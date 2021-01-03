@@ -33,7 +33,7 @@
 <details>
 <summary>Moderation</summary>
 
-- [Open folder](https://github.com/TheHDCrafter/yagpdb-cc/tree/master/Example%20Code)  
+- [Open folder](https://github.com/DiscDynamic/Dynamic-YAGPDB-ccs/tree/main/Moderation)  
 	**•** `Warn DM`  
 	**•** `Mute DM`  
 	**•** `Unmute DM`  
@@ -45,7 +45,7 @@
 <details>
 <summary>Staff</summary>
 
-- [Open folder](https://github.com/TheHDCrafter/yagpdb-cc/tree/master/Misc)  
+- [Open folder](https://github.com/DiscDynamic/Dynamic-YAGPDB-ccs/tree/main/Staff)  
 	**•** `Break` - Removes staff roles for a given time for a break  
 	**•** `Announce` - Makes an announcement and pings the announcement role  
 	**•** `Event` - Makes an event notif and pings the event role  
