@@ -1,5 +1,6 @@
 <h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
 
+### When Adding these custom commands, please make sure to include the leading comment+credit I made on those that have it.
 
 ## List of custom commands
 
@@ -61,7 +62,7 @@
 [YAGPDB Community & Support](https://discord.gg/4uY54rw) Official support server  
 [YAGPDB Documentation](https://docs.yagpdb.xyz/reference/templates) Official documentation  
 [YAGPDB Learning page](https://learn.yagpdb.xyz/) Official learning page    
-[Dynamic](https://discord.gg/ekMQH384KC) My server (All the commands here are used there, somewhat edited though)
+[Dynamic](https://discord.gg/ekMQH384KC) My server (All the commands here are used there, somewhat edited though) **All updates get pushed here**
 
 ## credits
 
