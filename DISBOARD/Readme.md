@@ -10,8 +10,10 @@ Fully functional, notifications, and bump messages that look like they're throug
 ## Usage
 
 `!d bump` - Will either bump the server (see image 1) or produce an error saying you cannot bump, and will output how long until the next bump (see image 2).
-![Example Bump 1](https://media.discordapp.net/attachments/784132357002625047/795167404535185408/unknown.png)
+
 ![Example Bump 2](https://cdn.discordapp.com/attachments/784132357002625047/795171341384810516/unknown.png)
+![Example Bump 1](https://cdn.discordapp.com/attachments/784132357002625047/795167404535185408/unknown.png)
+
 
 `Notify` - this is part of the `!d Bump` command, and isk what else to add here (I don't have the role added).
 ![Example Disboard](https://cdn.discordapp.com/attachments/784132357002625047/795179477574877194/unknown.png)
