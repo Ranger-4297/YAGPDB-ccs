@@ -60,7 +60,7 @@
 ## Other links:
 [YAGPDB Community & Support](https://discord.gg/4uY54rw) Official support server  
 [YAGPDB Documentation](https://docs.yagpdb.xyz/reference/templates) Official documentation  
-[YAGPDB Learning page](https://learn.yagpdb.xyz/) Official learning page
+[YAGPDB Learning page](https://learn.yagpdb.xyz/) Official learning page    
 [Dynamic](https://discord.gg/ekMQH384KC) My server (All the commands here are used there, somewhat edited though)
 
 ## credits
