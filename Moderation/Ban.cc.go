@@ -40,6 +40,6 @@ MIT License
             "description" (print ":hammer: **Banned:** *" $user.Username "#" $user.Discriminator "* `(ID " $user.ID ")`\n:receipt: **Channel:** <#" .Channel.ID ">\n:page_facing_up: **Reason:** " .Reason "\n:clock12: **Time:** " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
             "thumbnail" (sdict "url" ($user.AvatarURL "256"))
             "footer" (sdict "text" (print "Duration: " .HumanDuration ))
-            "color" 7372944
+            "color" 6473311
             }}
 {{sendMessage 784132358085017604 $Log}}
