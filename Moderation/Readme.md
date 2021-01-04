@@ -10,19 +10,19 @@ Fully functioning custom moderation DM and logging commands that DM the user an 
 
 `-warn <user> <reason>` - Sends an embed with the warn action information in a DM to the member being warned (see image 1). And logs the user running the command and who it's run by + extra in the modlogs (see image 2).
 ![Example Warn 1](https://cdn.discordapp.com/attachments/784132357002625047/795201051711897600/unknown.png)
-![Example Warn 2](https://cdn.discordapp.com/attachments/784132357002625047/795201505413431336/unknown.png)
+![Example Warn 2](https://cdn.discordapp.com/attachments/784132357002625047/795710650596196432/unknown.png)
 
 `-mute <user> <duration> <reason>` - Sends an embed with the mute action information in a DM to the member being muted (see image 1). And logs the user running the command and who it's run by + extra in the modlogs (see image 2).
 ![Example Mute 1](https://cdn.discordapp.com/attachments/784132357002625047/795202365833216030/unknown.png)
-![Example Mute 2](https://cdn.discordapp.com/attachments/784132357002625047/795202032050503680/unknown.png)
+![Example Mute 2](https://media.discordapp.net/attachments/784132357002625047/795710733954449428/unknown.png)
 
 `-unmute <user> <duration> <reason>` - Sends an embed with the unmute action information in a DM to the member being unmuted (see image 1). And logs the user running the command and who it's run by + extra in the modlogs (see image 2).
 ![Example Unmute 1](https://cdn.discordapp.com/attachments/784132357002625047/795203540728545280/unknown.png)
-![Example Unmute 2](https://cdn.discordapp.com/attachments/784132357002625047/795203810397913088/unknown.png)
+![Example Unmute 2](https://cdn.discordapp.com/attachments/784132357002625047/795710824004976694/unknown.png)
 
 `-kick <user> <reason>` - Sends an embed with the kick action information in a DM to the member being kicked (see image 1). And logs the user running the command and who it's run by + extra in the modlogs (see image 2).
 ![Example Unmute 1](https://cdn.discordapp.com/attachments/784132357002625047/795204345204703272/unknown.png)
-![Example Unmute 2](https://cdn.discordapp.com/attachments/784132357002625047/795204503309254666/unknown.png)
+![Example Unmute 2](https://cdn.discordapp.com/attachments/784132357002625047/795711607254024212/unknown.png)
 
 `-ban <user> <reason>` - Sends an embed with the ban action information in a DM to the member being banned (see image 1). And logs the user running the command and who it's run by + extra in the modlogs (see image 2).
 ![Example Unmute 1](https://cdn.discordapp.com/attachments/784132357002625047/795205736145616896/unknown.png)
