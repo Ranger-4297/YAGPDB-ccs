@@ -11,7 +11,7 @@ MIT License
 
 {{/* Configuration values start */}}
 {{$bumpNotifChannel := 787957757022175232}} {{/* channel to send the message notifying users it's possible to bump again */}}
-{{$bumpPing := "<@& 784132355379036194>"}} {{/* role to ping when it's possible to bump once again */}}
+{{$bumpPing := "<@&784132355379036194>"}} {{/* role to ping when it's possible to bump once again */}}
 {{$bumpChannel := 787957898872487956}} {{/* Channel to mention in the notification for users to have a quick portal */}}
 {{$bumpLog := 794365711614345267}}
 {{/* Configuration values end *}}
