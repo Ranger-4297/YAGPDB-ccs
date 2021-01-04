@@ -2,7 +2,7 @@
         Made by Rhyker (779096217853886504)
 
     Trigger Type: `Warn DM`
-©️ Dynamic 2021
+:copyright: Dynamic 2021
 MIT License
 */}}
 
@@ -39,6 +39,6 @@ MIT License
             "author" (sdict "icon_url" (.Author.AvatarURL "1024") "name" (print .Author.String " (ID " .Author.ID ")"))
             "description" (print ":warning: **Warned:** *" $user.Username "#" $user.Discriminator "* `(ID " $user.ID ")`\n:receipt: **Channel:** <#" .Channel.ID ">\n:page_facing_up: **Reason:** " .Reason "\n:clock12: **Time:** " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
             "thumbnail" (sdict "url" ($user.AvatarURL "256"))
-            "color" 7372944
+            "color" 16556627
             }}
 {{sendMessage $LogChannel $Log}}
