@@ -1,6 +1,5 @@
 {{/*
         Made by Rhyker (779096217853886504)
-
     Trigger Type: `Ban DM`
 ©️ Dynamic 2021
 MIT License
@@ -27,7 +26,7 @@ MIT License
 
 {{$BanDM := cembed
             "author" (sdict "icon_url" ($user.AvatarURL "1024") "name" (print $user.String " (ID " $user.ID ")"))
-            "description" (print "**Server:** " .Guild.Name "\n**Action:** `Ban`\n**Duration : **" .HumanDuration "\n**Reason: **" .Reason ".")/
+            "description" (print "**Server:** " .Guild.Name "\n**Action:** `Ban`\n**Duration : **" .HumanDuration "\n**Reason: **" .Reason ".")
             "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon ".gif"))
             "footer" (sdict "text" " ")
             "timestamp" currentTime
@@ -42,4 +41,4 @@ MIT License
             "footer" (sdict "text" (print "Duration: " .HumanDuration ))
             "color" 6473311
             }}
-{{sendMessage 784132358085017604 $Log}}
+{{sendMessage $LogChannel $Log}}
