@@ -1,5 +1,6 @@
 {{/*
         Made by Rhyker/Ranger (779096217853886504)
+        Credits: WickedWizard#3588
 
     Trigger Type: `Exact`
     Trigger: `!d help`
@@ -8,7 +9,7 @@ MIT License
 */}}
 
 
-{{execAdmin "clean" 1}}
+{{execAdmin "clean" 1 302050872383242240}}
 {{sendMessage nil (cembed
             "title" "DISBOARD: The public server list"
                 "url" (print "https://disboard.org/server/" .Guild.ID)
