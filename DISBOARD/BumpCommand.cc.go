@@ -33,8 +33,8 @@ MIT License
             ))}}
 {{else}}
     {{if not (dbGet 0 "bump")}}
-        {{dbSetExpire 0 "bump" 1 30}}
-        {{execCC .CCID nil 30 "data"}}
+        {{dbSetExpire 0 "bump" 1 7200}}
+        {{execCC .CCID nil 7200 "data"}}
             {{execAdmin "clean" 1}}
         {{sendMessage nil (cembed
             "title" "DISBOARD: The public server list"
