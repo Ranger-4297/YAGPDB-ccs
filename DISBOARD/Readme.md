@@ -39,3 +39,7 @@ These commands **are** standalone. You are able to use them without each other, 
 `Readme.md` - this document is an edited version of [NaruDevonte](https://github.com/NaruDevnote)'s [tag](https://github.com/NaruDevnote/yagpdb-ccs/tree/master/tags) custom command [README.md](https://github.com/NaruDevnote/yagpdb-ccs/blob/master/tags/README.md)
 
 `BumpCommand.cc.go` - Credit for this command goes to [DZ-TM](https://github.com/DZ-TM/Yagpdb.xyz)'s [BumpCommand.go](https://github.com/DZ-TM/Yagpdb.xyz/blob/master/Commands/Bump/BumpCommand.go) for the base command+notify and [TheHDCrafter](https://github.com/TheHDCrafter/yagpdb-cc)'s DISBOARD command which I took inspiration off to make this, but isn't public
+
+**Other credits**
+
+Huge thanks to [WickedWizzard](https://github.com/WickedWizard3588) for helping me throughout the duration of making `BumpCommand.cc.go, most of the original files would not of been done without their help ,and I cannot thank you enough
