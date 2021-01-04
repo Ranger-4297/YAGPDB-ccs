@@ -2,7 +2,7 @@
         Made by Rhyker (779096217853886504)
 
     Trigger Type: `Kick DM`
-:copyright: Dynamic 2021
+©️ Dynamic 2021
 MIT License
 */}}
 
