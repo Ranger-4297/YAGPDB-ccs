@@ -18,7 +18,7 @@ MIT License
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
-{{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12 }
+{{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12 }}
 {{end}}
 
 {{if .ExecData}}
