@@ -49,7 +49,7 @@ MIT License
                 "url" (print "https://disboard.org/server/" .Guild.ID)
             "description" (print .User.Mention " Has bumped the server\nDate of bump is " (joinStr " " ((currentTime.Format "02/01/2006"))) "\nTime of bump is " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
             "image" (sdict "url" "https://disboard.org/images/bot-command-image-bump.png")
-            "footer" (sdict "text" "Powered by • YAGPDB.xyz" "icon_url")
+            "footer" (sdict "text" "Powered by • YAGPDB.xyz")
             "color" 4436910
             )}}
     {{else}}
