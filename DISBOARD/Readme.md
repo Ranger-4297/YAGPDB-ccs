@@ -42,4 +42,4 @@ These commands **are** standalone. You are able to use them without each other, 
 
 **Other credits**
 
-Huge thanks to [WickedWizzard](https://github.com/WickedWizard3588) for helping me throughout the duration of making `BumpCommand.cc.go, most of the original files would not of been done without their help ,and I cannot thank you enough
+Huge thanks to [WickedWizzard](https://github.com/WickedWizard3588) for helping me throughout the duration of making `BumpCommand.cc.go`, most of the original files would not of been done without their help ,and I cannot thank you enough
