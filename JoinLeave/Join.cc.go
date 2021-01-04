@@ -1,6 +1,5 @@
 {{/*
         Made by Rhyker/Ranger (779096217853886504)
-
     Trigger Type: `Join Message in channel`
 ©️ Dynamic 2021
 MIT License
@@ -25,7 +24,7 @@ MIT License
             }}
 {{sendMessage nil $logEmbed}}
 {{$welcomeEmbed := cembed
-            "author" "name" "User Joined!" "icon_url" (.User.AvatarURL "2024")
+            "author" (sdict "name" "User Joined!" "icon_url" (.User.AvatarURL "2024"))
             "description" (print "Hello " .User.String "! Welcome to " .Guild.Name "! Check the DM I sent you!\nWe now have `" .Guild.MemberCount "` members!")
             "footer" (sdict "text" " ")
             "timestamp" currentTime
