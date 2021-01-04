@@ -1,4 +1,4 @@
-{{/*
+{{/* 
         Made by DZ#6669 (438789314101379072) https://github.com/DZ-TM/Yagpdb.xyz/blob/master/Commands/Bump/BumpCommand.go
         Updated by Rhyker (779096217853886504)
 
