@@ -1,5 +1,6 @@
 {{/*
-        Made by DZ#6669 (438789314101379072) https://github.com/DZ-TM/Yagpdb.xyz/blob/master/Commands/Bump/BumpCommand.go
+        Made by DZ#6669 (438789314101379072) (Removed due to change in ToS by Disboard)
+        Made by WickedWizard#3588 (Removed due to change in ToS by Disboard)
         Updated by Rhyker (779096217853886504)
 
     Trigger Type: `RegEx`
@@ -35,7 +36,7 @@ MIT License
     {{if not (dbGet 0 "bump")}}
         {{dbSetExpire 0 "bump" 1 7200}}
         {{execCC .CCID nil 7200 "data"}}
-            {{execAdmin "clean" 1}}
+            {{execAdmin "clean" 1 302050872383242240}}
         {{sendMessage nil (cembed
             "title" "DISBOARD: The public server list"
                 "url" (print "https://disboard.org/server/" .Guild.ID)
@@ -51,7 +52,7 @@ MIT License
             "color" 4436910
             )}}
     {{else}}
-            {{execAdmin "clean" 1}}
+            {{execAdmin "clean" 1 302050872383242240}}
         {{sendMessage nil (cembed
             "title" "DISBOARD: The public server list"
                 "url" (print "https://disboard.org/server/" .Guild.ID)
