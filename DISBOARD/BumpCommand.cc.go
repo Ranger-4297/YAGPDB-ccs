@@ -47,7 +47,7 @@ MIT License
         {{sendMessage $bumpLog (cembed
             "title" "DISBOARD: The public server list"
                 "url" (print "https://disboard.org/server/" .Guild.ID)
-            "description" (print .User.Mention "Has bumped our server\nDate is " .currentTime "\nTime is " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
+            "description" (print .User.Mention "Has bumped our server\nDate is " (joinStr " " ((currentTime.Format "02/01/2006"))) "\nTime is " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
             "image" (sdict "url" "https://disboard.org/images/bot-command-image-bump.png")
             "color" 4436910
             )}}
