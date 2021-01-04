@@ -10,7 +10,7 @@
 ![Example Announce](https://cdn.discordapp.com/attachments/784132357002625047/795295837898407956/unknown.png)
 
 `-Event [Announcement]` - Sends an embed with information about an event, including who sent it (see image (Keep in mind, I don't have the ping role, and the notif will go to your event notif channel.)). 
-![Example Event](https://cdn.discordapp.com/attachments/784132357002625047/795296080975364106/unknown.png)
+ ![Example Event](https://cdn.discordapp.com/attachments/784132357002625047/795296080975364106/unknown.png)
 
 `-Break <time>` - Removes the staff role so you can go on a break (for a duration specified by you) (No idea how to show this in an image--unable to screenrecord).
 
