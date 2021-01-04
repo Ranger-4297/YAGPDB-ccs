@@ -27,7 +27,7 @@ Fully functional, notifications, and bump messages that look like they're throug
 ![Example Disboard](https://cdn.discordapp.com/attachments/784132357002625047/795176964042129438/unknown.png)
 
 ## Other Info
-Regarding compatibility with DISBOARD; DISBOARD, the bot will still need send and read messages for your bump channele. YAGPDB does **not** bump the server. It just resends the embed(s).
+Regarding compatibility with DISBOARD; DISBOARD, the bot will still need send and read messages for your bump channel. YAGPDB does **not** bump the server. It just resends the embed(s).
 
 These commands **are** standalone. You are able to use them without each other, except `BumpNotify.cc.go` to use this, you will need to add `BumpCommand.cc.go`
 
