@@ -13,7 +13,7 @@ Fully functional, notifications, and bump messages that look like they're throug
 
 `!d bump` - Will either bump the server (see image 1) and log the bump (see image 2) or produce an error saying you cannot bump, and will output how long until the next bump (see image 3).
 
-![Example Bump 1](https://cdn.discordapp.com/attachments/784132357002625047/795167404535185408/unknown.png) 
+![Example Bump 1](https://cdn.discordapp.com/attachments/784132357002625047/795167404535185408/unknown.png)   
 ![Example Bump log](https://cdn.discordapp.com/attachments/795568796509011979/795679057445388288/unknown.png)
 ![Example Bump 2](https://cdn.discordapp.com/attachments/784132357002625047/795171341384810516/unknown.png)
 
