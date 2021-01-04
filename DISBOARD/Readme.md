@@ -1,6 +1,6 @@
 # Disboard/Bump CCs
 Fully functional, notifications, and bump messages that look like they're through YAGPDB! :0
-
+ 
 ## Features
 - Basic ping and notification that you are able to bump 
 - Completely customizable (if you know what you are doing)
