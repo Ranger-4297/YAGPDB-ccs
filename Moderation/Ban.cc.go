@@ -30,7 +30,7 @@ MIT License
             "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon ".gif"))
             "footer" (sdict "text" " ")
             "timestamp" currentTime
-            "color" 3553599
+            "color" 14043208
             }}
 {{sendDM $BanDM}}
 
