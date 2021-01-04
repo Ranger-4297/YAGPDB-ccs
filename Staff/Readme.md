@@ -22,4 +22,4 @@ These commands **are** standalone. You are able to use them without each other, 
 
 ## credits
 
-`Readme.me` - this document is an edited version of [NaruDevonte](https://github.com/NaruDevnote)'s [tag](https://github.com/NaruDevnote/yagpdb-ccs/tree/master/tags) custom command [README.md](https://github.com/NaruDevnote/yagpdb-ccs/blob/master/tags/README.md)
+`Readme.md` - this document is an edited version of [NaruDevonte](https://github.com/NaruDevnote)'s [tag](https://github.com/NaruDevnote/yagpdb-ccs/tree/master/tags) custom command [README.md](https://github.com/NaruDevnote/yagpdb-ccs/blob/master/tags/README.md)
