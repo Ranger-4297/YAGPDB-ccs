@@ -13,9 +13,13 @@ MIT License
 {{$bumpNotifChannel := 787957757022175232}} {{/* channel to send the message notifying users it's possible to bump again */}}
 {{$bumpPing := "<@&784132355379036194>"}} {{/* role to ping when it's possible to bump once again */}}
 {{$bumpChannel := 787957898872487956}} {{/* Channel to mention in the notification for users to have a quick portal */}}
+{{$bumpLog := 794365711614345267}}
 {{/* Configuration values end *}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
+
+{{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12 }
+{{end}}
 
 {{if .ExecData}}
     {{sendMessageNoEscape $bumpNotifChannel (complexMessage 
@@ -36,6 +40,13 @@ MIT License
             "title" "DISBOARD: The public server list"
                 "url" (print "https://disboard.org/server/" .Guild.ID)
             "description" (print .User.Mention ",\nBump done :thumbsup:\nCheck it on DISBOARD: [https://disboard.org/](https://disboard.org/server/" .Guild.ID ")")
+            "image" (sdict "url" "https://disboard.org/images/bot-command-image-bump.png")
+            "color" 4436910
+            )}}
+        {{sendMessage $bumpLog (cembed
+            "title" "DISBOARD: The public server list"
+                "url" (print "https://disboard.org/server/" .Guild.ID)
+            "description" (print .User.Mention "Has bumped our server\nDate is " .currentTime "\nTime is " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
             "image" (sdict "url" "https://disboard.org/images/bot-command-image-bump.png")
             "color" 4436910
             )}}
