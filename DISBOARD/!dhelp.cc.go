@@ -9,7 +9,7 @@ MIT License
 */}}
 
 
-{{execAdmin "clean" 1302050872383242240}}
+{{execAdmin "clean" 1 302050872383242240}}
 {{sendMessage nil (cembed
             "title" "DISBOARD: The public server list"
                 "url" (print "https://disboard.org/server/" .Guild.ID)
