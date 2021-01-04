@@ -1,7 +1,6 @@
 <h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
 
----
- When Adding these custom commands, please make sure to include the leading comment+credit I made on those that have it.
+----
 ----
 
 ## List of custom commands
