@@ -8,7 +8,7 @@
 
 `-Announce [Announcement]` - Sends an embed with information about an announcement, including who sent it (see image (Keep in mind, I don't have the ping role, and the announcement will go to your announcement channel.)).
 ![Example Announce](https://cdn.discordapp.com/attachments/784132357002625047/795295837898407956/unknown.png)
-
+ 
 `-Event [Announcement]` - Sends an embed with information about an event, including who sent it (see image (Keep in mind, I don't have the ping role, and the notif will go to your event notif channel.)).
  
  ![Example Event](https://cdn.discordapp.com/attachments/784132357002625047/795296080975364106/unknown.png)
