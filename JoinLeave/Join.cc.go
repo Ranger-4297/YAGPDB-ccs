@@ -7,7 +7,7 @@ MIT License
 
 
 {{/* Configuration values start */}}
-{{$welcomeChannel := 786752542171594752}}
+{{$Log:= 784132358085017602}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing except for the 21st line. Add your ban appeal link at the end. (: rawr */}}
@@ -22,13 +22,13 @@ MIT License
             "timestamp" currentTime
             "color" 3247335
             }}
-{{sendMessage nil $logEmbed}}
+{{sendMessage $Log $logEmbed}}
 {{$welcomeEmbed := cembed
-            "author" (sdict "name" "User Joined!" "icon_url" (.User.AvatarURL "2024"))
+            "author" (sdict "url" (.User.AvatarURL "4096") "name" "User Joined!" "icon_url" (.User.AvatarURL "1024"))
             "description" (print "Hello " .User.String "! Welcome to " .Guild.Name "! Check the DM I sent you!\nWe now have `" .Guild.MemberCount "` members!")
             "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 65419
             }}
-{{sendMessage $welcomeChannel $welcomeEmbed}}
+{{sendMessage nil $welcomeEmbed}}
 {{end}}
