@@ -7,7 +7,7 @@ MIT License
 
 
 {{/* Configuration values start */}}
-{{$Log:= 784132358085017602}}
+{{$Log:= 784132358085017602}} {{/* Join log channel */}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing except for the 21st line. Add your ban appeal link at the end. (: rawr */}}
