@@ -32,6 +32,7 @@ MIT License
             "thumbnail" (sdict "url" "https://disboard.org/images/bot-command-image-thumbnail.png")
             "color" 4436910
             ))}}
+{{dbSet 0 "dbid" (str $id)}}
 {{else}}
     {{if not (dbGet 0 "bump")}}
         {{dbSetExpire 0 "bump" 1 7200}}
@@ -44,7 +45,7 @@ MIT License
             "image" (sdict "url" "https://disboard.org/images/bot-command-image-bump.png")
             "color" 4436910
             )}}
-            {{editMessageNoEscape $bumpNotifChannel $id (complexMessageEdit
+            {{editMessageNoEscape $bumpNotifChannel (toInt (dbGet 0 "dbid").Value) (complexMessageEdit
             "content" (print "~~<@&" $bumpPing ">~~")
             "embed" (cembed
             "title" "DISBOARD: The public server list"
@@ -61,6 +62,7 @@ MIT License
             "footer" (sdict "text" "Powered by • YAGPDB.xyz")
             "color" 4436910
             )}}
+        {{dbDel 0 "dbid"}}
     {{else}}
             {{execAdmin "clean" 1 302050872383242240}}
         {{sendMessage nil (cembed
