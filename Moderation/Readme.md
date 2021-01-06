@@ -32,6 +32,7 @@ Fully functioning custom moderation DM and logging commands that DM the user an 
 These commands **are** standalone. You are able to use them without each other, it is not required that they are used together. However it will look more organized.
 
 Also, please note that; You will have to stop the default logs from being sent. Or you will have 2 logs being sent in your modlogs.
+On my server, which can be found [here](https://discord.gg/ekMQH384KC) I do use an edited version of these commands. Since I've replicated some private features, that I won't be sharing. Sorry!
 
 > *If you find any bugs or issues, feel free to PR an issue or fix, or contact me through the YAGPDB Support Server*
 
