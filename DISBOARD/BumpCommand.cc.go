@@ -12,7 +12,7 @@ MIT License
 
 {{/* Configuration values start */}}
 {{$bumpNotifChannel := 787957757022175232}} {{/* channel to send the message notifying users it's possible to bump again */}}
-{{$bumpPing := "<@&784132355379036194>"}} {{/* role to ping when it's possible to bump once again */}}
+{{$bumpPing := "784132355379036194"}} {{/* role to ping when it's possible to bump once again */}}
 {{$bumpChannel := 787957898872487956}} {{/* Channel to mention in the notification for users to have a quick portal */}}
 {{$bumpLog := 794365711614345267}} {{/* Channel to log bumps */}}
 {{/* Configuration values end */}}
@@ -23,8 +23,8 @@ MIT License
 {{end}}
 
 {{if .ExecData}}
-    {{sendMessageNoEscape $bumpNotifChannel (complexMessage 
-            "content" $bumpPing
+{{$id := sendMessageNoEscapeRetID $bumpNotifChannel (complexMessage 
+            "content" (print "<@&" $bumpPing ">")
             "embed" (cembed
             "title" "DISBOARD: The public server list"
                 "url" (print "https://disboard.org/server/" .Guild.ID)
@@ -32,6 +32,7 @@ MIT License
             "thumbnail" (sdict "url" "https://disboard.org/images/bot-command-image-thumbnail.png")
             "color" 4436910
             ))}}
+{{dbSet 0 "dbid" (str $id)}}
 {{else}}
     {{if not (dbGet 0 "bump")}}
         {{dbSetExpire 0 "bump" 1 7200}}
@@ -44,6 +45,15 @@ MIT License
             "image" (sdict "url" "https://disboard.org/images/bot-command-image-bump.png")
             "color" 4436910
             )}}
+            {{editMessageNoEscape $bumpNotifChannel (toInt (dbGet 0 "dbid").Value) (complexMessageEdit
+            "content" (print "~~<@&" $bumpPing ">~~")
+            "embed" (cembed
+            "title" "DISBOARD: The public server list"
+                "url" (print "https://disboard.org/server/" .Guild.ID)
+            "description" (print "~~You can now bump us in <#" $bumpChannel "> using `!d bump`!~~\nWhy not leave us a review __[here](https://disboard.org/dashboard/reviews)__!")
+            "thumbnail" (sdict "url" "https://disboard.org/images/bot-command-image-thumbnail.png")
+            "color" 4436910
+            ))}}
         {{sendMessage $bumpLog (cembed
             "title" "DISBOARD: The public server list"
                 "url" (print "https://disboard.org/server/" .Guild.ID)
@@ -52,6 +62,7 @@ MIT License
             "footer" (sdict "text" "Powered by • YAGPDB.xyz")
             "color" 4436910
             )}}
+        {{dbDel 0 "dbid"}}
     {{else}}
             {{execAdmin "clean" 1 302050872383242240}}
         {{sendMessage nil (cembed
