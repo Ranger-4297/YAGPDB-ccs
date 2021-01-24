@@ -1,7 +1,7 @@
 {{/*
         Made by Rhyker/Ranger (779096217853886504)
 
-    Trigger Type: `Join Message in channrl`
+    Trigger Type: `Join Message in channel`
 ©️ Dynamic 2021
 MIT License
 */}}
