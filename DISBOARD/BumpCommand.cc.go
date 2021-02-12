@@ -1,6 +1,6 @@
 {{/*
         Made by DZ#6669 (438789314101379072) (Removed due to change in ToS by Disboard)
-        Made by WickedWizard#3588 (Removed due to change in ToS by Disboard)
+        Made by WickedWizard#3588 (719421577086894101) (Removed due to change in ToS by Disboard)
         Modified by Ranger (779096217853886504)
 
     Trigger Type: `RegEx`
