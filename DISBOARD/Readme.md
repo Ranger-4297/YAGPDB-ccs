@@ -14,17 +14,24 @@ Fully functional, notifications, and bump messages that look like they're throug
 `!d bump` - Notifies you when you can bump (Image 1). Will either bump the server and log the bump (see image 2&3) or produce an error saying you cannot bump, and will output how long until the next bump (see image 4).
 
 ![Example Notify](https://cdn.discordapp.com/attachments/784132360399487066/809890885584027678/unknown.png)
-![Example Bump 1](https://cdn.discordapp.com/attachments/784132360399487066/809888149794717716/unknown.png)   
+
+![Example Bump 1](https://cdn.discordapp.com/attachments/784132360399487066/809888149794717716/unknown.png)
+
 ![Example Bump log](https://cdn.discordapp.com/attachments/784132360399487066/809889847509647423/unknown.png)
+
 ![Example Bump fail](https://cdn.discordapp.com/attachments/784132360399487066/809890534013009920/unknown.png)
 
+
 `!d Help` - Provides you with the basic DISBOARD help page through YAGPDB with nothing changed. **Note**: The support server is DISBOARD Support (see image)
+
 ![Example Help](https://cdn.discordapp.com/attachments/784132360399487066/809891290639499274/unknown.png)
 
 `!d Page` - Provides you with the basic DISBOARD server page through YAGPDB with nothing changed. (see image)
+
 ![Example Page](https://cdn.discordapp.com/attachments/784132360399487066/809891768114872400/unknown.png)
 
 `Disboard|Bump` - sends an embed of the time until how long you can bump. Features a cooldown and 2 triggers.
+
 ![Example Disboard](https://cdn.discordapp.com/attachments/784132360399487066/809892129681440808/unknown.png)
 
 ## Other Info
