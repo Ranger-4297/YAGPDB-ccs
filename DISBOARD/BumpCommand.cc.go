@@ -1,7 +1,7 @@
 {{/*
         Made by DZ#6669 (438789314101379072) (Removed due to change in ToS by Disboard)
         Made by WickedWizard#3588 (Removed due to change in ToS by Disboard)
-        Modified by Rhyker (779096217853886504)
+        Modified by Ranger (779096217853886504)
 
     Trigger Type: `RegEx`
     Trigger: `\A!d\sbump(?:\s+|\z)`
