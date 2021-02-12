@@ -1,9 +1,9 @@
 {{/*
-        Made by Rhyker (779096217853886504)
-        Credits: WickedWizard#3588
+        Made by Ranger (779096217853886504)
+        Credits: WickedWizard#3588 (719421577086894101)
 
-    Trigger Type: `Exact`
-    Trigger: `!d help`
+    Trigger Type: `Regex`
+    Trigger: `\A!d\shelp(?:\s+|\z)`
 ©️ Dynamic 2021
 MIT License
 */}}
