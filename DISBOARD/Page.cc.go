@@ -1,9 +1,9 @@
 {{/*
-        Made by Rhyker (779096217853886504)
-        Modified by WickedWizard#3588
+        Made by Ranger (779096217853886504)
+        Modified by WickedWizard#3588 (719421577086894101)
         
-    Trigger Type: `Exact`
-    Trigger: `!d page`
+    Trigger Type: `Regex`
+    Trigger: `\A!d\sPage(?:\s+|\z)`
 ©️ Dynamic 2021
 MIT License
 */}}
