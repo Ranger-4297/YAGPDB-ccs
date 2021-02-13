@@ -18,22 +18,22 @@ MIT License
 
 {{sendMessage nil "Check your DM's for info!"}}
 {{$embed := cembed
-			"author" (sdict "url" (print "https://discord.com/channels/" .Guild.ID) "name" (print .Guild.Name " Ban appeals") "icon_url" (.User.AvatarURL "1024"))
-			"description" (print  .User.Mention "\n\nHello " .User.Username ". You've requested " .Guild.Name "'s ban appeal form.\nThis means you are either looking to reverse your ban, or are simply taking a look at our appeal.\nPlease keep in mind that asking about the status of your appeal may warrant it's status as `denied`.\n[Ban appeal form](" $FormLink ")")
-			"thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $IconType ))
-			"footer" (sdict "text" " ")
-			"timestamp" currentTime
-			"color" 4645612
-			}}
+		"author" (sdict "url" (print "https://discord.com/channels/" .Guild.ID) "name" (print .Guild.Name " Ban appeals") "icon_url" (.User.AvatarURL "1024"))
+		"description" (print  .User.Mention "\n\nHello " .User.Username ". You've requested " .Guild.Name "'s ban appeal form.\nThis means you are either looking to reverse your ban, or are simply taking a look at our appeal.\nPlease keep in mind that asking about the status of your appeal may warrant it's status as `denied`.\n[Ban appeal form](" $FormLink ")")
+		"thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $IconType ))
+		"footer" (sdict "text" " ")
+		"timestamp" currentTime
+		"color" 4645612
+		}}
 {{sendDM $embed}}
 
 
 {{$logembed := cembed
-			"author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
-			"description" (print "**✉️ Ban appeal command notification**\n" .User.Mention " Has requested a ban appeal form.")
-			"thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $IconType ))
-			"footer" (sdict "text" " ")
-			"timestamp" currentTime
-			"color" 4645612
-			}}
+		"author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
+		"description" (print "**✉️ Ban appeal command notification**\n" .User.Mention " Has requested a ban appeal form.")
+		"thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $IconType ))
+		"footer" (sdict "text" " ")
+		"timestamp" currentTime
+		"color" 4645612
+		}}
 {{sendMessageNoEscape $logchannel $logembed}}
