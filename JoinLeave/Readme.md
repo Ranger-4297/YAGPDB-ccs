@@ -2,7 +2,7 @@
 
 ## Features
 - Leave and join logging
-- Rich embeds
+- Clear embeds
 - simple to read logs
 
 ## Usage
