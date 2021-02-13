@@ -2,7 +2,7 @@
         Made by Ranger (779096217853886504)
 
     Trigger Type: `Command`
-Trigger: `Appeal`
+    Trigger: `Appeal`
 ©️ Dynamic 2021
 MIT License
 */}}
@@ -29,11 +29,11 @@ MIT License
 
 
 {{$logembed := cembed
-			"author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
-			"description" (print "**✉️ Ban appeal command notification**\n" .User.Mention " Has requested a ban appeal form.")
-			"thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $IconType ))
-			"footer" (sdict "text" " ")
-			"timestamp" currentTime
-			"color" 4645612
-			}}
+            "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
+            "description" (print "**✉️ Ban appeal command notification**\n" .User.Mention " Has requested a ban appeal form.")
+            "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $IconType ))
+            "footer" (sdict "text" " ")
+            "timestamp" currentTime
+            "color" 4645612
+            }}
 {{sendMessageNoEscape $logchannel $logembed}}
