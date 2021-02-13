@@ -23,9 +23,6 @@ Fully functional form commands that DM the user an embed and a form to either a 
 ## Other Info
 These commands **are** standalone. You are able to use them without each other, it is not required that they're used together.
 
-Please note: The embed thumbnails are standardised for servers with an animated icon.
-If your server does not use this. In the `thumbnail` lines of the code replace the "`.gif`" with a "`.png`" Support for this will come soon!
-
 > *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/SY7wn39SYD) or my server, [Dynamic](https://discord.gg/2WfF9JxuTU)*
 
 
