@@ -5,7 +5,7 @@
 	Trigger: `Appeal`
 ©️ Dynamic 2021
 MIT License
-*/}
+*/}}
 
 
 {{/* Configuration values start */}}
