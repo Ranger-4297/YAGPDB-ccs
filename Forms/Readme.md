@@ -8,21 +8,25 @@ Fully functional form commands that DM the user an embed and a form to either a 
 
 ## Usage
 
-`-Apply` - Sends the embed with the staff application form in a DM (see image 1). And logs the user running the command (see image 2). 
-![Example Apply 1](https://cdn.discordapp.com/attachments/786941956004904991/809964653928251453/unknown.png) 
-![Example Apply 2](https://cdn.discordapp.com/attachments/784132360399487066/809966265984745482/unknown.png)
+`-Apply` - Sends the embed with the staff application form in a DM (see image 1). And logs the user running the command (see image 2).
+
+![Example Apply 1](https://cdn.discordapp.com/attachments/786941956004904991/809964653928251453/unknown.png)
+
+![Example Apply 2](https://cdn.discordapp.com/attachments/784132360399487066/810137720046616606/unknown.png)
 
 `-Appeal` - Sends the embed with the ban appeal form in a DM (see image 1). And logs the user running the command (see image 2).
-![Example Apply 1](https://cdn.discordapp.com/attachments/784132357002625047/795194965445574656/unknown.png)
-![Example Apply 2](https://cdn.discordapp.com/attachments/784132360399487066/809966265984745482/unknown.png) 
+
+![Example Appeal 1](https://cdn.discordapp.com/attachments/779096799738724372/809969878030745632/unknown.png)
+
+![Example Appeal 2](https://cdn.discordapp.com/attachments/779096799738724372/809970148596383764/unknown.png)
 
 ## Other Info
 These commands **are** standalone. You are able to use them without each other, it is not required that they're used together.
 
 Please note: The embed thumbnails are standardised for servers with an animated icon.
-If your server does not use this. In the `thumbnail` lines of the code replace the "`.gif`" with a "`.png`"
+If your server does not use this. In the `thumbnail` lines of the code replace the "`.gif`" with a "`.png`" Support for this will come soon!
 
-> *If you find any bugs or issues, feel free to PR an issue or fix, or contact me through the YAGPDB Support Server*
+> *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/SY7wn39SYD) or my server, [Dynamic](https://discord.gg/2WfF9JxuTU)*
 
 
 ## credits
