@@ -1,20 +1,20 @@
 {{/*
-        Made by Ranger (779096217853886504)
+		Made by Ranger (779096217853886504)
 
-    Trigger Type: `Command`
-    Trigger: `Appeal`
+	Trigger Type: `Command`
+	Trigger: `Appeal`
 ©️ Dynamic 2021
 MIT License
 */}}
 
 
 {{/* Configuration values start */}}
-{{$FormLink := "https://realsite.co.uk/application"}} {{/* Your servers application link */}}
-{{$logchannel := 794365711614345267}}
+{{$FormLink := "https://realsite.co.uk/appeal"}} {{/* Your servers application link */}}
+{{$logchannel := 794365711614345267}} {{/* Log channel*/}}
 {{$IconType := "gif"}} {{/* set to `png` if your server uses a static icon */}}
 {{/* Configuration values end */}}
 
-{{/* Only edit below if you know what you're doing except for the 21st line. Add your staff application link at the end. (: rawr */}}
+{{/* Only edit below if you know what you're doing except for the 21st line. Add your ban appeal link at the end. (: rawr */}}
 
 {{sendMessage nil "Check your DM's for info!"}}
 {{$embed := cembed
