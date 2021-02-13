@@ -1,4 +1,5 @@
 # Join+leave logs
+Featureful embeds for logging joins and leaves
 
 ## Features
 - Leave and join logging
