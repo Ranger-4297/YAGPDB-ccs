@@ -1,4 +1,4 @@
-{{/*
+{{/
 		Made by Ranger (779096217853886504)
 
 	Trigger Type: `Command`
