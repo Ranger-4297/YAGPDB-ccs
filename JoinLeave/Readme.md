@@ -1,4 +1,4 @@
-# Staff commandss
+# Join+leave logs
 
 ## Features
 - Leave and join logging
