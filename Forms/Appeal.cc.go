@@ -1,5 +1,5 @@
 {{/*
-        Made by Rhyker (779096217853886504)
+        Made by Ranger (779096217853886504)
 
     Trigger Type: `Command`
     Trigger: `Appeal`
@@ -9,7 +9,8 @@ MIT License
 
 
 {{/* Configuration values start */}}
-{{$logchannel := 794365711614345267}}
+{{$FormLink := "https://realsite.co.uk/application"}} {{/* Your servers application link */}}
+{{$logchannel := 794365711614345267}} {{/* Log channel*/}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing except for the 21st line. Add your ban appeal link at the end. (: rawr */}}
@@ -17,7 +18,7 @@ MIT License
 Check your DM's for info!
 {{$embed := cembed
             "author" (sdict "url" (print "https://discord.com/channels/" .Guild.ID) "name" (print .Guild.Name " Ban appeals") "icon_url" (.User.AvatarURL "1024"))
-            "description" (print  .User.Mention "\n\nHello " .User.Username ". You've requested " .Guild.Name "'s ban appeal form.\nThis means you are either looking to reverse your ban, or are simply taking a look at our appeal.\nPlease keep in mind that asking about the status of your appeal may warrant it's status as `denied`.\n[Ban appeal form](ban appeal)")
+            "description" (print  .User.Mention "\n\nHello " .User.Username ". You've requested " .Guild.Name "'s ban appeal form.\nThis means you are either looking to reverse your ban, or are simply taking a look at our appeal.\nPlease keep in mind that asking about the status of your appeal may warrant it's status as `denied`.\n[Ban appeal form](" $FormLink ")")
             "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon ".gif"))
             "footer" (sdict "text" " ")
             "timestamp" currentTime
