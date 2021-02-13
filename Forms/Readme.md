@@ -12,7 +12,7 @@ Fully functional form commands that DM the user an embed and a form to either a 
 
 ![Example Apply 1](https://cdn.discordapp.com/attachments/786941956004904991/809964653928251453/unknown.png)
 
-![Example Apply 2](https://cdn.discordapp.com/attachments/786941956004904991/809964653928251453/unknown.png)
+![Example Apply 2](https://cdn.discordapp.com/attachments/784132360399487066/809966265984745482/unknown.png)
 
 `-Appeal` - Sends the embed with the ban appeal form in a DM (see image 1). And logs the user running the command (see image 2).
 
