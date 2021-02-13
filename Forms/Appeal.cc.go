@@ -1,8 +1,8 @@
 {{/*
-		Made by Ranger (779096217853886504)
+        Made by Ranger (779096217853886504)
 
-	Trigger Type: `Command`
-	Trigger: `Appeal`
+    Trigger Type: `Command`
+    Trigger: `Appeal`
 ©️ Dynamic 2021
 MIT License
 */}}
