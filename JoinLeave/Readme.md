@@ -9,12 +9,17 @@ Featureful embeds for logging joins and leaves
 ## Usage
 **These aren't commands per-se, so you can't trigger them like a normal command**
 
-`Join message in channel` - Sends an embed with information about a user in the join log, including who their UserID and more (see image 1) and the public join notify (see image 2). (set the channel to your welcome channel)  
-![Example Jmic](https://cdn.discordapp.com/attachments/784132357002625047/795307154034262036/unknown.png) 
-![Example Jmipb](https://cdn.discordapp.com/attachments/784132360399487066/795690546253398096/unknown.png)
+`Join message in channel` - Sends an embed with information about a user in the join log, including who their UserID and more (see image 1) and the public join notify (see image 2). (set the channel to your welcome channel) 
 
-`Leave message` - Sends an embed with information about a user in the join log, including who their UserID and more (see image)
-![Example Leave message](https://cdn.discordapp.com/attachments/784132357002625047/795307269242748968/unknown.png)
+![Example Log](https://cdn.discordapp.com/attachments/784132360399487066/810189746587566140/unknown.png)
+
+![Example WelcomeChannel](https://cdn.discordapp.com/attachments/784132360399487066/810189468622651472/unknown.png)
+
+`Leave message` - Sends an embed with information about a user in the join log, including who their UserID and more (see image 1) and the public leave notify (see image 2)
+
+![Example Log](https://cdn.discordapp.com/attachments/784132360399487066/810189818940096573/unknown.png)
+
+![Example LeaveChannel](https://cdn.discordapp.com/attachments/784132360399487066/810189515929944124/unknown.png)
 
 ## Other Info
 These commands **are** standalone. You are able to use them without each other, it is not required that they are used together. However it would look more organized.
