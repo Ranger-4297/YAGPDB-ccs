@@ -11,7 +11,6 @@ MIT License
 {{/* Configuration values start */}}
 {{$FormLink := "https://realsite.co.uk/appeal"}} {{/* Your servers application link */}}
 {{$logchannel := 794365711614345267}} {{/* Log channel*/}}
-{{$IconType := "gif"}} {{/* set to `png` if your server uses a static icon */}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing except for the 21st line. Add your ban appeal link at the end. (: rawr */}}
