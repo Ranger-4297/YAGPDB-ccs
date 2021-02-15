@@ -1,6 +1,10 @@
 # Moderation commands (+ custom logging)
 Fully functioning custom moderation DM and logging commands that DM the user an embed with their mod action information and logs the command in the modlog channel.
 
+---
+### Make sure to add these in the moderation section of the control panel
+---
+
 ## Features
 - Custom logs
 - Fast and reliable logging
