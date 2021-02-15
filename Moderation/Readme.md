@@ -39,8 +39,7 @@ These commands **are** standalone. You are able to use them without each other, 
 Also, please note that; It would be best to stop the default logs from being sent. Or else you will have 2 logs being sent in your modlogs.
 
 
-> *If you find any bugs or issues, feel free to PR an issue or fix, or contact me through the YAGPDB Support Server*
-
+> *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/SY7wn39SYD) or my server, [Dynamic](https://discord.gg/2WfF9JxuTU)*
 
 ## credits
 
