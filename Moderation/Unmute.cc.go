@@ -1,5 +1,5 @@
 {{/*
-        Made by Rhyker (779096217853886504)
+        Made by Ranger (779096217853886504)
 
     Trigger Type: `Unmute DM`
 ©️ Dynamic 2021
@@ -12,6 +12,14 @@ MIT License
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
+
+{{$icon := ""}}
+{{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
+{{if .Guild.Icon}}
+	{{$ext := "webp"}}
+	{{if eq (slice .Guild.Icon 0 2) "a_"}} {{$ext = "gif"}} {{end}}
+	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
+{{end}}
 
 {{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12}}
 {{end}}
@@ -28,7 +36,7 @@ MIT License
 {{$UnmuteDM := cembed
             "author" (sdict "icon_url" ($user.AvatarURL "1024") "name" (print $user.String " (ID " $user.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Unmute`\n**Reason: **" .Reason ".")
-            "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon ".gif"))
+            "thumbnail" (sdict "url" $icon)
             "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 3553599
