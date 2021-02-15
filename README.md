@@ -51,6 +51,7 @@
 	**•** `Break` - Removes staff roles for a given time for a break  
 	**•** `Announce` - Makes an announcement and pings the announcement role  
 	**•** `Event` - Makes an event notif and pings the event role  
+    **Note:** Updates on hold
 </details>
 
 ---
@@ -70,4 +71,4 @@
 `Readme.md` - this document is an edited version of [TheHDCrafter](https://github.com/TheHDCrafter)'s [yagpdb-cc](https://github.com/TheHDCrafter/yagpdb-cc) custom commands [README.md](https://github.com/TheHDCrafter/yagpdb-cc/blob/master/README.md).
 
 ---
-> *If you find any bugs or issues, feel free to PR an issue or fix, or contact me through the YAGPDB Support Server*
+> *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/SY7wn39SYD) or my server, [Dynamic](https://discord.gg/2WfF9JxuTU)*
