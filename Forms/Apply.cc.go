@@ -27,7 +27,7 @@ MIT License
 {{sendMessage nil "Check your DM's for info!"}}
 {{$embed := cembed
             "author" (sdict "url" (print "https://discord.com/channels/" .Guild.ID) "name" (print .Guild.Name " staff applications") "icon_url" (.User.AvatarURL "1024"))
-            "description" (print  .User.Mention ",\nHello " .User.Username "\nThank you for taking interest in our servers staff team!\nPlease keep in mind that asking about the status of your application may warrant it's status as `denied`.\n[Application form](application)")
+            "description" (print  .User.Mention ",\nHello " .User.Username "\nThank you for taking interest in our servers staff team!\nPlease keep in mind that asking about the status of your application may warrant it's status as `denied`.\n[Application form](" $FormLink ")")
             "thumbnail" (sdict "url" $icon)
             "footer" (sdict "text" " ")
             "timestamp" currentTime
@@ -39,7 +39,7 @@ MIT License
 {{$logembed := cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**✉️ Application command notification**\n" .User.Mention " Has requested a staff application.")
-            "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $IconType))
+            "thumbnail" (sdict "url" $icon)
             "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 4645612
