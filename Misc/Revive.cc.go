@@ -22,8 +22,8 @@ MIT License
 	{{dbSetExpire 0 "cooldown" "cooldown" $Cooldown}}
 	{{sendMessageNoEscape nil (complexMessage
             "content" (print "<@&" $activityPing ">")
-			      "embed" (cembed
-			      "description"  (print .User.Mention " summons you with an activity ping!")
-			      "color" 4436910
-			      ))}}
+            "embed" (cembed
+            "description"  (print .User.Mention " summons you with an activity ping!")
+            "color" 4436910
+            ))}}
 {{end}}
