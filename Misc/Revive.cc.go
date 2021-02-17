@@ -9,7 +9,7 @@ MIT License
 
 {{/* Configuration values start */}}
 {{$activityPing := 799160232823226368}} {{/* RoleID of the role to ping when reviving chat */}}
-{{$Cooldown := 3600}} {{/* Cooldown in SECONDS */}}
+{{$Cooldown := 3600}} {{/* Cooldown in seconds */}}
 {{/* Configuration values end */}}
 
 {{if $cooldown := dbGet 0 "cooldown" }}
