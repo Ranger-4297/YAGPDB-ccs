@@ -68,7 +68,7 @@
 
 ## credits
 
-`Readme.md` - this document is an edited version of [TheHDCrafter](https://github.com/TheHDCrafter)'s [yagpdb-cc](https://github.com/TheHDCrafter/yagpdb-cc) custom commands [README.md](https://github.com/TheHDCrafter/yagpdb-cc/blob/master/README.md).
+`Readme.md` - this document is an edited version of [Wolf's](https://github.com/BlackWolfWoof) [yagpdb-cc](https://github.com/BlackWolfWoof/yagpdb-cc) custom commands [README.md](https://github.com/BlackWolfWoof/yagpdb-cc/blob/master/README.md).
 
 ---
 > *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/SY7wn39SYD) or my server, [Dynamic](https://discord.gg/2WfF9JxuTU)*
