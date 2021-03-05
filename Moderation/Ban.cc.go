@@ -13,6 +13,9 @@ MIT License
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
+{{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12}}
+{{end}}
+
 {{$icon := ""}}
 {{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
 {{if .Guild.Icon}}
@@ -21,20 +24,8 @@ MIT License
 	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
-{{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12}}
-{{end}}
-
-{{$member := .Member}}
-{{$user := .User}}
-{{$args := parseArgs 0 " " (carg "member" "target")}}
-{{if $args.IsSet 0}}
-    {{$member = $args.Get 0}}
-    {{$user = $member.User}}
-{{end}}
-
-
 {{$BanDM := cembed
-            "author" (sdict "icon_url" ($user.AvatarURL "1024") "name" (print $user.String " (ID " $user.ID ")"))
+            "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Ban`\n**Duration : **" .HumanDuration "\n**Reason: **" .Reason ".")
             "thumbnail" (sdict "url" $icon)
             "footer" (sdict "text" " ")
@@ -45,8 +36,8 @@ MIT License
 
 {{$Log := cembed
             "author" (sdict "icon_url" (.Author.AvatarURL "1024") "name" (print .Author.String " (ID " .Author.ID ")"))
-            "description" (print ":hammer: **Banned:** *" $user.Username "#" $user.Discriminator "* `(ID " $user.ID ")`\n:receipt: **Channel:** <#" .Channel.ID ">\n:page_facing_up: **Reason:** " .Reason "\n:clock12: **Time:** " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
-            "thumbnail" (sdict "url" ($user.AvatarURL "256"))
+            "description" (print ":hammer: **Banned:** *" .User.Username "#" .User.Discriminator "* `(ID " .User.ID ")`\n:receipt: **Channel:** <#" .Channel.ID ">\n:page_facing_up: **Reason:** " .Reason "\n:clock12: **Time:** " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
+            "thumbnail" (sdict "url" (.User.AvatarURL "256"))
             "footer" (sdict "text" (print "Duration: " .HumanDuration ))
             "color" 14043208
             }}
