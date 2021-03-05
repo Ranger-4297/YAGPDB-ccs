@@ -24,14 +24,14 @@ MIT License
 	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
-{{$WarnDM := cembed
+{{$MuteDM := cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Mute`\nDuration: " .HumanDuration "**Reason: **" .Reason ".")
             "thumbnail" (sdict "url" $icon)
             "timestamp" currentTime
             "color" 3553599
             }}
-{{sendDM $WarnDM}}
+{{sendDM $MuteDM}}
 
 {{$Log := cembed
             "author" (sdict "icon_url" (.Author.AvatarURL "1024") "name" (print .Author.String " (ID " .Author.ID ")"))
