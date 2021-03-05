@@ -16,15 +16,18 @@ MIT License
 {{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12}}
 {{end}}
 
-{{$channel := $LogChannel}}
-{{if .Channel.ID}}
-    {{$channel = .Channel.ID}}
+{{$icon := ""}}
+{{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
+{{if .Guild.Icon}}
+	{{$ext := "webp"}}
+	{{if eq (slice .Guild.Icon 0 2) "a_"}} {{$ext = "gif"}} {{end}}
+	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
 {{$WarnDM := cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Warn`\n**Reason: **" .Reason ".")
-            "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon ".gif"))
+            "thumbnail" (sdict "url" $icon)
             "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 3553599
