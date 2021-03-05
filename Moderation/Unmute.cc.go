@@ -1,7 +1,7 @@
 {{/*
         Made by Ranger (779096217853886504)
 
-    Trigger Type: `Warn DM`
+    Trigger Type: `UnMute DM`
 ©️ Dynamic 2021
 MIT License
 */}}
