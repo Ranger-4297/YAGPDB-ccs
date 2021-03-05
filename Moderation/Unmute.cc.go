@@ -29,14 +29,14 @@ MIT License
     {{$channel = .Channel.ID}}
 {{end}}
 
-{{$WarnDM := cembed
+{{$UnMuteDM := cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Warn`\n**Reason: **" .Reason ".")
             "thumbnail" (sdict "url" $icon)
             "timestamp" currentTime
             "color" 3553599
             }}
-{{sendDM $WarnDM}}
+{{sendDM $UnMuteDM}}
 
 {{$Log := cembed
             "author" (sdict "icon_url" (.Author.AvatarURL "1024") "name" (print .Author.String " (ID " .Author.ID ")"))
