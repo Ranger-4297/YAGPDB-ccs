@@ -24,7 +24,6 @@ MIT License
 {{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12}}
 {{end}}
 
-
 {{$channel := $LogChannel}}
 {{if .Channel.ID}}
     {{$channel = .Channel.ID}}
