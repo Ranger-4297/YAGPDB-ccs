@@ -10,11 +10,10 @@ MIT License
 
 {{/* Configuration values start */}}
 {{$FormLink := "https://realsite.co.uk/application"}} {{/* Your servers application link */}}
-{{$logchannel := 794365711614345267}}
-{{$IconType := "gif"}} {{/* set to `png` if your server uses a static icon */}}
+{{$logchannel := 794365711614345267}} {{/* Log channel */}}
 {{/* Configuration values end */}}
 
-{{/* Only edit below if you know what you're doing except for the 21st line. Add your staff application link at the end. (: rawr */}}
+{{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{$icon := ""}}
 {{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
@@ -44,4 +43,3 @@ MIT License
             "timestamp" currentTime
             "color" 4645612
             }}
-{{sendMessageNoEscape $logchannel $logembed}}
