@@ -9,7 +9,7 @@ MIT License
 
 
 {{/* Configuration values start */}}
-{{$FormLink := "https://realsite.co.uk/appeal"}} {{/* Your servers application link */}}
+{{$FormLink := "https://realsite.co.uk/appeal"}} {{/* Your servers appeal link */}}
 {{$logchannel := 794365711614345267}} {{/* Log channel*/}}
 {{/* Configuration values end */}}
 
