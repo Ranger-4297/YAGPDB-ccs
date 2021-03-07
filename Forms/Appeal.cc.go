@@ -13,7 +13,7 @@ MIT License
 {{$logchannel := 794365711614345267}} {{/* Log channel*/}}
 {{/* Configuration values end */}}
 
-{{/* Only edit below if you know what you're doing except for the 21st line. Add your ban appeal link at the end. (: rawr */}}
+{{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{$icon := ""}}
 {{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
