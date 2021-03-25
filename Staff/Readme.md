@@ -2,7 +2,6 @@
 
 ## Features
 - Break, announce, event commands
-- Rich embeds
 
 ## Usage
 
