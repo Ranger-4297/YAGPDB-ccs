@@ -1,5 +1,5 @@
 {{/*
-        Made by Rhyker/Ranger (779096217853886504)
+        Made by Ranger (765316548516380732)
 
     Trigger Type: `Command`
     Trigger: `Announce`
