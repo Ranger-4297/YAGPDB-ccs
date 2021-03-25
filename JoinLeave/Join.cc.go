@@ -8,7 +8,7 @@ MIT License
 
 
 {{/* Configuration values start */}}
-{{$Log:= 784132358085017602}} {{/* Join log channel */}}
+{{$Log:= 765316548516380732}} {{/* Join log channel */}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
