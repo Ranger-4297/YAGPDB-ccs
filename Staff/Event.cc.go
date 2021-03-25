@@ -1,5 +1,5 @@
 {{/*
-        Made by Rhyker/Ranger (779096217853886504)
+        Made by Ranger (765316548516380732)
 
     Trigger Type: `Command`
     Trigger: `Event`
@@ -9,13 +9,13 @@ MIT License
 
 
 {{/* Configuration values start */}}
-{{$announcementChannel := 784132357002625047}} {{/* Channel to send the event announcement */}}
-{{$announcementRole := 784132355379036196}} {{/* Event announcement role ping */}}
+{{$eventAnnouncementChannel := 784132357002625047}} {{/* Channel to send the event announcement */}}
+{{$eventRole := 784132355379036196}} {{/* Event announcement role ping */}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
-{{sendMessageNoEscape $eventChannel (complexMessage
+{{sendMessageNoEscape $eventAnnouncementChannel (complexMessage
     "content" (mentionRoleID $eventRole)
         "embed" (cembed
             "title" (print .User.Username " Has made an event notif!")
