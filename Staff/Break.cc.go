@@ -1,5 +1,5 @@
 {{/*
-        Made by Rhyker/Ranger (765316548516380732)
+        Made by Ranger (765316548516380732)
         Credits: Devonte (622146791659405313)
 
     Trigger Type: `Command`
@@ -10,7 +10,7 @@ MIT License
 
 
 {{/* Configuration values start */}}
-{{$rankID := 784132357002625047}} {{/* Staff rank ID | e.g moderators or administratio */}}
+{{$rankID := 784132357002625047}} {{/* Staff rank ID | e.g moderators or administration */}}
 {{$separatorID := 784132355379036196}} {{/* Staff role seperator ID | e.g a role named "Staff roles" | remove if none */}}
 {{/* Configuration values end */}}
 
