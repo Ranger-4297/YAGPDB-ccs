@@ -1,6 +1,6 @@
 {{/*
-        Made by Rhyker/Ranger (779096217853886504)
-        Helped by Devonte (622146791659405313) (or it might've been Dev who made it but def for me, since I see parseArgs and they confuse me)
+        Made by Rhyker/Ranger (765316548516380732)
+        Credits: Devonte (622146791659405313)
 
     Trigger Type: `Command`
     Trigger: `Break` | Syntax: `-Break <time>` | e.g `-Break 1y3mo8w6d7h9m1s`
