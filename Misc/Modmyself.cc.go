@@ -19,9 +19,9 @@ MIT License
     {{else if le $random 1}}
         {{execAdmin "mute" .User.ID (randInt 61) "you fookin donut, you modded yourself"}}
         {{else if le $random 2}}
-            {{execAdmin "kick" .User.ID (print "you fookin donut, you modded yourself :/ rejoin at [Dynamic](" $serverLink ")")}}
+            {{execAdmin "kick" .User.ID (print "you fookin donut, you modded yourself :/ rejoin at [" .Server.Name "](" $serverLink ")")}}
             {{else if le $random 3}}
-                {{execAdmin "ban" .User.ID (print "you fookin donut, you modded yourself\n:/rejoin in an hour (Yes. You have to wait) at [" .Server.Name "](" $serverLink ")") "-d" (print (randInt 61) "mins")}}
+                {{execAdmin "ban" .User.ID (print "you fookin donut, you modded yourself\n:/rejoin when your ban has timedout. (Yes. You have to wait) at [" .Server.Name "](" $serverLink ")") "-d" (print (randInt 61) "mins")}}
         {{end}}
     {{end}}
 {{end}}
