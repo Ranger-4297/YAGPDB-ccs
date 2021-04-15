@@ -26,7 +26,7 @@ MIT License
 {{sendMessage $Log $logEmbed}}
 {{$welcomeEmbed := cembed
             "author" (sdict "url" (.User.AvatarURL "4096") "name" "User Joined!" "icon_url" (.User.AvatarURL "1024"))
-            "description" (print "Hello " .User.String "! Welcome to " .Guild.Name "! Check the DM I sent you!\nWe now have `" .Guild.MemberCount "` members!")
+            "description" (print "Hey there,  " .User.String "! Welcome to " .Guild.Name "!\nWe now have `" .Guild.MemberCount "` members!")
             "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 65419
