@@ -1,1 +1,2 @@
-testing visual code 2 github
+I will be adding AND updating this SOON
+Due to the new unban command implemented onto YAGPDB
