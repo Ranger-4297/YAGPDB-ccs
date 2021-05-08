@@ -1,5 +1,6 @@
 {{/*
-        Made by Ranger (779096217853886504)
+        Made by Ranger (765316548516380732)
+
     Trigger Type: `RegEx`
     Trigger: `\A[^a-zA-Z0-9]*\-[​‏]*?m[​‏]*o[​‏]*d[​‏]*m[​‏]*y[​‏]*s[​‏]*e[​‏]*[lI][​‏]*f`
 ©️ Dynamic 2021
@@ -18,7 +19,7 @@ MIT License
     {{else if le $random 1}}
     {{execAdmin "mute" .User.ID (randInt 61) "you fuckin' donut, you modded yourself"}}
     {{else if le $random 2}}
-     {{execAdmin "kick" .User.ID (print "you fuckin' donut, you modded yourself :/ rejoin at [" .Server.Name "](" $serverLink ")")}}
-     {{else if le $random 3}}
-     {{execAdmin "ban" .User.ID (print "you fuckin' donut, you modded yourself :/ rejoin at [" .Server.Name "](" $serverLink ")") "-d" (print (randInt 61) "mins")}}
+    {{execAdmin "kick" .User.ID (print "you fuckin' donut, you modded yourself :/ rejoin at [" .Server.Name "](" $serverLink ")")}}
+    {{else if le $random 3}}
+    {{execAdmin "ban" .User.ID (print "you fuckin' donut, you modded yourself :/ rejoin at [" .Server.Name "](" $serverLink ")") "-d" (print (randInt 61) "mins")}}
 {{end}}
