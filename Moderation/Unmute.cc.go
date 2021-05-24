@@ -24,9 +24,9 @@ MIT License
 	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
-{{$channel := $LogChannel}}
+{{$Channel := $LogChannel}}
 {{if .Channel.ID}}
-    {{$channel = .Channel.ID}}
+    {{$Channel = .Channel.ID}}
 {{end}}
 
 {{$UnMuteDM := cembed
