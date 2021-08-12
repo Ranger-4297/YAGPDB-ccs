@@ -19,7 +19,6 @@ MIT License
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
-
 {{$icon := ""}}
 {{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
 {{if .Guild.Icon}}
@@ -46,6 +45,7 @@ MIT License
     {{$channel = .Channel.ID}}
 {{end}}
 
+{{/* log & DM messages */}}
 {{if $dm}}
     {{$UnmuteDM := cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
