@@ -7,8 +7,8 @@
 MIT License
 */}}
 
-{{/* Notes */}} 
-{{/* 
+
+{{/*        Notes
     This command allows for use with the `BannedWords` CC (Unsure who made it), if you haven't added it, and want to implement it DM me
     Please be aware that even though the original custom commands had the time, I removed it from this for NOW. They may be added back if I can get it to show the current time, not the time in GMT.
 */}}
@@ -63,6 +63,7 @@ MIT License
     {{end}}
 {{end}}
 
+{{/* log & DM messages */}}
 {{if $dm}}
     {{$WarnDM := cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
@@ -81,10 +82,6 @@ MIT License
             "color" 16556627
             )}}
 
-{{dbSet $case_number "viewcase" (sdict "name" .Author.Username "warnname" .User.Username "avatar" (.Author.AvatarURL "512") "reason" $reason "userid" $id "action" (.ModAction.Prefix) "channel" $channel "msgid" $x "userdiscrim" .User.Discriminator)}}{{/*for viewcase*/}}
-{{dbSet $case_number $id (print "Case # **" $case_number "**\t\t**| " $title " Reason:** `" $reason "`")}}{{/*for per user case viewing*/}}
-{{dbSet $case_number "userid" (str $id)}}{{/* for delete case*/}}
-
 {{$Response := sendMessageRetID nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print "Case type: Warning"))
             "description" (print .Author.Mention " Has successfully warned " .User.Mention " :thumbsup:")
@@ -93,3 +90,12 @@ MIT License
             "color" 3553599
             )}}
 {{deleteMessage nil $Response 5}}
+
+{{/*for viewcase*/}}
+{{dbSet $case_number "viewcase" (sdict "name" .Author.Username "warnname" .User.Username "avatar" (.Author.AvatarURL "512") "reason" $reason "userid" $id "action" (.ModAction.Prefix) "channel" $channel "msgid" $x "userdiscrim" .User.Discriminator)}}
+
+{{/*for per user case viewing*/}}
+{{dbSet $case_number $id (print "Case # **" $case_number "**\t\t**| " $title " Reason:** `" $reason "`")}}
+
+{{/* for delete case*/}}
+{{dbSet $case_number "userid" (str $id)}}
