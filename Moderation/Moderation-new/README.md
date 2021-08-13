@@ -1,4 +1,4 @@
-<!-- # Moderation commands (+ custom logging)
+# Moderation commands (+ custom logging)
 Fully functioning custom moderation DM and logging commands that DM the user an embed with their mod action information and logs the command in the modlog channel.
 ---
 Add these in **Tools & Util > Moderation**
@@ -47,4 +47,4 @@ Also, please note that; It would be best to stop the default logs from being sen
 
 ## credits
 
-`Readme.md` - this document is an edited version of [NaruDevonte](https://github.com/NaruDevnote)'s [tag](https://github.com/NaruDevnote/yagpdb-ccs/tree/master/tags) custom command [README.md](https://github.com/NaruDevnote/yagpdb-ccs/blob/master/tags/README.md) -->
+`Readme.md` - this document is an edited version of [NaruDevonte](https://github.com/NaruDevnote)'s [tag](https://github.com/NaruDevnote/yagpdb-ccs/tree/master/tags) custom command [README.md](https://github.com/NaruDevnote/yagpdb-ccs/blob/master/tags/README.md)
