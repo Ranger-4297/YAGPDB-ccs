@@ -14,6 +14,8 @@ MIT License
 {{$separatorID := 784132355379036196}} {{/* Staff role seperator ID | e.g a role named "Staff roles" | remove if none */}}
 {{/* Configuration values end */}}
 
+{{/* Only edit below if you know what you're doing (: rawr */}}
+
 {{$args := parseArgs 1 "" (carg "duration" "time")}}
 {{if not .ExecData}}
     {{removeRoleID $rankID}} {{/*Staff Role*/}}
