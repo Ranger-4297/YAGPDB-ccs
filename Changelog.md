@@ -12,7 +12,7 @@
 - **V1**  
 	**•** [`V1.0`](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/releases/tag/V1) - Outdated.  
 	**•** [`V1.4`](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/releases/tag/V1.4) - Outdated
-	**•** [`v1.6`](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/releases/tag/V1.6) - Current version.  
+	**•** [`v1.7`](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/releases/tag/V1.7) - Current version.  
 </details>
 
 ---
