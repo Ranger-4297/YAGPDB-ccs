@@ -57,8 +57,8 @@
 ---
 ## Other custom command repositories:
 [Official Repo](https://github.com/yagpdb-cc/yagpdb-cc): The official custom command repository. If you are searching for more custom commands you will find a lot of them there :).  
-[Pedro's Repo](https://github.com/Pedro-Pessoa/yagpdb-cc/tree/Tickets/tickets): A fork of the official repo but with an amazing ticket system.
-[Wolf's Repo](https://github.com/BlackWolfWoof/yagpdb-cc)
+[Pedro's Repo](https://github.com/Pedro-Pessoa/yagpdb-cc/tree/Tickets/tickets): A fork of the official repo but with an amazing ticket system.  
+[Wolf's Repo](https://github.com/BlackWolfWoof/yagpdb-cc): A really advanced repository including database management
 
 
 ## Other links:
