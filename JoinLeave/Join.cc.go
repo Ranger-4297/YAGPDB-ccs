@@ -19,7 +19,6 @@ MIT License
 {{$logEmbed := cembed
             "author" (sdict "url" (.User.AvatarURL "4096") "name" "User Joined" "icon_url" (.User.AvatarURL "1024"))
             "description" (print  .User.Mention "\n[" .User.String "]" " : " "`" .User.ID "`" "\nAccount created " "**" currentUserAgeHuman "** ago" "\nWe now have" "** " .Guild.MemberCount " **" "members")
-            "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 3247335
             }}
@@ -27,7 +26,6 @@ MIT License
 {{$welcomeEmbed := cembed
             "author" (sdict "url" (.User.AvatarURL "4096") "name" "User Joined!" "icon_url" (.User.AvatarURL "1024"))
             "description" (print "Hey there,  " .User.String "! Welcome to " .Guild.Name "!\nWe now have `" .Guild.MemberCount "` members!")
-            "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 65419
             }}

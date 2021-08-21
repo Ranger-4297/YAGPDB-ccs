@@ -47,7 +47,6 @@ MIT License
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .Usser.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Kick`\n**Reason: **" (joinStr " " (split (reReplace `Automoderator:` .Reason "<:Bot:787563190221406259>:") "\n")))
             "thumbnail" (sdict "url" $icon)
-            "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 3553599
             }}
@@ -64,7 +63,6 @@ MIT License
 {{$Response := sendMessageRetID nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print "Case type: Kick"))
             "description" (print .Author.Mention " Has successfully kicked " .User.Mention " :thumbsup:")
-            "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 3553599
             )}}

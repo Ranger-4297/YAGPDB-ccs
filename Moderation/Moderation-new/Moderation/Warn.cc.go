@@ -69,7 +69,6 @@ MIT License
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Warn`\n**Reason: **" $reason)
             "thumbnail" (sdict "url" $icon)
-            "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 3553599
             }}
@@ -85,7 +84,6 @@ MIT License
 {{$Response := sendMessageRetID nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print "Case type: Warning"))
             "description" (print .Author.Mention " Has successfully warned " .User.Mention " :thumbsup:")
-            "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 3553599
             )}}

@@ -28,7 +28,6 @@ MIT License
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Warn`\n**Reason: **" .Reason ".")
             "thumbnail" (sdict "url" $icon)
-            "footer" (sdict "text" " ")
             "timestamp" currentTime
             "color" 3553599
             }}
