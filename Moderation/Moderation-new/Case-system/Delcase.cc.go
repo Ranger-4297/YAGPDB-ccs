@@ -11,11 +11,11 @@ MIT License
 */}}
 
 
-{{/* Only edit below if you know what you're doing (: rawr */}}
-
 {{/* Configuration values start */}}
 {{$roles := cslice }} {{/* Add your staff role ID's here */}}
 {{/* Configuration values end */}}
+
+{{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{$check := 0}}
 {{range $roles}}
