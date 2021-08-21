@@ -16,6 +16,7 @@
 
 ## Other Info
 These commands **are** standalone. You are able to use them without each other, it is not required that they are used together.
+These were only for basic stuff, not going to be working on them at all
 
 > *If you find any bugs or issues, feel free to PR an issue or fix, or contact me through the YAGPDB Support Server*
 
