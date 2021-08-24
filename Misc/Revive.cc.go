@@ -18,7 +18,7 @@ MIT License
             "description" (print ":warning: This command is still on cooldown for: " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)) )
             "color" 14043208
             )}}
-    {{else}}
+{{else}}
 	{{dbSetExpire 0 "cooldown" "cooldown" $Cooldown}}
 	{{sendMessageNoEscape nil (complexMessage
             "content" (print "<@&" $activityPing ">")

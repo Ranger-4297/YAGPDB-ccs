@@ -5,7 +5,6 @@
 
     Trigger Type: `RegEx`
     Trigger: `\A(-|<@!?204255221017214977>\s*)(delcase|deletecase|clearcase|dc|clc)(\s+|\z)`
-
 Repo: https://github.com/Maverick-Wolf/yagpdb-mave
 MIT License
 */}}
@@ -32,7 +31,7 @@ MIT License
             "description" (print "<:Cross:817828050938363905> I'm sorry. You don't have permission to use this command.")
             "color" 0x36393f
             )}}
-    {{else}}
+{{else}}
     {{$check :=0}}
     {{$roles :=cslice 784202772923809824 784202772232405032 784203507989086258 784530496490569799 784132355534880855}}
     {{range $roles}}
@@ -42,14 +41,13 @@ MIT License
             {{end}}
         {{end}}
     {{end}}
-    
     {{if eq $check 0}}
         {{sendMessage nil (cembed
             "author" (sdict "name" (print .User.Username) "icon_url" (.User.AvatarURL "512"))
             "description" (print "<:Cross:817828050938363905> I'm sorry. You don't have permission to use this command.")
             "color" 0x36393f
             )}}
-        {{else}}
+    {{else}}
         {{$args := parseArgs 1 "correct usuage is `-delcase <case number>`" (carg "int" "case number")}}
         {{$caseno := ($args.Get 0)}}
         {{$id := (toInt (dbGet $caseno "userid").Value)}}

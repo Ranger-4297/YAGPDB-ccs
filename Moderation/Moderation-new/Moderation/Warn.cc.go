@@ -24,7 +24,9 @@ MIT License
 {{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
 {{if .Guild.Icon}}
 	{{$ext := "webp"}}
-	{{if eq (slice .Guild.Icon 0 2) "a_"}} {{$ext = "gif"}} {{end}}
+	{{if eq (slice .Guild.Icon 0 2) "a_"}}
+        {{$ext = "gif"}}
+    {{end}}
 	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
@@ -42,7 +44,7 @@ MIT License
 
 {{if eq $action "Muted" "Unmuted"}}
     {{$a = (sub (len .ModAction.Prefix) 1)}}
-    {{else}}
+{{else}}
     {{$a = (sub (len .ModAction.Prefix) 2)}}
 {{end}}
 
@@ -54,10 +56,10 @@ MIT License
 {{if .Reason}}
     {{if and (reFind "(?i)word blacklist" .Reason) (dbGet 0 "banned words")}}
         {{$reason = (print "Sending  word ||" (reFind $bannedWords (lower .Message.Content)) "|| is forbidden")}}
-        {{else if or (not (reFind "(?i)word blacklist" .Reason)) (not (dbGet 0 "banned words"))}}
+    {{else if or (not (reFind "(?i)word blacklist" .Reason)) (not (dbGet 0 "banned words"))}}
         {{if reFind `Automoderator:` .Reason}}
             {{$reason = (reReplace `Triggered rule:\s` (reReplace `Automoderator:\s` .Reason "") "")}}
-            {{else}}
+        {{else}}
             {{$reason = .Reason}}
         {{end}}
     {{end}}
@@ -69,8 +71,8 @@ MIT License
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Warn`\n**Reason: **" $reason)
             "thumbnail" (sdict "url" $icon)
-            "timestamp" currentTime
             "color" 3553599
+            "timestamp" currentTime
             }}
     {{sendDM $WarnDM}}
 {{end}}
@@ -84,8 +86,8 @@ MIT License
 {{$Response := sendMessageRetID nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print "Case type: Warning"))
             "description" (print .Author.Mention " Has successfully warned " .User.Mention " :thumbsup:")
-            "timestamp" currentTime
             "color" 3553599
+            "timestamp" currentTime
             )}}
 {{deleteMessage nil $Response 5}}
 

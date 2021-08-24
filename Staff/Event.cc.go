@@ -21,7 +21,7 @@ MIT License
             "title" (print .User.Username " Has made an event notif!")
                 "url" (print "https://discord.com/channels/" .Guild.ID "/" $eventChannel)
             "description" (print .StrippedMsg)
-            "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon ".gif"))
             "image" (sdict "url" "https://cdn.discordapp.com/attachments/784132357002625047/789191517704290324/2.png")
+            "thumbnail" (sdict "url" (print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon ".gif"))
             "color" 16761035 ))
             }}

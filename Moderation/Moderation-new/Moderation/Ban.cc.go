@@ -23,7 +23,9 @@ MIT License
 {{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
 {{if .Guild.Icon}}
 	{{$ext := "webp"}}
-	{{if eq (slice .Guild.Icon 0 2) "a_"}} {{$ext = "gif"}} {{end}}
+	{{if eq (slice .Guild.Icon 0 2) "a_"}}
+        {{$ext = "gif"}}
+    {{end}}
 	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
@@ -33,7 +35,7 @@ MIT License
 
 {{if eq $action "Muted" "Unmuted"}}
     {{$a = (sub (len .ModAction.Prefix) 1)}}
-    {{else}}
+{{else}}
     {{$a = (sub (len .ModAction.Prefix) 2)}}
 {{end}}
 
@@ -47,8 +49,8 @@ MIT License
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Ban`\n**Duration : **" .HumanDuration "\n**Reason: **" (joinStr " " (split (reReplace `Automoderator:` .Reason "<:Bot:787563190221406259>:") "\n")))
             "thumbnail" (sdict "url" $icon)
-            "timestamp" currentTime
             "color" 3553599
+            "timestamp" currentTime
             }}
     {{sendDM $BanDM}}
 {{end}}
@@ -57,15 +59,15 @@ MIT License
             "author" (sdict "icon_url" (.Author.AvatarURL "1024") "name" (print .Author.String " (ID " .Author.ID ")"))
             "description" (print "<:TextChannel:800978104105304065> **Case number** " $case_number "\n<:Management:788937280508657694> **Who:** " .User.Mention " `(ID " .User.ID ")`\n<:Metadata:788937280508657664> **Action:** `Ban`\n<:Assetlibrary:788937280554926091> **Channel:** <#" .Channel.ID ">\n<:Manifest:788937280579698728> **Reason:** " (joinStr " " (split (reReplace `Automoderator:` .Reason "<:Bot:787563190221406259>:") "\n")) "\n:clock12: **Time:** " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
             "thumbnail" (sdict "url" (.User.AvatarURL "256"))
-            "footer" (sdict "text" (print "Duration: " .HumanDuration ))
             "color" 14043208
+            "footer" (sdict "text" (print "Duration: " .HumanDuration ))
             )}}
 
 {{$Response := sendMessageRetID nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print "Case type: Ban"))
             "description" (print .Author.Mention " Has successfully banned " .User.Mention " :thumbsup:")
-            "timestamp" currentTime
             "color" 3553599
+            "timestamp" currentTime
             )}}
 {{deleteMessage nil $Response 5}}
 

@@ -16,14 +16,14 @@ MIT License
 {{$logEmbed := cembed
             "author" (sdict "url" (.User.AvatarURL "4096") "name" "User Left" "icon_url" (.User.AvatarURL "1024"))
             "description" (print  .User.Mention "\n[" .User.String "]" " : " "`" .User.ID "`" "\nAccount created " "**" currentUserAgeHuman "** ago" "\nWe now have" "** " .Guild.MemberCount " **" "members")
-            "timestamp" currentTime
             "color" 16711680
+            "timestamp" currentTime
             }}
 {{sendMessage $Log $logEmbed}}
 {{$leaveEmbed := cembed
             "author" (sdict "url" (.User.AvatarURL "4096") "name" "User left!" "icon_url" (.User.AvatarURL "1024"))
             "description" (print "Welp " .User.String " Left " .Guild.Name "~~ :( Guess they were cool enough~~\nWe now have `" .Guild.MemberCount "` members!")
-            "timestamp" currentTime
             "color" 16711680
+            "timestamp" currentTime
             }}
 {{sendMessage nil $leaveEmbed}}

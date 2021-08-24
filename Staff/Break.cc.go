@@ -3,7 +3,8 @@
         Credits: Devonte (622146791659405313)
 
     Trigger Type: `Command`
-    Trigger: `Break` | Syntax: `-Break <time>` | e.g `-Break 1y3mo8w6d7h9m1s`
+    Trigger: `Break`
+    Usage: `-Break <time>`
 ©️ Dynamic 2021
 MIT License
 */}}

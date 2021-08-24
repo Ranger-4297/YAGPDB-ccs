@@ -1,6 +1,5 @@
 {{/*
         Made by Ranger (765316548516380732)
-        Credits: WickedWizard#3588 (719421577086894101)
 
     Trigger Type: `Regex`
     Trigger: `\A!d\shelp(?:\s+|\z)`
@@ -8,6 +7,8 @@
 MIT License
 */}}
 
+
+{{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{execAdmin "clean" 1 302050872383242240}}
 {{sendMessage nil (cembed

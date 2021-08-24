@@ -23,7 +23,9 @@ MIT License
 {{$name := printf "%s (%d)" .Guild.Name .Guild.ID}}
 {{if .Guild.Icon}}
 	{{$ext := "webp"}}
-	{{if eq (slice .Guild.Icon 0 2) "a_"}} {{$ext = "gif"}} {{end}}
+	{{if eq (slice .Guild.Icon 0 2) "a_"}}
+        {{$ext = "gif"}}
+    {{end}}
 	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
@@ -33,7 +35,7 @@ MIT License
 
 {{if eq $action "Muted" "Unmuted"}}
     {{$a = (sub (len .ModAction.Prefix) 1)}}
-    {{else}}
+{{else}}
     {{$a = (sub (len .ModAction.Prefix) 2)}}
 {{end}}
 
@@ -47,8 +49,8 @@ MIT License
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .Usser.String " (ID " .User.ID ")"))
             "description" (print "**Server:** " .Guild.Name "\n**Action:** `Kick`\n**Reason: **" (joinStr " " (split (reReplace `Automoderator:` .Reason "<:Bot:787563190221406259>:") "\n")))
             "thumbnail" (sdict "url" $icon)
-            "timestamp" currentTime
             "color" 3553599
+            "timestamp" currentTime
             }}
     {{sendDM $KickDM}}
 {{end}}
@@ -63,8 +65,8 @@ MIT License
 {{$Response := sendMessageRetID nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print "Case type: Kick"))
             "description" (print .Author.Mention " Has successfully kicked " .User.Mention " :thumbsup:")
-            "timestamp" currentTime
             "color" 3553599
+            "timestamp" currentTime
             )}}
 {{deleteMessage nil $Response 5}}
 

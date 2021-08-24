@@ -32,7 +32,7 @@ MIT License
             "description" (print "<:Cross:817828050938363905> I'm sorry. You don't have permission to use this command.")
             "color" 0x36393f
             )}}
-    {{else}}
+{{else}}
     {{$args := parseArgs 1 "` -viewcase <case number>` " (carg "int" "case number")}}
     {{$a := ""}}
     {{$name := ""}}
@@ -64,7 +64,7 @@ MIT License
             "color" 0x36393f
             "footer" (sdict "text" (print "Case #" $b))}}
         {{sendMessage nil $embed}} 
-        {{else}}
+    {{else}}
         {{sendMessage nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" .User.Username)
             "description" (print "Could not find the case specified, Please make sure the case number is correct or the case has not been deleted")

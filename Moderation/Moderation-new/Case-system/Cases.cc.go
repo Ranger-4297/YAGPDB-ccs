@@ -5,7 +5,6 @@
 
     Trigger Type: `RegEx`
     Trigger: `\A(-|<@!?204255221017214977>\s*)(cases|allcase)(\s+|\z)`
-
 Repo: https://github.com/Maverick-Wolf/yagpdb-mave
 MIT License
 */}}
@@ -32,7 +31,7 @@ MIT License
             "description" (print "<:Cross:817828050938363905> I'm sorry. You don't have permission to use this command.")
             "color" 0x36393f
             )}}
-    {{else}}
+{{else}}
     {{$args := parseArgs 1 "correct usuage is `-cases <User/Mention> [Page]`" (carg "member" "target user") (carg "int" "page number")}}
     {{$user := ($args.Get 0).User}}
     {{$id := $user.ID}}
@@ -41,7 +40,7 @@ MIT License
     {{if ($args.IsSet 1)}}
         {{if ge ($args.Get 1) 1}}
             {{$page = ($args.Get 1)}}
-            {{else}}
+        {{else}}
             {{$page = 1}}
         {{end}}
     {{end}}
@@ -50,14 +49,14 @@ MIT License
     {{range $cases}}
         {{- $value := str .Value }} 
         {{- $display = joinStr "" $display "\n" $value -}} 
-        {{else}}
+    {{else}}
         {{$display = "`No cases exist on this page`"}}
     {{end}}
     {{$id := sendMessageRetID nil (cembed
-            "author" (sdict "name" (print $user.Username " (" $user.ID ")") "icon_url" ($user.AvatarURL "512"))
             "title" "Cases" 
+            "author" (sdict "name" (print $user.Username " (" $user.ID ")") "icon_url" ($user.AvatarURL "512"))
             "description" $display
-            "footer" (sdict "text" (print "Page " $page))
             "color" 0x36393f
+            "footer" (sdict "text" (print "Page " $page))
             )}}
 {{end}}

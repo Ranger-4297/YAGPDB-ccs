@@ -17,13 +17,12 @@
 
 {{$args := parseArgs 1 "Correct Usage:\n\n`-bannedwords <your list of banned words>` to set a list of banned words and enable the banned words extension\n\n`-bannedwords delete` to delete the banned words list and disable the banned words extension\n\n`-bannedwords show` to show the current list of banned words" (carg "string" "list of banned words")}}
 
- 
 {{if eq (lower ($args.Get 0)) "delete"}}
     {{dbDel 0 "banned words"}}
     {{sendMessage nil "Deleted the banned words list and disabled the banned words extension"}}
-    {{else if eq (lower ($args.Get 0)) "show"}}
+{{else if eq (lower ($args.Get 0)) "show"}}
     {{(dbGet 0 "banned words").Value}}
-    {{else}}
+{{else}}
     {{dbSet 0 "banned words" ($args.Get 0)}}
     {{sendMessage nil "All set :)"}}
 {{end}}

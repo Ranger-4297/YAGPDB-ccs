@@ -1,7 +1,6 @@
 {{/*
         Made by Ranger (765316548516380732)
-        Modified by WickedWizard#3588 (719421577086894101)
-        
+    
     Trigger Type: `Regex`
     Trigger: `\A!d\sPage(?:\s+|\z)`
 ©️ Dynamic 2021

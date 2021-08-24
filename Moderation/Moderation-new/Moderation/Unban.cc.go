@@ -30,7 +30,7 @@ MIT License
             "description" (print "<:Cross:817828050938363905> I'm sorry. You don't have permission to use this command.")
             "color" 0x36393f
             )}}
-    {{else}}
+{{else}}
     {{$args := parseArgs 1 "```Unban <User:ID> [Reason:Text]```" (carg "string" "target") (carg "string" "optional")}}
     {{$target := $args.Get 0}}
     {{execAdmin "Unban" ($args.Get 0)}}
@@ -43,7 +43,7 @@ MIT License
     {{$a := 0}}
     {{if eq $action "Muted" "Unmuted"}}
         {{$a = (sub (len "Unbanned") 1)}}
-        {{else}}
+    {{else}}
         {{$a = (sub (len "Unbanned") 2)}}
     {{end}}
     {{$title := (slice "Unbanned" 0 $a)}}
@@ -61,8 +61,8 @@ MIT License
     {{$Response := sendMessageRetID nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print "Case type: Unban"))
             "description" (print .User.Mention " Has successfully Unbanned <@" $target "> :thumbsup:")
-            "timestamp" currentTime
             "color" 3553599
+            "timestamp" currentTime
 			)}}
     {{deleteMessage nil $Response 3}}
     {{/*for viewcase*/}}

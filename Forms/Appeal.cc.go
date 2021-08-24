@@ -30,8 +30,8 @@ MIT License
             "author" (sdict "url" (print "https://discord.com/channels/" .Guild.ID) "name" (print .Guild.Name " Ban appeals") "icon_url" (.User.AvatarURL "1024"))
             "description" (print  .User.Mention "\n\nHello " .User.Username ". You've requested " .Guild.Name "'s ban appeal form.\nThis means you are either looking to reverse your ban, or are simply taking a look at our appeal.\nPlease keep in mind that asking about the status of your appeal may warrant it's status as `denied`.\n[Ban appeal form](" $FormLink ")")
             "thumbnail" (sdict "url" $icon)
-            "timestamp" currentTime
             "color" 4645612
+            "timestamp" currentTime
             }}
 {{sendDM $embed}}
 
@@ -40,7 +40,7 @@ MIT License
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .User.String " (ID " .User.ID ")"))
             "description" (print "**✉️ Ban appeal command notification**\n" .User.Mention " Has requested a ban appeal form.")
             "thumbnail" (sdict "url" $icon)
-            "timestamp" currentTime
             "color" 4645612
+            "timestamp" currentTime
             }}
 {{sendMessageNoEscape $logchannel $logembed}}

@@ -1,8 +1,8 @@
 {{/* 
         Made by Ranger (765316548516380732)
 
-    Trigger Type: `Regex`
-    Trigger: `Bumpbot|Disboard`
+    Trigger Type: `Command`
+    Trigger: `whenbump`
 ©️ Dynamic 2021
 MIT License
 */}}
@@ -23,8 +23,8 @@ MIT License
             }}
 
 {{if dbGet 0 "cooldown" }}
-{{/* Leave blank */}}
+    {{/* Leave blank */}}
 {{else}}
-{{dbSetExpire 0 "cooldown" "cooldown" 600}}
-{{sendMessage nil $embed }}
+    {{dbSetExpire 0 "cooldown" "cooldown" 600}}
+    {{sendMessage nil $embed }}
 {{end}}
