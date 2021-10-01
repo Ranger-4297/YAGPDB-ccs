@@ -5,7 +5,7 @@
     Trigger Type: `Command`
     Trigger: `Break`
     Usage: `-Break <time>`
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 

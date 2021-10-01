@@ -3,7 +3,7 @@
 
     Trigger Type: `Command`
     Trigger: `Event`
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 

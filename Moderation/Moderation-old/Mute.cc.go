@@ -2,7 +2,7 @@
         Made by Ranger (765316548516380732)
 
     Trigger Type: `Mute DM`
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 

@@ -3,7 +3,7 @@
 
     Trigger Type: `RegEx`
     Trigger: `\A[^a-zA-Z0-9]*\-[​‏]*?m[​‏]*o[​‏]*d[​‏]*m[​‏]*y[​‏]*s[​‏]*e[​‏]*[lI][​‏]*f`
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 

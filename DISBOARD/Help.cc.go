@@ -3,7 +3,7 @@
 
     Trigger Type: `Regex`
     Trigger: `\A!d\shelp(?:\s+|\z)`
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 

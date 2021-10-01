@@ -3,7 +3,7 @@
 
     Trigger Type: `Command`
     Trigger: `whenbump`
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 

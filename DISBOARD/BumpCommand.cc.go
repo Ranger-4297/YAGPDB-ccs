@@ -5,7 +5,7 @@
 
     Trigger Type: `RegEx`
     Trigger: `\A!d\sbump(?:\s+|\z)`
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 

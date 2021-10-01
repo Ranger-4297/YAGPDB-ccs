@@ -3,7 +3,7 @@
         Made & modified by Ranger (765316548516380732)
 
     **Tools & Util > Moderation > Warn > Warn DM**
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 

@@ -2,7 +2,7 @@
         Made by Ranger (765316548516380732)
 
     Trigger Type: `Warn DM`
-©️ Dynamic 2021
+©️ Ranger 2021
 MIT License
 */}}
 
