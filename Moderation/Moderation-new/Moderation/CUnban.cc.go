@@ -54,7 +54,7 @@ MIT License
             {{/* Log & DM messages */}}
             {{$LogEmbed := (cembed
             "author" (sdict "icon_url" ($.User.AvatarURL "1024") "name" (print $.User.String " (ID " $.User.ID ")"))
-            "description" (print "<:Management:788937280508657694> **Who:** <@" $userid "> `(ID " $userid ")`\n<:Metadata:788937280508657664> **Action:** `Unban`\n<:Assetlibrary:788937280554926091> **Channel:** <#" $.Channel.ID ">\n<:Manifest:788937280579698728> **Reason:** " $reason "\n:clock12: **Time:** " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
+            "description" (print "<:Management:788937280508657694> **Who:** <@" $userid "> `(ID " $userid ")`\n<:Metadata:788937280508657664> **Action:** `Unban`\n<:Assetlibrary:788937280554926091> **Channel:** <#" $.Channel.ID ">\n<:Manifest:788937280579698728> **Reason:** " $reason)
             "thumbnail" (sdict "url" $uavatar)
             "color" 6473311
             )}}
