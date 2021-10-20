@@ -29,20 +29,8 @@ MIT License
 	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
-{{$case_number := (toInt (dbIncr 77 "cv" 1))}}
-{{$action := .ModAction.Prefix}}
-{{$a := 0}}
-
-{{if eq $action "Muted" "Unmuted"}}
-    {{$a = (sub (len .ModAction.Prefix) 1)}}
-{{else}}
-    {{$a = (sub (len .ModAction.Prefix) 2)}}
-{{end}}
-
-{{$title := (slice .ModAction.Prefix 0 $a)}}
 {{$id := .User.ID}}
 
-{{$channel := $LogChannel}}
 {{$channel2 := $LogChannel}}
 {{if .Channel.ID}}
     {{$channel2 = .Channel.ID}}
@@ -62,7 +50,7 @@ MIT License
 
 {{$x := sendMessageRetID $LogChannel (cembed
             "author" (sdict "icon_url" (.Author.AvatarURL "1024") "name" (print .Author.String " (ID " .Author.ID ")"))
-            "description" (print "<:TextChannel:800978104105304065> **Case number** " $case_number "\n<:Management:788937280508657694> **Who:** " .User.Mention " `(ID " .User.ID ")`\n<:Metadata:788937280508657664> **Action:** `Unmute`\n<:Assetlibrary:788937280554926091> **Channel:** <#" $channel2 ">\n<:Manifest:788937280579698728> **Reason:** " (joinStr " " (split (reReplace `Automoderator:` .Reason "<:Bot:787563190221406259>:") "\n")))
+            "description" (print "<:Management:788937280508657694> **Who:** " .User.Mention " `(ID " .User.ID ")`\n<:Metadata:788937280508657664> **Action:** `Unmute`\n<:Assetlibrary:788937280554926091> **Channel:** <#" $channel2 ">\n<:Manifest:788937280579698728> **Reason:** " (joinStr " " (split (reReplace `Automoderator:` .Reason "<:Bot:787563190221406259>:") "\n")))
             "thumbnail" (sdict "url" (.User.AvatarURL "256"))
             "color" 6473311
             )}}
@@ -74,12 +62,3 @@ MIT License
             "timestamp" currentTime
             )}}
 {{deleteMessage nil $Response 5}}
-
-{{/*for viewcase*/}}
-{{dbSet $case_number "viewcase" (sdict "name" .Author.Username "warnname" .User.Username "avatar" (.Author.AvatarURL "512") "reason" .Reason "userid" $id "action" (.ModAction.Prefix) "channel" $channel "msgid" $x "userdiscrim" .User.Discriminator)}}
-
-{{/*for per user case viewing*/}}
-{{dbSet $case_number $id (print "Case # **" $case_number "**\t\t**| " $title " Reason:** `" .Reason "`")}}
-
-{{/* for delete case*/}}
-{{dbSet $case_number "userid" (str $id)}}
