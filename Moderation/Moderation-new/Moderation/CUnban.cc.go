@@ -8,7 +8,6 @@
 MIT License
 */}}
 
-
 {{/* Configuration values start */}}
 {{$roles := cslice 885177438135517214}} {{/* Add your staff role ID's */}}
 {{$LogChannel := 838432051094880306}} {{/* Modlog channel */}}
@@ -16,9 +15,6 @@ MIT License
 
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
-
-{{if gt ( toInt ( currentTime.UTC.Format "15" ) ) 12}}
-{{end}}
 
 {{$check := 0}}
 {{range $roles}}
@@ -40,28 +36,49 @@ MIT License
     {{$a := ""}}
     {{$userid := ""}}
     {{$uavatar := ""}}
+    {{$action := ""}}
     {{$b := ($args.Get 0)}}
     {{with (dbGet $b "viewcase")}}	
         {{$a = sdict .Value}}
         {{$userid = $a.userid}}
-        {{$uavatar := $a.uavatar}}
-    {{/* If no reason */}}
-    {{$reason := (print "No reason specified")}}
-    {{/* If reason */}}
-    {{if ($args.Get 1)}}
-        {{$reason = (joinStr " " (slice .CmdArgs 1))}}
-    {{end}}
-        {{$LogEmbed := (cembed
+        {{$uavatar = $a.uavatar}}
+        {{$action = $a.action}}
+        {{if eq $action "Banned"}}
+            {{/* If no reason */}}
+            {{$reason := (print "No reason specified")}}
+            {{/* If reason */}}
+            {{if ($args.Get 1)}}
+                {{$reason = (joinStr " " (slice .CmdArgs 1))}}
+            {{end}}
+
+            {{/* Log & DM messages */}}
+            {{$LogEmbed := (cembed
             "author" (sdict "icon_url" ($.User.AvatarURL "1024") "name" (print $.User.String " (ID " $.User.ID ")"))
             "description" (print "<:Management:788937280508657694> **Who:** <@" $userid "> `(ID " $userid ")`\n<:Metadata:788937280508657664> **Action:** `Unban`\n<:Assetlibrary:788937280554926091> **Channel:** <#" $.Channel.ID ">\n<:Manifest:788937280579698728> **Reason:** " $reason "\n:clock12: **Time:** " ( joinStr " " (( currentTime.Add 0).Format "15:04 GMT")))
             "thumbnail" (sdict "url" $uavatar)
             "color" 6473311
             )}}
-        {{sendMessage $LogChannel $LogEmbed}} 
+            {{sendMessage $LogChannel $LogEmbed}}
+            {{$Response := sendMessageRetID nil (cembed
+            "author" (sdict "icon_url" $uavatar "name" (print "Case type: Unban"))
+            "description" (print  $.User.Mention " Has successfully Unbanned <@!" $userid "> :thumbsup:")
+            "color" 3553599
+            "timestamp" currentTime
+            )}}
+            {{deleteMessage nil $Response 3}}
+            {{$silent := execAdmin "Unban" $userid}}
+        {{else}}
+            {{sendMessage nil (cembed
+            "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" .User.Username)
+            "description" (print "Could not find the case specified. Please make sure the case number is correct, that the case is a `type: ban` case or that it's not been deleted.")
+            "color" 3553599
+            )}}
+        {{end}}
     {{else}}
         {{sendMessage nil (cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" .User.Username)
-            "description" (print "Could not find the case specified, Please make sure the case number is correct or the case has not been deleted")
+            "description" (print "Could not find the case specified. Please make sure the case number is correct or the case has not been deleted")
+            "color" 3553599
             )}}
     {{end}}
 {{end}}
