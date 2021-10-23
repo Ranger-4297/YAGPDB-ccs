@@ -32,7 +32,7 @@ MIT License
             "color" 0x36393f
             )}}
 {{else}}
-    {{$args := parseArgs 1 "` -CUnban <CaseID>` " (carg "int" "case number")}}
+    {{$args := parseArgs 1 "` -CUnban <CaseID> [Reason:Text]` " (carg "int" "case number")}}
     {{$a := ""}}
     {{$userid := ""}}
     {{$uavatar := ""}}
@@ -50,7 +50,6 @@ MIT License
             {{if ($args.Get 1)}}
                 {{$reason = (joinStr " " (slice .CmdArgs 1))}}
             {{end}}
-
             {{/* Log & DM messages */}}
             {{$LogEmbed := (cembed
             "author" (sdict "icon_url" ($.User.AvatarURL "1024") "name" (print $.User.String " (ID " $.User.ID ")"))
