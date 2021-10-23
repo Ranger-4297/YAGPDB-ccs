@@ -32,7 +32,7 @@ MIT License
             "color" 0x36393f
             )}}
 {{else}}
-    {{$args := parseArgs 1 "` -CUnban <CaseID> [Reason:Text]` " (carg "int" "case number")}}
+    {{$args := parseArgs 1 "` -CUnban <CaseID> [Reason:Tex]` " (carg "int" "case number") (carg "string" "reason")}}
     {{$a := ""}}
     {{$userid := ""}}
     {{$uavatar := ""}}
@@ -48,7 +48,7 @@ MIT License
             {{$reason := (print "No reason specified")}}
             {{/* If reason */}}
             {{if ($args.Get 1)}}
-                {{$reason = (joinStr " " (slice .CmdArgs 1))}}
+                {{$reason = (joinStr " " (slice $.CmdArgs 1))}}
             {{end}}
             {{/* Log & DM messages */}}
             {{$LogEmbed := (cembed
@@ -58,7 +58,7 @@ MIT License
             "color" 6473311
             )}}
             {{sendMessage $LogChannel $LogEmbed}}
-            {{$Response := sendMessageRetID nil (cembed
+            {{$Response := sendMessage nil (cembed
             "author" (sdict "icon_url" $uavatar "name" (print "Case type: Unban"))
             "description" (print  $.User.Mention " Has successfully Unbanned <@!" $userid "> :thumbsup:")
             "color" 3553599
