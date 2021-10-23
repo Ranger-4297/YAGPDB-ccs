@@ -8,9 +8,8 @@
 MIT License
 */}}
 
-
 {{/* Configuration values start */}}
-{{$roles := cslice 807610850541568031}} {{/* Add your staff role ID's */}}
+{{$roles := cslice }} {{/* Add your staff role ID's */}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
