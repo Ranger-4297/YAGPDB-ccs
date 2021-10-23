@@ -96,6 +96,7 @@ MIT License
 
 {{/*for per user case viewing*/}}
 {{dbSet $case_number $id (print "Case # **" $case_number "**\t\t**| " $title " Reason:** `" $reason "`")}}
+{{dbSet $case_number cases $title}}
 
 {{/* for delete case*/}}
 {{dbSet $case_number "userid" (str $id)}}
