@@ -1,8 +1,8 @@
 {{/*
         Made by Ranger (765316548516380732)
 
-    Trigger Type: `Command`
-    Trigger: `CUnban`
+    Trigger Type: `RegEx`
+    Trigger: `(-|<@!?204255221017214977>\s*)(cunban|caseunban)`
 
 ©️ Ranger 2021
 MIT License
