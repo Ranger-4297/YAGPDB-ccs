@@ -33,7 +33,7 @@ MIT License
             "color" 0x36393f
             )}}
 {{else}}
-    {{$args := parseArgs 1 "` -viewcase <case number>` " (carg "int" "case number")}}
+    {{$args := parseArgs 1 "` -viewcase <CaseID>` " (carg "int" "case number")}}
     {{$a := ""}}
     {{$name := ""}}
     {{$iconurl := ""}}
