@@ -5,6 +5,7 @@
 
     Trigger Type: `RegEx`
     Trigger: `\A(-|<@!?204255221017214977>\s*)(delcase|deletecase|clearcase|dc|clc)(\s+|\z)`
+
 Repo: https://github.com/Maverick-Wolf/yagpdb-mave
 MIT License
 */}}
