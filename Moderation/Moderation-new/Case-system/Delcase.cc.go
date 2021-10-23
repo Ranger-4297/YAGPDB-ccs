@@ -25,22 +25,6 @@ MIT License
     {{end}}
 {{end}}
 
-{{if eq $check 0}}
-    {{sendMessage nil (cembed
-            "author" (sdict "name" (print .User.Username) "icon_url" (.User.AvatarURL "512"))
-            "description" (print "<:Cross:817828050938363905> I'm sorry. You don't have permission to use this command.")
-            "color" 0x36393f
-            )}}
-{{else}}
-    {{$check :=0}}
-    {{$roles :=cslice 784202772923809824 784202772232405032 784203507989086258 784530496490569799 784132355534880855}}
-    {{range $roles}}
-        {{if eq $check 0}}
-            {{if hasRoleID .}}
-                {{$check =1}}
-            {{end}}
-        {{end}}
-    {{end}}
     {{if eq $check 0}}
         {{sendMessage nil (cembed
             "author" (sdict "name" (print .User.Username) "icon_url" (.User.AvatarURL "512"))
@@ -48,7 +32,7 @@ MIT License
             "color" 0x36393f
             )}}
     {{else}}
-        {{$args := parseArgs 1 "correct usuage is `-delcase <case number>`" (carg "int" "case number")}}
+        {{$args := parseArgs 1 "correct usuage is `-delcase <CaseID>`" (carg "int" "case number")}}
         {{$caseno := ($args.Get 0)}}
         {{$id := (toInt (dbGet $caseno "userid").Value)}}
         {{dbDel $caseno "viewcase"}}
