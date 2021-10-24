@@ -8,7 +8,7 @@
 <details>
 <summary>DISBOARD</summary>
 
-- [Open Folder](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/DISBOARD)  
+- [Open Folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/DISBOARD)  
 	**•** `BumpCommand` - Command that deletes and resends DISBOARD's bumps and errors as YAGPDB rich embeds.  
 	**•** `BumpNotify` - Lets you know when you can bump.  
 	**•** `Help` - Shows the standard DISBOARD help page.  
@@ -18,7 +18,7 @@
 <details>
 <summary>Forms</summary>
 
-- [Open Folder](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Forms)  
+- [Open Folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Forms)  
 	**•** `Apply` - Sends an embed with the application link and logs it to a channel  
 	**•** `Appeal` - Sends an embed with the appeal link and logs it to a channel
 </details>
@@ -26,7 +26,7 @@
 <details>
 <summary>JoinLeave</summary>
 
-- [Open Folder](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/JoinLeave)  
+- [Open Folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/JoinLeave)  
 	**•** `Join message in server channel`  
 	**•** `Leave message`  
 </details>
@@ -35,7 +35,7 @@
 <details>
 <summary>Moderation</summary>
 
-- [Open folder](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Moderation)  
+- [Open folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Moderation)  
 	**•** `Warn DM`  
 	**•** `Mute DM`  
 	**•** `Unmute DM`  
@@ -47,7 +47,7 @@
 <details>
 <summary>Staff</summary>
 
-- [Open folder](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Staff)  
+- [Open folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Staff)  
 	**•** `Break` - Removes staff roles for a given time for a break  
 	**•** `Announce` - Makes an announcement and pings the announcement role  
 	**•** `Event` - Makes an event notif and pings the event role  

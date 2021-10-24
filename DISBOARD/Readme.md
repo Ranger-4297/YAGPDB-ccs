@@ -37,7 +37,7 @@ Fully functional, notifications, and bump messages that look like they're throug
 ## Other Info
 Regarding compatibility with DISBOARD; DISBOARD, the bot will still need send and read messages for your bump channel. YAGPDB does **not** bump the server. It just resends the embed(s).
 
-These commands **are** standalone. You are able to use them without each other, however, to use [`Disboard.cc.go`](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/blob/main/DISBOARD/DISBOARD.cc.go) you will need to add [`BumpCommand.cc.go`](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/blob/main/DISBOARD/BumpCommand.cc.go)
+These commands **are** standalone. You are able to use them without each other, however, to use [`Disboard.cc.go`](https://github.com/Ranger-4297/YAGPDB-ccs/blob/main/DISBOARD/DISBOARD.cc.go) you will need to add [`BumpCommand.cc.go`](https://github.com/Ranger-4297/YAGPDB-ccs/blob/main/DISBOARD/BumpCommand.cc.go)
 
 > *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/SY7wn39SYD) or my server, [Dynamic](https://discord.gg/2WfF9JxuTU)*
 

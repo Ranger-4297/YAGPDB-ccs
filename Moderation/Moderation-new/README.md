@@ -14,22 +14,22 @@ Add these in **Tools & Util > Moderation**
 
 ## Usage
 
-`-warn <user> <reason>` - Sends an embed with the warn action information in a DM to the member being warned [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/EX-Warn.png), logs the warn and relevant information [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Log-Warn.png) & outputs a reponse [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/blob/34054ebf8bc08fa8fccd6e410abfbcabc946b0ed/Assets/Response-warn.png)
+`-warn <user> <reason>` - Sends an embed with the warn action information in a DM to the member being warned [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/EX-Warn.png), logs the warn and relevant information [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Log-Warn.png) & outputs a reponse [img](https://github.com/Ranger-4297/YAGPDB-ccs/blob/34054ebf8bc08fa8fccd6e410abfbcabc946b0ed/Assets/Response-warn.png)
 
 <hr>
 
-`-mute <user> [duration] [reason]` - Sends an embed with the mute action information in a DM to the member being muted [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/EX-Mute.png), logs the mute and relevant information [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Log-Mute.png) & outputs a reponse [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Response-mute.png) 
+`-mute <user> [duration] [reason]` - Sends an embed with the mute action information in a DM to the member being muted [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/EX-Mute.png), logs the mute and relevant information [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Log-Mute.png) & outputs a reponse [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Response-mute.png) 
 
 <hr>
 
-`-unmute <user> [reason]` - Sends an embed with the unmute action information in a DM to the member being unmuted [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/EX-Unmute.png), logs the mute and relevant information [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Log-Unmute.png) & outputs a reponse [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Response-unmute.png)
+`-unmute <user> [reason]` - Sends an embed with the unmute action information in a DM to the member being unmuted [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/EX-Unmute.png), logs the mute and relevant information [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Log-Unmute.png) & outputs a reponse [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Response-unmute.png)
 
 <hr>
 
-`-kick <user> [reason]` - Sends an embed with the kick action information in a DM to the member being kicked [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/EX-Kick.png), logs the mute and relevant information [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Log-Kick.png) & outputs a reponse [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Response-kick.png)
+`-kick <user> [reason]` - Sends an embed with the kick action information in a DM to the member being kicked [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/EX-Kick.png), logs the mute and relevant information [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Log-Kick.png) & outputs a reponse [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Response-kick.png)
 
 
-`-ban <user> [reason]` - Sends an embed with the ban action information in a DM to the member being banned [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/EX-Ban.png), logs the mute and relevant information [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Log-Ban.png) & outputs a reponse [img](https://github.com/Ranger-4297/Dynamic-YAGPDB-ccs/tree/main/Assets/Response-ban.png)
+`-ban <user> [reason]` - Sends an embed with the ban action information in a DM to the member being banned [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/EX-Ban.png), logs the mute and relevant information [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Log-Ban.png) & outputs a reponse [img](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Assets/Response-ban.png)
 
 
 ## Other Info
