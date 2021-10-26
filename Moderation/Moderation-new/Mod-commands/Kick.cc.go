@@ -9,7 +9,7 @@ MIT License
 
 
 {{/*        Notes
-    Please be aware that even though the original custom commands had the time, I removed it from this for NOW. They may be added back if I can get it to show the current time, not the time in GMT.
+    This command allows for use with the `BannedWords` CC (Unsure who made it), if you haven't added it, and want to implement it DM me
 */}}
 
 {{/* Configuration values start */}}
@@ -29,6 +29,14 @@ MIT License
 	{{$icon = printf "https://cdn.discordapp.com/icons/%d/%s.%s" .Guild.ID .Guild.Icon $ext}}
 {{end}}
 
+{{$bannedWords := ""}}
+
+{{if (dbGet 0 "banned words")}}
+    {{$bannedWords = reReplace `\A` (toString (dbGet 0 "banned words").Value) "("}}
+    {{$bannedWords = reReplace `\z` $bannedWords ")"}}
+    {{$bannedWords = reReplace `\s` $bannedWords "|"}}
+{{end}}
+
 {{$case_number := (toInt (dbIncr 77 "cv" 1))}}
 {{$action := .ModAction.Prefix}}
 {{$a := 0}}
@@ -42,12 +50,27 @@ MIT License
 {{$title := (slice .ModAction.Prefix 0 $a)}}
 {{$id := .User.ID}}
 {{$channel := $LogChannel}}
+{{$logs := execAdmin "logs"}}
+{{$time := currentTime.Unix }}
+
+{{$reason := ""}}
+{{if .Reason}}
+    {{if and (reFind "(?i)word blacklist" .Reason) (dbGet 0 "banned words")}}
+        {{$reason = (print "Sending  word ||" (reFind $bannedWords (lower .Message.Content)) "|| is forbidden")}}
+    {{else if or (not (reFind "(?i)word blacklist" .Reason)) (not (dbGet 0 "banned words"))}}
+        {{if reFind `Automoderator:` .Reason}}
+            {{$reason = (reReplace `Triggered rule:\s` (reReplace `Automoderator:\s` .Reason "") "")}}
+        {{else}}
+            {{$reason = .Reason}}
+        {{end}}
+    {{end}}
+{{end}}
 
 {{/* log & DM messages */}}
 {{if $dm}}
     {{$KickDM := cembed
             "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" (print .Usser.String " (ID " .User.ID ")"))
-            "description" (print "**Server:** " .Guild.Name "\n**Action:** `Kick`\n**Reason: **" (joinStr " " (split (reReplace `Automoderator:` .Reason "<:Bot:787563190221406259>:") "\n")))
+            "description" (print "**Server:** " .Guild.Name "\n**Action:** `Kick`\n**Reason:** " $reason )
             "thumbnail" (sdict "url" $icon)
             "color" 3553599
             "timestamp" currentTime
@@ -57,7 +80,7 @@ MIT License
 
 {{$x := sendMessageRetID $LogChannel (cembed
             "author" (sdict "icon_url" (.Author.AvatarURL "1024") "name" (print .Author.String " (ID " .Author.ID ")"))
-            "description" (print "<:TextChannel:800978104105304065> **Case number** " $case_number "\n<:Management:788937280508657694> **Who:** " .User.Mention " `(ID " .User.ID ")`\n<:Metadata:788937280508657664> **Action:** `Kick`\n<:Assetlibrary:788937280554926091> **Channel:** <#" .Channel.ID ">\n<:Manifest:788937280579698728> **Reason:** " (joinStr " " (split (reReplace `Automoderator:` .Reason "<:Bot:787563190221406259>:") "\n")))
+            "description"  (print "<:TextChannel:800978104105304065> **Case number:** " $case_number "\n<:Management:788937280508657694> **Who:** " .User.Mention " `(ID " .User.ID ")`\n<:Metadata:788937280508657664> **Action:** `Kick`\n<:Assetlibrary:788937280554926091> **Channel:** <#" .Channel.ID ">\n<:Manifest:788937280579698728> **Reason:** " $reason "\n<:Edit:800978104272683038> **Message Logs:** [Click Here](" $logs ")\n:clock12: **Time:** <t:" $time ":f>")
             "thumbnail" (sdict "url" (.User.AvatarURL "256"))
             "color" 16556627
             )}}
@@ -71,11 +94,11 @@ MIT License
 {{deleteMessage nil $Response 5}}
 
 {{/*for viewcase*/}}
-{{dbSet $case_number "viewcase" (sdict "name" .Author.Username "warnname" .User.Username "avatar" (.Author.AvatarURL "512") "reason" .Reason "userid" $id "action" (.ModAction.Prefix) "channel" $channel "msgid" $x "userdiscrim" .User.Discriminator)}}
+{{dbSet $case_number "viewcase" (sdict "name" .Author.Username "warnname" .User.Username "avatar" (.Author.AvatarURL "512") "reason" $reason "userid" $id "action" (.ModAction.Prefix) "channel" $channel "msgid" $x "userdiscrim" .User.Discriminator "logs" $logs "channel2" .Channel.ID "time" $time)}}
 
 {{/*for per user case viewing*/}}
-{{dbSet $case_number $id (print "Case # **" $case_number "**\t\t**| " $title " Reason:** `" .Reason "`")}}
-{{dbSet $case_number cases "title" $title}}
+{{dbSet $case_number $id (print "Case # **" $case_number "**\t\t**| " $title " Reason:** `" $reason "`")}}
+{{dbSet $case_number "cases" $title}}
 
 {{/* for delete case*/}}
 {{dbSet $case_number "userid" (str $id)}}

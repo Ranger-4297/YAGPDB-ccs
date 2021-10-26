@@ -7,7 +7,7 @@
 MIT License
 */}}
 
-
+{{/* DEPRECATED */}}
 {{/* Configuration values start */}}
 {{$roles := cslice 784132355534880855}} {{/* Add your staff role ID's */}}
 {{$LogChannel := 784132358085017604}} {{/* Modlog channel */}}
