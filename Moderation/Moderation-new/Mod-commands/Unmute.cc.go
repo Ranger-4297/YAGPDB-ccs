@@ -31,8 +31,8 @@ MIT License
 
 {{$bannedWords := ""}}
 
-{{if (dbGet 0 "banned words")}}
-    {{$bannedWords = reReplace `\A` (toString (dbGet 0 "banned words").Value) "("}}
+{{if (dbGet 0 "bannedwords")}}
+    {{$bannedWords = reReplace `\A` (toString (dbGet 0 "bannedwords").Value) "("}}
     {{$bannedWords = reReplace `\z` $bannedWords ")"}}
     {{$bannedWords = reReplace `\s` $bannedWords "|"}}
 {{end}}
@@ -60,9 +60,9 @@ MIT License
 
 {{$reason := ""}}
 {{if .Reason}}
-    {{if and (reFind "(?i)word blacklist" .Reason) (dbGet 0 "banned words")}}
+    {{if and (reFind "(?i)word blacklist" .Reason) (dbGet 0 "bannedwords")}}
         {{$reason = (print "Sending  word ||" (reFind $bannedWords (lower .Message.Content)) "|| is forbidden")}}
-    {{else if or (not (reFind "(?i)word blacklist" .Reason)) (not (dbGet 0 "banned words"))}}
+    {{else if or (not (reFind "(?i)word blacklist" .Reason)) (not (dbGet 0 "bannedwords"))}}
         {{if reFind `Automoderator:` .Reason}}
             {{$reason = (reReplace `Triggered rule:\s` (reReplace `Automoderator:\s` .Reason "") "")}}
         {{else}}
