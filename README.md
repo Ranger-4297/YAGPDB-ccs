@@ -1,7 +1,8 @@
 <h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
 
-----
-----
+## Outdated
+
+---
 
 ## List of custom commands
 
