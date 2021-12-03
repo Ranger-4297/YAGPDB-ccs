@@ -11,9 +11,12 @@ Mischallaneous commands I've made that go nowhere else
 
 `-revive` - Sends an small boring embed that is supposed to revive the chat when dead.
 
+`-Confess <Confession>` - Creates an annoymous confession, logs to a staff channel with an "encrypted" UserID (Basic "encryption")
+
+`-Decrypt <Key>` - Decrypts the encrypted UserID fron the confession command to form a UserID 
 
 ## Other Info
-These commands **are** standalone. You are able to use them without each other, it is not required that they are used together. However it will look more organized.
+These commands may or may not be standalone.
 
 These commands do not feature any images in this Readme since these are misc commands that don't need doucmenting like my others
 
