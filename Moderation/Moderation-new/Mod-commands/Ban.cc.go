@@ -2,14 +2,14 @@
         Case system by Maverick Wolf (549820835230253060)
         Made & modified by Ranger (765316548516380732)
 
-    **Tools & Util > Moderation > Kick > Kick DM**
+    **Tools & Util > Moderation > Ban > Ban DM**
 ©️ Ranger 2021
 MIT License
 */}}
 
 
 {{/*        Notes
-    Please be aware that even though the original custom commands had the time, I removed it from this for NOW. They may be added back if I can get it to show the current time, not the time in GMT.
+    This command allows for use with the `BannedWords` CC (Unsure who made it), if you haven't added it, and want to implement it DM me
 */}}
 
 {{/* Configuration values start */}}
