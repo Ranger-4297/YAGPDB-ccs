@@ -7,5 +7,5 @@
 MIT License
 */}}
 
-{{$a := (reReplace `(\()(\d)(\[;s\] \d-\[[0-9]+/\)[a-z])(\$\^)` .StrippedMsg "$2")}}
+{{$a := (reReplace `(\d{1,2}[}{[]\W[A-z][}{\]] )(\d)(\.)([A-z]\d\W[A-z]{1,2})(\W{1,2})` .StrippedMsg "$2")}}
 {{sendMessage nil $a}}
