@@ -28,7 +28,7 @@ MIT License
         {{$bank = $a.bank}}
         {{$newBank := ""}}
         {{if eq $amount "all"}}
-            {{$newBank := (add (toInt $cash) (toInt $bank))}}
+            {{$newBank = (add (toInt $cash) (toInt $bank))}}
             {{$depositEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
             "description" (print "You deposited " $EconomySymbol $cash " into your bank!")
