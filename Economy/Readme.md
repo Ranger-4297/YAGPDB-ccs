@@ -1,0 +1,1 @@
+# Very basic economy through yagpdb
