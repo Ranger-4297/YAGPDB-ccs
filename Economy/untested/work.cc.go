@@ -1,8 +1,8 @@
 {{/*
 		Made by Ranger (765316548516380732)
 
-	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(work|job|getpaid|labor)`
+	Trigger Type: `Command`
+	Trigger: `Work`
 ©️ Ranger 2021
 MIT License
 */}}
