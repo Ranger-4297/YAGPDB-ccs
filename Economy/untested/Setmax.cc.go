@@ -2,14 +2,14 @@
         Made by Ranger (765316548516380732)
 
     Trigger Type: `Command`
-    Trigger: `set-min`
+    Trigger: `setMax`
 ©️ Ranger 2021
 MIT License
 */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
-{{$args := parseArgs 1 "set-max <value>" (carg "int" "Value")}}
+{{$args := parseArgs 1 "setMax <value>" (carg "int" "Value")}}
 {{$max := $args.Get 0}}
 
 {{$min := ""}}
