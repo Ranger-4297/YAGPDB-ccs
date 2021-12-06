@@ -1,7 +1,7 @@
 {{/*
         Made by Ranger (765316548516380732)
 
-    Trigger Type: `Command`
+    Trigger Type: `Regex`
     Trigger: `Work`
 ©️ Ranger 2021
 MIT License
@@ -22,7 +22,7 @@ MIT License
     {{$newCash := (add (toInt $cash) $pay)}}
     {{$workEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))
-            "description" (print "You decided to work today! You got paid a hefty " $pay)
+            "description" (print "You decided to work today! You got paid a hefty £" $pay)
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}

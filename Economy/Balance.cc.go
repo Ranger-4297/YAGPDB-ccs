@@ -24,9 +24,9 @@ MIT License
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))
             "description" (print "Your balance")
             "fields" (cslice 
-                (sdict "name" "Cash" "value" (toString $cash) "inline" true)
-                (sdict "name" "Bank" "value" (toString $bank) "inline" true)
-                (sdict "name" "Networth" "value" (toString (add (toInt $cash) (toInt $bank))) "inline" true))
+                (sdict "name" "Cash" "value" (print "£" (toString $cash)) "inline" true)
+                (sdict "name" "Bank" "value" (print "£" (toString $bank)) "inline" true)
+                (sdict "name" "Networth" "value" (print "£" (toString (add (toInt $cash) (toInt $bank)))) "inline" true))
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}

@@ -22,7 +22,7 @@ MIT License
     {{$bank = $a.bank}}
     {{$withdrawEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))
-            "description" (print "You withdrew " $bank " from your bank!")
+            "description" (print "You withdrew £" $bank " from your bank!")
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}

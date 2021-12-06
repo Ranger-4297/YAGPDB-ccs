@@ -23,7 +23,7 @@ MIT License
     {{$newBank := (add (toInt $cash) (toInt $bank))}}
     {{$depositEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))
-            "description" (print "You deposited " $cash " into your bank!")
+            "description" (print "You deposited £" $cash " into your bank!")
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}
