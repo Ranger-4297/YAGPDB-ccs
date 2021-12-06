@@ -17,12 +17,14 @@ MIT License
 {{$c := ""}}
 {{$cash := ""}}
 {{$failRate := ""}}
+{{$EconomySymbol := ""}}
 {{if not (dbGet $b "EconomyInfo")}}
     {{dbSet .User.ID "EconomyInfo" (sdict "cash" 0 "bank" 0)}}
 {{end}}
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a = sdict .Value}}
 	{{$failRate = $a.failRate}}
+    {{$EconomySymbol = $a.EconomySymbol}}
     {{with (dbGet $victim "EconomyInfo")}}
         {{$victimsCash := $a.cash}}
         {{$amount := (randInt $victimsCash}}
@@ -30,7 +32,7 @@ MIT License
 		{{$victimsNewCash := (sub (toInt $victimsCash) $amount)}}
 		{{$crimeEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))
-            "description" (print "You robbed £ " $amount " from <@! " $victim ">")
+            "description" (print "You robbed " $EconomySymbol $amount " from <@! " $victim ">")
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}
