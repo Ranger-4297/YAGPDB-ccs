@@ -1,8 +1,8 @@
 {{/*
 		Made by Ranger (765316548516380732)
 
-	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(crime|felony)`
+	Trigger Type: `Command`
+	Trigger: `crime`
 ©️ Ranger 2021
 MIT License
 */}}
