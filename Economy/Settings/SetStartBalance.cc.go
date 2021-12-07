@@ -20,7 +20,7 @@ MIT License
     {{$economySymbol = $a.economySymbol}}
     {{$updateEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-            "description" (print "You set the server start-balance to " $newStartBalance " from " $startBalance)
+            "description" (print "You set the server start-balance to " $economySymbol $newStartBalance " from " $economySymbol $startBalance)
             "color" 0x00ff8b
             "timestamp" currentTime
             )}}
