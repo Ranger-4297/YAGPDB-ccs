@@ -15,7 +15,7 @@ MIT License
 {{$a := ""}}
 {{with (dbGet 0 "EconomySettings")}}
     {{$a = sdict .Value}}
-    {{$startBalance = $a.EconomySymbol}}
+    {{$startBalance = $a.startBalance}}
     {{$updateEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
             "description" (print "You set the server start-balance to symbol to " $newStartBalance " from " $startBalance)
