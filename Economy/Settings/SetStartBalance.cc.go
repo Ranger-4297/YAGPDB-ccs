@@ -24,6 +24,6 @@ MIT License
             )}}
     {{sendMessage nil $updateEmbed}}
     {{$sdict := (dbGet 0 "EconomySettings").Value}}
-    {{$sdict.Set "startBalance" $newSymbol}}
+    {{$sdict.Set "startBalance" $newStartBalance}}
     {{dbSet 0 "EconomySettings" $sdict}}
 {{end}}
