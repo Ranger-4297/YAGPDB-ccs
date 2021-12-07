@@ -8,7 +8,7 @@ Fully functional basic economy system that for your server!
 
 ## Usage
 
-`Work`, `Crime`, `Rob`, `Deposit`, `Withdrawl`, `Bal`, `setFailrate`, `setMax`, `setMin`, `setSymbol` and more to come!
+`Work`, `Crime`, `Rob`, `Deposit`, `Withdrawl`, `Bal`, `setFailRate`, `setMax`, `setMin`, `setSymbol` and more to come!
 
 ## Other Info
 These commands **are not** standalone. You must add them all to use them.
