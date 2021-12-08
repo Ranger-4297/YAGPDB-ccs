@@ -214,15 +214,15 @@ MIT License
                 {{$sdict := (dbGet 0 "EconomySettings").Value}}
                 {{$sdict.Set "symbol" $newSymbol}}
                 {{dbSet 0 "EconomySettings" $sdict}}
-            {{else}}
-                {{$errorEmbed := (cembed
+            {{end}}
+        {{else}}
+            {{$errorEmbed := (cembed
                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
                             "description" (print "You have no provide a valid setting or value.\nSyntax is: `" $prefix "set <Setting:String> <Value:String/Int>`\nAvailable settings: `failrate`, `max`, `min`, `startbalance`, `symbol`\nAvailable value types `int` `string`")
                             "color" $errorColor
                             "timestamp" currentTime
                             )}}
-                {{sendMessage nil $errorEmbed}}
-            {{end}}
+            {{sendMessage nil $errorEmbed}}
         {{end}}
     {{end}}
 {{end}}
