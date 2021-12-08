@@ -12,14 +12,14 @@ MIT License
 {{$a := ""}}
 {{$cash := ""}}
 {{$bank := ""}}
-{{$EconomySymbol := ""}}
+{{$symbol := ""}}
 {{$b := .User.ID}}
 {{if not (dbGet $b "EconomyInfo")}}
     {{dbSet .User.ID "EconomyInfo" (sdict "cash" 0 "bank" 0)}}
 {{end}}
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a = sdict .Value}}
-	{{$EconomySymbol = $a.EconomySymbol}}
+	{{$symbol = $a.symbol}}
 	{{with (dbGet $b "EconomyInfo")}}
         {{$a = sdict .Value}}
 		{{$cash = $a.cash}}
@@ -28,9 +28,9 @@ MIT License
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
             "description" (print "Your balance")
             "fields" (cslice 
-                (sdict "name" "Cash" "value" (print $EconomySymbol (toInt $cash)) "inline" true)
-                (sdict "name" "Bank" "value" (print $EconomySymbol (toInt $bank)) "inline" true)
-                (sdict "name" "Networth" "value" (print $EconomySymbol (toString (add (toInt $cash) (toInt $bank)))) "inline" true))
+                (sdict "name" "Cash" "value" (print $symbol (toInt $cash)) "inline" true)
+                (sdict "name" "Bank" "value" (print $symbol (toInt $bank)) "inline" true)
+                (sdict "name" "Networth" "value" (print $symbol (toString (add (toInt $cash) (toInt $bank)))) "inline" true))
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}

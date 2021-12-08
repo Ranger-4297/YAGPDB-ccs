@@ -16,7 +16,7 @@ MIT License
 {{$min := ""}}
 {{$max := ""}}
 {{$failRate := ""}}
-{{$EconomySymbol := ""}}
+{{$symbol := ""}}
 {{if not (dbGet $b "EconomyInfo")}}
     {{dbSet .User.ID "EconomyInfo" (sdict "cash" 0 "bank" 0)}}
 {{end}}
@@ -25,7 +25,7 @@ MIT License
     {{$min = $a.min}}
     {{$max = $a.max}}
     {{$failRate = $a.failRate}}
-    {{$EconomySymbol = $a.EconomySymbol}}
+    {{$symbol = $a.symbol}}
     {{with (dbGet $b "EconomyInfo")}}
         {{$a = sdict .Value}}
         {{$cash = $a.cash}}
@@ -37,7 +37,7 @@ MIT License
             {{$newCash = (add (toInt $cash) (toInt $pay))}}
             {{$crimeEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-            "description" (print "You broke the law for a pretty penny! You made " $EconomySymbol $pay " in your crime spree today")
+            "description" (print "You broke the law for a pretty penny! You made " $symbol $pay " in your crime spree today")
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}
@@ -49,7 +49,7 @@ MIT License
             {{$newCash := (sub (toInt $cash) (toInt $loss))}}
             {{$crimeEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-            "description" (print "You broke the law to try squander a pretty penny! You were caught and lost " $EconomySymbol $loss " in your crime spree today")
+            "description" (print "You broke the law to try squander a pretty penny! You were caught and lost " $symbol $loss " in your crime spree today")
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}

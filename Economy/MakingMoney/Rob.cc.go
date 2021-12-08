@@ -25,14 +25,14 @@ MIT License
     {{$b := .User.ID}}
     {{$cash := ""}}
     {{$failRate := ""}}
-    {{$EconomySymbol := ""}}
+    {{$symbol := ""}}
     {{if not (dbGet $b "EconomyInfo")}}
         {{dbSet .User.ID "EconomyInfo" (sdict "cash" 0 "bank" 0)}}
     {{end}}
     {{with (dbGet 0 "EconomySettings")}}
         {{$a = sdict .Value}}
         {{$failRate = $a.failRate}}
-        {{$EconomySymbol = $a.EconomySymbol}}
+        {{$symbol = $a.symbol}}
         {{with (dbGet $victim "EconomyInfo")}}
             {{$a = sdict .Value}}
             {{$victimsCash := $a.cash}} {{/* Amount victim has before robbed */}}
@@ -56,7 +56,7 @@ MIT License
                     {{$yourNewCash := (add (toInt $yourCash) $amount)}} {{/* Amount you have after adding stolen money */}}
                     {{$crimeEmbed := (cembed
                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))
-                            "description" (print "You robbed " $EconomySymbol $amount " from <@!" $victim ">")
+                            "description" (print "You robbed " $symbol $amount " from <@!" $victim ">")
                             "color" 0x00ff7b
                             "timestamp" currentTime
                     )}}

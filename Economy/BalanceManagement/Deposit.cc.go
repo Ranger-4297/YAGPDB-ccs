@@ -14,14 +14,14 @@ MIT License
 {{$a := ""}}
 {{$cash := ""}}
 {{$bank := ""}}
-{{$EconomySymbol := ""}}
+{{$symbol := ""}}
 {{$b := .User.ID}}
 {{if not (dbGet $b "EconomyInfo")}}
     {{dbSet .User.ID "EconomyInfo" (sdict "cash" 0 "bank" 0)}}
 {{end}}
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a = sdict .Value}}
-    {{$EconomySymbol = $a.EconomySymbol}}
+    {{$symbol = $a.symbol}}
     {{with (dbGet $b "EconomyInfo")}}
         {{$a = sdict .Value}}
         {{$cash = $a.cash}}
@@ -31,7 +31,7 @@ MIT License
             {{$newBank = (add (toInt $cash) (toInt $bank))}}
             {{$depositEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-            "description" (print "You deposited " $EconomySymbol $cash " into your bank!")
+            "description" (print "You deposited " $symbol $cash " into your bank!")
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}
@@ -56,7 +56,7 @@ MIT License
                 {{$newBank = (add $bank $amount)}}
                 {{$depositEmbed := (cembed
                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-                            "description" (print "You deposited " $EconomySymbol $moneyToDeposit " into your bank!")
+                            "description" (print "You deposited " $symbol $moneyToDeposit " into your bank!")
                             "color" 0x00ff7b
                             "timestamp" currentTime
                 )}}

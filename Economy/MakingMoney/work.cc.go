@@ -14,7 +14,7 @@ MIT License
 {{$b := .User.ID}}
 {{$min := ""}}
 {{$max := ""}}
-{{$EconomySymbol := ""}}
+{{$symbol := ""}}
 {{if not (dbGet $b "EconomyInfo")}}
     {{dbSet .User.ID "EconomyInfo" (sdict "cash" 0 "bank" 0)}}
 {{end}}
@@ -22,7 +22,7 @@ MIT License
     {{$a = sdict .Value}}
     {{$min = $a.min}}
     {{$max = $a.max}}
-    {{$EconomySymbol = $a.EconomySymbol}}
+    {{$symbol = $a.symbol}}
     {{with (dbGet $b "EconomyInfo")}}
         {{$a = sdict .Value}}
         {{$cash = $a.cash}}
@@ -30,7 +30,7 @@ MIT License
         {{$newCash := (add (toInt $cash) $pay)}}
         {{$workEmbed := (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))
-            "description" (print "You decided to work today! You got paid a hefty " $EconomySymbol $pay)
+            "description" (print "You decided to work today! You got paid a hefty " $symbol $pay)
             "color" 0x00ff7b
             "timestamp" currentTime
             )}}
