@@ -59,7 +59,7 @@ MIT License
                             "description" (print "You deposited " $symbol $moneyToDeposit " into your bank!")
                             "color" 0x00ff7b
                             "timestamp" currentTime
-                )}}
+                            )}}
                 {{sendMessage nil $depositEmbed}}
                 {{$sdict := (dbGet .User.ID "EconomyInfo").Value}}
                 {{$sdict.Set "bank" $newBank}}

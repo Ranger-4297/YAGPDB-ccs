@@ -42,7 +42,7 @@ MIT License
                             "description" (print "You're unable to rob <@!" $victim "> to a value below `0`")
                             "color" 0x00ff8b
                             "timestamp" currentTime
-                )}}
+                            )}}
                 {{sendMessage nil $errorEmbed}}
             {{else}}
                 {{$amount := (randInt $victimsCash)}} {{/* Amount stolen from victim */}}
@@ -59,7 +59,7 @@ MIT License
                             "description" (print "You robbed " $symbol $amount " from <@!" $victim ">")
                             "color" 0x00ff7b
                             "timestamp" currentTime
-                    )}}
+                            )}}
                     {{sendMessage nil $crimeEmbed}}
                     {{$sdict = (dbGet $b "EconomyInfo").Value}}
                     {{$sdict.Set "cash" $yourNewCash}}

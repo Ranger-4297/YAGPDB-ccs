@@ -48,7 +48,7 @@ MIT License
                             "description" (print "You're unable to withdraw more than you have in your bank")
                             "color" 0x00ff8b
                             "timestamp" currentTime
-                )}}
+                            )}}
                 {{sendMessage nil $errorEmbed}}
 			{{else}}
 				{{$moneyToWithdraw := (toInt $amount)}}
