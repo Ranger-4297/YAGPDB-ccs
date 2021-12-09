@@ -74,7 +74,7 @@ MIT License
                         {{else}}
                             {{$errorEmbed := (cembed
                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-                            "description" (print "You're unable to set the  this value, check that you used a valid number above 1")
+                            "description" (print "You're unable to add this value, check that you used a valid number above 1")
                             "color" $errorColor
                             "timestamp" currentTime
                             )}}
