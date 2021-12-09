@@ -1,3 +1,7 @@
+# Notice
+Settings commands found <a href="/Settings">here</a> are not currently role-locked and are able to be used by all.
+Untill I add an inbuilt role-block, I suggest you lock the command in the cc settings
+
 # Economy CCs
 Fully functional basic economy system that for your server!
 
