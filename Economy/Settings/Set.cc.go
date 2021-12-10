@@ -15,7 +15,7 @@ MIT License
 {{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
 {{if not ($args.Get 0)}}
     {{$errorEmbed := (cembed
-            "description" (print "Not enough arguments passed.\nSyntax is: `" $prefix "set <Setting:String> <Value:String/Int>`\nAvailable settings: `failrate`, `max`, `min`, `startbalance`, `symbol`\nAvailable value types `int` `string`")
+            "description" (print "Not enough arguments passed.\nSyntax is: `" $prefix "set <Setting:String> <Value:String/Int>`\nAvailable settings: `failrate`, `max`, `min`, `startbalance`, `symbol`\nAvailable value types `int` `string`\nTo set it with the default settings `-set default`")
             "color" $errorColor
             )}}
     {{sendMessage nil $errorEmbed}}
@@ -215,7 +215,9 @@ MIT License
                 {{$sdict.Set "symbol" $newSymbol}}
                 {{dbSet 0 "EconomySettings" $sdict}}
             {{end}}
-        {{else}}
+		{{else if eq $Setting "default"}}
+        	{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "failRate" 20 "symbol" "£" "startBalance" 200)}}
+		{{else}}
             {{$errorEmbed := (cembed
                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
                             "description" (print "You have no provide a valid setting or value.\nSyntax is: `" $prefix "set <Setting:String> <Value:String/Int>`\nAvailable settings: `failrate`, `max`, `min`, `startbalance`, `symbol`\nAvailable value types `int` `string`")
