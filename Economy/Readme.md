@@ -17,10 +17,8 @@ Fully functional basic economy system that for your server!
 ## Other Info
 These commands **are not** standalone. You must add them all to use them.
 
-## N.B: Will not currently work since the setup command hasn't been added
-> To set it up yourself just execute the following custom command
-`{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "failRate" 20 "symbol" "£" "startBalance" 200)}}`
-> I'm hoping to make 1 `set` command that can handle all settings arguments in the future, but there's no ETA
+## Setup
+To set up, install the set command found <a href="https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Economy/Settings">here</a> and run `set default`
 
 > *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/SY7wn39SYD) or my server, [Dynamic](https://discord.gg/2WfF9JxuTU)*
 
