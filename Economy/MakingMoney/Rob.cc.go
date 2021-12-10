@@ -19,7 +19,7 @@ MIT License
             "color" 0x00ff8b
             "timestamp" currentTime
             )}}
-            {{sendMessage nil $errorEmbed}}
+    {{sendMessage nil $errorEmbed}}
 {{else}}
     {{$a := ""}}
     {{$b := .User.ID}}
