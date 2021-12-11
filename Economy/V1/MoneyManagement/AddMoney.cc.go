@@ -21,7 +21,6 @@ MIT License
     {{sendMessage nil $errorEmbed}}
 {{else if ($args.Get 0).User}}
     {{$Receiving = ($args.Get 0).User}}
-    {{$ReceivingUser = $Receiving}}
     {{$Receiving = $Receiving.ID}}
 {{else}}
     {{$errorEmbed := (cembed
