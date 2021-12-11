@@ -2,7 +2,7 @@
         Made by Ranger (765316548516380732)
 
     Trigger Type: `Command`
-    Trigger: `AddMoney`
+    Trigger: `GiveMoney`
 ©️ Ranger 2021
 MIT License
 */}}
