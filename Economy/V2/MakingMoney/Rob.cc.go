@@ -30,7 +30,7 @@ You can change these later
     {{$a := sdict .Value}}
     {{$failRate := $a.failRate}}
     {{$symbol := $a.symbol}}
-    {{with .CmdArgs}}
+    {{with $.CmdArgs}}
         {{if index . 0 }}
             {{if index . 0 | getMember}}
                 {{$user := getMember (index . 0)}}
@@ -94,7 +94,7 @@ You can change these later
     {{else}}
         {{sendMessage nil (cembed
             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-            "description" (print "No `User` argument provided.\nSyntaxt is ` " .Cmd " <User:Mention/ID>`")
+            "description" (print "No `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")
             "color" $errorColor
             "timestamp" currentTime
             )}}
