@@ -216,7 +216,7 @@ MIT License
                 {{dbSet 0 "EconomySettings" $sdict}}
             {{end}}
 		{{else if eq $Setting "default"}}
-        	{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "failRate" 20 "symbol" "£" "startBalance" 200)}}
+            {{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "failRate" 20 "symbol" "£" "startBalance" 200)}}
 		{{else}}
             {{$errorEmbed := (cembed
                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
