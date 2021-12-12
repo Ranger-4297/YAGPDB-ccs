@@ -50,6 +50,6 @@ If the below cannot be found in the leading comment of a file, the above licensi
 
 <hr>
 
-<h2>Other</h2>>
+<h2>Other</h2>
 
 <blockquote>If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the <a href="https://discord.gg/4uY54rw">YAGPDB support server</a> or VIA <a href="mailto:a.rhyker@gmail.com">email</a></blockquote>
