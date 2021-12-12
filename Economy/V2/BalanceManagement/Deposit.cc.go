@@ -30,7 +30,7 @@ You can change these later
 {{with (dbGet 0 "EconomySettings")}}
     {{$a := sdict .Value}}
     {{$symbol := $a.symbol}}
-    {{with .CmdArgs}}
+    {{with $.CmdArgs}}
         {{if not (dbGet $userID "EconomyInfo")}}
             {{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
         {{end}}
