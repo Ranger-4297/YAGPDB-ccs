@@ -1,12 +1,12 @@
 {{/*
         Made by Ranger (765316548516380732)
-        Credits DZ#6669 (438789314101379072)
-        Credits to WickedWizard#3588 (719421577086894101)
 
-    Trigger Type: `RegEx`
+    Trigger Type: `Regex`
     Trigger: `\A!d\sbump(?:\s+|\z)`
-©️ Ranger 2021
-MIT License
+
+    ©️ Ranger 2020-Present
+    GNU, GPLV3 License
+    Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
 
