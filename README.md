@@ -1,76 +1,55 @@
-<h1 align="center"><img src="https://yagpdb.xyz/static/img/logo_y.png" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1>
+<center><h1><img src="https://yagpdb.xyz/static/img/logo_y.png" alt="" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1></center>
 
-## Outdated
+<p>Welcome to my YAGPDB CC repository!<br>
+This [repository] includes custom commands that I have made or that I have yet to make.<br>
+As you can see, alot of effort has gone into these,<br>
+And despite me not being an "expert" I am very content and proud of them.</p>
 
----
+<hr>
 
-## List of custom commands
+<h2>License</h2>
 
-<details>
-<summary>DISBOARD</summary>
+<p>This repository is licensed unuder the terms of the below license. The GNU, General Public License Version 3</p>
 
-- [Open Folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/DISBOARD)  
-	**•** `BumpCommand` - Command that deletes and resends DISBOARD's bumps and errors as YAGPDB rich embeds.  
-	**•** `BumpNotify` - Lets you know when you can bump.  
-	**•** `Help` - Shows the standard DISBOARD help page.  
-	**•** `Page` - Shows the servers page on DISBOARD.  
-</details>
+<a href="https://github.com/Ranger-4297/YAGPDB-ccs/blob/main/LICENSE">Full License</a><br>
 
-<details>
-<summary>Forms</summary>
+<p>The license essentially revolves down to these conditions:
+<ul>
+    <li>Redistributions of source code must retain the copyright notice, this list of conditions and the disclaimer.</li>
+    <li>That you [as a redistributor] must make sure that they too receive or are able to receive the source code</li>
+    <li>If redistributing software, it must be done under the same license.</li>
+    <li>I do not provide warranty over faulty code</li>
+</ul>
+</p>
 
-- [Open Folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Forms)  
-	**•** `Apply` - Sends an embed with the application link and logs it to a channel  
-	**•** `Appeal` - Sends an embed with the appeal link and logs it to a channel
-</details>
+<p>Due to the size of the full license, below is a condensed form of it included in the codes found here<br>
+If the below cannot be found in the leading comment of a file, the above licensing terms are invalidated for that file only.
+</p>
 
-<details>
-<summary>JoinLeave</summary>
+<pre>
+    <code "color:white;background-color:black">
+        ©️ Ranger 2020-Present
+        GNU, GPLV3 License
+        Repository: https://github.com/Ranger-4297/YAGPDB-ccs
+    </code>
+</pre>
 
-- [Open Folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/JoinLeave)  
-	**•** `Join message in server channel`  
-	**•** `Leave message`  
-</details>
+<hr>
 
+<h2>Custom Command repositories:</h2>
+<a href="https://github.com/yagpdb-cc/yagpdb-cc">Official Repo</a> The official custom command repository. If you are searching for more custom commands you will find a lot of them there :).<br>
+<a href="https://github.com/BlackWolfWoof/yagpdb-cc">Wolf's Repo</a> A really advanced repository including database management.<br>
+<a href="https://github.com/l-zeuch/lagpdb-cc">Lzeuch's Repo</a> An extremely well documented custom command repository.
 
-<details>
-<summary>Moderation</summary>
+<hr>
 
-- [Open folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Moderation)  
-	**•** `Warn DM`  
-	**•** `Mute DM`  
-	**•** `Unmute DM`  
-	**•** `Kick DM`  
-  **•** `Ban DM`  
-</details>
+<h2>Other links:</h2>
+<a href="https://discord.gg/4uY54rw">Official YAGPDB support server</a><br> 
+<a href="https://docs.yagpdb.xyz/">Official YAGPDB documentation</a>
+<a href="https://learn.yagpdb.xyz/">Official YAGPDB Custom-Command documentation</a>
 
+<hr>
 
-<details>
-<summary>Staff</summary>
+<h2>Other</h2>>
 
-- [Open folder](https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Staff)  
-	**•** `Break` - Removes staff roles for a given time for a break  
-	**•** `Announce` - Makes an announcement and pings the announcement role  
-	**•** `Event` - Makes an event notif and pings the event role  
-    **Note:** Updates on hold
-</details>
-
----
-## Other custom command repositories:
-[Official Repo](https://github.com/yagpdb-cc/yagpdb-cc): The official custom command repository. If you are searching for more custom commands you will find a lot of them there :).  
-[Pedro's Repo](https://github.com/Pedro-Pessoa/yagpdb-cc/tree/Tickets/tickets): A fork of the official repo but with an amazing ticket system.  
-[Wolf's Repo](https://github.com/BlackWolfWoof/yagpdb-cc): A really advanced repository including database management
-
-
-## Other links:
-[YAGPDB Community & Support](https://discord.gg/4uY54rw) Official support server  
-[YAGPDB Documentation](https://docs.yagpdb.xyz/reference/templates) Official documentation  
-[YAGPDB Learning page](https://learn.yagpdb.xyz/) Official learning page    
-[Dynamic](https://discord.gg/ekMQH384KC) My server (All the commands here are used there, somewhat edited though) **All updates get pushed here**
-
-## credits
-
-`Readme.md` - this document is an edited version of [Wolf's](https://github.com/BlackWolfWoof) [yagpdb-cc](https://github.com/BlackWolfWoof/yagpdb-cc) custom commands [README.md](https://github.com/BlackWolfWoof/yagpdb-cc/blob/master/README.md).
-
----
-> *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/4uY54rw) or my server, [Dynamic](https://discord.gg/ekMQH384KC)*
+<blockquote>If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the <a href="https://discord.gg/4uY54rw">YAGPDB support server</a> or VIA <a href="mailto:a.rhyker@gmail.com">email</a></blockquote>
