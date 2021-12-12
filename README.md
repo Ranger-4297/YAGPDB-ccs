@@ -45,7 +45,7 @@ If the below cannot be found in the leading comment of a file, the above licensi
 
 <h2>Other links:</h2>
 <a href="https://discord.gg/4uY54rw">Official YAGPDB support server</a><br> 
-<a href="https://docs.yagpdb.xyz/">Official YAGPDB documentation</a>
+<a href="https://docs.yagpdb.xyz/">Official YAGPDB documentation</a><br>
 <a href="https://learn.yagpdb.xyz/">Official YAGPDB Custom-Command documentation</a>
 
 <hr>
