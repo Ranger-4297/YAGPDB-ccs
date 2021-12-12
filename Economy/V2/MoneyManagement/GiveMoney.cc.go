@@ -30,7 +30,7 @@ You can change these later
 {{with (dbGet 0 "EconomySettings")}}
     {{$a := sdict .Value}}
     {{$symbol := $a.symbol}}
-    {{with .CmdArgs}}
+    {{with $.CmdArgs}}
         {{if index . 0}}
             {{if index . 0 | getMember}}
                 {{$user := getMember (index . 0)}}
@@ -69,21 +69,24 @@ You can change these later
                                     {{$sdict := (dbGet $receivingUser "EconomyInfo").Value}}
                                     {{$sdict.Set "cash" $receivingNewBalance}}
                                     {{dbSet $receivingUser "EconomyInfo" $sdict}}
+                                    {{$sdict := (dbGet $userID "EconomyInfo").Value}}
+                                    {{$sdict.Set "cash" $yourNewBalance}}
+                                    {{dbSet $userID "EconomyInfo" $sdict}}
                                 {{end}}
                             {{end}}
                         {{end}}
                     {{else}}
                         {{sendMessage nil (cembed
-                                    "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-                                    "description" (print "No `Amount` argument passed.\nSyntax is: `" $.Cmd " <Member:Mention/ID> <Amount:Amount>`")
-                                    "color" $errorColor
-                                    "timestamp" currentTime
-                                    )}}
+                            "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
+                            "description" (print "You're unable to give this value, check that you used a valid number above 1")
+                            "color" $errorColor
+                            "timestamp" currentTime
+                            )}}
                     {{end}}
                 {{else}}
                     {{sendMessage nil (cembed
                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-                            "description" (print "You're unable to give this value, check that you used a valid number above 1")
+                            "description" (print "No `Amount` argument passed.\nSyntax is: `" $.Cmd " <Member:Mention/ID> <Amount:Amount>`")
                             "color" $errorColor
                             "timestamp" currentTime
                             )}}

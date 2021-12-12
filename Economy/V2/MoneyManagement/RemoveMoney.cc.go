@@ -29,7 +29,7 @@ You can change these later
 {{with (dbGet 0 "EconomySettings")}}
     {{$a := sdict .Value}}
     {{$symbol := $a.symbol}}
-    {{with .CmdArgs}}
+    {{with $.CmdArgs}}
         {{if index . 0}}
             {{if index . 0 | getMember}}
                 {{$user := getMember (index . 0)}}
@@ -51,7 +51,7 @@ You can change these later
                             {{if gt (len $.CmdArgs) 2}}
                                 {{$amount := (index $.CmdArgs 2)}}
                                 {{if (toInt $amount)}}
-                                    {{if gt $amount $removingBalance}}
+                                    {{if gt (toInt $amount) (toInt $removingBalance)}}
                                         {{sendMessage nil (cembed
                                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
                                             "description" (print "You cannot remove more than the given user has.")

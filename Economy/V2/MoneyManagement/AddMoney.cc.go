@@ -29,7 +29,7 @@ You can change these later
 {{with (dbGet 0 "EconomySettings")}}
     {{$a := sdict .Value}}
     {{$symbol := $a.symbol}}
-    {{with .CmdArgs}}
+    {{with $.CmdArgs}}
         {{if index . 0}}
             {{if index . 0 | getMember}}
                 {{$user := getMember (index . 0)}}
