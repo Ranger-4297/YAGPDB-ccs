@@ -3,4 +3,6 @@
 *template
 Staff/
 Economy/V1
+# Will remove from gitignore when done
+Economy/V3
 Moderation/Moderation-old
