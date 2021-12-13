@@ -2,7 +2,7 @@
 		Made by Ranger (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(offence|crime|commit-?felon)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(offence|crime|commit-?felon)(\s+|\z)`
 ©️ Ranger 2021
 MIT License
 */}}
