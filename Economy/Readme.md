@@ -2,6 +2,9 @@
 Settings commands found <a href="https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Economy/V2/Settings">here</a> are not currently role-locked and are able to be used by all.
 Untill I add an inbuilt role-block, I suggest you lock the command in the cc settings
 
+# Notice 2
+`set` command is over 10k char limit, will work to decrease this at some point. Not sure when, need to decrease it by 6k
+
 # Economy CCs
 Fully functional basic economy system that for your server!
 
