@@ -1,11 +1,12 @@
 {{/*
         Made by Ranger (765316548516380732)
 
-    Trigger Type: `RegEx`
+    Trigger Type: `Regex`
     Trigger: `(-|<@!?204255221017214977>\s*)((edit|new)-?reason)`
 
-©️ Ranger 2021
-MIT License
+    ©️ Ranger 2020-Present
+    GNU, GPLV3 License
+    Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
 
