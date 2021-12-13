@@ -96,7 +96,7 @@ You can change these later
             {{else}}
                 {{sendMessage nil (cembed
                             "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "128"))
-                            "description" (print "Invalid `Amount` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Amount:Amount>`")
+                            "description" (print "Invalid `user` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Amount:Amount>`")
                             "color" $errorColor
                             "timestamp" currentTime
                             )}}
