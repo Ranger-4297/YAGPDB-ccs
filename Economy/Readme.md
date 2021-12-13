@@ -1,5 +1,5 @@
 # Notice
-Settings commands found <a href="https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Economy/Settings">here</a> are not currently role-locked and are able to be used by all.
+Settings commands found <a href="https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Economy/V2/Settings">here</a> are not currently role-locked and are able to be used by all.
 Untill I add an inbuilt role-block, I suggest you lock the command in the cc settings
 
 # Economy CCs
@@ -12,17 +12,13 @@ Fully functional basic economy system that for your server!
 
 ## Usage
 
-`Work`, `Crime`, `Rob`, `Deposit`, `Withdrawl`, `Bal`, `setFailRate`, `setMax`, `setMin`, `setSymbol` and more to come!
+`Bal`, `Dep`, `With`, `Crime`, `Rob`, `Work`, `Addmoney`, `Givemoney`, `Removemoney`, `Set`, `Viewsettings` and more to come!
 
 ## Other Info
 These commands **are not** standalone. You must add them all to use them.
 
 ## Setup
-To set up, install the set command found <a href="https://github.com/Ranger-4297/YAGPDB-ccs/tree/main/Economy/Settings">here</a> and run `set default`
-
-> *If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the [YAGPDB Support Server](https://discord.gg/SY7wn39SYD) or my server, [Dynamic](https://discord.gg/2WfF9JxuTU)*
+If you're setting up for the first time, add the [set](https://github.com/ranger-4297/yagpdb-ccs/blob/main/Economy/V2/Settings/Set.cc.go) command, and run `set default`.
 
 
-## credits
-
-`Readme.md` - this document is an edited version of [NaruDevonte](https://github.com/NaruDevnote)'s [tag](https://github.com/NaruDevnote/yagpdb-ccs/tree/master/tags) custom command [README.md](https://github.com/NaruDevnote/yagpdb-ccs/blob/master/tags/README.md)
+<blockquote>If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the <a href="https://discord.gg/4uY54rw">YAGPDB support server</a> or VIA <a href="mailto:a.rhyker@gmail.com">email</a></blockquote>
