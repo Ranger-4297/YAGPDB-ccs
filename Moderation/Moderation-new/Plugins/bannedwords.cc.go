@@ -1,10 +1,11 @@
 {{/* 
         Made by Unknown User
+        Edited by Ranger (765316548516380732)
 
     Trigger Type: `Command`
-    Trigger: `bannedwordd`
+    Trigger: `bannedwords`
 
-    Usage: `bannedwords` | `bannedwords delete` | `bannedwords show`
+No license
 */}}
 
 
