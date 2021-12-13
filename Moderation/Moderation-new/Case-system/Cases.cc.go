@@ -3,8 +3,9 @@
         Edited by Ranger (765316548516380732)
         Credit to LemmeCry (664118444739919882)
 
-    Trigger Type: `RegEx`
+    Trigger Type: `Regex`
     Trigger: `\A(-|<@!?204255221017214977>\s*)(cases|allcase)(\s+|\z)`
+
 Repo: https://github.com/Maverick-Wolf/yagpdb-mave
 MIT License
 */}}
