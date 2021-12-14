@@ -4,7 +4,9 @@
 This [repository] includes custom commands that I have made or that I have yet to make.<br>
 As you can see, alot of effort has gone into these,<br>
 And despite me not being an "expert" I am very content and proud of them.</p>
+<br>
 
+Ty to those that fork and star <3
 <hr>
 
 <h2>License</h2>
