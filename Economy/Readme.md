@@ -1,6 +1,5 @@
 # Notice
-These custom commands are being devloped using YAGPDB functions
-However are being tested using a selfhosted instance with an increased char limit
+These custom commands are being tested using a selfhosted instance with an increased char limit
 As such, some of these commands may be larger than the character limit.
 I will at the latest, by V4 shorten these down, so that they can all fit.
 **Thanks!**
