@@ -56,71 +56,85 @@ You can change these later
                 {{dbSet $userID "EconomyInfo" $sdict}}
             {{end}}
         {{else if (reFind `((commit-?)?offence|(commit-?)?crime|(commit-?)?felony?)` $cmd)}}
-            {{with (dbGet $userID "EconomyInfo")}}
-                {{$a = sdict .Value}}
-                {{$cash := $a.cash}}
-                {{$amount := randInt $min $max}}
-                {{$newCash := ""}}
-                {{$int := randInt 1 3}}
-                {{if eq $int 1}}
-                    {{$newCash = $cash | add $amount}}
-                    {{$embed.Set "description" (print "You broke the law for a pretty penny! You made " $symbol $amount " in your crime spree today")}}
-                    {{$embed.Set "color" $successColor}}
-                {{else}}
-                    {{$newCash = $amount | sub $cash}}
-                    {{$embed.Set "description" (print "You broke the law trying to commit a felony! You were arrested and lost " $symbol $amount " due to your bail.")}}
-                    {{$embed.Set "color" $errorColor}}
+            {{$crimeCooldown := 180 | toInt}}
+            {{if $cooldown := dbGet $.User.ID "crimeCooldown"}}
+                {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+                {{$embed.Set "color" $errorColor}}
+            {{else}}
+                {{dbSetExpire $.User.ID "crimeCooldown" "cooldown" $crimeCooldown}}
+                {{with (dbGet $userID "EconomyInfo")}}
+                    {{$a = sdict .Value}}
+                    {{$cash := $a.cash}}
+                    {{$amount := randInt $min $max}}
+                    {{$newCash := ""}}
+                    {{$int := randInt 1 3}}
+                    {{if eq $int 1}}
+                        {{$newCash = $cash | add $amount}}
+                        {{$embed.Set "description" (print "You broke the law for a pretty penny! You made " $symbol $amount " in your crime spree today")}}
+                        {{$embed.Set "color" $successColor}}
+                    {{else}}
+                        {{$newCash = $amount | sub $cash}}
+                        {{$embed.Set "description" (print "You broke the law trying to commit a felony! You were arrested and lost " $symbol $amount " due to your bail.")}}
+                        {{$embed.Set "color" $errorColor}}
+                    {{end}}
+                    {{$sdict := (dbGet $userID "EconomyInfo").Value}}
+                    {{$sdict.Set "cash" $newCash}}
+                    {{dbSet $userID "EconomyInfo" $sdict}}
                 {{end}}
-                {{$sdict := (dbGet $userID "EconomyInfo").Value}}
-                {{$sdict.Set "cash" $newCash}}
-                {{dbSet $userID "EconomyInfo" $sdict}}
             {{end}}
         {{else if (reFind `(rob|steal|mug|con)` $cmd)}}
-            {{with $.CmdArgs}}
-                {{if (index . 0)}}
-                    {{if (index . 0) | getMember}}
-                        {{$user :=  (index . 0) | getMember}}
-                        {{$victim := $user.User.ID}}
-                        {{if eq $victim $userID}}
-                            {{$embed.Set "description" (print "You can't rob yourself. Please specify a valid user")}}
-                            {{$embed.Set "color" $errorColor}}
-                        {{else}}
-                            {{if not (dbGet $victim "EconomyInfo")}}
-                                {{dbSet $victim "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
-                            {{end}}
-                            {{with (dbGet $victim "EconomyInfo")}}
-                                {{$a = sdict .Value}}
-                                {{$victimsCash := $a.cash | toInt}}
-                                {{with (dbGet $userID "EconomyInfo")}}
+            {{$robCooldown := 259200 | toInt}}
+            {{if $cooldown := dbGet $.User.ID "robCooldown"}}
+                {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+                {{$embed.Set "color" $errorColor}}
+            {{else}}
+                {{dbSetExpire $.User.ID "robCooldown" "cooldown" $robCooldown}}
+                {{with $.CmdArgs}}
+                    {{if (index . 0)}}
+                        {{if (index . 0) | getMember}}
+                            {{$user :=  (index . 0) | getMember}}
+                            {{$victim := $user.User.ID}}
+                            {{if eq $victim $userID}}
+                                {{$embed.Set "description" (print "You can't rob yourself. Please specify a valid user")}}
+                                {{$embed.Set "color" $errorColor}}
+                            {{else}}
+                                {{if not (dbGet $victim "EconomyInfo")}}
+                                    {{dbSet $victim "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+                                {{end}}
+                                {{with (dbGet $victim "EconomyInfo")}}
                                     {{$a = sdict .Value}}
-                                    {{$yourCash := $a.cash | toInt}}
-                                    {{if eq $victimsCash 0}}
-                                        {{$embed.Set "description" (print "You're unable to rob <@!" $victim "> to a value below `0`")}}
-                                        {{$embed.Set "color" 0x00ff8b}}
-                                    {{else}}
-                                        {{$amount := (randInt $victimsCash)}} {{/* Amount stolen from victim */}}
-                                        {{$victimsNewCash := $amount | sub $victimsCash}} {{/* Amout victim will have after being robbed */}}
-                                        {{$yourNewCash := $amount | add $yourCash}} {{/* Amount you will have after robbing vitim */}}
-                                            {{$embed.Set "description" (print "You robbed " $symbol $amount " from <@!" $victim ">")}}
-                                            {{$embed.Set "color" $successColor}}
-                                        {{$sdict := (dbGet $victim "EconomyInfo").Value}}
-                                        {{$sdict.Set "cash" $victimsNewCash}}
-                                        {{dbSet $victim "EconomyInfo" $sdict}}
-                                        {{$sdict = (dbGet $userID "EconomyInfo").Value}}
-                                        {{$sdict.Set "cash" $yourNewCash}}
-                                        {{dbSet $userID "EconomyInfo" $sdict}}
+                                    {{$victimsCash := $a.cash | toInt}}
+                                    {{with (dbGet $userID "EconomyInfo")}}
+                                        {{$a = sdict .Value}}
+                                        {{$yourCash := $a.cash | toInt}}
+                                        {{if eq $victimsCash 0}}
+                                            {{$embed.Set "description" (print "You're unable to rob <@!" $victim "> to a value below `0`")}}
+                                            {{$embed.Set "color" 0x00ff8b}}
+                                        {{else}}
+                                            {{$amount := (randInt $victimsCash)}} {{/* Amount stolen from victim */}}
+                                            {{$victimsNewCash := $amount | sub $victimsCash}} {{/* Amout victim will have after being robbed */}}
+                                            {{$yourNewCash := $amount | add $yourCash}} {{/* Amount you will have after robbing vitim */}}
+                                                {{$embed.Set "description" (print "You robbed " $symbol $amount " from <@!" $victim ">")}}
+                                                {{$embed.Set "color" $successColor}}
+                                            {{$sdict := (dbGet $victim "EconomyInfo").Value}}
+                                            {{$sdict.Set "cash" $victimsNewCash}}
+                                            {{dbSet $victim "EconomyInfo" $sdict}}
+                                            {{$sdict = (dbGet $userID "EconomyInfo").Value}}
+                                            {{$sdict.Set "cash" $yourNewCash}}
+                                            {{dbSet $userID "EconomyInfo" $sdict}}
+                                        {{end}}
                                     {{end}}
                                 {{end}}
                             {{end}}
+                        {{else}}
+                            {{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")}}
+                            {{$embed.Set "color" $errorColor}}
                         {{end}}
-                    {{else}}
-                        {{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")}}
-                        {{$embed.Set "color" $errorColor}}
                     {{end}}
+                {{else}}
+                    {{$embed.Set "description" (print "No `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")}}
+                    {{$embed.Set "color" $errorColor}}
                 {{end}}
-            {{else}}
-                {{$embed.Set "description" (print "No `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")}}
-                {{$embed.Set "color" $errorColor}}
             {{end}}
         {{end}}
     {{end}}
