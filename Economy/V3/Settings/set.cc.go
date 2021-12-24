@@ -31,102 +31,105 @@ You can change these later
 {{$perms := split (index (split (exec "viewperms" ) "\n" ) 2) ", "}}
 {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
     {{with .CmdArgs}}
-        {{with (dbGet 0 "EconomySettings")}}
-            {{$a := sdict .Value}}
-            {{if index $.CmdArgs 0}}
-                {{$setting := (lower (index $.CmdArgs 0))}}
-                {{if eq $setting "max"}}
-                    {{$min := (toInt $a.min)}}
-                    {{$symbol := $a.symbol}}
-                    {{if gt (len $.CmdArgs) 1}}
-                        {{$max := (index $.CmdArgs 1)}}
-                        {{if (toInt $max)}}
-                            {{if lt (toInt $max) (toInt $min)}}
-                                {{$embed.Set "description" (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" $min "`")}}
-                                {{$embed.Set "color" $errorColor}}
+        {{if index $.CmdArgs 0}}
+            {{$setting :=  (index $.CmdArgs 0) | lower}}
+            {{if eq $setting "default"}}
+                {{$embed.Set "description" (print "Set the `EconomySettings` to the default values")}}
+                {{$embed.Set "color" $successColor}}
+                {{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "symbol" "£" "startBalance" 200)}}
+            {{else}}
+                {{with (dbGet 0 "EconomySettings")}}
+                    {{$a := sdict .Value}}
+                    {{if eq $setting "max"}}
+                        {{$min := $a.min | lower}}
+                        {{$symbol := $a.symbol}}
+                        {{if gt (len $.CmdArgs) 1}}
+                            {{$max := (index $.CmdArgs 1)}}
+                            {{if (toInt $max)}}
+                                {{if lt ($max | toInt) ($min | toInt)}}
+                                    {{$embed.Set "description" (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" $min "`")}}
+                                    {{$embed.Set "color" $errorColor}}
+                                {{else}}
+                                    {{$embed.Set "description" (print "You set `" $setting "` to " $symbol $max)}}
+                                    {{$embed.Set "color" $successColor}}
+                                    {{$sdict.Set "max" $max}}
+                                    {{dbSet 0 "EconomySettings" $sdict}}
+                                {{end}}
                             {{else}}
-                                {{$embed.Set "description" (print "You set `" $setting "` to " $symbol $max)}}
-                                {{$embed.Set "color" $successColor}}
-                                {{$sdict.Set "max" $max }}
+                                {{$embed.Set "description" (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
+                                {{$embed.Set "color" $errorColor}}
                             {{end}}
                         {{else}}
-                            {{$embed.Set "description" (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
+                            {{$embed.Set "description" (print "No `value` argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
                             {{$embed.Set "color" $errorColor}}
                         {{end}}
-                    {{else}}
-                        {{$embed.Set "description" (print "No `value` argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
-                        {{$embed.Set "color" $errorColor}}
-                    {{end}}
-                {{else if eq $setting "min"}}
-                    {{$max := (toInt $a.max)}}
-                    {{$symbol := $a.symbol}}
-                    {{if gt (len $.CmdArgs) 1}}
-                        {{$min := (index $.CmdArgs 1)}}
-                        {{if (toInt $min)}}
-                            {{if gt (toInt $min) (toInt $max)}}
-                                {{$embed.Set "description" (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" $max "`")}}
-                                {{$embed.Set "color" $errorColor}}
+                    {{else if eq $setting "min"}}
+                        {{$max := $a.max | toInt}}
+                        {{$symbol := $a.symbol}}
+                        {{if gt (len $.CmdArgs) 1}}
+                            {{$min := (index $.CmdArgs 1)}}
+                            {{if $min | toInt}}
+                                {{if gt ($min | toInt) ($max | toInt)}}
+                                    {{$embed.Set "description" (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" $max "`")}}
+                                    {{$embed.Set "color" $errorColor}}
+                                {{else}}
+                                    {{$embed.Set "description" (print "You set `" $setting "` to " $symbol $min)}}
+                                    {{$embed.Set "color" $successColor}}
+                                    {{$sdict.Set "min" $min}}
+                                    {{dbSet 0 "EconomySettings" $sdict}}
+                                {{end}}
                             {{else}}
-                                {{$embed.Set "description" (print "You set `" $setting "` to " $symbol $min)}}
-                                {{$embed.Set "color" $successColor}}
-                                {{$sdict.Set "min" $min }}
+                                {{$embed.Set "description" (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
+                                {{$embed.Set "color" $errorColor}}
                             {{end}}
                         {{else}}
-                            {{$embed.Set "description" (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
+                            {{$embed.Set "description" (print "No `value` argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
                             {{$embed.Set "color" $errorColor}}
                         {{end}}
-                    {{else}}
-                        {{$embed.Set "description" (print "No `value` argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
-                        {{$embed.Set "color" $errorColor}}
-                    {{end}}
-                {{else if eq $setting "startbalance"}}
-                    {{$symbol := $a.symbol}}
-                    {{$oldStartBalance := $a.startBalance }}
-                    {{if gt (len $.CmdArgs) 1}}
-                        {{$startBalance := (index $.CmdArgs 1)}}
-                        {{if (toInt $startBalance)}}
-                            {{$embed.Set "description" (print "You set `" $setting "` to " $symbol $startBalance " from " $oldStartBalance)}}
-                            {{$embed.Set "color" $successColor}}
-                            {{$sdict.Set "startBalance" $startBalance }}
+                    {{else if eq $setting "startbalance"}}
+                        {{$symbol := $a.symbol}}
+                        {{$oldStartBalance := $a.startBalance}}
+                        {{if gt (len $.CmdArgs) 1}}
+                            {{$startBalance := (index $.CmdArgs 1)}}
+                            {{if ($startBalance | toInt)}}
+                                {{$embed.Set "description" (print "You set `" $setting "` to " $symbol $startBalance " from " $oldStartBalance)}}
+                                {{$embed.Set "color" $successColor}}
+                                {{$sdict.Set "startBalance" $startBalance}}
+                                {{dbSet 0 "EconomySettings" $sdict}}
+                            {{else}}
+                            {{$embed.Set "description" (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
+                            {{$embed.Set "color" $errorColor}}
+                            {{end}}
                         {{else}}
-                        {{$embed.Set "description" (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
-                        {{$embed.Set "color" $errorColor}}
+                            {{$embed.Set "description" (print "No `value` argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
+                            {{$embed.Set "color" $errorColor}}
                         {{end}}
-                    {{else}}
-                        {{$embed.Set "description" (print "No `value` argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
-                        {{$embed.Set "color" $errorColor}}
-                    {{end}}
-                {{else if eq $setting "symbol"}}
-                    {{if gt (len $.CmdArgs) 1}}
-                        {{$symbol := (index $.CmdArgs 1)}}
-                        {{$output := ""}}
-                        {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
-                            {{$output = $symbol}}
-                        {{else}}
-                            {{$output = (print "`" $symbol "`")}}
-                        {{end}}
+                    {{else if eq $setting "symbol"}}
+                        {{if gt (len $.CmdArgs) 1}}
+                            {{$symbol := (index $.CmdArgs 1)}}
+                            {{$output := ""}}
+                            {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
+                                {{$output = $symbol}}
+                            {{else}}
+                                {{$output = (print "`" $symbol "`")}}
+                            {{end}}
                             {{$embed.Set "description" (print "You set the server currency symbol to " $output )}}
                             {{$embed.Set "color" $successColor}}
-                        {{$sdict.Set "symbol" $symbol }}
+                            {{$sdict.Set "symbol" $symbol}}
+                            {{dbSet 0 "EconomySettings" $sdict}}
+                        {{else}}
+                            {{$embed.Set "description" (print "No `value` argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:String>`")}}
+                            {{$embed.Set "color" $errorColor}}
+                        {{end}}
                     {{else}}
-                        {{$embed.Set "description" (print "No `value` argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:String>`")}}
+                        {{$embed.Set "description" (print "No valid setting argument passed.\nSyntax is: `" $.Cmd " <Setting:String> <Value:String/Int>`\nAvailable settings: `max`, `min`, `startbalance`, `symbol`\nTo set it with the default settings `" $.Cmd " default`")}}
                         {{$embed.Set "color" $errorColor}}
                     {{end}}
-                {{else if eq $setting "default"}}
-                    {{$embed.Set "description" (print "Set the `EconomySettings` to the default values")}}
-                    {{$embed.Set "color" $successColor}}
-                    {{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "symbol" "£" "startBalance" 200)}}
-                    {{$staffBadge := "<:Badge_Staff:923744973118119946>"}}
-                    {{$betaBadge := "<:Badge_Beta:923744973285892106>"}}
-                    {{dbSet 0 "EconomyBadges" (sdict "staffBadge" $staffBadge "betaBadge" $betaBadge)}}
                 {{else}}
-                    {{$embed.Set "description" (print "No valid setting argument passed.\nSyntax is: `" $.Cmd " <Setting:String> <Value:String/Int>`\nAvailable settings: `max`, `min`, `startbalance`, `symbol`\nTo set it with the default settings `" $.Cmd " default`")}}
+                    {{$embed.Set "description" (print "No database found.\nPlease set it up with the default values using `" $.Cmd " default`")}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
             {{end}}
-        {{else}}
-            {{$embed.Set "description" (print "No database found.\nPlease set it up with the default values using `" $.Cmd " default`")}}
-            {{$embed.Set "color" $errorColor}}
         {{end}}
     {{else}}
         {{$embed.Set "description" (print "No setting argument passed.\nSyntax is: `" $.Cmd " <Setting:String> <Value:String/Int>`\nAvailable settings: `max`, `min`, `startbalance`, `symbol`\nTo set it with the default settings `" $.Cmd " default`")}}
@@ -137,4 +140,3 @@ You can change these later
     {{$embed.Set "color" $errorColor}}
 {{end}}
 {{sendMessage nil (cembed $embed)}}
-{{dbSet 0 "EconomySettings" $sdict}}
