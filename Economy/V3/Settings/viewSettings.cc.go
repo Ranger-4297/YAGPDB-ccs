@@ -34,14 +34,16 @@ You can change these later
     {{$max := $a.max}}
     {{$symbol := $a.symbol}}
     {{$crimeCooldown := $a.crimeCooldown}}
+    {{$crimeCooldown = humanizeDurationSeconds (mult $.TimeSecond $crimeCooldown)}}
     {{$robCooldown := $a.robCooldown}}
+    {{$robCooldown = humanizeDurationSeconds (mult $.TimeSecond $robCooldown)}}
     {{$startBalance := $a.startBalance}}
     {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
         {{$symbol = $symbol}}
     {{else}}
-        {{$symbol = (print "`" $symbol "`")}}
+        {{$symbol = (print $symbol)}}
     {{end}}
-    {{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nSymbol: " $symbol "\nstartBalance: " $symbol $startBalance "\ncrimeCooldown: " $crimeCooldown "\nrobCooldown: " $robCooldown)}}
+    {{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
     {{$embed.Set "color" $successColor}}
 {{else}}
     {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
