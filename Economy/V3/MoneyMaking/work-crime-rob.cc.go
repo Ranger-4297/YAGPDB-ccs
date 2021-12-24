@@ -38,6 +38,8 @@ You can change these later
     {{$min := $a.min}}
     {{$max := $a.max}}
     {{$symbol := $a.symbol}}
+    {{$robCooldown := $a.robCooldown | toInt}}
+    {{$crimeCooldown := $a.crimeCooldown | toInt}}
     {{if not (dbGet $userID "EconomyInfo")}}
 		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
 	{{end}}
@@ -56,12 +58,10 @@ You can change these later
                 {{dbSet $userID "EconomyInfo" $sdict}}
             {{end}}
         {{else if (reFind `((commit-?)?offence|(commit-?)?crime|(commit-?)?felony?)` $cmd)}}
-            {{$crimeCooldown := 180 | toInt}}
             {{if $cooldown := dbGet $.User.ID "crimeCooldown"}}
                 {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
                 {{$embed.Set "color" $errorColor}}
             {{else}}
-                {{dbSetExpire $.User.ID "crimeCooldown" "cooldown" $crimeCooldown}}
                 {{with (dbGet $userID "EconomyInfo")}}
                     {{$a = sdict .Value}}
                     {{$cash := $a.cash}}
@@ -83,21 +83,20 @@ You can change these later
                 {{end}}
             {{end}}
         {{else if (reFind `(rob|steal|mug|con)` $cmd)}}
-            {{$robCooldown := 259200 | toInt}}
-            {{if $cooldown := dbGet $.User.ID "robCooldown"}}
-                {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
-                {{$embed.Set "color" $errorColor}}
-            {{else}}
-                {{dbSetExpire $.User.ID "robCooldown" "cooldown" $robCooldown}}
-                {{with $.CmdArgs}}
-                    {{if (index . 0)}}
-                        {{if (index . 0) | getMember}}
-                            {{$user :=  (index . 0) | getMember}}
-                            {{$victim := $user.User.ID}}
-                            {{if eq $victim $userID}}
-                                {{$embed.Set "description" (print "You can't rob yourself. Please specify a valid user")}}
+            {{with $.CmdArgs}}
+                {{if (index . 0)}}
+                    {{if (index . 0) | getMember}}
+                        {{$user :=  (index . 0) | getMember}}
+                        {{$victim := $user.User.ID}}
+                        {{if eq $victim $userID}}
+                            {{$embed.Set "description" (print "You can't rob yourself. Please specify a valid user")}}
+                            {{$embed.Set "color" $errorColor}}
+                        {{else}}
+                            {{if $cooldown := dbGet $.User.ID "robCooldown"}}
+                                {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
                                 {{$embed.Set "color" $errorColor}}
                             {{else}}
+                                {{dbSetExpire $.User.ID "robCooldown" "cooldown" $robCooldown}}
                                 {{if not (dbGet $victim "EconomyInfo")}}
                                     {{dbSet $victim "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
                                 {{end}}
@@ -126,15 +125,15 @@ You can change these later
                                     {{end}}
                                 {{end}}
                             {{end}}
-                        {{else}}
-                            {{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")}}
-                            {{$embed.Set "color" $errorColor}}
                         {{end}}
+                    {{else}}
+                        {{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")}}
+                        {{$embed.Set "color" $errorColor}}
                     {{end}}
-                {{else}}
-                    {{$embed.Set "description" (print "No `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")}}
-                    {{$embed.Set "color" $errorColor}}
                 {{end}}
+            {{else}}
+                {{$embed.Set "description" (print "No `User` argument provided.\nSyntaxt is `" $.Cmd " <User:Mention/ID>`")}}
+                {{$embed.Set "color" $errorColor}}
             {{end}}
         {{end}}
     {{end}}
