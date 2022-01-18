@@ -2,7 +2,7 @@
         Made by Ranger (765316548516380732)
 
     Trigger Type: `Regex`
-    Trigger: `(-|<@!?204255221017214977>\s*)((edit|new)-?reason)`
+    Trigger: `\A(-|<@!?204255221017214977>\s*)((edit|new)-?reason)`
 
     ©️ Ranger 2020-Present
     GNU, GPLV3 License
