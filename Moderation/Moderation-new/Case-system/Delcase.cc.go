@@ -26,23 +26,22 @@ MIT License
     {{end}}
 {{end}}
 
-    {{if eq $check 0}}
-        {{sendMessage nil (cembed
-            "author" (sdict "name" (print .User.Username) "icon_url" (.User.AvatarURL "512"))
-            "description" (print "<:Cross:817828050938363905> I'm sorry. You don't have permission to use this command.")
-            "color" 0x36393f
-            )}}
-    {{else}}
-        {{$args := parseArgs 1 "correct usuage is `-delcase <CaseID>`" (carg "int" "case number")}}
-        {{$caseno := ($args.Get 0)}}
-        {{$id := (toInt (dbGet $caseno "userid").Value)}}
-        {{dbDel $caseno "viewcase"}}
-        {{dbDel $caseno $id}}
-        {{dbDel $caseno "userid"}}
-        {{$embed := sendMessage nil (cembed
-            "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" .User.Username)
-            "description" (print "Deleted the case")
-            "color" 0x36393f
-            )}}
-    {{end}}
+{{if eq $check 0}}
+    {{sendMessage nil (cembed
+        "author" (sdict "name" (print .User.Username) "icon_url" (.User.AvatarURL "512"))
+        "description" (print "<:Cross:817828050938363905> I'm sorry. You don't have permission to use this command.")
+        "color" 0x36393f
+        )}}
+{{else}}
+    {{$args := parseArgs 1 "correct usuage is `-delcase <CaseID>`" (carg "int" "case number")}}
+    {{$caseno := ($args.Get 0)}}
+    {{$id := (toInt (dbGet $caseno "userid").Value)}}
+    {{dbDel $caseno "viewcase"}}
+    {{dbDel $caseno $id}}
+    {{dbDel $caseno "userid"}}
+    {{$embed := sendMessage nil (cembed
+        "author" (sdict "icon_url" (.User.AvatarURL "1024") "name" .User.Username)
+        "description" (print "Deleted the case")
+        "color" 0x36393f
+        )}}
 {{end}}
