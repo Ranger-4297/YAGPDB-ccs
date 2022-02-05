@@ -27,7 +27,7 @@
     {{dbDel .User.ID "Leaderboard"}}
 {{end }}
 {{sendMessage nil (cembed
-        "title" "Leaderboard"
+        "title" "Cash leaderboard"
         "description" $display
         "color" 0x00ff7b
         "footer" (sdict "text" (joinStr "" "Page " $page))
