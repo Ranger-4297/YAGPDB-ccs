@@ -16,6 +16,7 @@
 {{$user := .User}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
+{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
 
 {{/* Balance, Deposit, Withdraw */}}
 
@@ -59,7 +60,7 @@ You can change these later
         {{$embed.Set "timestamp" currentTime}}
     {{end}}
 {{else}}
-    {{$embed.Set "description" (print "No database found.\nPlease set it up with the default values using `" $.Cmd " default`")}}
+    {{$embed.Set "description" (print "No database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
     {{$embed.Set "color" $errorColor}}
 {{end}}
 {{sendMessage nil (cembed $embed)}}
