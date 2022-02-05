@@ -34,9 +34,9 @@ You can change these later
     {{$max := $a.max}}
     {{$symbol := $a.symbol}}
     {{$crimeCooldown := $a.crimeCooldown}}
-    {{$crimeCooldown = humanizeDurationSeconds (mult $.TimeSecond $crimeCooldown)}}
+    {{$crimeCooldown = humanizeDurationSeconds (mult $.TimeSecond $crimeCooldown | toDuration)}}
     {{$robCooldown := $a.robCooldown}}
-    {{$robCooldown = humanizeDurationSeconds (mult $.TimeSecond $robCooldown)}}
+    {{$robCooldown = humanizeDurationSeconds (mult $.TimeSecond $robCooldown | toDuration)}}
     {{$startBalance := $a.startBalance}}
     {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
         {{$symbol = $symbol}}
