@@ -1,3 +1,7 @@
+# Notice!!
+> As of Aprill 1, 2022, regular commands will no longer work and the bot [DISBOARD] will only respond to slash commands. This means that these set of commands will no longer work and will be deprecated. Sorry for any inconveniences caused!
+
+
 # Disboard/Bump CCs
 Fully functional, notifications, and bump messages that look like they're through YAGPDB! :0
  
