@@ -1,5 +1,11 @@
 <center><h1><img src="https://yagpdb.xyz/static/img/logo_y.png" alt="" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1></center>
 
+<h2>Notice</h2>
+<p>I am sad to say that currently, I have not been able to put much work into these. What with my examinations coming up over the next few weeks<br>
+I have had to shift all my attention to them. However, once they are out of the way (20th June), I will have more free time to work and develop these commands<br>
+From that point on, I will be focusing on my economy based commands until such a time that I am happy with them.<br>
+Thank you for understanding!</p>
+
 <p>Welcome to my YAGPDB CC repository!<br>
 This [repository] includes custom commands that I have made or that I have yet to make.<br>
 As you can see, alot of effort has gone into these,<br>
