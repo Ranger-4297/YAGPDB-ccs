@@ -6,6 +6,8 @@ I have had to shift all my attention to them. However, once they are out of the 
 From that point on, I will be focusing on my economy based commands until such a time that I am happy with them.<br>
 Thank you for understanding!</p>
 
+<hr>
+
 <p>Welcome to my YAGPDB CC repository!<br>
 This [repository] includes custom commands that I have made or that I have yet to make.<br>
 As you can see, alot of effort has gone into these,<br>
