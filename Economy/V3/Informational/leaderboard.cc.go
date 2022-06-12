@@ -9,6 +9,9 @@
     Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
+
+{{/* Only edit below if you know what you're doing (: rawr */}}
+
 {{range (dbTopEntries "EconomyInfo" 10 0)}}
     {{dbSet .User.ID "Leaderboard" ((dbGet .User.ID "EconomyInfo").Value.cash)}}
 {{end}}
