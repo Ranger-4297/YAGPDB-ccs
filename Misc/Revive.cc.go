@@ -4,8 +4,6 @@
     Trigger Type: `Command`
     Trigger: `Revive`
 
-    ©️ Ranger 2020-Present
-    GNU, GPLV3 License
     Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
