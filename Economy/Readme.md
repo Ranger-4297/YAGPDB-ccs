@@ -1,3 +1,7 @@
+# V4 is now underway
+##### Currently this will include complete working commands suited for non-premium users too
+##### As well as hopefully, a shop system that I will be experimenting with
+
 # Economy CCs
 Fully functional basic economy system that for your server!
 
