@@ -1,6 +1,11 @@
 # V4 is now underway
-##### Currently this will include complete working commands suited for non-premium users too
-##### As well as hopefully, a shop system that I will be experimenting with
+
+## V4 plans
+- [ ] Fully support basic yag without hitting limits
+- [ ] Help to provide information on commands
+- [ ] Per-server shop
+- [ ] Cooldowns on basic income commands
+- [ ] More configurability (maybe)
 
 # Economy CCs
 Fully functional basic economy system that for your server!
@@ -12,7 +17,7 @@ Fully functional basic economy system that for your server!
 
 ## Usage
 
-`Bal`, `Dep`, `With`, `Crime`, `Rob`, `Work`, `Addmoney`, `Givemoney`, `Removemoney`, `Set`, `Viewsettings` and more to come!
+> Unfinished
 
 ## Other Info
 These commands **are not** standalone. You must add them all to use them.
