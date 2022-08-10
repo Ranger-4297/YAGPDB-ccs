@@ -2,7 +2,7 @@
 		Made by Ranger (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(work|job|get-?paid|(commit-?)?crime|(commit-?)?felon|rob|steal)(\s+|\z)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(work|job|get-?paid|(commit-?)?crime|rob|steal)(\s+|\z)`
 
     ©️ Ranger 2020-Present
     GNU, GPLV3 License
@@ -60,7 +60,7 @@ You can change these later
                     {{$sdict.Set "cash" $newCashBalance}}
                     {{dbSet $userID "EconomyInfo" $sdict}}
                 {{end}}
-            {{else if (reFind `((commit-?)?offence|(commit-?)?crime|(commit-?)?felony?)` $cmd)}}
+            {{else if (reFind `(commit-?)?crime` $cmd)}}
                 {{if $cooldown := dbGet $.User.ID "crimeCooldown"}}
                     {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
                     {{$embed.Set "color" $errorColor}}
