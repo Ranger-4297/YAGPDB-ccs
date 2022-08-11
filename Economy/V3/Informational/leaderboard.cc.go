@@ -27,6 +27,7 @@
     {{$cash := toInt .Value }}
     {{$rank = add $rank 1 }}
     {{$display = (printf "%s**%d.** %s **||** %d \n" $display $rank .User.String $cash)}}
+    {{dbDel .User.ID "Leaderboard"}}
 {{end }}
 {{sendMessage nil (cembed
         "title" "Cash leaderboard"
