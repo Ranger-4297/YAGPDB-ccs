@@ -28,7 +28,6 @@ If there is no setting values
 You'll be asked to set it up with default values
 You can change these later
 */}}
-{{/* Set DB Call counter at 0 */}}
 
 {{/* Resoponse */}}
 {{$embed := sdict}}
