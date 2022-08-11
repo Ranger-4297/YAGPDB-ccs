@@ -4,6 +4,7 @@
 - [X] Fully support basic yag without hitting limits
 - [X] Help to provide information on commands
 - [ ] Per-server shop
+- [ ] More income based commands
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
 - [ ] Leaderboard position on balance (maybe)
