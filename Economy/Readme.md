@@ -6,6 +6,7 @@
 - [ ] Per-server shop
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
+- [ ] Leaderboard position on balance (maybe)
 
 # Economy CCs
 Fully functional basic economy system that for your server!
