@@ -1,7 +1,7 @@
 # V4 is now underway
 
 ## V4 plans
-- [ ] Fully support basic yag without hitting limits
+- [X] Fully support basic yag without hitting limits
 - [X] Help to provide information on commands
 - [ ] Per-server shop
 - [ ] Cooldowns on basic income commands
