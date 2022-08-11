@@ -84,7 +84,7 @@ You can change these later
                         {{dbSet $userID "EconomyInfo" $sdict}}
                     {{end}}
                 {{end}}
-            {{else if (reFind `(rob|steal|mug|con)` $cmd)}}
+            {{else if (reFind `(rob|steal)` $cmd)}}
                 {{with $.CmdArgs}}
                     {{if (index . 0)}}
                         {{if (index . 0) | getMember}}
