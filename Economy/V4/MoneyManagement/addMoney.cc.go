@@ -2,7 +2,7 @@
             Made by Ranger (765316548516380732)
 
         Trigger Type: `Regex`
-        Trigger: `\A(-|<@!?204255221017214977>\s*)(add-?money|inc-?money|money-?add)(\s+|\z)`
+        Trigger: `\A(-|<@!?204255221017214977>\s*)(add-?money|inc(crease)?-?money)(\s+|\z)`
 
         ©️ Ranger 2020-Present
         GNU, GPLV3 License
