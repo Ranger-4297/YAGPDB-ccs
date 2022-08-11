@@ -67,8 +67,8 @@ You can change these later
                                 {{$newCashBalance := ""}}
                                 {{$int := randInt 1 3}}
                                 {{if eq $int 1}} {{/* Win */}}
-                                    {{$newCashBalance = $cash | add ($amount | mult 2)}}
-                                    {{$embed.Set "description" (print "You flipped " $side1 " and won " $symbol ($amount | mult 2))}}
+                                    {{$newCashBalance = $cash | add $amount}}
+                                    {{$embed.Set "description" (print "You flipped " $side1 " and won " $symbol $amount)}}
                                     {{$embed.Set "color" $successColor}}
                                 {{else}} {{/* Lose */}}
                                     {{$newCashBalance = $amount | sub $cash}}
