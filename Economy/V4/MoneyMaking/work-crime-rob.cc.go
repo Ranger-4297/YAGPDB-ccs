@@ -52,7 +52,7 @@ You can change these later
                 {{with (dbGet $userID "EconomyInfo")}}
                     {{$a = sdict .Value}}
                     {{$cash := $a.cash}}
-                    {{$workPay := (randInt $min) (randInt $max)}}
+                    {{$workPay := randInt $min $max}}
                     {{$newCashBalance := $cash | add $workPay}}
                     {{$embed.Set "description" (print "You decided to work today! You got paid a hefty " $symbol $workPay)}}
                     {{$embed.Set "color" 0x00ff7b}}
