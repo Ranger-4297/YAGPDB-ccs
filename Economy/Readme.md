@@ -2,7 +2,7 @@
 
 ## V4 plans
 - [ ] Fully support basic yag without hitting limits
-- [ ] Help to provide information on commands
+- [X] Help to provide information on commands
 - [ ] Per-server shop
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
