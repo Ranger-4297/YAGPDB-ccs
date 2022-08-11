@@ -7,6 +7,7 @@
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
 - [ ] Leaderboard position on balance (maybe)
+- [ ] Allow ints with comma's
 
 # Economy CCs
 Fully functional basic economy system that for your server!
