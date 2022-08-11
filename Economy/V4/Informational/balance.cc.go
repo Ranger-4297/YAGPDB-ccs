@@ -18,7 +18,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
 
-{{/* Balance, Deposit, Withdraw */}}
+{{/* Balance */}}
 
 {{/*
 If the user isn't in the economy database 
