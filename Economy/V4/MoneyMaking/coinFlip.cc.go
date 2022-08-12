@@ -35,8 +35,6 @@ You can change these later
 {{$embed.Set "timestamp" currentTime}}
 {{with (dbGet 0 "EconomySettings")}}
     {{$a := sdict .Value}}
-    {{$min := $a.min | toInt}}
-    {{$max := $a.max | toInt}}
     {{$symbol := $a.symbol}}
     {{if not (dbGet $userID "EconomyInfo")}}
         {{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
@@ -57,8 +55,8 @@ You can change these later
                     {{$amount := (index . 1)}}
                     {{if $amount | toInt}}
                         {{$amount = $amount | toInt}}
-                        {{if gt $amount $max}}
-                            {{$embed.Set "description" (print "You cannot flip for higher than " $symbol $max)}}
+                        {{if lt $amount 0}}
+                            {{$embed.Set "description" (print "You cannot flip for lower than " $symbol "1")}}
                             {{$embed.Set "color" $errorColor}}
                         {{else}}
                             {{with (dbGet $userID "EconomyInfo")}}
