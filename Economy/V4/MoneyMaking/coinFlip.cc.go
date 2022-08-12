@@ -92,7 +92,7 @@ You can change these later
             {{end}}
         {{end}}
     {{else}}
-        {{$embed.Set "description" (print "No valid `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Amount:Amount>`")}}
+        {{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Amount:Amount>`")}}
         {{$embed.Set "color" $errorColor}}
     {{end}}
 {{else}}
