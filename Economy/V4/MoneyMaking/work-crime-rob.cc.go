@@ -20,15 +20,6 @@
 
 {{/* Work, crime, rob */}}
 
-{{/*
-If the users aren't in the economy database 
-It'll automatically add them
---
-If there is no setting values
-You'll be asked to set it up with default values
-You can change these later
-*/}}
-
 {{/* Resoponse */}}
 {{$embed := sdict}}
 {{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}

@@ -16,12 +16,6 @@
 {{$successColor := 0x00ff7b}}
 {{/* Configures economy settings */}}
 
-{{/*
-If there is no setting values
-You'll be asked to set it up with default values
-You can change these later
-*/}}
-
 {{/* Response */}}
 {{$msg := sdict}}
 {{$msg.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}

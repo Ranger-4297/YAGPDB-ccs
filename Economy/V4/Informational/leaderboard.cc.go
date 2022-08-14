@@ -12,6 +12,8 @@
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
+{{/* Leaderboard */}}
+
 {{range (dbTopEntries "EconomyInfo" 10 0)}}
     {{dbSet .User.ID "Leaderboard" ((dbGet .User.ID "EconomyInfo").Value.cash)}}
 {{end}}

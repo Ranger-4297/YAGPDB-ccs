@@ -19,12 +19,6 @@
 
 {{/* Configures economy settings */}}
 
-{{/*
-If there is no setting values
-You'll be asked to set it up with default values
-You can change these later
-*/}}
-
 {{/* Response */}}
 {{$embed := sdict}}
 {{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
