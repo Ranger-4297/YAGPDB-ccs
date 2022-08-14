@@ -31,8 +31,8 @@
     {{$display = (printf "%s**%d.** %s **||** %d \n" $display $rank .User.String $cash)}}
 {{end }}
 {{sendMessage nil (cembed
-        "title" "Cash leaderboard"
-        "description" $display
-        "color" 0x00ff7b
-        "footer" (sdict "text" (joinStr "" "Page " $page))
+            "title" "Cash leaderboard"
+            "description" $display
+            "color" 0x00ff7b
+            "footer" (sdict "text" (joinStr "" "Page " $page))
 )}}
