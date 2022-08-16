@@ -38,6 +38,9 @@
 					{{$qty := ""}}
 					{{if $v.qty}}
 						{{$qty = $v.qty}}
+						{{if not (reFind "inf(inity)?" (toString $qty))}}
+							{{$qty = humanizeThousands $qty}}
+						{{end}}
 					{{end}}
 					{{$desc := $v.desc}}
 				{{end}}
