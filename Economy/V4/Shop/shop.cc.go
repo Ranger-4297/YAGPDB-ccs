@@ -36,9 +36,9 @@
 				{{range $k,$v := $items}}
 					{{$item := $k}}
 					{{$price := $v.price | humanizeThousands}}
-					{{$entry = $entry.Append (print "Name: " $item "\n")}}
+					{{$entry = $entry.Append (sdict "Name" $item "value" (print "Price" $symbol $price) "inline" false)}}
 				{{end}}
-				{{$embed.Set "description" (print $entry)}}
+				{{$embed.Set "fields" $entry}}
 			{{end}}
 		{{end}}
 	{{else}}
