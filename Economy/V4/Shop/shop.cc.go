@@ -35,8 +35,18 @@
 			{{if $items}}
 				{{range $k,$v := $items}}
 					{{$item := $k}}
+					{{$desc := $v.desc }}
 					{{$price := $v.price | humanizeThousands}}
-					{{$entry = $entry.Append (sdict "Name" $item "value" (print "Price" $symbol $price) "inline" false)}}
+					{{$qty := ""}}
+					{{if $v.qty}}
+						{{$qty = $v.qty}}
+						{{if not (reFind "Infinite" (toString $qty))}}
+							{{$qty = toInt $qty | humanizeThousands}}
+						{{end}}
+					{{else}}
+						{{$qty = "Infinite"}}
+					{{end}}
+					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Price: " $symbol $price) (print "Quantity:" $qty)) "inline" false)}}
 				{{end}}
 				{{$embed.Set "fields" $entry}}
 			{{end}}
