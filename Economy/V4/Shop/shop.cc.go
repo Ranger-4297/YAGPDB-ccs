@@ -37,6 +37,9 @@
 					{{$price := $v.price}}
 					{{$qty := $v.qty}}
 					{{$desc := $v.desc}}
+				{{end}}
+			{{end}}
+		{{end}}
 	{{else}}
 		{{$embed.Set "description" (print "The shop is empty :(\nPlease add some items with ``")}}
 		{{$embed.Set "color" $errorColor}}
