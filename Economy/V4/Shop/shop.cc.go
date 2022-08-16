@@ -44,9 +44,14 @@
 					{{end}}
 					{{$desc := $v.desc}}
 					{{$entry := cslice (sdict "name" $item "price" (print $symbol $price) "quantity" $qty)}}
-					{{$page :=}}
-					{{$start := ""}}
-					{{stop := ""}}
+					{{$page := ""}}
+					{{if .CmdArgs}}
+						{{$page = (index .CmdArgs 0) | toInt}}
+					{{else}}
+						{{$page = 1}}
+					{{end}}
+					{{$start := (mult 10 (sub $page 1))}}
+					{{$stop := (mult $page 10)}}
 				{{end}}
 			{{end}}
 		{{end}}
