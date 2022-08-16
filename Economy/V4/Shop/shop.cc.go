@@ -35,7 +35,10 @@
 				{{range $k,$v := $items}}
 					{{$item := $k}}
 					{{$price := $v.price}}
-					{{$qty := $v.qty}}
+					{{$qty := ""}}
+					{{if $v.qty}}
+						{{$qty = $v.qty}}
+					{{end}}
 					{{$desc := $v.desc}}
 				{{end}}
 			{{end}}
