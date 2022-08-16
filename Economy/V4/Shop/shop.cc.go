@@ -36,13 +36,13 @@
 					{{$item := $k}}
 					{{$price := $v.price | humanizeThousands}}
 					{{$qty := ""}}
+					{{$desc := $v.desc}}
 					{{if $v.qty}}
 						{{$qty = $v.qty}}
 						{{if not (reFind "inf(inity)?" (toString $qty))}}
 							{{$qty = humanizeThousands $qty}}
 						{{end}}
 					{{end}}
-					{{$desc := $v.desc}}
 					{{$entry := cslice (sdict "name" $item "price" (print $symbol $price) "quantity" $qty)}}
 					{{$page := ""}}
 					{{if .CmdArgs}}
@@ -52,6 +52,7 @@
 					{{end}}
 					{{$start := (mult 10 (sub $page 1))}}
 					{{$stop := (mult $page 10)}}
+					{{$embed.Set "description" (print $entry)}}
 				{{end}}
 			{{end}}
 		{{end}}
