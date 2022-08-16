@@ -31,29 +31,14 @@
 		{{$items := sdict}}
 		{{if ($info.Get "Items")}}
 			{{$items = sdict ($info.Get "Items")}}
+			{{$entry := cslice}}
 			{{if $items}}
 				{{range $k,$v := $items}}
 					{{$item := $k}}
 					{{$price := $v.price | humanizeThousands}}
-					{{$qty := ""}}
-					{{$desc := $v.desc}}
-					{{if $v.qty}}
-						{{$qty = $v.qty}}
-						{{if not (reFind "inf(inity)?" (toString $qty))}}
-							{{$qty = humanizeThousands $qty}}
-						{{end}}
-					{{end}}
-					{{$entry := cslice (sdict "name" $item "price" (print $symbol $price) "quantity" $qty)}}
-					{{$page := ""}}
-					{{if .CmdArgs}}
-						{{$page = (index .CmdArgs 0) | toInt}}
-					{{else}}
-						{{$page = 1}}
-					{{end}}
-					{{$start := (mult 10 (sub $page 1))}}
-					{{$stop := (mult $page 10)}}
-					{{$embed.Set "description" (print $entry)}}
+					{{$entry = $entry.Append (print "Name: " $item "\n")}}
 				{{end}}
+				{{$embed.Set "description" (print $entry)}}
 			{{end}}
 		{{end}}
 	{{else}}
