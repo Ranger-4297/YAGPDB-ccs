@@ -34,7 +34,7 @@
 			{{if $items}}
 				{{range $k,$v := $items}}
 					{{$item := $k}}
-					{{$price := $v.price}}
+					{{$price := $v.price | humanizeThousands}}
 					{{$qty := ""}}
 					{{if $v.qty}}
 						{{$qty = $v.qty}}
@@ -43,6 +43,10 @@
 						{{end}}
 					{{end}}
 					{{$desc := $v.desc}}
+					{{$entry := cslice (sdict "name" $item "price" (print $symbol $price) "quantity" $qty)}}
+					{{$page :=}}
+					{{$start := ""}}
+					{{stop := ""}}
 				{{end}}
 			{{end}}
 		{{end}}
