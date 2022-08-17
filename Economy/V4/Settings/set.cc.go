@@ -33,6 +33,7 @@
                 {{$msg.Set "description" (print "Set the `EconomySettings` to the default values")}}
                 {{$msg.Set "color" $successColor}}
                 {{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "symbol" "£" "startBalance" 200 "crimeCooldown" 3600 "robCooldown" 21600)}}
+                {{dbSet 0 "store" sdict}}
             {{else}}
                 {{with (dbGet 0 "EconomySettings")}}
                     {{$a := sdict .Value}}
