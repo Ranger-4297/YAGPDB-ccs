@@ -33,43 +33,52 @@
                 {{$name := (index . 0)}}
                 {{if gt (len $.CmdArgs) 1}}
                     {{if (index . 1) | toInt}}
-                        {{$price := (index . 1)}}
-                        {{if gt (len $.CmdArgs) 2}}
-                            {{$qty := ""}}
-                            {{if (index . 2) | toInt}}
-                                {{$qty = (index . 2)}}
-                            {{else}}
-                                {{if eq (lower (index . 2)) "infinite" "infinity" "inf"}}
-                                    {{$qty = "Infinite"}}
+                        {{if ge (toInt (index . 1)) 1}}
+                            {{$price := (index . 1)}}
+                            {{if gt (len $.CmdArgs) 2}}
+                                {{$qty := ""}}
+                                {{if (index . 2) | toInt}}
+                                    {{if ge (toInt (index . 2)) 1}}
+                                        {{$qty = (index . 2)}}
+                                    {{else}}
+                                        {{$qty = "Infinite"}}
+                                    {{end}}
                                 {{else}}
-                                    {{$embed.Set "description" (print "Invalid `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                                    {{if eq (lower (index . 2)) "infinite" "infinity" "inf"}}
+                                        {{$qty = "Infinite"}}
+                                    {{else}}
+                                        {{$embed.Set "description" (print "Invalid `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                                        {{$embed.Set "color" $errorColor}}
+                                    {{end}}
+                                {{end}}
+                                {{if gt (len $.CmdArgs) 3}}
+                                    {{$description := (joinStr " " (slice $.CmdArgs 3))}}
+                                    {{$items := sdict}}
+                                    {{if ($store.Get "Items")}}
+                                        {{$items = sdict ($store.Get "Items")}}
+                                    {{else}}
+                                        {{dbSet 0 "store" (sdict "Items" sdict)}}
+                                        {{with (dbGet 0 "store")}}
+                                            {{$store = sdict .Value}}
+                                        {{end}}
+                                        {{$items = sdict ($store.Get "Items")}}
+                                    {{end}}
+                                    {{$items.Set $name (sdict "desc" $description "price" $price "qty" $qty)}}
+                                    {{$store.Set "Items" $items}}
+                                    {{dbSet 0 "store" $store}}
+                                    {{$embed.Set "description" (print "New item added to shop!")}}
+                                    {{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " $price "\nQuantity: " $qty) "inline" false))}}
+                                    {{$embed.Set "color" $successColor}}
+                                {{else}}
+                                    {{$embed.Set "description" (print "No `description` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
                                     {{$embed.Set "color" $errorColor}}
                                 {{end}}
-                            {{end}}
-                            {{if gt (len $.CmdArgs) 3}}
-                                {{$description := (joinStr " " (slice $.CmdArgs 3))}}
-                                {{$items := sdict}}
-                                {{if ($store.Get "Items")}}
-                                    {{$items = sdict ($store.Get "Items")}}
-                                {{else}}
-                                    {{dbSet 0 "store" (sdict "Items" sdict)}}
-                                    {{with (dbGet 0 "store")}}
-                                        {{$store = sdict .Value}}
-                                    {{end}}
-                                    {{$items = sdict ($store.Get "Items")}}
-                                {{end}}
-                                {{$items.Set $name (sdict "desc" $description "price" $price "qty" $qty)}}
-                                {{$store.Set "Items" $items}}
-                                {{dbSet 0 "store" $store}}
-                                {{$embed.Set "description" (print "New item added to shop!")}}
-                                {{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " $price "\nQuantity: " $qty) "inline" false))}}
-                                {{$embed.Set "color" $successColor}}
                             {{else}}
-                                {{$embed.Set "description" (print "No `description` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                                {{$embed.Set "description" (print "No `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
                                 {{$embed.Set "color" $errorColor}}
                             {{end}}
                         {{else}}
-                            {{$embed.Set "description" (print "No `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                            {{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
                             {{$embed.Set "color" $errorColor}}
                         {{end}}
                     {{else}}
