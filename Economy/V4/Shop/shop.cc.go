@@ -40,8 +40,10 @@
 					{{$qty := ""}}
 					{{if $v.qty}}
 						{{$qty = $v.qty}}
-						{{if not (reFind "Infinite" (toString $qty))}}
+						{{if not (reFind "infinite" (lower (toString $qty)))}}
 							{{$qty = toInt $qty | humanizeThousands}}
+						{{else}}
+							{{$qty = "Infinite"}}
 						{{end}}
 					{{else}}
 						{{$qty = "Infinite"}}
@@ -49,6 +51,7 @@
 					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Price: " $symbol $price) (print "Quantity:" $qty)) "inline" false)}}
 				{{end}}
 				{{$embed.Set "fields" $entry}}
+				{{$embed.Set "color" $successColor}}
 			{{end}}
 		{{end}}
 	{{else}}
