@@ -70,7 +70,7 @@
 						{{$field = $field.Append (index $entry .)}}
 					{{end}}
 				{{else}}
-					{{$embed.Set "description" (print "There are no items on this page")}}
+					{{$embed.Set "description" (print "There are no items on this page\nAdd some with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>")}}
 				{{end}}
 				{{$embed.Set "fields" $field}}
 				{{$embed.Set "color" $successColor}}
@@ -78,7 +78,7 @@
 			{{end}}
 		{{end}}
 	{{else}}
-		{{$embed.Set "description" (print "The shop is empty :(")}}
+		{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>")}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
 {{else}}
