@@ -16,7 +16,7 @@
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
 
-{{/* Configures economy settings */}}
+{{/* Server shop */}}
 
 {{/* Response */}}
 {{$embed := sdict}}
