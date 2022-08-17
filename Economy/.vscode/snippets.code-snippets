@@ -1,0 +1,50 @@
+{
+	"CC": {
+		"prefix": "cc",
+		"body": [
+			"{{/*",
+			"        Made by Ranger (765316548516380732)",
+			"",
+			"        Trigger Type: `Regex`",
+			"        Trigger: `\\A(-|<@!?204255221017214977>\\s*)($1)(\\s+|\\z)`",
+			"",
+			"    ©️ Ranger 2020-Present",
+			"    GNU, GPLV3 License",
+			"    Repository: https://github.com/Ranger-4297/YAGPDB-ccs",
+			"*/}}",
+			"",
+			"",
+			"{{/* Only edit below if you know what you're doing (: rawr */}}",
+			"",
+			"{{/* Initiates variables */}}",
+			"",
+			"$2",
+			"{{/* $3 */}}",
+			"",
+			"{{/* Response */}}"
+		],
+		"description": "Log output to console"
+	},
+	"Economy settings": {
+		"prefix": "ecoset",
+		"body": [
+			"{{with dbGet 0 \"EconomySettings\"}}",
+			"    {{$$a := sdict .Value}}",
+			"    $1",
+			"{{else}}",
+			"    {{$$embed.Set \"description\" (print \"No `Settings` database found.\\nPlease set it up with the default values using `\" $$prefix \"set default`\")}}",
+			"    {{$$embed.Set \"color\" $$errorColor}}",
+			"{{end}}"
+		]
+	},
+	"Embed": {
+		"prefix": "Embed",
+		"body": [
+			"{{$$embed := sdict}}",
+			"{{$$embed.Set \"author\" (sdict \"name\" $.User.Username \"icon_url\" ($.User.AvatarURL \"1024\"))}}",
+			"{{$$embed.Set \"timestamp\" currentTime}}",
+			"$1",
+			"{{sendMessage nil (cembed $$embed)}}"
+		]
+	}
+}
