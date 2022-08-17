@@ -32,6 +32,7 @@
 		{{if ($info.Get "Items")}}
 			{{$items = sdict ($info.Get "Items")}}
 			{{$entry := cslice}}
+			{{$field := cslice}}
 			{{if $items}}
 				{{range $k,$v := $items}}
 					{{$item := $k}}
@@ -61,13 +62,23 @@
 				{{end}}
 				{{$start := (mult 10 (sub $page 1))}}
 				{{$stop := (mult $page 10)}}
-				{{$embed.Set "fields" $entry}}
+				{{if ge $stop (len $entry)}}
+					{{$stop = (len $entry)}}
+				{{end}}
+				{{if and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry))}}
+					{{range (seq $start $stop)}}
+						{{$field = $field.Append (index $entry .)}}
+					{{end}}
+				{{else}}
+					{{$embed.Set "description" (print "There are no items on this page")}}
+				{{end}}
+				{{$embed.Set "fields" $field}}
 				{{$embed.Set "color" $successColor}}
 				{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
 			{{end}}
 		{{end}}
 	{{else}}
-		{{$embed.Set "description" (print "The shop is empty :(\nPlease add some items with ``")}}
+		{{$embed.Set "description" (print "The shop is empty :(")}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
 {{else}}
