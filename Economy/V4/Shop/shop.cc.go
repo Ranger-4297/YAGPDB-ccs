@@ -50,8 +50,20 @@
 					{{end}}
 					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Price: " $symbol $price) (print "Quantity:" $qty)) "inline" false)}}
 				{{end}}
+				{{$page := ""}}
+				{{if $.CmdArgs}}
+					{{$page = (index $.CmdArgs 0) | toInt}}
+					{{if lt $page 1}}
+						{{$page = 1}}
+					{{end}}
+				{{else}}
+					{{$page = 1}}
+				{{end}}
+				{{$start := (mult 10 (sub $page 1))}}
+				{{$stop := (mult $page 10)}}
 				{{$embed.Set "fields" $entry}}
 				{{$embed.Set "color" $successColor}}
+				{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
 			{{end}}
 		{{end}}
 	{{else}}
