@@ -38,12 +38,12 @@
                         {{$price := $item.Get "price"}}
                         {{$qty := ""}}
                         {{if ($item.Get "qty")}}
-                                {{$qty = ($item.Get "qty")}}
-                                {{if not (reFind "infinite" (lower (toString $qty)))}}
-                                    {{$qty = toInt $qty | humanizeThousands}}
-                                {{else}}
-                                    {{$qty = "Infinite"}}
-                                {{end}}
+                            {{$qty = ($item.Get "qty")}}
+                            {{if not (reFind "infinite" (lower (toString $qty)))}}
+                                {{$qty = toInt $qty | humanizeThousands}}
+                            {{else}}
+                                {{$qty = "Infinite"}}
+                            {{end}}
                         {{else}}
                             {{$qty = "Infinite"}}
                         {{end}}
