@@ -70,16 +70,19 @@
 						{{$field = $field.Append (index $entry .)}}
 					{{end}}
 				{{else}}
-					{{$embed.Set "description" (print "There are no items on this page\nAdd some with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>")}}
+					{{$embed.Set "description" (print "There are no items on this page\nAdd some with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
 				{{end}}
 				{{$embed.Set "fields" $field}}
 				{{$embed.Set "color" $successColor}}
 				{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
+			{{else}}
+				{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
+				{{$embed.Set "color" $errorColor}}
 			{{end}}
+		{{else}}
+			{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
+			{{$embed.Set "color" $errorColor}}
 		{{end}}
-	{{else}}
-		{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>")}}
-		{{$embed.Set "color" $errorColor}}
 	{{end}}
 {{else}}
     {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
