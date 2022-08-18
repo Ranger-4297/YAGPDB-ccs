@@ -35,7 +35,6 @@
                         {{$items := sdict}}
                         {{if ($info.Get "Items")}}
                             {{$items = sdict ($info.Get "Items")}}
-                            {{$items}}
                             {{with $.CmdArgs}}
                                 {{$name := (index . 0)}}
                                 {{if $items.Get $name}}
@@ -43,6 +42,20 @@
                                     {{$price := $item.Get "price"}}
                                     {{$qty := $item.Get "qty"}}
                                     {{$bqty := 1}}
+                                    {{if gt (len $.CmdArgs) 1}}
+                                        {{$inp := (index . 1)}}
+                                        {{if (toInt $inp)}}
+                                            {{if lt (toInt $bqty) (toInt $qty)}}
+                                                {{$bqty = (mult $bqty $inp)}}
+                                                {{$price = (mult $price $inp)}}
+                                            {{end}}
+                                        {{else}}
+                                            {{if (eq $inp "all" "max")}}
+                                                {{$bqty = (mult (toInt $bqty) (toInt $qty))}}
+                                                {{$price = (mult (toInt $price) (toInt $qty))}}
+                                            {{end}}
+                                        {{end}}
+                                    {{end}}
                                     {{if le (toInt $price) (toInt $bal)}}
                                         {{$nqty := (sub $qty $bqty)}}
                                         {{if eq (toInt $nqty) 0}}
