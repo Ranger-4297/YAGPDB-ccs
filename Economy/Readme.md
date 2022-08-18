@@ -3,12 +3,12 @@
 ## V4 plans
 - [X] Fully support basic yag without hitting limits
 - [X] Help to provide information on commands
-- [ ] Per-server shop
+- [X] Per-server shop
 - [ ] More income based commands
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
 - [ ] Leaderboard position on balance (maybe)
-- [ ] Allow ints with comma's
+- [ ] Allow AND show ints with comma's
 - [ ] Fix betting more than you have
 
 # Economy CCs
@@ -18,6 +18,7 @@ Fully functional basic economy system that for your server!
 - Basic economy
 - Easy to read embeds
 - Customizability
+- Server shop (More features to come)
 
 ## Usage
 
