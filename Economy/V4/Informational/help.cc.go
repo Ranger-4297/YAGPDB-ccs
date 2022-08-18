@@ -102,6 +102,14 @@
         {{$desc = "Views the servers shop"}}
         {{$use = "Shop [Page:Int]"}}
         {{$alias = "`store`"}}
+    {{else if eq $cmd "item-info"}}
+        {{$cmd = "Item-info"}}
+        {{$desc = "Views information on an item in the shop"}}
+        {{$use = "Item-info <Item:String>"}}
+    {{else if eq $cmd "buy-item"}}
+        {{$cmd = "Buy-item"}}
+        {{$desc = "Purchase an item from the shop, with a specified quantity"}}
+        {{$use = "Buy-item <Item:String> [Quantity:Int/All]"}}
     {{else}}
         {{$cmd = "Invalid command provided"}}
         {{$embed.Set "color" $errorColor}}
@@ -109,8 +117,7 @@
     {{$embed.Set "title" $cmd}}
     {{$embed.Set "description" $desc}}
     {{if $use}}
-        {{$embed.Set "fields" (cslice 
-            (sdict "name" "Usage" "value" (print "`" $use "`") "inline" true))}}
+        {{$embed.Set "fields" (cslice (sdict "name" "Usage" "value" (print "`" $use "`") "inline" true))}}
     {{end}}
     {{if $alias}}
         {{$embed.Set "fields" (($embed.Get "fields").Append (sdict "name" "Alias(es)" "value" (print $alias) "inline" true))}}
