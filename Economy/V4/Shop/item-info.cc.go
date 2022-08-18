@@ -32,9 +32,9 @@
             {{if ($info.Get "Items")}}
                 {{$items = sdict ($info.Get "Items")}}
                 {{with $.CmdArgs}}
-                    {{$item := $items.Get (index . 0)}}
                     {{$name := (index . 0)}}
                     {{if $items.Get $name}}
+                        {{$item := $items.Get (index . 0)}}
                         {{$price := $item.Get "price"}}
                         {{$qty := ""}}
                         {{if ($item.Get "qty")}}
