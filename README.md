@@ -7,8 +7,6 @@ This [repository] includes custom commands that I have made or that I am making<
 As you can see, alot of effort has gone into these<br>
 I appreciate every fork and star and those who use my commands!
 </p>
-<br>
-
 <hr>
 If you'd like to help test with commands and be the first to know when new releases will be coming, consider joining the server below<br>
 https://discord.gg/bbvzRgQvB7
