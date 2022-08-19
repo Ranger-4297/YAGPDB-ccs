@@ -68,7 +68,9 @@
                                             {{dbSet 0 "store" $info}}
                                         {{end}}
                                         {{$nbal := (sub $bal $price)}}
+                                        {{$inventory := (sdict $name (sdict "desc" ($item.Get "desc") "qty" $bqty))}}
                                         {{$a.Set "cash" $nbal}}
+                                        {{$a.Set "inventory" $inventory}}
                                         {{dbSet $userID "EconomyInfo" $a}}
                                         {{$embed.Set "description" (print "Purchase successful!\nYou're now a proud owner of a(n) " $name)}}
                                         {{$embed.Set "color" $successColor}}
