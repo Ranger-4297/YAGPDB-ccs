@@ -37,11 +37,11 @@
                 {{else}}
                     {{with (dbGet 0 "EconomySettings")}}
                         {{$a := sdict .Value}}
+                        {{$symbol := $a.symbol}}
                         {{$nv := (print "No `value` argument passed.")}}
                         {{if eq $setting "min" "max"}}
                             {{$smax := $a.min}}
                             {{$smin := $a.min}}
-                            {{$symbol := $a.symbol}}
                             {{if gt (len $.CmdArgs) 1}}
                                 {{$val := (index $.CmdArgs 1)}}
                                 {{$ct := false}}
@@ -77,7 +77,6 @@
                                 {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
                             {{end}}
                         {{else if eq $setting "startbalance"}}
-                            {{$symbol := $a.symbol}}
                             {{$oldStartBalance := $a.startBalance}}
                             {{if gt (len $.CmdArgs) 1}}
                                 {{$startBalance := (index $.CmdArgs 1)}}
@@ -94,14 +93,8 @@
                             {{end}}
                         {{else if eq $setting "symbol"}}
                             {{if gt (len $.CmdArgs) 1}}
-                                {{$symbol := (index $.CmdArgs 1)}}
-                                {{$output := ""}}
-                                {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
-                                    {{$output = $symbol}}
-                                {{else}}
-                                    {{$output = (print "`" $symbol "`")}}
-                                {{end}}
-                                {{$msg.Set "description" (print "You set the server currency symbol to " $output )}}
+                                {{$symbol = (index $.CmdArgs 1)}}
+                                {{$msg.Set "description" (print "You set the server currency symbol to " $symbol )}}
                                 {{$msg.Set "color" $sC}}
                                 {{$db.Set "symbol" $symbol}}
                                 {{dbSet 0 "EconomySettings" $db}}
