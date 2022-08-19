@@ -38,42 +38,40 @@
                     {{with (dbGet 0 "EconomySettings")}}
                         {{$a := sdict .Value}}
                         {{$nv := (print "No `value` argument passed.")}}
-                        {{if eq $setting "max"}}
-                            {{$min := toString $a.min}}
+                        {{if eq $setting "min" "max"}}
+                            {{$smax := $a.min}}
+                            {{$smin := $a.min}}
                             {{$symbol := $a.symbol}}
                             {{if gt (len $.CmdArgs) 1}}
-                                {{$max := (index $.CmdArgs 1)}}
-                                {{if toInt $max}}
-                                    {{if lt (toInt $max) (toInt $min)}}
-                                        {{$msg.Set "description" (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" $min "`")}}
+                                {{$val := (index $.CmdArgs 1)}}
+                                {{$ct := false}}
+                                {{$desc := ""}}
+                                {{if eq $setting "max"}}
+                                    {{if toInt $val}}
+                                        {{if lt (toInt $val) (toInt $smin)}}
+                                            {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" $smin "`")}}
+                                        {{else}}
+                                            {{$ct = true}}
+                                        {{end}}
                                     {{else}}
-                                        {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $max)}}
-                                        {{$msg.Set "color" $sC}}
-                                        {{$db.Set "max" $max}}
-                                        {{dbSet 0 "EconomySettings" $db}}
+                                        {{$msg.Set "description" $unable}}
                                     {{end}}
                                 {{else}}
-                                    {{$msg.Set "description" $unable}}
+                                    {{if toInt $val}}
+                                        {{if gt (toInt $val) (toInt $smax)}}
+                                            {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" $smax "`")}}
+                                        {{else}}
+                                            {{$ct = true}}
+                                        {{end}}
+                                    {{end}}
                                 {{end}}
-                            {{else}}
-                                {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
-                            {{end}}
-                        {{else if eq $setting "min"}}
-                            {{$max := toString $a.max}}
-                            {{$symbol := $a.symbol}}
-                            {{if gt (len $.CmdArgs) 1}}
-                                {{$min := (index $.CmdArgs 1)}}
-                                {{if toInt $min}}
-                                    {{if gt (toInt $min) (toInt $max)}}
-                                        {{$msg.Set "description" (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" $max "`")}}
-                                    {{else}}
-                                        {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $min)}}
-                                        {{$msg.Set "color" $sC}}
-                                        {{$db.Set "min" $min}}
-                                        {{dbSet 0 "EconomySettings" $db}}
-                                    {{end}}
+                                {{if $ct}}
+                                    {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $val)}}
+                                    {{$msg.Set "color" $sC}}
+                                    {{$db.Set $setting $val}}
+                                    {{dbSet 0 "EconomySettings" $db}}
                                 {{else}}
-                                    {{$msg.Set "description" $unable}}
+                                    {{$msg.Set "description" $desc}}
                                 {{end}}
                             {{else}}
                                 {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
