@@ -1,144 +1,144 @@
-    {{/*
-            Made by Ranger (765316548516380732)
+{{/*
+        Made by Ranger (765316548516380732)
 
-        Trigger Type: `Regex`
-        Trigger: `\A(-|<@!?204255221017214977>\s*)(set|config(ure)?)(\s+|\z)`
+    Trigger Type: `Regex`
+    Trigger: `\A(-|<@!?204255221017214977>\s*)(set|config(ure)?)(\s+|\z)`
 
-        ©️ Ranger 2020-Present
-        GNU, GPLV3 License
-        Repository: https://github.com/Ranger-4297/YAGPDB-ccs
-    */}}
+    ©️ Ranger 2020-Present
+    GNU, GPLV3 License
+    Repository: https://github.com/Ranger-4297/YAGPDB-ccs
+*/}}
 
 
-    {{/* Only edit below if you know what you're doing (: rawr */}}
+{{/* Only edit below if you know what you're doing (: rawr */}}
 
-    {{/* Initiates variables */}}
-    {{$sC := 0x00ff7b}}
-    {{/* Configures economy settings */}}
+{{/* Initiates variables */}}
+{{$sC := 0x00ff7b}}
+{{/* Configures economy settings */}}
 
-    {{/* Response */}}
-    {{$msg := sdict}}
-    {{$msg.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-    {{$msg.Set "timestamp" currentTime}}
-    {{$msg.Set "color" 0xFF0000}}
-    {{$db := (dbGet 0 "EconomySettings").Value}}
-    {{$perms := split (index (split (exec "viewperms" ) "\n" ) 2) ", "}}
-    {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
-        {{$syntax := (print "\nAvailable settings: `max`, `min`, `startbalance`, `symbol`, `cooldown`\nTo set it with the default settings `" $.Cmd " default`")}}
-        {{with .CmdArgs}}
-            {{if index $.CmdArgs 0}}
-                {{$setting :=  (index $.CmdArgs 0) | lower}}
-                {{$unable := (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
-                {{if eq $setting "default"}}
-                    {{$msg.Set "description" (print "Set the `EconomySettings` to default values")}}
-                    {{$msg.Set "color" $sC}}
-                    {{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "symbol" "£" "startBalance" 200 "crimeCooldown" 3600 "robCooldown" 21600)}}
-                    {{dbSet 0 "store" sdict}}
-                {{else}}
-                    {{with (dbGet 0 "EconomySettings")}}
-                        {{$a := sdict .Value}}
-                        {{$symbol := $a.symbol}}
-                        {{$nv := (print "No `value` argument passed.")}}
-                        {{if eq $setting "min" "max"}}
-                            {{$smax := $a.min}}
-                            {{$smin := $a.min}}
-                            {{if gt (len $.CmdArgs) 1}}
-                                {{$val := (index $.CmdArgs 1)}}
-                                {{$ct := false}}
-                                {{$desc := ""}}
-                                {{if eq $setting "max"}}
-                                    {{if toInt $val}}
-                                        {{if lt (toInt $val) (toInt $smin)}}
-                                            {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" $smin "`")}}
-                                        {{else}}
-                                            {{$ct = true}}
-                                        {{end}}
+{{/* Response */}}
+{{$msg := sdict}}
+{{$msg.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$msg.Set "timestamp" currentTime}}
+{{$msg.Set "color" 0xFF0000}}
+{{$db := (dbGet 0 "EconomySettings").Value}}
+{{$perms := split (index (split (exec "viewperms" ) "\n" ) 2) ", "}}
+{{if or (in $perms "Administrator") (in $perms "ManageServer")}}
+    {{$syntax := (print "\nAvailable settings: `max`, `min`, `startbalance`, `symbol`, `cooldown`\nTo set it with the default settings `" $.Cmd " default`")}}
+    {{with .CmdArgs}}
+        {{if index $.CmdArgs 0}}
+            {{$setting :=  (index $.CmdArgs 0) | lower}}
+            {{$unable := (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
+            {{if eq $setting "default"}}
+                {{$msg.Set "description" (print "Set the `EconomySettings` to default values")}}
+                {{$msg.Set "color" $sC}}
+                {{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "symbol" "£" "startBalance" 200 "crimeCooldown" 3600 "robCooldown" 21600)}}
+                {{dbSet 0 "store" sdict}}
+            {{else}}
+                {{with (dbGet 0 "EconomySettings")}}
+                    {{$a := sdict .Value}}
+                    {{$symbol := $a.symbol}}
+                    {{$nv := (print "No `value` argument passed.")}}
+                    {{if eq $setting "min" "max"}}
+                        {{$smax := $a.min}}
+                        {{$smin := $a.min}}
+                        {{if gt (len $.CmdArgs) 1}}
+                            {{$val := (index $.CmdArgs 1)}}
+                            {{$ct := false}}
+                            {{$desc := ""}}
+                            {{if eq $setting "max"}}
+                                {{if toInt $val}}
+                                    {{if lt (toInt $val) (toInt $smin)}}
+                                        {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" $smin "`")}}
+                                    {{else}}
+                                        {{$ct = true}}
+                                    {{end}}
+                                {{else}}
+                                    {{$msg.Set "description" $unable}}
+                                {{end}}
+                            {{else}}
+                                {{if toInt $val}}
+                                    {{if gt (toInt $val) (toInt $smax)}}
+                                        {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" $smax "`")}}
+                                    {{else}}
+                                        {{$ct = true}}
+                                    {{end}}
+                                {{end}}
+                            {{end}}
+                            {{if $ct}}
+                                {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $val)}}
+                                {{$msg.Set "color" $sC}}
+                                {{$db.Set $setting $val}}
+                                {{dbSet 0 "EconomySettings" $db}}
+                            {{else}}
+                                {{$msg.Set "description" $desc}}
+                            {{end}}
+                        {{else}}
+                            {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
+                        {{end}}
+                    {{else if eq $setting "startbalance"}}
+                        {{$oldStartBalance := $a.startBalance}}
+                        {{if gt (len $.CmdArgs) 1}}
+                            {{$startBalance := (index $.CmdArgs 1)}}
+                            {{if (toInt $startBalance)}}
+                                {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $startBalance " from " $oldStartBalance)}}
+                                {{$msg.Set "color" $sC}}
+                                {{$db.Set "startBalance" $startBalance}}
+                                {{dbSet 0 "EconomySettings" $db}}
+                            {{else}}
+                            {{$msg.Set "description" $unable}}
+                            {{end}}
+                        {{else}}
+                            {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
+                        {{end}}
+                    {{else if eq $setting "symbol"}}
+                        {{if gt (len $.CmdArgs) 1}}
+                            {{$symbol = (index $.CmdArgs 1)}}
+                            {{$msg.Set "description" (print "You set the server currency symbol to " $symbol )}}
+                            {{$msg.Set "color" $sC}}
+                            {{$db.Set "symbol" $symbol}}
+                            {{dbSet 0 "EconomySettings" $db}}
+                        {{else}}
+                            {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:String>`")}}
+                        {{end}}
+                    {{else if eq $setting "cooldown"}}
+                        {{if gt (len $.CmdArgs) 1}}
+                            {{$cdType := (lower (index $.CmdArgs 1))}}
+                            {{if eq $cdType "crime" "rob"}}
+                                {{if gt (len $.CmdArgs) 2}}
+                                    {{$dr := (index $.CmdArgs 2)}}
+                                    {{if toDuration $dr}}
+                                        {{$dr = toDuration $dr}}
+                                        {{$msg.Set "description" (print "Sucessfully set the `" $cdType "Cooldown` to `" (humanizeDurationSeconds $dr) "`")}}
+                                        {{$msg.Set "color" $sC}}
+                                        {{$dr = $dr.Seconds}}
+                                        {{$crCD := (print $cdType "Cooldown")}}
+                                        {{$db.Set $crCD $dr}}
+                                        {{dbSet 0 "EconomySettings" $db}}
                                     {{else}}
                                         {{$msg.Set "description" $unable}}
                                     {{end}}
                                 {{else}}
-                                    {{if toInt $val}}
-                                        {{if gt (toInt $val) (toInt $smax)}}
-                                            {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" $smax "`")}}
-                                        {{else}}
-                                            {{$ct = true}}
-                                        {{end}}
-                                    {{end}}
-                                {{end}}
-                                {{if $ct}}
-                                    {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $val)}}
-                                    {{$msg.Set "color" $sC}}
-                                    {{$db.Set $setting $val}}
-                                    {{dbSet 0 "EconomySettings" $db}}
-                                {{else}}
-                                    {{$msg.Set "description" $desc}}
-                                {{end}}
-                            {{else}}
-                                {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
-                            {{end}}
-                        {{else if eq $setting "startbalance"}}
-                            {{$oldStartBalance := $a.startBalance}}
-                            {{if gt (len $.CmdArgs) 1}}
-                                {{$startBalance := (index $.CmdArgs 1)}}
-                                {{if (toInt $startBalance)}}
-                                    {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $startBalance " from " $oldStartBalance)}}
-                                    {{$msg.Set "color" $sC}}
-                                    {{$db.Set "startBalance" $startBalance}}
-                                    {{dbSet 0 "EconomySettings" $db}}
-                                {{else}}
-                                {{$msg.Set "description" $unable}}
-                                {{end}}
-                            {{else}}
-                                {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
-                            {{end}}
-                        {{else if eq $setting "symbol"}}
-                            {{if gt (len $.CmdArgs) 1}}
-                                {{$symbol = (index $.CmdArgs 1)}}
-                                {{$msg.Set "description" (print "You set the server currency symbol to " $symbol )}}
-                                {{$msg.Set "color" $sC}}
-                                {{$db.Set "symbol" $symbol}}
-                                {{dbSet 0 "EconomySettings" $db}}
-                            {{else}}
-                                {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:String>`")}}
-                            {{end}}
-                        {{else if eq $setting "cooldown"}}
-                            {{if gt (len $.CmdArgs) 1}}
-                                {{$cdType := (lower (index $.CmdArgs 1))}}
-                                {{if eq $cdType "crime" "rob"}}
-                                    {{if gt (len $.CmdArgs) 2}}
-                                        {{$dr := (index $.CmdArgs 2)}}
-                                        {{if toDuration $dr}}
-                                            {{$dr = toDuration $dr}}
-                                            {{$msg.Set "description" (print "Sucessfully set the `" $cdType "Cooldown` to `" (humanizeDurationSeconds $dr) "`")}}
-                                            {{$msg.Set "color" $sC}}
-                                            {{$dr = $dr.Seconds}}
-                                            {{$crCD := (print $cdType "Cooldown")}}
-                                            {{$db.Set $crCD $dr}}
-                                            {{dbSet 0 "EconomySettings" $db}}
-                                        {{else}}
-                                            {{$msg.Set "description" $unable}}
-                                        {{end}}
-                                    {{else}}
-                                        {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Duration>`")}}
-                                    {{end}}
-                                {{else}}
-                                    {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Type:Rob/Crime> <Value:Duration>`")}}
+                                    {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Duration>`")}}
                                 {{end}}
                             {{else}}
                                 {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Type:Rob/Crime> <Value:Duration>`")}}
                             {{end}}
                         {{else}}
-                            {{$msg.Set "description" (print "No valid setting argument passed.\nSyntax is: `" $.Cmd " <Setting:String> <Value:String/Int/Duration>`" $syntax)}}
+                            {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Type:Rob/Crime> <Value:Duration>`")}}
                         {{end}}
                     {{else}}
-                        {{$msg.Set "description" (print "No database found.\nPlease set it up with the default values using `" $.Cmd " default`")}}
+                        {{$msg.Set "description" (print "No valid setting argument passed.\nSyntax is: `" $.Cmd " <Setting:String> <Value:String/Int/Duration>`" $syntax)}}
                     {{end}}
+                {{else}}
+                    {{$msg.Set "description" (print "No database found.\nPlease set it up with the default values using `" $.Cmd " default`")}}
                 {{end}}
             {{end}}
-        {{else}}
-            {{$msg.Set "description" (print "No setting argument passed.\nSyntax is: `" $.Cmd " <Setting:String> <Value:String/Int/Duration>`" $syntax)}}
         {{end}}
     {{else}}
-        {{$msg.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
+        {{$msg.Set "description" (print "No setting argument passed.\nSyntax is: `" $.Cmd " <Setting:String> <Value:String/Int/Duration>`" $syntax)}}
     {{end}}
-    {{sendMessage nil (cembed $msg)}}
+{{else}}
+    {{$msg.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
+{{end}}
+{{sendMessage nil (cembed $msg)}}
