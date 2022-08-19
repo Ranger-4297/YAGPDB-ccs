@@ -9,7 +9,9 @@ I appreciate every fork and star and those who use my commands!
 </p>
 <br>
 
-Ty to those that fork and star <3
+<hr>
+If you'd like to help test with commands and be the first to know when new releases will be coming, consider joining the server below<br>
+https://discord.gg/bbvzRgQvB7
 <hr>
 
 <h2>License</h2>
