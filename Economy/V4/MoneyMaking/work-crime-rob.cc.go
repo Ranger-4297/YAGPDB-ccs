@@ -29,6 +29,7 @@
     {{$min := $a.min}}
     {{$max := $a.max}}
     {{$symbol := $a.symbol}}
+    {{$workCooldown := $a.workCooldown | toInt}}
     {{$robCooldown := $a.robCooldown | toInt}}
     {{$crimeCooldown := $a.crimeCooldown | toInt}}
     {{if not (dbGet $userID "EconomyInfo")}}
@@ -39,12 +40,18 @@
         {{$cash := $a.cash}}
         {{$cmd := $.Cmd | toString | lower}}
         {{if (reFind `(work|job|get-?paid|labor)` $cmd)}}
-            {{$workPay := randInt $min $max}}
-            {{$newCashBalance := $cash | add $workPay}}
-            {{$embed.Set "description" (print "You decided to work today! You got paid a hefty " $symbol $workPay)}}
-            {{$embed.Set "color" 0x00ff7b}}
-            {{$a.Set "cash" $newCashBalance}}
-            {{dbSet $userID "EconomyInfo" $a}}
+            {{if not ($cooldown := dbGet $userID "workCooldown")}}
+                {{dbSetExpire $userID "workCooldown" "cooldown" $workCooldown}}
+                {{$workPay := randInt $min $max}}
+                {{$newCashBalance := $cash | add $workPay}}
+                {{$embed.Set "description" (print "You decided to work today! You got paid a hefty " $symbol $workPay)}}
+                {{$embed.Set "color" 0x00ff7b}}
+                {{$a.Set "cash" $newCashBalance}}
+                {{dbSet $userID "EconomyInfo" $a}}
+            {{else}}
+                {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+                {{$embed.Set "color" $errorColor}}
+            {{end}}
         {{else if (reFind `(commit-?)?crime` $cmd)}}
             {{if not ($cooldown := dbGet $userID "crimeCooldown")}}
                 {{dbSetExpire $userID "crimeCooldown" "cooldown" $crimeCooldown}}
