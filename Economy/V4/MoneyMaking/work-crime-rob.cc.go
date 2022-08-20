@@ -46,11 +46,9 @@
             {{$a.Set "cash" $newCashBalance}}
             {{dbSet $userID "EconomyInfo" $a}}
         {{else if (reFind `(commit-?)?crime` $cmd)}}
-            {{if $cooldown := dbGet $userID "crimeCooldown"}}
-                {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
-                {{$embed.Set "color" $errorColor}}
-            {{else}}
-                {{$amount := (mult (randInt $min $max) (randInt 1 4))}}
+            {{if not ($cooldown := dbGet $userID "crimeCooldown")}}
+                {{dbSetExpire $userID "crimeCooldown" "cooldown" $crimeCooldown}}
+                {{$amount := (mult (randInt $min $max) (randInt 1 3))}}
                 {{$newCash := ""}}
                 {{$int := randInt 1 3}}
                 {{if eq $int 1}}
@@ -64,6 +62,9 @@
                 {{end}}
                 {{$a.Set "cash" $newCash}}
                 {{dbSet $userID "EconomyInfo" $a}}
+            {{else}}
+                {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+                {{$embed.Set "color" $errorColor}}
             {{end}}
         {{else if (reFind `(rob|steal)` $cmd)}}
             {{with $.CmdArgs}}
