@@ -12,27 +12,47 @@
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
+{{/* Initiates variables */}}
+{{$successColor := 0x00ff7b}}
+{{$errorColor := 0xFF0000}}
+{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
+
 {{/* Leaderboard */}}
 
-{{range (dbTopEntries "EconomyInfo" 10 0)}}
-    {{dbSet .User.ID "Leaderboard" ((dbGet .User.ID "EconomyInfo").Value.cash)}}
+{{/* Response */}}
+{{$embed := sdict}}
+{{$ex := or (and (reFind "a_" .Guild.Icon) "gif" ) "png" }}
+{{$icon := print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $ex "?size=1024" }}
+{{$embed.Set "author" (sdict "name" (print .Guild.Name " leaderboard") "icon_url" $icon)}}
+{{$embed.Set "timestamp" currentTime}}
+{{with (dbGet 0 "EconomySettings")}}
+    {{$a := sdict .Value}}
+    {{$symbol := $a.symbol}}
+    {{$page := 1}}
+    {{if $.CmdArgs}}
+        {{if (index $.CmdArgs 0) | toInt}}
+            {{$page = (index $.CmdArgs 0)}}
+        {{end}}
+    {{end}}
+    {{$skip := mult (sub $page 1) 10}}
+    {{$leaderboard := dbTopEntries "Leaderboard" 10 $skip}}
+    {{if not (len $leaderboard)}}
+        {{$embed.Set "description" "There were no users on this page"}}
+        {{$embed.Set "color" $errorColor}}
+    {{else}}
+        {{$rank := $skip}}
+        {{$display := ""}}
+        {{range $leaderboard}}
+            {{$cash := toInt .Value }}
+            {{$rank = add $rank 1 }}
+            {{$display = (print $display "**" $rank ".** " .User.String  " **•** " $symbol $cash "\n")}}
+        {{end}}
+        {{$embed.Set "description" $display}}
+        {{$embed.Set "footer" (sdict "text" (joinStr "" "Page " $page))}}
+        {{$embed.Set "color" $successColor}}
+    {{end}}
+{{else}}
+    {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
+    {{$embed.Set "color" $errorColor}}
 {{end}}
-{{$page := 1}}
-{{with reFind `\d+` (joinStr " " .CmdArgs)}}
-    {{$page = . | toInt}}
-{{end}}
-{{$skip := mult (sub $page 1) 10}}
-{{$leaderboard := dbTopEntries "Leaderboard" 10 $skip}}
-{{$rank := $skip}}
-{{$display := ""}}
-{{range $leaderboard}}
-    {{$cash := toInt .Value }}
-    {{$rank = add $rank 1 }}
-    {{$display = (printf "%s**%d.** %s **||** %d \n" $display $rank .User.String $cash)}}
-{{end }}
-{{sendMessage nil (cembed
-            "title" "Cash leaderboard"
-            "description" $display
-            "color" 0x00ff7b
-            "footer" (sdict "text" (joinStr "" "Page " $page))
-)}}
+{{sendMessage nil (cembed $embed)}}
