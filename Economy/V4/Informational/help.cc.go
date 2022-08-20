@@ -92,24 +92,33 @@
         {{$cmd = "Viewsettings"}}
         {{$desc = "Views the economy settings of the server"}}
         {{$use = "viewsettings"}}
+    {{else if eq $cmd "buy-item"}}
+        {{$cmd = "Buy-item"}}
+        {{$desc = "Purchase an item from the shop, with a specified quantity"}}
+        {{$use = "buy-item <Item:String> [Quantity:Int/All]"}}
     {{else if eq $cmd "create-item"}}
         {{$cmd = "Create-item"}}
         {{$desc = "Adds items to the shop"}}
         {{$use = "create-item <Name:String> <Price:Int> <Quantity:Int> <Description:String>"}}
         {{$alias = "`new-item`"}}
-    {{else if eq $cmd "shop"}}
-        {{$cmd = "Shop"}}
-        {{$desc = "Views the servers shop"}}
-        {{$use = "Shop [Page:Int]"}}
-        {{$alias = "`store`"}}
+    {{else if eq $cmd "inventory"}}
+        {{$cmd = "Inventory"}}
+        {{$desc = "Views your inventory"}}
+        {{$use = "inventory [Page:Int]"}}
+        {{$alias = "`inv`"}}
     {{else if eq $cmd "item-info"}}
         {{$cmd = "Item-info"}}
         {{$desc = "Views information on an item in the shop"}}
-        {{$use = "Item-info <Item:String>"}}
-    {{else if eq $cmd "buy-item"}}
-        {{$cmd = "Buy-item"}}
-        {{$desc = "Purchase an item from the shop, with a specified quantity"}}
-        {{$use = "Buy-item <Item:String> [Quantity:Int/All]"}}
+        {{$use = "item-info <Item:String>"}}
+    {{else if eq $cmd "shop"}}
+        {{$cmd = "Shop"}}
+        {{$desc = "Views the servers shop"}}
+        {{$use = "shop [Page:Int]"}}
+        {{$alias = "`store`"}}
+    {{else if eq $cmd "use-item"}}
+        {{$cmd = "Use-item"}}
+        {{$desc = "Uses a given item"}}
+        {{$use = "use-item <Item:String>"}}
     {{else}}
         {{$cmd = "Invalid command provided"}}
         {{$embed.Set "color" $errorColor}}
