@@ -43,10 +43,10 @@
                     {{$side1 = "heads"}}
                 {{end}}
                 {{if gt (len .) 1}}
-                    {{$amount := (index . 1)}}
-                    {{if $amount | toInt}}
-                        {{$amount = $amount | toInt}}
-                        {{if lt $amount 0}}
+                    {{$bet := (index . 1)}}
+                    {{if $bet | toInt}}
+                        {{$bet = $bet | toInt}}
+                        {{if lt $bet 0}}
                             {{$embed.Set "description" (print "You cannot flip for lower than " $symbol "1")}}
                             {{$embed.Set "color" $errorColor}}
                         {{else}}
@@ -56,11 +56,11 @@
                                 {{$newCashBalance := ""}}
                                 {{$int := randInt 1 3}}
                                 {{if eq $int 1}} {{/* Win */}}
-                                    {{$newCashBalance = $cash | add $amount}}
-                                    {{$embed.Set "description" (print "You flipped " $side1 " and won " $symbol $amount)}}
+                                    {{$newCashBalance = $cash | add $bet}}
+                                    {{$embed.Set "description" (print "You flipped " $side1 " and won " $symbol $bet)}}
                                     {{$embed.Set "color" $successColor}}
                                 {{else}} {{/* Lose */}}
-                                    {{$newCashBalance = $amount | sub $cash}}
+                                    {{$newCashBalance = $bet | sub $cash}}
                                     {{$embed.Set "description" (print "You flipped " $side1 " and lost.")}}
                                     {{$embed.Set "color" $errorColor}}
                                 {{end}}
@@ -70,20 +70,20 @@
                             {{end}}
                         {{end}}
                     {{else}}
-                        {{$embed.Set "description" (print "No valid `Amount` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Amount:Amount>`")}}
+                        {{$embed.Set "description" (print "No valid `Bet` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
                         {{$embed.Set "color" $errorColor}}
                     {{end}}
                 {{else}}
-                    {{$embed.Set "description" (print "No `Amount` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Amount:Amount>`")}}
+                    {{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
             {{else}}
-                {{$embed.Set "description" (print "No valid `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Amount:Amount>`")}}
+                {{$embed.Set "description" (print "No valid `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
                 {{$embed.Set "color" $errorColor}}
             {{end}}
         {{end}}
     {{else}}
-        {{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Amount:Amount>`")}}
+        {{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
         {{$embed.Set "color" $errorColor}}
     {{end}}
 {{else}}
