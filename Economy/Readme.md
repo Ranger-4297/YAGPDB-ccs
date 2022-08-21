@@ -7,7 +7,6 @@
 - [ ] More income based commands
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
-- [ ] Leaderboard position on balance (maybe)
 - [ ] Allow AND show ints with comma's
 - [ ] Fix betting more than you have
 
