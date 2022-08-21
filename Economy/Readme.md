@@ -7,7 +7,7 @@
 - [ ] More income based commands
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
-- [ ] Allow AND show ints with comma's
+- [ ] Readable int values
 - [ ] Fix betting more than you have
 
 # NB
