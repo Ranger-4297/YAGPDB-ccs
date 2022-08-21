@@ -1,9 +1,12 @@
 dump
-*.yml
-*.html
-*template
 Archive/
+
+# Moderation
+Moderation/Moderation-old
+
+# Economy
 Economy/V1
 Economy/V2
 Economy/V3
-Moderation/Moderation-old
+joinMessage.cc.go
+leaveMessage.cc.go
