@@ -8,6 +8,9 @@
     Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
+{{/* 
+Use this in conjunction with leaveMessage
+*/}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 

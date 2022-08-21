@@ -9,6 +9,10 @@
 */}}
 
 
+{{/* 
+Use this in conjunction with joinMessage
+*/}}
+
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Response */}}
