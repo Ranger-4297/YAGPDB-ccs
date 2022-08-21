@@ -41,7 +41,7 @@
                         {{if eq $moneyDestination "cash" "bank"}}
                             {{with (dbGet $removingUser "EconomyInfo")}}
                                 {{$a = sdict .Value}}
-                                {{$removingBalance := (print $a "." $moneyDestination)}}
+                                {{$removingBalance := $a.Get $moneyDestination}}
                                 {{if gt (len $.CmdArgs) 2}}
                                     {{$amount := (index $.CmdArgs 2)}}
                                     {{if (toInt $amount)}}
@@ -51,7 +51,7 @@
                                                 {{$embed.Set "color" $errorColor}}
                                             {{else}}
                                                 {{$removingNewBalance := $amount | sub $removingBalance}}
-                                                {{$embed.Set "description" (print "You removed " $symbol $amount " from <@!" $removingUser ">'s " $moneyDestination "\nThey now have " $symbol $removingNewBalance " in their " $moneyDestination "!")}}
+                                                {{$embed.Set "description" (print "You removed " $symbol (humanizeThousands $amount) " from <@!" $removingUser ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $removingNewBalance) " in their " $moneyDestination "!")}}
                                                 {{$embed.Set "color" $successColor}}
                                                 {{$sdict := (dbGet $removingUser "EconomyInfo").Value}}
                                                 {{$sdict.Set $moneyDestination $removingNewBalance}}

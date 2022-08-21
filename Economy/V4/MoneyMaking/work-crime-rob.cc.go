@@ -44,7 +44,7 @@
                 {{dbSetExpire $userID "workCooldown" "cooldown" $workCooldown}}
                 {{$workPay := randInt $min $max}}
                 {{$newCashBalance := $cash | add $workPay}}
-                {{$embed.Set "description" (print "You decided to work today! You got paid a hefty " $symbol $workPay)}}
+                {{$embed.Set "description" (print "You decided to work today! You got paid a hefty " $symbol (humanizeThousands $workPay))}}
                 {{$embed.Set "color" 0x00ff7b}}
                 {{$a.Set "cash" $newCashBalance}}
                 {{dbSet $userID "EconomyInfo" $a}}
@@ -60,11 +60,11 @@
                 {{$int := randInt 1 3}}
                 {{if eq $int 1}}
                     {{$newCash = $cash | add $amount}}
-                    {{$embed.Set "description" (print "You broke the law for a pretty penny! You made " $symbol $amount " in your crime spree today")}}
+                    {{$embed.Set "description" (print "You broke the law for a pretty penny! You made " $symbol (humanizeThousands $amount) " in your crime spree today")}}
                     {{$embed.Set "color" $successColor}}
                 {{else}}
                     {{$newCash = $amount | sub $cash}}
-                    {{$embed.Set "description" (print "You broke the law trying to commit a felony! You were arrested and lost " $symbol $amount " due to your bail.")}}
+                    {{$embed.Set "description" (print "You broke the law trying to commit a felony! You were arrested and lost " $symbol (humanizeThousands $amount) " due to your bail.")}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
                 {{$a.Set "cash" $newCash}}
@@ -89,7 +89,7 @@
                                         {{$amount := (randInt $victimsCash)}} {{/* Amount stolen from victim */}}
                                         {{$victimsNewCash := (sub $victimsCash $amount)}} {{/* Amout victim will have after being robbed */}}
                                         {{$yourNewCash := (add $cash $amount)}} {{/* Amount you will have after robbing vitim */}}
-                                        {{$embed.Set "description" (print "You robbed " $symbol $amount " from <@!" $victim ">")}}
+                                        {{$embed.Set "description" (print "You robbed " $symbol (humanizeThousands $amount) " from <@!" $victim ">")}}
                                         {{$embed.Set "color" $successColor}}
                                         {{$b.Set "cash" $victimsNewCash}}
                                         {{dbSet $victim "EconomyInfo" $b}}

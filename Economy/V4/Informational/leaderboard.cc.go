@@ -40,7 +40,7 @@
         {{$rank := $skip}}
         {{$display := ""}}
         {{range $leaderboard}}
-            {{$cash := toInt .Value.cash}}
+            {{$cash := humanizeThousands (toInt .Value.cash)}}
             {{$rank = add $rank 1}}
             {{$display = (print $display "**" $rank ".** " .User.String  " **•** " $symbol $cash "\n")}}
         {{end}}

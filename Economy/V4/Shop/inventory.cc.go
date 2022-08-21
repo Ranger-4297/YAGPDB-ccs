@@ -40,7 +40,7 @@
 					{{$desc := $v.desc }}
 					{{$qty := ""}}
 					{{$qty = $v.qty}}
-					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " $qty)) "inline" false)}}
+					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty))) "inline" false)}}
 				{{end}}
 				{{$page := ""}}
 				{{if $.CmdArgs}}

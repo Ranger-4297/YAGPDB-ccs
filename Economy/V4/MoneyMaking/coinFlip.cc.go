@@ -55,7 +55,7 @@
                                     {{$int := randInt 1 3}}
                                     {{if eq $int 1}} {{/* Win */}}
                                         {{$newCashBalance = $bal | add $bet}}
-                                        {{$embed.Set "description" (print "You flipped " $side " and won " $symbol $bet)}}
+                                        {{$embed.Set "description" (print "You flipped " $side " and won " $symbol (humanizeThousands $bet)}}
                                         {{$embed.Set "color" $successColor}}
                                     {{else}} {{/* Lose */}}
                                         {{$newCashBalance = $bet | sub $bal}}

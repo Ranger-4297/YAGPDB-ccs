@@ -38,8 +38,8 @@
     {{end}}
     {{with (dbGet $user.ID "EconomyInfo")}}
         {{$a = sdict .Value}}
-        {{$cash := $a.cash | toInt}}
-        {{$bank := $a.bank | toInt}}
+        {{$cash := humanizeThousands ($a.cash | toInt)}}
+        {{$bank := humanizeThousands ($a.bank | toInt)}}
         {{$net := $cash | add $bank}}
         {{$embed.Set "author" (sdict "name" $user.Username "icon_url" ($user.AvatarURL "128"))}}
         {{$embed.Set "description" (print $user.Mention "'s balance")}}

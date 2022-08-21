@@ -45,7 +45,7 @@
                         {{$info.Set "inventory" $items}}
                         {{dbSet $userID "EconomyInfo" $info}}
                     {{end}}
-                    {{$embed.Set "description" (print "You've just used " $name "!\nYou had " $qty " and now have " $nqty)}}
+                    {{$embed.Set "description" (print "You've just used " $name "!\nYou had " (humanizeThousands $qty) " and now have " (humanizeThousands $nqty))}}
                     {{$embed.Set "color" $successColor}}
                 {{else}}
                     {{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Item:String>`")}}

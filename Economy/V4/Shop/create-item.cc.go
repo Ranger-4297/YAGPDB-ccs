@@ -69,7 +69,7 @@
                                         {{$store.Set "Items" $items}}
                                         {{dbSet 0 "store" $store}}
                                         {{$embed.Set "description" (print "New item added to shop!")}}
-                                        {{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " $price "\nQuantity: " $qty) "inline" false))}}
+                                        {{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " (humanizeThousands $price) "\nQuantity: " (humanizeThousands $qty)) "inline" false))}}
                                         {{$embed.Set "color" $successColor}}
                                     {{else}}
                                         {{$embed.Set "description" (print "No `description` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}

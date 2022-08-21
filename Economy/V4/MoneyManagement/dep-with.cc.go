@@ -41,19 +41,19 @@
                     {{$amount := (index $.CmdArgs 0)}}
                     {{if (toInt $amount)}}
                         {{if gt (toInt $amount) (toInt $cash)}}
-                            {{$embed.Set "description" (print "You're unable to deposit more than you have on hand.\nYou currently have " $symbol $cash " on you.")}}
+                            {{$embed.Set "description" (print "You're unable to deposit more than you have on hand.\nYou currently have " $symbol (humanizeThousands $cash) " on you.")}}
                             {{$embed.Set "color" $errorColor}}
                         {{else}}
                             {{$newCashBalance := $amount | sub $cash}}
                             {{$newBankBalance := $amount | add $bank}}
-                            {{$embed.Set "description" (print "You deposited " $symbol $amount " into your bank!")}}
+                            {{$embed.Set "description" (print "You deposited " $symbol (humanizeThousands $amount) " into your bank!")}}
                             {{$embed.Set "color" $successColor}}
                             {{dbSet $user.ID "EconomyInfo" (sdict "cash" $newCashBalance "bank" $newBankBalance)}}
                         {{end}}
                     {{else if eq (lower (toString $amount)) "all"}}
                         {{$newCashBalance := (toInt 0)}}
                         {{$newBankBalance := $bank | add $cash}}
-                        {{$embed.Set "description" (print "You deposited " $symbol $cash " into your bank!")}}
+                        {{$embed.Set "description" (print "You deposited " $symbol (humanizeThousands $cash) " into your bank!")}}
                         {{$embed.Set "color" $successColor}}
                         {{dbSet $user.ID "EconomyInfo" (sdict "cash" $newCashBalance "bank" $newBankBalance)}}
                     {{else}}
@@ -77,19 +77,19 @@
                     {{$amount := (index $.CmdArgs 0)}}
                     {{if (toInt $amount)}}
                         {{if gt (toInt $amount) (toInt $bank)}}
-                            {{$embed.Set "description" (print "You're unable to withdraw more than you have in your bank.\nYou currently have " $symbol $bank " in your bank.")}}
+                            {{$embed.Set "description" (print "You're unable to withdraw more than you have in your bank.\nYou currently have " $symbol (humanizeThousands $bank) " in your bank.")}}
                             {{$embed.Set "color" $errorColor}}
                         {{else}}
                             {{$newCashBalance := $amount | add $cash}}
                             {{$newBankBalance := $amount | sub $bank}}
-                            {{$embed.Set "description" (print "You withdrew " $symbol $amount " from your bank!")}}
+                            {{$embed.Set "description" (print "You withdrew " $symbol (humanizeThousands $amount) " from your bank!")}}
                             {{$embed.Set "color" $successColor}}
                             {{dbSet $user.ID "EconomyInfo" (sdict "cash" $newCashBalance "bank" $newBankBalance)}}
                         {{end}}
                     {{else if eq (lower (toString $amount)) "all"}}
                         {{$newCashBalance := $bank | add $cash}}
                         {{$newBankBalance := (toInt 0)}}
-                        {{$embed.Set "description" (print "You withdrew " $symbol $bank " from your bank!")}}
+                        {{$embed.Set "description" (print "You withdrew " $symbol (humanizeThousands $bank) " from your bank!")}}
                         {{$embed.Set "color" $successColor}}
                         {{dbSet $user.ID "EconomyInfo" (sdict "cash" $newCashBalance "bank" $newBankBalance)}}
                     {{else}}

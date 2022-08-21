@@ -49,7 +49,7 @@
                             {{if eq $setting "max"}}
                                 {{if toInt $val}}
                                     {{if lt (toInt $val) (toInt $smin)}}
-                                        {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" $smin "`")}}
+                                        {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" (humanizeThousands $smin) "`")}}
                                     {{else}}
                                         {{$ct = true}}
                                     {{end}}
@@ -59,7 +59,7 @@
                             {{else}}
                                 {{if toInt $val}}
                                     {{if gt (toInt $val) (toInt $smax)}}
-                                        {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" $smax "`")}}
+                                        {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" (humanizeThousands $smax) "`")}}
                                     {{else}}
                                         {{$ct = true}}
                                     {{end}}
@@ -81,7 +81,7 @@
                         {{if gt (len $.CmdArgs) 1}}
                             {{$startBalance := (index $.CmdArgs 1)}}
                             {{if (toInt $startBalance)}}
-                                {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $startBalance " from " $oldStartBalance)}}
+                                {{$msg.Set "description" (print "You set `" $setting "` to " $symbol (humanizeThousands $startBalance) " from " (humanizeThousands $oldStartBalance))}}
                                 {{$msg.Set "color" $sC}}
                                 {{$db.Set "startBalance" $startBalance}}
                                 {{dbSet 0 "EconomySettings" $db}}

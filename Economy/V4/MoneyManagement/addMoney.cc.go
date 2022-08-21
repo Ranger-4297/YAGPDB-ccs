@@ -41,17 +41,16 @@
                         {{if eq $moneyDestination "cash" "bank"}}
                             {{with (dbGet $receivingUser "EconomyInfo")}}
                                 {{$a = sdict .Value}}
-                                {{$receivingBalance := (print $a "." $moneyDestination)}}
+                                {{$receivingBalance := $a.Get $moneyDestination}}
                                 {{if gt (len $.CmdArgs) 2}}
                                     {{$amount := (index $.CmdArgs 2)}}
                                     {{if (toInt $amount)}}
                                         {{if gt (toInt $amount) 0}}
                                             {{$receivingNewBalance := $receivingBalance | add $amount}}
-                                            {{$embed.Set "description" (print "You added " $symbol $amount " to <@!" $receivingUser ">'s " $moneyDestination "\nThey now have " $symbol $receivingNewBalance " in their " $moneyDestination "!")}}
+                                            {{$embed.Set "description" (print "You added " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $receivingNewBalance) " in their " $moneyDestination "!")}}
                                             {{$embed.Set "color" $successColor}}
-                                            {{$sdict := (dbGet $receivingUser "EconomyInfo").Value}}
-                                            {{$sdict.Set $moneyDestination $receivingNewBalance}}
-                                            {{dbSet $receivingUser "EconomyInfo" $sdict}}
+                                            {{$a.Set $moneyDestination $receivingNewBalance}}
+                                            {{dbSet $receivingUser "EconomyInfo" $a}}
                                         {{else}}
                                             {{$embed.Set "description" (print "You're unable to add this value, check that you used a valid number above 1")}}
                                             {{$embed.Set "color" $errorColor}}

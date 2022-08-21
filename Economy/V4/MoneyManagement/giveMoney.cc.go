@@ -48,22 +48,20 @@
                                         {{$a = sdict .Value}}
                                         {{$receivingBalance := $a.cash}}
                                         {{with (dbGet $userID "EconomyInfo")}}
-                                            {{$a = sdict .Value}}
-                                            {{$yourBalance := $a.cash}}
+                                            {{$b := sdict .Value}}
+                                            {{$yourBalance := $b.cash}}
                                             {{if gt (toInt $amount) (toInt $yourBalance)}}
                                                 {{$embed.Set "description" (print "You cannot give more than you have.")}}
                                                 {{$embed.Set "color" $errorColor}}
                                             {{else}}
                                                 {{$receivingNewBalance := $receivingBalance | add $amount}}
-                                                {{$yourNewBalance := $amount |sub $yourBalance}}
-                                                    {{$embed.Set "description" (print "You gave " $symbol $amount " to <@!" $receivingUser ">\nThey now have " $symbol $receivingNewBalance " in cash!")}}
-                                                    {{$embed.Set "color" $successColor}}
-                                                {{$sdict := (dbGet $receivingUser "EconomyInfo").Value}}
-                                                {{$sdict.Set "cash" $receivingNewBalance}}
-                                                {{dbSet $receivingUser "EconomyInfo" $sdict}}
-                                                {{$sdict := (dbGet $userID "EconomyInfo").Value}}
-                                                {{$sdict.Set "cash" $yourNewBalance}}
-                                                {{dbSet $userID "EconomyInfo" $sdict}}
+                                                {{$yourNewBalance := $amount | sub $yourBalance}}
+                                                {{$embed.Set "description" (print "You gave " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">\nThey now have " $symbol (humanizeThousands $receivingNewBalance) " in cash!")}}
+                                                {{$embed.Set "color" $successColor}}
+                                                {{$a.Set "cash" $receivingNewBalance}}
+                                                {{dbSet $receivingUser "EconomyInfo" $a}}
+                                                {{$b.Set "cash" $yourNewBalance}}
+                                                {{dbSet $userID "EconomyInfo" $b}}
                                             {{end}}
                                         {{end}}
                                     {{end}}

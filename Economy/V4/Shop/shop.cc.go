@@ -49,7 +49,7 @@
 					{{else}}
 						{{$qty = "Infinite"}}
 					{{end}}
-					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Price: " $symbol $price) (print "Quantity: " $qty)) "inline" false)}}
+					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Price: " $symbol (humanizeThousands $price)) (print "Quantity: " $qty)) "inline" false)}}
 				{{end}}
 				{{$page := ""}}
 				{{if $.CmdArgs}}

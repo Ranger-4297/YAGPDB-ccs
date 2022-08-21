@@ -25,13 +25,13 @@
 {{$embed.Set "timestamp" currentTime}}
 {{with (dbGet 0 "EconomySettings")}}
     {{$a := sdict .Value}}
-    {{$min := $a.min}}
-    {{$max := $a.max}}
+    {{$min := (humanizeThousands $a.min)}}
+    {{$max := (humanizeThousands $a.max)}}
     {{$symbol := $a.symbol}}
     {{$workCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.workCooldown | toDuration)}}
     {{$crimeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.crimeCooldown | toDuration)}}
     {{$robCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.robCooldown | toDuration)}}
-    {{$startBalance := $a.startBalance}}
+    {{$startBalance := (humanizeThousands $a.startBalance)}}
     {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
         {{$symbol = $symbol}}
     {{else}}

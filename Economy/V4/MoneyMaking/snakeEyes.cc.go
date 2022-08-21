@@ -2,7 +2,7 @@
         Made by Ranger (765316548516380732)
 
         Trigger Type: `Regex`
-        Trigger: `\A(-|<@!?204255221017214977>\s*)(snake-?eyes)(\s+|\z)`
+        Trigger: `\A(-|<@!?204255221017214977>\s*)(snake?-?eyes)(\s+|\z)`
 
     ©️ Ranger 2020-Present
     GNU, GPLV3 License
@@ -42,11 +42,11 @@
                     {{if le (toInt $bet) (toInt $bal)}}
                         {{$newCash := (sub $bal $bet)}}
                         {{if and (eq $die1 1) (eq $die2 1)}}
-                            {{$embed.Set "description" (print "You rolled snake eyes (" $die1 "&" $die2 ")\nAnd won " (mult $bet 36))}}
+                            {{$embed.Set "description" (print "You rolled snake eyes (" $die1 "&" $die2 ")\nAnd won " $symbol (humanizeThousands (mult $bet 36)))}}
                             {{$embed.Set "color" $successColor}}
                             {{$newCash = (add $bal (mult $bet 36))}}
                         {{else}}
-                            {{$embed.Set "description" (print "You rolled " $die1 "&" $die2 " and lost " $bet ".")}}
+                            {{$embed.Set "description" (print "You rolled " $die1 "&" $die2 " and lost " $symbol (humanizeThousands $bet) ".")}}
                             {{$embed.Set "color" $errorColor}}
                         {{end}}
                         {{$a.Set "cash" $newCash}}
