@@ -35,21 +35,21 @@
         {{end}}
     {{end}}
     {{$skip := mult (sub $page 1) 10}}
-    {{$leaderboard := dbTopEntries "Leaderboard" 10 $skip}}
-    {{if not (len $leaderboard)}}
-        {{$embed.Set "description" "There were no users on this page"}}
-        {{$embed.Set "color" $errorColor}}
-    {{else}}
+    {{$leaderboard := dbBottomEntries "EconomyInfo" 10 $skip}}
+    {{if (len $leaderboard)}}
         {{$rank := $skip}}
         {{$display := ""}}
         {{range $leaderboard}}
-            {{$cash := toInt .Value }}
-            {{$rank = add $rank 1 }}
+            {{$cash := toInt .Value.cash}}
+            {{$rank = add $rank 1}}
             {{$display = (print $display "**" $rank ".** " .User.String  " **•** " $symbol $cash "\n")}}
         {{end}}
         {{$embed.Set "description" $display}}
         {{$embed.Set "footer" (sdict "text" (joinStr "" "Page " $page))}}
         {{$embed.Set "color" $successColor}}
+    {{else}}
+        {{$embed.Set "description" "There were no users on this page"}}
+        {{$embed.Set "color" $errorColor}}
     {{end}}
 {{else}}
     {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
