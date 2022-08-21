@@ -7,7 +7,7 @@
 - [ ] More income based commands
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
-- [ ] Readable int values
+- [X] Readable int values
 - [ ] Fix betting more than you have
 
 # NB
