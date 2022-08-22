@@ -52,11 +52,11 @@
                     {{$embed.Set "fields" (cslice (sdict "name" "Name" "value" (print $name) "inline" true) (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true) (sdict "name" "Description" "value" (print $desc) "inline" false) (sdict "name" "Quantity" "value" (print $qty)))}}
                     {{$embed.Set "color" $successColor}}
                 {{else}}
-                    {{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Item:String>`")}}
+                    {{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
             {{else}}
-                {{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Item:String>`")}}
+                {{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
                 {{$embed.Set "color" $errorColor}}
             {{end}}
         {{else}}

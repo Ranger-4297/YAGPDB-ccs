@@ -79,15 +79,15 @@
                             {{$embed.Set "color" $errorColor}}
                         {{end}}
                     {{else}}
-                        {{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Item:String>`\n\nTo view all items, run the `" $prefix "shop` command.")}}
+                        {{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name> [Quantity:Int]`\n\nTo view all items, run the `" $prefix "shop` command.")}}
                         {{$embed.Set "color" $errorColor}}
                     {{end}}
                 {{else}}
-                    {{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Item:String>`\n\nTo view all items, run the `" $prefix "shop` command.")}}
+                    {{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Name> [Quantity:Int]`\n\nTo view all items, run the `" $prefix "shop` command.")}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
             {{else}}
-                {{$embed.Set "description" (print "There are no items :(\nAdd some items with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                {{$embed.Set "description" (print "There are no items :(\nAdd some items with `" $prefix "create-item <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                 {{$embed.Set "color" $errorColor}}
             {{end}}
         {{end}}

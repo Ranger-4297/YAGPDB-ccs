@@ -49,7 +49,7 @@
                                         {{if eq (lower (index . 2)) "infinite" "infinity" "inf"}}
                                             {{$qty = "Infinite"}}
                                         {{else}}
-                                            {{$embed.Set "description" (print "Invalid `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                                            {{$embed.Set "description" (print "Invalid `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                                             {{$embed.Set "color" $errorColor}}
                                         {{end}}
                                     {{end}}
@@ -72,31 +72,31 @@
                                         {{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " (humanizeThousands $price) "\nQuantity: " (humanizeThousands $qty)) "inline" false))}}
                                         {{$embed.Set "color" $successColor}}
                                     {{else}}
-                                        {{$embed.Set "description" (print "No `description` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                                        {{$embed.Set "description" (print "No `description` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                                         {{$embed.Set "color" $errorColor}}
                                     {{end}}
                                 {{else}}
-                                    {{$embed.Set "description" (print "No `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                                    {{$embed.Set "description" (print "No `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                                     {{$embed.Set "color" $errorColor}}
                                 {{end}}
                             {{else}}
-                                {{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                                {{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                                 {{$embed.Set "color" $errorColor}}
                             {{end}}
                         {{else}}
-                            {{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                            {{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                             {{$embed.Set "color" $errorColor}}
                         {{end}}
                     {{else}}
-                        {{$embed.Set "description" (print "No `Price` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                        {{$embed.Set "description" (print "No `Price` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                         {{$embed.Set "color" $errorColor}}
                     {{end}}
                 {{else}}
-                    {{$embed.Set "description" (print "No `Name` argument provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                    {{$embed.Set "description" (print "No `Name` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
             {{else}}
-                {{$embed.Set "description" (print "No arguments provided.\nSyntax is `" $.Cmd " <Name:String> <Price:Int> <Quantity:Int> <Description:String>`")}}
+                {{$embed.Set "description" (print "No arguments provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
                 {{$embed.Set "color" $errorColor}}
             {{end}}
         {{end}}

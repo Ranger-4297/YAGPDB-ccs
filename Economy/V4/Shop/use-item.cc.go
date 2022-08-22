@@ -48,11 +48,11 @@
                     {{$embed.Set "description" (print "You've just used " $name "!\nYou had " (humanizeThousands $qty) " and now have " (humanizeThousands $nqty))}}
                     {{$embed.Set "color" $successColor}}
                 {{else}}
-                    {{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Item:String>`")}}
+                    {{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
             {{else}}
-                {{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Item:String>`")}}
+                {{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
                 {{$embed.Set "color" $errorColor}}
             {{end}}
         {{else}}
