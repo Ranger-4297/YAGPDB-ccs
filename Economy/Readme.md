@@ -6,9 +6,9 @@
 - [X] Per-server shop
 - [X] More income based commands
 - [X] Cooldowns on basic income commands
-- [ ] More configurability (maybe)
+- [X] More configurability (maybe)
 - [X] Readable int values
-- [ ] Fix betting more than you have
+- [X] Fix betting more than you have
 
 # NB
 Buying items does not CURRENTLY add said item to an inventory
