@@ -77,10 +77,14 @@
                         {{if gt (len $.CmdArgs) 1}}
                             {{$startBalance := (index $.CmdArgs 1)}}
                             {{if (toInt $startBalance)}}
+                                {{if gt (toInt $startBalance) 0}}
                                 {{$msg.Set "description" (print "You set `" $setting "` to " $symbol (humanizeThousands $startBalance) " from " (humanizeThousands $oldStartBalance))}}
                                 {{$msg.Set "color" $sC}}
                                 {{$db.Set "startBalance" $startBalance}}
                                 {{dbSet 0 "EconomySettings" $db}}
+                                {{else}}
+                                    {{$msg.Set "description" $unable}}
+                                {{end}}
                             {{else}}
                                 {{$msg.Set "description" $unable}}
                             {{end}}
