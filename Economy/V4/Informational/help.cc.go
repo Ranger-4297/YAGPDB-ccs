@@ -108,11 +108,11 @@
     {{else if eq $cmd "buy-item"}}
         {{$cmd = "Buy-item"}}
         {{$desc = "Purchase an item from the shop, with a specified quantity"}}
-        {{$use = "buy-item <Item:String> [Quantity:Int/All]"}}
+        {{$use = "buy-item <Name> [Quantity:Int/All]"}}
     {{else if eq $cmd "create-item"}}
         {{$cmd = "Create-item"}}
         {{$desc = "Adds items to the shop"}}
-        {{$use = "create-item <Name:String> <Price:Int> <Quantity:Int> <Description:String>"}}
+        {{$use = "create-item <Name> <Price:Int> <Quantity:Int> <Description:String>"}}
         {{$alias = "`new-item`"}}
     {{else if eq $cmd "inventory"}}
         {{$cmd = "Inventory"}}
@@ -122,7 +122,7 @@
     {{else if eq $cmd "item-info"}}
         {{$cmd = "Item-info"}}
         {{$desc = "Views information on an item in the shop"}}
-        {{$use = "item-info <Item:String>"}}
+        {{$use = "item-info <Name>"}}
     {{else if eq $cmd "shop"}}
         {{$cmd = "Shop"}}
         {{$desc = "Views the servers shop"}}
@@ -131,7 +131,7 @@
     {{else if eq $cmd "use-item"}}
         {{$cmd = "Use-item"}}
         {{$desc = "Uses a given item"}}
-        {{$use = "use-item <Item:String>"}}
+        {{$use = "use-item <Name>"}}
     {{else}}
         {{$cmd = "Invalid command provided"}}
         {{$embed.Set "color" $errorColor}}
@@ -148,7 +148,7 @@
         {{$embed.Set "fields" (($embed.Get "fields").Append (sdict "name" "Alias(es)" "value" (print $alias) "inline" true))}}
     {{end}}
 {{else}}
-    {{$embed.Set "description" (print "__**List of all commands**__\n\n**Informational**\n`Balance`\n`Leaderboard`\n\n**Income**\n`CoinFlip`\n`Rollnumber`\n`SnakeEyes`\n`Work`\n`Crime`\n`Rob`\n\n**Management**\n`Addmoney`\n`Deposit`\n`Withdraw`\n`Givemoney`\n`Removemoney`\n\n**Settings**\n`Set`\n`Viewsettings`\n\n**Shop**\n`Create-item`\n`Shop`")}}
+    {{$embed.Set "description" (print "__**List of all commands**__\n\n**Arguments**\n` < ` ` > ` - Required\n\n` [ ` ` ] ` - Optional\n\n**Informational**\n`Balance`\n`Leaderboard`\n\n**Income**\n`CoinFlip`\n`Rollnumber`\n`SnakeEyes`\n`Work`\n`Crime`\n`Rob`\n\n**Management**\n`Addmoney`\n`Deposit`\n`Withdraw`\n`Givemoney`\n`Removemoney`\n\n**Settings**\n`Set`\n`Viewsettings`\n\n**Shop**\n`Create-item`\n`Shop`")}}
     {{$embed.Set "color" $successColor}}
 {{end}}
 {{sendMessage nil (cembed $embed)}}
