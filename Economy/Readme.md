@@ -11,7 +11,7 @@
 - [X] Fix betting more than you have
 
 # Economy CCs
-Fully functional basic economy system that for your server!
+Fully functional economy system for your server!
 
 ## Features
 - Basic economy
