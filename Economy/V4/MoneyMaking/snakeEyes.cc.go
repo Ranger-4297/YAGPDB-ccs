@@ -27,6 +27,7 @@
 {{with dbGet 0 "EconomySettings"}}
     {{$a := sdict .Value}}
     {{$symbol := $a.symbol}}
+    {{$incomeCooldown := $a.incomeCooldown | toInt}}
     {{if not (dbGet $userID "EconomyInfo")}}
         {{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
     {{end}}
@@ -40,17 +41,23 @@
             {{if (toInt $bet)}}
                 {{if gt (toInt $bet) 0}}
                     {{if le (toInt $bet) (toInt $bal)}}
-                        {{$newCash := (sub $bal $bet)}}
-                        {{if and (eq $die1 1) (eq $die2 1)}}
-                            {{$embed.Set "description" (print "You rolled snake eyes (" $die1 "&" $die2 ")\nAnd won " $symbol (humanizeThousands (mult $bet 36)))}}
-                            {{$embed.Set "color" $successColor}}
-                            {{$newCash = (add $bal (mult $bet 36))}}
+                        {{if not ($cooldown := dbGet $userID "snakeeyesCooldown")}}
+                            {{dbSetExpire $userID "snakeeyesCooldown" "cooldown" $incomeCooldown}}
+                            {{$newCash := (sub $bal $bet)}}
+                            {{if and (eq $die1 1) (eq $die2 1)}}
+                                {{$embed.Set "description" (print "You rolled snake eyes (" $die1 "&" $die2 ")\nAnd won " $symbol (humanizeThousands (mult $bet 36)))}}
+                                {{$embed.Set "color" $successColor}}
+                                {{$newCash = (add $bal (mult $bet 36))}}
+                            {{else}}
+                                {{$embed.Set "description" (print "You rolled " $die1 "&" $die2 " and lost " $symbol (humanizeThousands $bet) ".")}}
+                                {{$embed.Set "color" $errorColor}}
+                            {{end}}
+                            {{$a.Set "cash" $newCash}}
+                            {{dbSet $userID "EconomyInfo" $a}}
                         {{else}}
-                            {{$embed.Set "description" (print "You rolled " $die1 "&" $die2 " and lost " $symbol (humanizeThousands $bet) ".")}}
+                            {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
                             {{$embed.Set "color" $errorColor}}
                         {{end}}
-                        {{$a.Set "cash" $newCash}}
-                        {{dbSet $userID "EconomyInfo" $a}}
                     {{else}}
                         {{$embed.Set "description" (print "You can't bet more than you have")}}
                         {{$embed.Set "color" $errorColor}}

@@ -27,6 +27,7 @@
 {{with dbGet 0 "EconomySettings"}}
     {{$a := sdict .Value}}
     {{$symbol := $a.symbol}}
+    {{$incomeCooldown := $a.incomeCooldown | toInt}}
     {{if not (dbGet $userID "EconomyInfo")}}
         {{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
     {{end}}
@@ -63,30 +64,36 @@
                 {{end}}
             {{end}}
             {{if $continue}}
-                {{$roll := (randInt 1 101)}}
-                {{$amount := ""}}
-                {{$newBal := ""}}
-                {{if and (ge $roll 65) (lt $roll 90)}}
-                    {{$amount = $bet}}
-                    {{$newBal = (add $bal $amount)}}
-                {{else if and (ge $roll 90) (lt $roll 100)}}
-                    {{$amount = (mult $bet 3)}}
-                    {{$newBal = (add $bal $amount)}}
-                {{else if eq $roll 100}}
-                    {{$amount = (mult $bet 5)}}
-                    {{$newBal = (add $bal $amount)}}
+                {{if not ($cooldown := dbGet $userID "rollCooldown")}}
+                    {{dbSetExpire $userID "rollCooldown" "cooldown" $incomeCooldown}}
+                    {{$roll := (randInt 1 101)}}
+                    {{$amount := ""}}
+                    {{$newBal := ""}}
+                    {{if and (ge $roll 65) (lt $roll 90)}}
+                        {{$amount = $bet}}
+                        {{$newBal = (add $bal $amount)}}
+                    {{else if and (ge $roll 90) (lt $roll 100)}}
+                        {{$amount = (mult $bet 3)}}
+                        {{$newBal = (add $bal $amount)}}
+                    {{else if eq $roll 100}}
+                        {{$amount = (mult $bet 5)}}
+                        {{$newBal = (add $bal $amount)}}
+                    {{else}}
+                        {{$newBal = (sub $bal $bet)}}
+                    {{end}}
+                    {{if gt $newBal $bal}}
+                        {{$embed.Set "description" (print "The roll landed on " $roll " and you and won " (humanizeThousands $amount) "!")}}
+                        {{$embed.Set "color" $successColor}}
+                    {{else}}
+                        {{$embed.Set "description" (print "The roll landed on " $roll " and you and lost " (humanizeThousands $bet))}}
+                        {{$embed.Set "color" $errorColor}}
+                    {{end}}
+                    {{$a.Set "cash" $newBal}}
+                    {{dbSet $userID "EconomyInfo" $a}}
                 {{else}}
-                    {{$newBal = (sub $bal $bet)}}
-                {{end}}
-                {{if gt $newBal $bal}}
-                    {{$embed.Set "description" (print "The roll landed on " $roll " and you rolled and won " (humanizeThousands $amount) "!")}}
-                    {{$embed.Set "color" $successColor}}
-                {{else}}
-                    {{$embed.Set "description" (print "The roll landed on " $roll " and you rolled and lost " (humanizeThousands $bet))}}
+                    {{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
-                {{$a.Set "cash" $newBal}}
-                {{dbSet $userID "EconomyInfo" $a}}
             {{end}}
         {{else}}
             {{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
