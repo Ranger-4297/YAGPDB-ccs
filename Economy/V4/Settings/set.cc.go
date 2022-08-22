@@ -46,24 +46,16 @@
                             {{$val := (index $.CmdArgs 1)}}
                             {{$ct := false}}
                             {{$desc := ""}}
-                            {{if eq $setting "max"}}
-                                {{if toInt $val}}
-                                    {{if lt (toInt $val) (toInt $smin)}}
-                                        {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" (humanizeThousands $smin) "`")}}
-                                    {{else}}
-                                        {{$ct = true}}
-                                    {{end}}
+                            {{if toInt $val}}
+                                {{if and (eq $setting "max") (lt (toInt $val) (toInt $smin))}}
+                                    {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" (humanizeThousands $smin) "`")}}
+                                {{else if and (eq $setting "min") (gt (toInt $val) (toInt $smax))}}
+                                    {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" (humanizeThousands $smax) "`")}}
                                 {{else}}
-                                    {{$msg.Set "description" $unable}}
+                                    {{$ct = true}}
                                 {{end}}
                             {{else}}
-                                {{if toInt $val}}
-                                    {{if gt (toInt $val) (toInt $smax)}}
-                                        {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" (humanizeThousands $smax) "`")}}
-                                    {{else}}
-                                        {{$ct = true}}
-                                    {{end}}
-                                {{end}}
+                                {{$msg.Set "description" $unable}}
                             {{end}}
                             {{if $ct}}
                                 {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $val)}}
