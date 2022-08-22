@@ -16,12 +16,14 @@
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
 {{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
+{{$ex := or (and (reFind "a_" .Guild.Icon) "gif" ) "png" }}
+{{$icon := print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $ex "?size=1024" }}
 
 {{/* Server shop */}}
 
 {{/* Response */}}
 {{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$embed.Set "author" (sdict "name" (print .Guild.Name " store") "icon_url" $icon)}}
 {{$embed.Set "timestamp" currentTime}}
 {{with (dbGet 0 "EconomySettings")}}
     {{$a := sdict .Value}}
@@ -68,15 +70,17 @@
 				{{if and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry))}}
 					{{range (seq $start $stop)}}
 						{{$field = $field.Append (index $entry .)}}
+						{{$embed.Set "description" (print "Buy an item with `buy-item <Name> [Quantity:Int]`\nFor more information on an item use `item-info <Name>`.")}}
+						{{$embed.Set "color" $successColor}}
 					{{end}}
 				{{else}}
-					{{$embed.Set "description" (print "There are no items on this page\nAdd some with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
+					{{$embed.Set "description" (print "There are no items on this page\nAdd some with `create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
+					{{$embed.Set "color" $errorColor}}
 				{{end}}
 				{{$embed.Set "fields" $field}}
-				{{$embed.Set "color" $successColor}}
 				{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
 			{{else}}
-				{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
+				{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
 				{{$embed.Set "color" $errorColor}}
 			{{end}}
 		{{else}}
