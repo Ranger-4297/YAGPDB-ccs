@@ -4,7 +4,7 @@
 - [X] Fully support basic yag without hitting limits
 - [X] Help to provide information on commands
 - [X] Per-server shop
-- [ ] More income based commands
+- [X] More income based commands
 - [ ] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
 - [X] Readable int values
