@@ -28,6 +28,7 @@
     {{$min := (humanizeThousands $a.min)}}
     {{$max := (humanizeThousands $a.max)}}
     {{$symbol := $a.symbol}}
+    {{$incomeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.incomeCooldown | toDuration)}}
     {{$workCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.workCooldown | toDuration)}}
     {{$crimeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.crimeCooldown | toDuration)}}
     {{$robCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.robCooldown | toDuration)}}
@@ -37,7 +38,7 @@
     {{else}}
         {{$symbol = (print $symbol)}}
     {{end}}
-    {{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
+    {{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
     {{$embed.Set "color" $successColor}}
 {{else}}
     {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}

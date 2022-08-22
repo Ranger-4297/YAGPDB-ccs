@@ -32,7 +32,7 @@
             {{if eq $setting "default"}}
                 {{$msg.Set "description" (print "Set the `EconomySettings` to default values")}}
                 {{$msg.Set "color" $sC}}
-                {{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "symbol" "£" "startBalance" 200 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600)}}
+                {{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600)}}
                 {{dbSet 0 "store" sdict}}
             {{else}}
                 {{with (dbGet 0 "EconomySettings")}}
@@ -104,7 +104,7 @@
                     {{else if eq $setting "cooldown"}}
                         {{if gt (len $.CmdArgs) 1}}
                             {{$cdType := (lower (index $.CmdArgs 1))}}
-                            {{if eq $cdType "work" "crime" "rob"}}
+                            {{if eq $cdType "work" "crime" "rob" "income"}}
                                 {{if gt (len $.CmdArgs) 2}}
                                     {{$dr := (index $.CmdArgs 2)}}
                                     {{if toDuration $dr}}
@@ -122,10 +122,10 @@
                                     {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Duration>`")}}
                                 {{end}}
                             {{else}}
-                                {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Type:Rob/Crime/Work> <Value:Duration>`")}}
+                                {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Type:Rob/Crime/Work/Income> <Value:Duration>`")}}
                             {{end}}
                         {{else}}
-                            {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Type:Rob/Crime/Work> <Value:Duration>`")}}
+                            {{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Type:Rob/Crime/Work/Income> <Value:Duration>`")}}
                         {{end}}
                     {{else}}
                         {{$msg.Set "description" (print "No valid setting argument passed.\nSyntax is: `" $.Cmd " <Setting:String> <Value:String/Int/Duration>`" $syntax)}}
