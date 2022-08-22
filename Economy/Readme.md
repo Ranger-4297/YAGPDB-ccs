@@ -10,8 +10,6 @@
 - [X] Readable int values
 - [X] Fix betting more than you have
 
-# NB
-Buying items does not CURRENTLY add said item to an inventory
 # Economy CCs
 Fully functional basic economy system that for your server!
 
