@@ -5,7 +5,7 @@
 - [X] Help to provide information on commands
 - [X] Per-server shop
 - [X] More income based commands
-- [ ] Cooldowns on basic income commands
+- [X] Cooldowns on basic income commands
 - [ ] More configurability (maybe)
 - [X] Readable int values
 - [ ] Fix betting more than you have
