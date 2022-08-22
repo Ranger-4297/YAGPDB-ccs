@@ -47,15 +47,19 @@
                             {{$ct := false}}
                             {{$desc := ""}}
                             {{if toInt $val}}
-                                {{if and (eq $setting "max") (lt (toInt $val) (toInt $smin))}}
-                                    {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" (humanizeThousands $smin) "`")}}
-                                {{else if and (eq $setting "min") (gt (toInt $val) (toInt $smax))}}
-                                    {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" (humanizeThousands $smax) "`")}}
+                                {{if gt (toInt $val) 0}}
+                                    {{if and (eq $setting "max") (lt (toInt $val) (toInt $smin))}}
+                                        {{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" (humanizeThousands $smin) "`")}}
+                                    {{else if and (eq $setting "min") (gt (toInt $val) (toInt $smax))}}
+                                        {{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" (humanizeThousands $smax) "`")}}
+                                    {{else}}
+                                        {{$ct = true}}
+                                    {{end}}
                                 {{else}}
-                                    {{$ct = true}}
+                                    {{$desc = $unable}}
                                 {{end}}
                             {{else}}
-                                {{$msg.Set "description" $unable}}
+                                {{$desc = $unable}}
                             {{end}}
                             {{if $ct}}
                                 {{$msg.Set "description" (print "You set `" $setting "` to " $symbol $val)}}
