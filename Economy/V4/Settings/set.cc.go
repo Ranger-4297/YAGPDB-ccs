@@ -40,7 +40,7 @@
                     {{$symbol := $a.symbol}}
                     {{$nv := (print "No `value` argument passed.")}}
                     {{if eq $setting "min" "max"}}
-                        {{$smax := $a.min}}
+                        {{$smax := $a.max}}
                         {{$smin := $a.min}}
                         {{if gt (len $.CmdArgs) 1}}
                             {{$val := (index $.CmdArgs 1)}}
