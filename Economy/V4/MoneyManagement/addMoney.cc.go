@@ -15,7 +15,7 @@
 {{/* Initiates variables */}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
+{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
 
 {{/* Adds money to given user */}}
 
@@ -23,7 +23,7 @@
 {{$embed := sdict}}
 {{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
 {{$embed.Set "timestamp" currentTime}}
-{{$perms := split (index (split (exec "viewperms" ) "\n" ) 2) ", "}}
+{{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
     {{with (dbGet 0 "EconomySettings")}}
         {{$a := sdict .Value}}

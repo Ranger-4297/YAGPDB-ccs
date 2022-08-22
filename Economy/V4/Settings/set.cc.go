@@ -22,12 +22,12 @@
 {{$msg.Set "timestamp" currentTime}}
 {{$msg.Set "color" 0xFF0000}}
 {{$db := (dbGet 0 "EconomySettings").Value}}
-{{$perms := split (index (split (exec "viewperms" ) "\n" ) 2) ", "}}
+{{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
     {{$syntax := (print "\nAvailable settings: `max`, `min`, `startbalance`, `symbol`, `cooldown`\nTo set it with the default settings `" $.Cmd " default`")}}
     {{with .CmdArgs}}
         {{if index $.CmdArgs 0}}
-            {{$setting :=  (index $.CmdArgs 0) | lower}}
+            {{$setting := (index $.CmdArgs 0) | lower}}
             {{$unable := (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
             {{if eq $setting "default"}}
                 {{$msg.Set "description" (print "Set the `EconomySettings` to default values")}}
@@ -94,7 +94,7 @@
                     {{else if eq $setting "symbol"}}
                         {{if gt (len $.CmdArgs) 1}}
                             {{$symbol = (index $.CmdArgs 1)}}
-                            {{$msg.Set "description" (print "You set the server currency symbol to " $symbol )}}
+                            {{$msg.Set "description" (print "You set the server currency symbol to " $symbol)}}
                             {{$msg.Set "color" $sC}}
                             {{$db.Set "symbol" $symbol}}
                             {{dbSet 0 "EconomySettings" $db}}

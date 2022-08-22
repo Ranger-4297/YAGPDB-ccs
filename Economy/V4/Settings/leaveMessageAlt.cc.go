@@ -24,7 +24,7 @@ To retrieve a users economy data upon rejoining
     {{end}}
     {{with dbGet 0 "EconomyInfoLeftGuild"}}
         {{$entry := sdict .Value}}
-        {{$entry.Set (toString $.User.ID ) (sdict $a)}}
+        {{$entry.Set (toString $.User.ID) (sdict $a)}}
         {{dbSet 0 "EconomyInfoLeftGuild" $entry}}
         {{dbDel $.User.ID "EconomyInfo"}}
     {{end}}

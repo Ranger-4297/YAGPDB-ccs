@@ -23,7 +23,7 @@
 {{$embed := sdict}}
 {{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
 {{$embed.Set "timestamp" currentTime}}
-{{$perms := split (index (split (exec "viewperms" ) "\n" ) 2) ", "}}
+{{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
     {{with (dbGet 0 "EconomySettings")}}
         {{$a := sdict .Value}}

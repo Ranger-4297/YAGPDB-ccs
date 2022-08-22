@@ -16,7 +16,7 @@
 	{{$successColor := 0x00ff7b}}
 	{{$errorColor := 0xFF0000}}
 	{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
-	{{$ex := or (and (reFind "a_" .Guild.Icon) "gif" ) "png" }}
+	{{$ex := or (and (reFind "a_" .Guild.Icon) "gif") "png" }}
 	{{$icon := print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $ex "?size=1024" }}
 
 	{{/* Server shop */}}

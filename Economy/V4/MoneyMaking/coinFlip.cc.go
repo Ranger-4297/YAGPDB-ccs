@@ -16,7 +16,7 @@
 {{$userID := .User.ID}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
+{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
 
 {{/* Flip */}}
 
@@ -36,7 +36,7 @@
         {{$bal := $a.cash}}
         {{with $.CmdArgs}}
             {{if (index . 0)}}
-                {{$side :=  (index . 0) | toString | lower}}
+                {{$side := (index . 0) | toString | lower}}
                 {{$picker1 := ""}}
                 {{$win := ""}}
                 {{$lose := ""}}
