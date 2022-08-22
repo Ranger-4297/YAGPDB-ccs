@@ -27,6 +27,7 @@
     {{$cmd := (index . 0) | lower}}
     {{$desc := ""}}
     {{$use := ""}}
+    {{$extra := ""}}
     {{$alias := ""}}
     {{if eq $cmd "balance" "bal"}}
         {{$cmd = "Balance"}}
@@ -39,10 +40,22 @@
         {{$use = "leaderboard"}}
         {{$alias = (print "`lb` " "`top`")}}
     {{else if eq $cmd "coinflip"}}
-        {{$cmd = "Coinflip"}}
+        {{$cmd = "Coin-flip"}}
         {{$desc = "Flips a coin, if you win you get 2x the bet amount"}}
         {{$use = "coinflip <Side:Heads/Tails> <Bet:Amount>"}}
         {{$alias = (print "`flipcoin` " "`cf` " "`fc`")}}
+    {{else if eq $cmd "rollnumber"}}
+        {{$cmd = "RollNumber"}}
+        {{$desc = "Rolls a number with a chance of high payouts"}}
+        {{$extra = "Payouts\n100 = <Bet>\\*5\n90-99 = <Bet>\\*3\n65-89 = <Bet>\\*1\n<65 = Lose"}}
+        {{$use = "rollnumber <Bet:Amount>"}}
+        {{$alias = (print "`rollnum` " "`rn`")}}
+    {{else if eq $cmd "snakeyes" "snakeeyes"}}
+        {{$cmd = "Snake-eyes"}}
+        {{$desc = "Bets on 2 die both rolling on 1's (Snake eyes)."}}
+        {{$extra = "Payout is 36*<Bet>"}}
+        {{$use = "snakeeyes <Bet:Amount>"}}
+        {{$alias = (print "`snakeyes`")}}
     {{else if eq $cmd "work"}}
         {{$cmd = "Work"}}
         {{$desc = "Work with no chance of being fined"}}
@@ -128,11 +141,14 @@
     {{if $use}}
         {{$embed.Set "fields" (cslice (sdict "name" "Usage" "value" (print "`" $use "`") "inline" true))}}
     {{end}}
+    {{if $extra}}
+        {{$embed.Set "fields" (($embed.Get "fields").Append (sdict "name" "Extra(s)" "value" (print $extra)))}}
+    {{end}}
     {{if $alias}}
         {{$embed.Set "fields" (($embed.Get "fields").Append (sdict "name" "Alias(es)" "value" (print $alias) "inline" true))}}
     {{end}}
 {{else}}
-    {{$embed.Set "description" (print "__**List of all commands**__\n\n**Informational**\n`Balance`\n`Leaderboard`\n\n**Income**\n`CoinFlip`\n`Work`\n`Crime`\n`Rob`\n\n**Management**\n`Addmoney`\n`Deposit`\n`Withdraw`\n`Givemoney`\n`Removemoney`\n\n**Settings**\n`Set`\n`Viewsettings`\n\n**Shop**\n`Create-item`\n`Shop`")}}
+    {{$embed.Set "description" (print "__**List of all commands**__\n\n**Informational**\n`Balance`\n`Leaderboard`\n\n**Income**\n`CoinFlip`\n`Rollnumber`\n`SnakeEyes`\n`Work`\n`Crime`\n`Rob`\n\n**Management**\n`Addmoney`\n`Deposit`\n`Withdraw`\n`Givemoney`\n`Removemoney`\n\n**Settings**\n`Set`\n`Viewsettings`\n\n**Shop**\n`Create-item`\n`Shop`")}}
     {{$embed.Set "color" $successColor}}
 {{end}}
 {{sendMessage nil (cembed $embed)}}
