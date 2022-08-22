@@ -42,7 +42,7 @@
         {{if (reFind `(work|job|get-?paid|labor)` $cmd)}}
             {{if not ($cooldown := dbGet $userID "workCooldown")}}
                 {{dbSetExpire $userID "workCooldown" "cooldown" $workCooldown}}
-                {{$workPay := randInt $min $max}}
+                {{$workPay := (mult (randInt $min $max) (randInt 1 3))}}
                 {{$newCashBalance := $cash | add $workPay}}
                 {{$embed.Set "description" (print "You decided to work today! You got paid a hefty " $symbol (humanizeThousands $workPay))}}
                 {{$embed.Set "color" 0x00ff7b}}
