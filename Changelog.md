@@ -36,7 +36,9 @@
 
 - **V4**
 	**•** [`V4`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4) - Oudated (11 Aug 22).
-	**•** [`V4.3`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4) - Current (17 Aug 22).
+	**•** [`V4.4`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.4) - Outdated (17 Aug 22).
+	**•** [`V4.5`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.5) - Outdated (22 Aug 22).
+	**•** [`V4.6`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.6) - Current (23 Aug 22).
 </details>
 ---
 
