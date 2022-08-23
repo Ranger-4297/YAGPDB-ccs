@@ -1,4 +1,5 @@
-# V4 is now underway
+# V6 plans
+
 
 # Economy CCs
 Fully functional economy system for your server!
