@@ -55,7 +55,7 @@
         {{else if (reFind `(commit-?)?crime` $cmd)}}
             {{if not ($cooldown := dbGet $userID "crimeCooldown")}}
                 {{dbSetExpire $userID "crimeCooldown" "cooldown" $crimeCooldown}}
-                {{$amount := (mult (randInt $min $max) (randInt 1 3))}}
+                {{$amount := (mult (randInt $min $max) (randInt 1 5))}}
                 {{$newCash := ""}}
                 {{$int := randInt 1 3}}
                 {{if eq $int 1}}
