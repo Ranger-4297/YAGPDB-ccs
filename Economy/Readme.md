@@ -11,10 +11,6 @@ Documentation on each command
 Easy-to-read embeds
 More
 
-## Usage
-
-> Unfinished
-
 ## Other Info
 These commands **are not** standalone. You must add them all to use them.
 
