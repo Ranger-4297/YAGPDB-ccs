@@ -47,16 +47,11 @@
                                     {{if (toInt $amount)}}
                                         {{if gt (toInt $amount) 0}}
                                             {{if (reFind `remove-?money|dec(rease)?-?money` $.Cmd)}}
-                                                {{if gt (toInt $amount) (toInt $balance)}}
-                                                    {{$embed.Set "description" (print "You cannot remove more than the given user has.")}}
-                                                    {{$embed.Set "color" $errorColor}}
-                                                {{else}}
-                                                    {{$newBalance := $amount | sub $balance}}
-                                                    {{$embed.Set "description" (print "You removed " $symbol (humanizeThousands $amount) " from <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBalance) " in their " $moneyDestination "!")}}
-                                                    {{$embed.Set "color" $successColor}}
-                                                    {{$a.Set $moneyDestination $newBalance}}
-                                                    {{dbSet $user "EconomyInfo" $a}}
-                                                {{end}}
+                                                {{$newBalance := $amount | sub $balance}}
+                                                {{$embed.Set "description" (print "You removed " $symbol (humanizeThousands $amount) " from <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBalance) " in their " $moneyDestination "!")}}
+                                                {{$embed.Set "color" $successColor}}
+                                                {{$a.Set $moneyDestination $newBalance}}
+                                                {{dbSet $user "EconomyInfo" $a}}
                                             {{else if (reFind `add-?money|inc(crease)?-?money` $.Cmd)}}
                                                 {{$newBalance := $balance | add $amount}}
                                                 {{$embed.Set "description" (print "You added " $symbol (humanizeThousands $amount) " to <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBalance   ) " in their " $moneyDestination "!")}}
