@@ -58,8 +58,8 @@
                                                     {{dbSet $user "EconomyInfo" $a}}
                                                 {{end}}
                                             {{else if (reFind `add-?money|inc(crease)?-?money` $.Cmd)}}
-                                                {{$newBalance := $receivingBalance | add $amount}}
-                                                {{$embed.Set "description" (print "You added " $symbol (humanizeThousands $amount) " to <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBal) " in their " $moneyDestination "!")}}
+                                                {{$newBalance := $balance | add $amount}}
+                                                {{$embed.Set "description" (print "You added " $symbol (humanizeThousands $amount) " to <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBalance   ) " in their " $moneyDestination "!")}}
                                                 {{$embed.Set "color" $successColor}}
                                                 {{$a.Set $moneyDestination $newBalance}}
                                                 {{dbSet $user "EconomyInfo" $a}}
