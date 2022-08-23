@@ -58,11 +58,11 @@
                                                 {{dbSet $removingUser "EconomyInfo" $sdict}}
                                             {{end}}
                                         {{else}}
-                                            {{$embed.Set "description" (print "You're unable to take this value, check that you used a valid number above 1")}}
+                                            {{$embed.Set "description" (print "You're unable to select this value, check that you used a valid number above 1")}}
                                             {{$embed.Set "color" $errorColor}}
                                         {{end}}
                                     {{else}}
-                                        {{$embed.Set "description" (print "You're unable to take this value, check that you used a valid number above 1")}}
+                                        {{$embed.Set "description" (print "You're unable to select this value, check that you used a valid number above 1")}}
                                         {{$embed.Set "color" $errorColor}}
                                     {{end}}
                                 {{else}}
