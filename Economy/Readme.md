@@ -4,10 +4,12 @@
 Fully functional economy system for your server!
 
 ## Features
-- Basic economy
-- Easy to read embeds
-- Customizability
-- Server shop (More features to come)
+Customizable server shop
+Configurable settings
+Extensive and well-tested commands
+Documentation on each command
+Easy-to-read embeds
+More
 
 ## Usage
 
