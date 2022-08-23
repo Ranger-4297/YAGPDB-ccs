@@ -1,15 +1,5 @@
 # V4 is now underway
 
-## V4 plans
-- [X] Fully support basic yag without hitting limits
-- [X] Help to provide information on commands
-- [X] Per-server shop
-- [X] More income based commands
-- [X] Cooldowns on basic income commands
-- [X] More configurability (maybe)
-- [X] Readable int values
-- [X] Fix betting more than you have
-
 # Economy CCs
 Fully functional economy system for your server!
 
