@@ -2,7 +2,7 @@
 		Made by Ranger (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(remove-?money|dec(rease)?-?money)(\s+|\z)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(add-?money|inc-?money|money-?add|remove-?money|dec(rease)?-?money)(\s+|\z)`
 
     ©️ Ranger 2020-Present
     GNU, GPLV3 License
@@ -55,14 +55,14 @@
                                                     {{$embed.Set "description" (print "You removed " $symbol (humanizeThousands $amount) " from <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBalance) " in their " $moneyDestination "!")}}
                                                     {{$embed.Set "color" $successColor}}
                                                     {{$a.Set $moneyDestination $newBalance}}
-                                                    {{dbSet $user "EconomyInfo" $sdict}}
+                                                    {{dbSet $user "EconomyInfo" $a}}
                                                 {{end}}
                                             {{else if (reFind `add-?money|inc(crease)?-?money` $.Cmd)}}
-                                                {{$newBal := $receivingBalance | add $amount}}
-                                                {{$embed.Set "description" (print "You added " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBal) " in their " $moneyDestination "!")}}
+                                                {{$newBalance := $receivingBalance | add $amount}}
+                                                {{$embed.Set "description" (print "You added " $symbol (humanizeThousands $amount) " to <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBal) " in their " $moneyDestination "!")}}
                                                 {{$embed.Set "color" $successColor}}
-                                                {{$a.Set $moneyDestination $newBal}}
-                                                {{dbSet $receivingUser "EconomyInfo" $a}}
+                                                {{$a.Set $moneyDestination $newBalance}}
+                                                {{dbSet $user "EconomyInfo" $a}}
                                             {{end}}
                                         {{else}}
                                             {{$embed.Set "description" (print "You're unable to select this value, check that you used a valid number above 1")}}
