@@ -32,30 +32,37 @@
             {{if index . 0}}
                 {{if index . 0 | getMember}}
                     {{$user := getMember (index . 0)}}
-                    {{$removingUser := $user.User.ID}}
-                    {{if not (dbGet $removingUser "EconomyInfo")}}
-                        {{dbSet $removingUser "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+                    {{$user = $user.User.ID}}
+                    {{if not (dbGet $user "EconomyInfo")}}
+                        {{dbSet $user "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
                     {{end}}
                     {{if gt (len $.CmdArgs) 1}}
                         {{$moneyDestination := (lower (index . 1))}}
                         {{if eq $moneyDestination "cash" "bank"}}
-                            {{with (dbGet $removingUser "EconomyInfo")}}
+                            {{with (dbGet $user "EconomyInfo")}}
                                 {{$a = sdict .Value}}
-                                {{$removingBalance := $a.Get $moneyDestination}}
+                                {{$balance := $a.Get $moneyDestination}}
                                 {{if gt (len $.CmdArgs) 2}}
                                     {{$amount := (index $.CmdArgs 2)}}
                                     {{if (toInt $amount)}}
                                         {{if gt (toInt $amount) 0}}
-                                            {{if gt (toInt $amount) (toInt $removingBalance)}}
-                                                {{$embed.Set "description" (print "You cannot remove more than the given user has.")}}
-                                                {{$embed.Set "color" $errorColor}}
-                                            {{else}}
-                                                {{$removingNewBalance := $amount | sub $removingBalance}}
-                                                {{$embed.Set "description" (print "You removed " $symbol (humanizeThousands $amount) " from <@!" $removingUser ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $removingNewBalance) " in their " $moneyDestination "!")}}
+                                            {{if (reFind `remove-?money|dec(rease)?-?money` $.Cmd)}}
+                                                {{if gt (toInt $amount) (toInt $balance)}}
+                                                    {{$embed.Set "description" (print "You cannot remove more than the given user has.")}}
+                                                    {{$embed.Set "color" $errorColor}}
+                                                {{else}}
+                                                    {{$newBalance := $amount | sub $balance}}
+                                                    {{$embed.Set "description" (print "You removed " $symbol (humanizeThousands $amount) " from <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBalance) " in their " $moneyDestination "!")}}
+                                                    {{$embed.Set "color" $successColor}}
+                                                    {{$a.Set $moneyDestination $newBalance}}
+                                                    {{dbSet $user "EconomyInfo" $sdict}}
+                                                {{end}}
+                                            {{else if (reFind `add-?money|inc(crease)?-?money` $.Cmd)}}
+                                                {{$newBal := $receivingBalance | add $amount}}
+                                                {{$embed.Set "description" (print "You added " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBal) " in their " $moneyDestination "!")}}
                                                 {{$embed.Set "color" $successColor}}
-                                                {{$sdict := (dbGet $removingUser "EconomyInfo").Value}}
-                                                {{$sdict.Set $moneyDestination $removingNewBalance}}
-                                                {{dbSet $removingUser "EconomyInfo" $sdict}}
+                                                {{$a.Set $moneyDestination $newBal}}
+                                                {{dbSet $receivingUser "EconomyInfo" $a}}
                                             {{end}}
                                         {{else}}
                                             {{$embed.Set "description" (print "You're unable to select this value, check that you used a valid number above 1")}}
