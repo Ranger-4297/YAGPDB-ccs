@@ -1,4 +1,4 @@
-# V6 plans
+# V6 IS NOT COMPLETE. USE THESE AT YOUR OWN RISK
 
 
 # Economy CCs
