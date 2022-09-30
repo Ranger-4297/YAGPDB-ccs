@@ -1,5 +1,8 @@
 {{/*
-        Made by Ranger (765316548516380732)
+
+DO NOT USE THIS
+
+Made by Ranger (765316548516380732)
 
     Trigger Type: `Regex`
     Trigger: `\A(-|<@!?204255221017214977>\s*)(l(eader)?-?b(oard)?|top)(\s+|\z)`
