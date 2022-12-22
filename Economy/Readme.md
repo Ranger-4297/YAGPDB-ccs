@@ -1,6 +1,3 @@
-# V6 IS NOT COMPLETE. USE THESE AT YOUR OWN RISK
-
-
 # Economy CCs
 Fully functional economy system for your server!
 
