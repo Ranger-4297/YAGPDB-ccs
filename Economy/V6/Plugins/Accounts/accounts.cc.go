@@ -37,9 +37,9 @@
         {{with .CmdArgs}}
             {{if index $.CmdArgs 0}}
                 {{$option := (index $.CmdArgs 0) | lower}}
-                {{if eq $setting "create"}}
+                {{if eq $option "create"}}
                     {{dbSet "accounts" (sdict (toString $.User.ID) (sdict "accountSettings" (sdict "whitelistedUsers" (cslice) "withdrawLimit" 500 "accountExpiry" 604800 "transferCost" 300) "accountBalance" 500))}}
-                {{if eq $setting "set"}}
+                {{else if eq $option "set"}}
                     {{if gt (len $.CmdArgs) 1}}
                         {{$val := (lower (toString (index $.CmdArgs)))}}
                         {{if eq $val "wl" "whitelist"}}
@@ -80,11 +80,16 @@
                                 {{$embed.Set "description" (print "No amount provided.")}}
                                 {{$embed.Set "color" $errorColor}}
                             {{end}}
+                        {{else}}
+                            {{$embed.Set "description" (print "Invalid option provided.")}}
+                            {{$embed.Set "color" $errorColor}}
+                        {{end}}
                     {{else}}
                         {{$msg.Set "description" (print "No option argument passed.\nSyntax is: `" $.Cmd " <Option> <Values>`" $syntax)}}
                         {{$embed.Set "color" $errorColor}}
                     {{end}}
-
+                {{else if eq $option "list"}}
+                    {{if }}
             {{end}}
         {{else}}
             {{$msg.Set "description" (print "No option argument passed.\nSyntax is: `" $.Cmd " <Option> <Values>`" $syntax)}}
