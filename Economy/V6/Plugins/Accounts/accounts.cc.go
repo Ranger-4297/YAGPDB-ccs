@@ -116,8 +116,40 @@
                             {{- $fields = $fields.Append (sdict "Name" (print " Account ") "value"  (print .) "inline" false) -}}
                         {{end}}
                         {{$embed.Set "fields" $fields}}
+                        {{$embed.Set "color" $successColor}}
                     {{else}}
                         {{$msg.Set "description" (print "You have no accounts. Open one with" $.Cmd "create or wait to be added to a whitelist.")}}
+                        {{$embed.Set "color" $errorColor}}
+                    {{end}}
+                {{else if eq $option "balance"}}
+                    {{if gt (len $.CmdArgs) 1}}
+                        {{$account := (index $.CmdArgs 1)}}
+                        {{if (toInt $account)}}
+                            {{if in $currentAccounts (toString $account)}}
+                                {{$continue := false}}
+                                {{- $whitelist := (($a.Get (toString $account)).accountSettings).whitelistedUsers -}}
+                                {{range $whitelist}}
+                                    {{- if in . (toString $.User.ID) -}}
+                                        {{- $continue = true -}}
+                                    {{end}}
+                                {{end}}
+                                {{if $continue}}
+                                    {{$balance := (($a.Get (toString $account)).accountBalance)}}
+                                    {{$embed.Set "description" (print "The account `" $account "` has a balance of " $balance)}}
+                                {{else}}
+                                    {{$msg.Set "description" (print "You do not have access to this account")}}
+                                    {{$embed.Set "color" $errorColor}}
+                                {{end}}
+                            {{else}}
+                                {{$msg.Set "description" (print "This account does not exist")}}
+                                {{$embed.Set "color" $errorColor}}
+                            {{end}}
+                        {{else}}
+                            {{$msg.Set "description" (print "Invalid account type provided")}}
+                            {{$embed.Set "color" $errorColor}}
+                        {{end}}
+                    {{else}}
+                        {{$msg.Set "description" (print "No account provided")}}
                         {{$embed.Set "color" $errorColor}}
                     {{end}}
             {{end}}
