@@ -27,8 +27,9 @@
     {{$a := sdict .Value}}
     {{$symbol := $a.symbol}}
     {{with $db := (dbGet 0 "accounts")}}
-        {{$a := sdict .Value}}
+        {{$a = sdict .Value}}
         {{$currentAccounts := cslice}}
+        {{$users := cslice}}
         {{if $db}}
             {{range $k,$v:= $a}}
                 {{- $currentAccounts = $currentAccounts.Append $k -}}
@@ -89,7 +90,19 @@
                         {{$embed.Set "color" $errorColor}}
                     {{end}}
                 {{else if eq $option "list"}}
-                    {{if }}
+                    {{$accountList := cslice}}
+                    {{if $a.Get (toString $.User.ID)}}
+                        {{$accountList.Append $.User.ID}}
+                    {{end}}
+                    {{range $currentAccounts}}
+                        {{- $accounts = . -}}
+                        {{- $whitelist := (($a.Get .).accountSettings).whitelistedUsers -}}
+                        {{range $whitelist}}
+                            {{if in . (toString $.User.ID)}}
+                                {{- $accountList.AppendSlice $accounts -}}
+                            {{end}}
+                        {{end}}
+                    {{end}}
             {{end}}
         {{else}}
             {{$msg.Set "description" (print "No option argument passed.\nSyntax is: `" $.Cmd " <Option> <Values>`" $syntax)}}
