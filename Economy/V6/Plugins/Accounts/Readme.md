@@ -6,4 +6,4 @@
 # Info
 Accounts are multi-user accessable bank accounts.
 Accounts can be created for a set number or a percentage of money. 
-Accounts can expire and certain aspects of an account can be managed by the holder
+Certain aspects of an account can be managed by the holder
