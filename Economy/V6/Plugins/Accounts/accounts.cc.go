@@ -48,16 +48,23 @@
                                 {{$ID := (joinStr " " (slice $.CmdArgs 2))}}
                                 {{$users := cslice}}
                                 {{range (reFindAll \d{17,19} $ID)}}
-                                    {{- $users = $users.Append .}}
-                                {{- end}} 
-                                {{$account := $a.Get (toString $.User.ID)}}
-                                {{$settings := $account.Get "accountSettings"}}
-                                {{$settings.Set "whitelistedUsers" ($whitelist.AppendSlice $users)}}
-                                {{$account.Set "accountSettings" $settings}}
-                                {{$a.Set (toString $.User.ID) $account}}
-                                {{dbSet 0 "accounts" $a}}
-                                {{$embed.Set "description" (print "Users now added to whitelist.")}}
-                                {{$embed.Set "color" $successColor}}
+                                    {{- if not eq $ID $.User.ID -}}
+                                        {{- $users = $users.Append .}}
+                                    {{else}}
+                                        {{$embed.Set "description" (print "You cannot add yourself to the whitelist")}}
+                                        {{$embed.Set "color" $errorColor}}
+                                    {{end}}
+                                {{- end}}
+                                {{if $users}}
+                                    {{$account := $a.Get (toString $.User.ID)}}
+                                    {{$settings := $account.Get "accountSettings"}}
+                                    {{$settings.Set "whitelistedUsers" ($whitelist.AppendSlice $users)}}
+                                    {{$account.Set "accountSettings" $settings}}
+                                    {{$a.Set (toString $.User.ID) $account}}
+                                    {{dbSet 0 "accounts" $a}}
+                                    {{$embed.Set "description" (print "User(s) now added to whitelist.")}}
+                                    {{$embed.Set "color" $successColor}}
+                                {{end}}
                             {{else}}
                                 {{$embed.Set "description" (print "No user provided.\nPlease ensure that you use UserIDs")}}
                                 {{$embed.Set "color" $errorColor}}
@@ -92,16 +99,26 @@
                 {{else if eq $option "list"}}
                     {{$accountList := cslice}}
                     {{if $a.Get (toString $.User.ID)}}
-                        {{$accountList.Append $.User.ID}}
+                        {{$accountList = $accountList.Append $.User.ID}}
                     {{end}}
                     {{range $currentAccounts}}
-                        {{- $accounts = . -}}
+                        {{- $account := . -}}
                         {{- $whitelist := (($a.Get .).accountSettings).whitelistedUsers -}}
                         {{range $whitelist}}
-                            {{if in . (toString $.User.ID)}}
-                                {{- $accountList.AppendSlice $accounts -}}
+                            {{- if in . (toString $.User.ID) -}}
+                                {{- $accountList = $accountList.Append $account -}}
                             {{end}}
                         {{end}}
+                    {{end}}
+                    {{if $accountList}}
+                        {{$fields := cslice}}
+                        {{range $accountList}}
+                            {{- $fields = $fields.Append (sdict "Name" (print " Account ") "value"  (print .) "inline" false) -}}
+                        {{end}}
+                        {{$embed.Set "fields" $fields}}
+                    {{else}}
+                        {{$msg.Set "description" (print "You have no accounts. Open one with" $.Cmd "create or wait to be added to a whitelist.")}}
+                        {{$embed.Set "color" $errorColor}}
                     {{end}}
             {{end}}
         {{else}}
