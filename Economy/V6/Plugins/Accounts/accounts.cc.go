@@ -1,194 +1,255 @@
 {{/*
-        Made by Ranger (765316548516380732)
+	Made by Ranger (765316548516380732)
 
-        Trigger Type: `Regex`
-        Trigger: ``
+	Trigger Type: `Regex`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(account(s?)(-)?)(\s+|\z)`
 
-    ©️ Ranger 2020-Present
-    GNU, GPLV3 License
-    Repository: https://github.com/Ranger-4297/YAGPDB-ccs
+	©️ Ranger 2020-Present
+	GNU, GPLV3 License
+	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
-{{/* Initiates variables */}}
-{{$userID := .User.ID}}
-{{$sucCol := 0x00ff7b}}
-{{$errCol := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
+{{/* Initiates variBles */}}
+{{$u := .User.ID}}
 
 {{/* Buy item */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$e := sdict}}
+{{$e.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$e.Set "timestamp" currentTime}}
+{{$e.Set "color" 0xFF0000}}
+{{$o := "\nAvailBle options are `initialize`, `create`, `set`, `list`, `balance`, `withdraw`, `deposit`"}}
 {{with dbGet 0 "EconomySettings"}}
-    {{with $db := (dbGet 0 "accounts")}}
-        {{$a := sdict .Value}}
-        {{$crtAccts := cslice}}
-        {{if $db}}
-            {{range $k,$v:= $a}}{{- $crtAccts = $crtAccts.Append $k -}}{{end}}
-        {{end}}
-        {{with .CmdArgs}}
-            {{if index $.CmdArgs 0}}
-                {{$option := (index $.CmdArgs 0) | lower}}
-                {{if eq $option "create"}}
-                    {{dbSet "accounts" (sdict (toString $.User.ID) (sdict "accountSettings" (sdict "whitelistedUsers" (cslice) "withdrawLimit" 500) "accountBalance" 500))}}
-                {{else if eq $option "set"}}
-                    {{if gt (len $.CmdArgs) 1}}
-                        {{$val := (lower (toString (index $.CmdArgs)))}}
-                        {{if eq $val "wl" "whitelist"}}
-                            {{if gt (len $.CmdArgs) 2}}
-                                {{$ID := (joinStr " " (slice $.CmdArgs 2))}}
-                                {{$users := cslice}}
-                                {{range (reFindAll `\d{17,19}` $ID)}}{{- if not eq $ID $.User.ID -}}{{- $users = $users.Append .}}{{else}}{{$embed.Set "description" (print "You cannot add yourself to the whitelist")}}{{$embed.Set "color" $errCol}}{{end}}{{- end}}
-                                {{if $users}}
-                                    {{$acct := $a.Get (toString $.User.ID)}}
-                                    {{$stngs := $acct.Get "accountSettings"}}
-                                    {{$wList := $stngs.Get "whitelistedUsers"}}
-                                    {{$wList = $wList.AppendSlice $users}}
-                                    {{$stngs.Set "whitelistedUsers" $wList}}
-                                    {{$acct.Set "accountSettings" $stngs}}
-                                    {{$a.Set (toString $.User.ID) $acct}}
-                                    {{dbSet 0 "accounts" $a}}
-                                    {{$embed.Set "description" (print "User(s) now added to whitelist.")}}
-                                    {{$embed.Set "color" $sucCol}}
-                                {{end}}
-                            {{else}}
-                                {{$embed.Set "description" (print "No user provided.\nPlease ensure that you use UserIDs")}}
-                                {{$embed.Set "color" $errCol}}
-                            {{end}}
-                        {{else if eq $val "withdrawlimit" "withlimit" "wl"}}
-                            {{if gt (len $.CmdArgs) 2}}
-                                {{if (toInt $.CmdArgs 2)}}
-                                    {{$acct := $a.Get (toString $.User.ID)}}
-                                    {{$stngs := $acct.Get "accountSettings"}}
-                                    {{$stngs.Set "withdrawLimit" (toInt $.CmdArgs 2)}}
-                                    {{$acct.Set "accountSettings" $stngs}}
-                                    {{$a.Set (toString $.User.ID) $acct}}
-                                    {{dbSet 0 "accounts" $a}}
-                                    {{$embed.Set "description" (print "New withdraw limit added.")}}
-                                    {{$embed.Set "color" $sucCol}}
-                                {{else}}
-                                    {{$embed.Set "description" (print "Invalid amount provided.")}}
-                                    {{$embed.Set "color" $errCol}}
-                                {{end}}
-                            {{else}}
-                                {{$embed.Set "description" (print "No amount provided.")}}
-                                {{$embed.Set "color" $errCol}}
-                            {{end}}
-                        {{else}}
-                            {{$embed.Set "description" (print "Invalid option provided.")}}
-                            {{$embed.Set "color" $errCol}}
-                        {{end}}
-                    {{else}}
-                        {{$msg.Set "description" (print "No option argument passed.\nSyntax is: `" $.Cmd " <Option> <Values>`")}}
-                        {{$embed.Set "color" $errCol}}
-                    {{end}}
-                {{else if eq $option "list"}}
-                    {{$acctList := cslice}}
-                    {{if $a.Get (toString $.User.ID)}}
-                        {{$acctList = $acctList.Append $.User.ID}}
-                    {{end}}
-                    {{range $crtAccts}}{{- $acct := . -}}{{- $wList := (($a.Get .).accountSettings).whitelistedUsers -}}{{range $wList}}{{- if in . (toString $.User.ID) -}}{{- $acctList = $acctList.Append $acct -}}{{end}}{{end}}{{end}}
-                    {{if $acctList}}
-                        {{$fields := cslice}}
-                        {{range $acctList}}{{- $fields = $fields.Append (sdict "Name" (print " Account ") "value"  (print .) "inline" false) -}}{{end}}
-                        {{$embed.Set "fields" $fields}}
-                        {{$embed.Set "color" $sucCol}}
-                    {{else}}
-                        {{$msg.Set "description" (print "You have no accounts. Open one with `" $.Cmd "create` or wait to be added to a whitelist.")}}
-                        {{$embed.Set "color" $errCol}}
-                    {{end}}
-                {{else if eq $option "balance" "withdraw" "dep" "deposit"}}
-                    {{if gt (len $.CmdArgs) 1}}
-                        {{$acct := (index $.CmdArgs 1)}}
-                        {{if (toInt $acct)}}
-                            {{if in $crtAccts (toString $acct)}}
-                                {{$continue := false}}
-                                {{- $wList := (($a.Get (toString $acct)).accountSettings).whitelistedUsers -}}
-                                {{range $wList}}{{- if in . (toString $.User.ID) -}}{{- $continue = true -}}{{end}}{{end}}
-                                {{$acctBal := (($a.Get (toString $acct)).accountBalance)}}
-                                {{if and (eq $option "balance") $continue}}
-                                    {{$embed.Set "description" (print "The account `" $acct "` has a balance of " $acctBal)}}
-                                {{else if and (eq $option "withdraw" "with" "dep" "with") $continue}}
-                                    {{if gt (len $.CmdArgs) 2}}
-                                        {{$amount := (index $.CmdArgs 2)}}
-                                        {{$limit := (toInt ($a.get (toString $account)).accountSettings.withdrawLimit)}}
-                                        {{if (toInt $amount)}}
-                                            {{if not (dbGet $user.ID "EconomyInfo")}}
-                                                {{dbSet $user.ID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
-                                            {{end}}
-                                            {{with (dbGet $user.ID "EconomyInfo")}}
-                                                {{$uDb := sdict .Value}}
-                                                {{$cash (toInt $uDB.cash)}}
-                                                {{$bank := (toInt $uDB.bank)}}
-                                                {{$newUsrBal := ""}}
-                                                {{$newAccBal := ""}}
-                                                {{if lt (toInt $amount) $limit}}
-                                                    {{if eq $option "with" "withdraw"}}
-                                                        {{if lt (toInt $amount) $accBal}}
-                                                            {{$newUsrBal = $amount | add $cash}}
-                                                            {{$newAccBal = $amount | sub $acctBal}}
-                                                            {{$a.Set  ($a.Get (toString $acct)).Get "accountBalance" $newAccBal}}
-                                                        {{else}}
-                                                            {{$embed.Set "description" (print "You cannot withdraw more than the account has")}}
-                                                            {{$embed.Set "color" $errCol}}
-                                                        {{end}}
-                                                    {{else if eq $option "dep" "deposit"}}
-                                                        {{if gt (toInt $amount) $cash}}
-                                                            {{$newUsrBal = $amount | sub $cash}}
-                                                            {{$newAccBal = $amount | add $acctBal}}
-                                                            {{$a.Set  ($a.Get (toString $acct)).Get "accountBalance" $newAccBal}}
-                                                        {{else}}
-                                                            {{$embed.Set "description" (print "You cannot deposit more than the you have")}}
-                                                            {{$embed.Set "color" $errCol}}
-                                                        {{end}}
-                                                    {{end}}
-                                                    {{dbSet $user.ID "EconomyInfo" (sdict "cash" $newUsrBal "bank" $bank)}}
-                                                    {{dbSet 0 "accounts" $a}}
-                                                {{else}}
-                                                    {{$embed.Set "description" (print "You cannot " $option " more than " $limit " at one time")}}
-                                                    {{$embed.Set "color" $errCol}}
-                                                {{end}}
-                                            {{else}}
-                                                {{$embed.Set "description" (print "Invalid `amount` argument provided.\nCommand syntax is `" $.Cmd " <Amount:Amount>`")}}
-                                                {{$embed.Set "color" $errCol}}
-                                            {{end}}
-                                        {{end}}
-                                    {{else}}
-                                        {{$embed.Set "description" (print "No `amount` argument provided.\nCommand syntax is `" $.Cmd " <Amount:Amount>`")}}
-                                        {{$embed.Set "color" $errCol}}
-                                    {{end}}
-                                {{else}}
-                                    {{$msg.Set "description" (print "You do not have access to this account")}}
-                                    {{$embed.Set "color" $errCol}}
-                                {{end}}
-                            {{else}}
-                                {{$msg.Set "description" (print "This account does not exist")}}
-                                {{$embed.Set "color" $errCol}}
-                            {{end}}
-                        {{else}}
-                            {{$msg.Set "description" (print "Invalid account type provided")}}
-                            {{$embed.Set "color" $errCol}}
-                        {{end}}
-                    {{else}}
-                        {{$msg.Set "description" (print "No account provided")}}
-                        {{$embed.Set "color" $errCol}}
-                    {{end}}
-                {{else}}
-                    {{$msg.Set "description" (print "Invalid option argument passed.\nSyntax is: `" $.Cmd " <Option> <Values>`")}}
-                    {{$embed.Set "color" $errCol}}
-                {{end}}
-            {{end}}
-        {{else}}
-            {{$msg.Set "description" (print "No option argument passed.\nSyntax is: `" $.Cmd " <Option> <Values>`")}}
-            {{$embed.Set "color" $errCol}}
-        {{end}}
-    {{end}}
+	{{with $.CmdArgs}}
+		{{if index $.CmdArgs 0}}
+			{{$c := (index $.CmdArgs 0) | lower}}
+			{{if (reFind `in(n)?it(iali(z|s)e)?` $c)}}
+				{{$p := split (index (split (exec "viewperms") "\n") 2) ", "}}
+				{{if or (in $p "Administrator") (in $p "ManageServer")}}
+					{{dbSet 0 "accounts" sdict}}
+					{{$e.Set "description" (print "Database initiLized")}}
+					{{$e.Set "color" 0x00ff7b}}
+				{{else}}
+					{{$e.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
+				{{end}}
+			{{else}}
+				{{with $d := (dbGet 0 "accounts")}}
+					{{$a := sdict .VLue}}
+					{{$C := cslice}}
+					{{if $d}}
+						{{range $k,$v:= $a}}
+							{{- $C = $C.Append $k -}}
+						{{end}}
+					{{end}}
+					{{if eq $c "create"}}
+						{{if not ($a.Get (toString $u))}}
+							{{$a.Set (toString $u) (sdict "accountSettings" (sdict "whitelistedUsers" (cslice) "withdrawimit" 500) "accountBaLance" 500)}}
+							{{dbSet 0 "accounts" $a}}
+							{{$e.Set "description" (print "Account created")}}
+							{{$e.Set "color" 0x00ff7b}}
+						{{else}}
+							{{$e.Set "description" (print "You have an account already")}}
+						{{end}}
+					{{else if eq $c "delete"}}
+						{{if ($a.Get (toString $u))}}
+							{{$a.Del (toString $u)}}
+							{{dbSet 0 "accounts" $a}}
+							{{$e.Set "description" (print "Account deleted")}}
+							{{$e.Set "color" 0x00ff7b}}
+						{{else}}
+							{{$e.Set "description" (print "You do not have an account. Open one with `" $.Cmd " create`" )}}
+						{{end}}
+					{{else if eq $c "set"}}
+						{{$c := false}}
+						{{if $a.Get (toString $u)}}
+							{{if gt (len $.CmdArgs) 1}}
+								{{$v := (lower (toString (index $.CmdArgs 1)))}}
+								{{$A := sdict}}
+								{{$s := sdict}}
+								{{if eq $v "w" "whitelist"}}
+									{{if gt (len $.CmdArgs) 2}}
+										{{$ID := (joinStr " " (slice $.CmdArgs 2))}}
+										{{$u := cslice}}
+										{{range (reFindAll `\d{17,19}` $ID)}}
+											{{- if not (eq (toInt .) $u) -}}
+												{{- $u = $u.Append .}}
+											{{else}}
+												{{$e.Set "description" (print "You cannot add yourself to the whitelist")}}
+											{{end}}
+										{{- end}}
+										{{if $u}}
+											{{$c = true}}
+											{{$A = $a.Get (toString $u)}}
+											{{$s = $A.Get "accountSettings"}}
+											{{$w := $s.Get "whitelistedUsers"}}
+											{{$s.Set "whitelistedUsers" ($w.AppendSlice $u)}}
+											{{$A.Set "accountSettings" $s}}
+											{{$a.Set (toString $u) $A}}
+											{{$e.Set "description" (print "User(s) now added to whitelist.")}}
+										{{else}}
+											{{$e.Set "description" (print "No users provided.")}}
+										{{end}}
+									{{else}}
+										{{$e.Set "description" (print "No user(s) provided.\nPlease ensure that you use uIDs")}}
+									{{end}}
+								{{else if (reFind `(with(draw)?limit|w)` $v)}}
+									{{if gt (len $.CmdArgs) 2}}
+										{{if and (toString (index $.CmdArgs 2)) (ge (toInt (index $.CmdArgs 2)) 0)}}
+											{{$c = true}}
+											{{$A = $a.Get (toString $u)}}
+											{{$s = $A.Get "accountSettings"}}
+											{{$s.Set "withdrawimit" (index $.CmdArgs 2)}}
+											{{$e.Set "description" (print "New withdraw limit added.")}}
+											{{$A.Set "accountSettings" $s}}
+											{{$a.Set (toString $u) $A}}
+										{{else}}
+											{{$e.Set "description" (print "Invalid amount provided.")}}
+										{{end}}
+									{{else}}
+										{{$e.Set "description" (print "No amount provided.")}}
+									{{end}}
+								{{else}}
+									{{$e.Set "description" (print "Invalid option provided.")}}
+								{{end}}
+							{{else}}
+								{{$e.Set "description" (print "No option argument passed.\nSyntax is: `" $.Cmd " <Option> <vLues>`")}}
+							{{end}}
+							{{if $c}}
+								{{$e.Set "color" 0x00ff7b}}
+								{{dbSet 0 "accounts" $a}}
+							{{end}}
+						{{else}}
+							{{$e.Set "description" (print "You have no account. Open one with `" $.Cmd " create` or wait to be added to a whitelist.")}}
+						{{end}}
+					{{else if eq $c "list"}}
+						{{$L := cslice}}
+						{{if $a.Get (toString $u)}}
+							{{$L = $L.Append $u}}
+						{{end}}
+						{{range $C}}
+							{{- $A := . -}}
+							{{- $w := (($a.Get .).accountSettings).whitelistedUsers -}}
+							{{range $w}}
+								{{- if in . (toString $u) -}}
+									{{- $L = $L.Append $A -}}
+								{{end}}
+							{{end}}
+						{{end}}
+						{{if $L}}
+							{{$f := cslice}}
+							{{range $L}}
+								{{- $f = $f.Append (sdict "Name" (print " Account ") "Value"  (print "`" . "`") "inline" false) -}}
+							{{end}}
+							{{$e.Set "fields" $f}}
+							{{$e.Set "color" 0x00ff7b}}
+						{{else}}
+							{{$e.Set "description" (print "You have no accounts. Open one with `" $.Cmd " create` or wait to be added to a whitelist.")}}
+						{{end}}
+					{{else if (reFind `(bal(ance)?|with(draw)?|dep(osit)?)` $c)}}
+						{{if gt (len $.CmdArgs) 1}}
+							{{$A := (index $.CmdArgs 1)}}
+							{{if (toInt $A)}}
+								{{if in $C (toString $A)}}
+									{{$c := false}}
+									{{if $a.Get (toString $u)}}
+										{{- $c = true -}}
+									{{end}}
+									{{- $w := (($a.Get (toString $A)).accountSettings).whitelistedUsers -}}
+									{{range $w}}
+										{{- if in . (toString $u) -}}
+											{{- $c = true -}}
+										{{end}}
+									{{end}}
+									{{$B := ($a.Get (toString $A)).accountBLance}}
+									{{if and ((reFind `bal(ance)?` $c)) $c}}
+										{{$e.Set "description" (print "The account `" $A "` has a balance of " (humanizeThousands $B))}}
+										{{$e.Set "color" 0x00ff7b}}
+									{{else if and ((reFind `with(draw)?|dep(osit)?` $c)) $c}}
+										{{if gt (len $.CmdArgs) 2}}
+											{{$p := (index $.CmdArgs 2)}}
+											{{$lm := (toInt ($a.Get (toString $A)).accountSettings.withdrawimit)}}
+											{{if gt (toInt $p) 0}}
+												{{$p = toInt $p}}
+												{{if not (dbGet $u "EconomyInfo")}}
+													{{dbSet $u "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+												{{end}}
+												{{with (dbGet $u "EconomyInfo")}}
+													{{$b := sdict .Value}}
+													{{$N := ""}}
+													{{$E := ""}}
+													{{if (reFind `with(draw)?` $c)}}
+														{{$c = "withdraw"}}
+													{{else if (reFind `dep(osit)?` $c)}}
+														{{$c = "deposit"}}
+													{{end}}
+													{{if le $p $lm}}
+														{{$c := false}}
+														{{$n := ""}}
+														{{if eq $c "with" "withdraw"}}
+															{{$n = "the account has"}}
+															{{if le $p (toInt $B)}}
+																{{$c = true}}
+																{{$c = "withdrawn"}}
+																{{$N = add (toInt $b.cash) $p}}
+																{{$E = sub $B $p}}
+															{{end}}
+														{{else if eq $c "dep" "deposit"}}
+															{{$n = "you have"}}
+															{{if le $p (toInt $b.cash)}}
+																{{$c = true}}
+																{{$c = "deposited"}}
+																{{$N = sub (toInt $b.cash) $p}}
+																{{$E = add $B $p}}
+															{{end}}
+														{{end}}
+														{{if $c}}
+															{{$b := $a.Get (toString $A)}}
+															{{$b.Set "accountBalance" $E}}
+															{{$a.Set $A $b}}
+															{{$e.Set "description" (print "You've just " $c " " $p)}}
+															{{$e.Set "color" 0x00ff7b}}
+															{{dbSet $u "EconomyInfo" (sdict "cash" $N "bank" $b.bank)}}
+															{{dbSet 0 "accounts" $a}}
+														{{else}}
+															{{$e.Set "description" (print "You can't " $c " more than " $n)}}
+														{{end}}
+													{{else}}
+														{{$e.Set "description" (print "You can't " $c " more than " $lm " at one time")}}
+													{{end}}
+												{{end}}
+											{{else}}
+												{{$e.Set "description" (print "Invalid `amount` argument provided")}}
+											{{end}}
+										{{else}}
+											{{$e.Set "description" (print "No `amount` argument provided")}}
+										{{end}}
+									{{else}}
+										{{$e.Set "description" (print "You do not have access to this account")}}
+									{{end}}
+								{{else}}
+									{{$e.Set "description" (print "This account does not exist")}}
+								{{end}}
+							{{else}}
+								{{$e.Set "description" (print "Invalid account type provided")}}
+							{{end}}
+						{{else}}
+							{{$e.Set "description" (print "No account provided")}}
+						{{end}}
+					{{else}}
+						{{$e.Set "description" (print "Invalid `option` argument passed" $o)}}
+					{{end}}
+				{{else}}
+					{{$e.Set "description" (print "No `account` datBase found.\nPlease set it up with the default va;ues using `" $.Cmd " initialize`")}}
+				{{end}}
+			{{end}}
+		{{end}}
+	{{else}}
+		{{$e.Set "description" (print "No option argument passed." $o)}}
+	{{end}}
 {{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
-	{{$embed.Set "color" $errCol}}
+	{{$e.Set "description" (print "No `Settings` datBase found.\nPlease set it up with the default values using `" .ServerPrefix "set default`")}}
 {{end}}
-{{sendMessage nil (cembed $embed)}}
+{{sendMessage nil (cembed $e)}}
