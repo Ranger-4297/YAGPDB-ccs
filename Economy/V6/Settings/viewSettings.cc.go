@@ -1,12 +1,12 @@
 {{/*
-        Made by Ranger (765316548516380732)
+		Made by Ranger (765316548516380732)
 
-    Trigger Type: `Regex`
-    Trigger: `\A(-|<@!?204255221017214977>\s*)(view-?settings?)(\s+|\z)`
+	Trigger Type: `Regex`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(view-?settings?)(\s+|\z)`
 
-    ©️ Ranger 2020-Present
-    GNU, GPLV3 License
-    Repository: https://github.com/Ranger-4297/YAGPDB-ccs
+	©️ Ranger 2020-Present
+	GNU, GPLV3 License
+	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
 
@@ -24,24 +24,24 @@
 {{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
 {{$embed.Set "timestamp" currentTime}}
 {{with (dbGet 0 "EconomySettings")}}
-    {{$a := sdict .Value}}
-    {{$min := (humanizeThousands $a.min)}}
-    {{$max := (humanizeThousands $a.max)}}
-    {{$symbol := $a.symbol}}
-    {{$incomeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.incomeCooldown | toDuration)}}
-    {{$workCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.workCooldown | toDuration)}}
-    {{$crimeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.crimeCooldown | toDuration)}}
-    {{$robCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.robCooldown | toDuration)}}
-    {{$startBalance := (humanizeThousands $a.startBalance)}}
-    {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
-        {{$symbol = $symbol}}
-    {{else}}
-        {{$symbol = (print $symbol)}}
-    {{end}}
-    {{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
-    {{$embed.Set "color" $successColor}}
+	{{$a := sdict .Value}}
+	{{$min := (humanizeThousands $a.min)}}
+	{{$max := (humanizeThousands $a.max)}}
+	{{$symbol := $a.symbol}}
+	{{$incomeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.incomeCooldown | toDuration)}}
+	{{$workCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.workCooldown | toDuration)}}
+	{{$crimeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.crimeCooldown | toDuration)}}
+	{{$robCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.robCooldown | toDuration)}}
+	{{$startBalance := (humanizeThousands $a.startBalance)}}
+	{{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
+		{{$symbol = $symbol}}
+	{{else}}
+		{{$symbol = (print $symbol)}}
+	{{end}}
+	{{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
+	{{$embed.Set "color" $successColor}}
 {{else}}
-    {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
-    {{$embed.Set "color" $errorColor}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
+	{{$embed.Set "color" $errorColor}}
 {{end}}
 {{sendMessage nil (cembed $embed)}}
