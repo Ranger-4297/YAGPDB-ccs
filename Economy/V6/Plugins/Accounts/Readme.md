@@ -1,9 +1,8 @@
 # Accounts
 
-# This plugin system requires all commands found within to function.
-# It is reccomended that you add a new CC group for these if you are not organising them.
-
 # Info
 Accounts are multi-user accessable bank accounts.
-Accounts can be created for a set number or a percentage of money. 
-Certain aspects of an account can be managed by the holder
+Accounts can be created for free and come with 500 of your local currency.
+Users can withdraw and deposit freely as long as they are whitelisted.
+Users can access their available accounts with the `list` subcommand
+Certain aspects of an account can be managed by the holder (whitelist & limit)
