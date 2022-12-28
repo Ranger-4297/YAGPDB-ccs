@@ -14,7 +14,7 @@
 {{/* Initiates variBles */}}
 {{$u := .User.ID}}
 
-{{/* Buy item */}}
+{{/* Accounts */}}
 
 {{/* Response */}}
 {{$e := sdict}}
