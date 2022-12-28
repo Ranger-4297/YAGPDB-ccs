@@ -46,7 +46,7 @@
 					{{end}}
 					{{if eq $c "create"}}
 						{{if not ($a.Get (toString $u))}}
-							{{$a.Set (toString $u) (sdict "accountSettings" (sdict "whitelistedUsers" (cslice) "withdrawimit" 500) "accountBaLance" 500)}}
+							{{$a.Set (toString $u) (sdict "accountSettings" (sdict "whitelistedUsers" (cslice) "withdrawimit" 500) "accountBalance" 500)}}
 							{{dbSet 0 "accounts" $a}}
 							{{$e.Set "description" (print "Account created")}}
 							{{$e.Set "color" 0x00ff7b}}
@@ -242,7 +242,7 @@
 						{{$e.Set "description" (print "Invalid `option` argument passed" $o)}}
 					{{end}}
 				{{else}}
-					{{$e.Set "description" (print "No `account` datBase found.\nPlease set it up with the default va;ues using `" $.Cmd " initialize`")}}
+					{{$e.Set "description" (print "No `account` database found.\nPlease set it up with the default va;ues using `" $.Cmd " initialize`")}}
 				{{end}}
 			{{end}}
 		{{end}}
@@ -250,6 +250,6 @@
 		{{$e.Set "description" (print "No option argument passed." $o)}}
 	{{end}}
 {{else}}
-	{{$e.Set "description" (print "No `Settings` datBase found.\nPlease set it up with the default values using `" .ServerPrefix "set default`")}}
+	{{$e.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "set default`")}}
 {{end}}
 {{sendMessage nil (cembed $e)}}
