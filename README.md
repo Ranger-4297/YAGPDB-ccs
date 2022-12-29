@@ -3,8 +3,8 @@
 <hr>
 
 <p>Welcome to my YAGPDB CC repository!<br>
-This [repository] includes custom commands that I have made or that I am making<br>
-As you can see, alot of effort has gone into these<br>
+This repository includes custom commands that I have made or that I am making<br>
+As you can see, a lot of effort has gone into these<br>
 I appreciate every fork and star and those who use my commands!
 </p>
 <hr>
@@ -14,7 +14,7 @@ https://discord.gg/bbvzRgQvB7
 
 <h2>License</h2>
 
-<p>This repository is licensed unuder the terms of the below license. The GNU, General Public License Version 3</p>
+<p>This repository is licensed under the terms of the below license. The GNU, General Public License Version 3</p>
 
 <a href="https://github.com/Ranger-4297/YAGPDB-ccs/blob/main/LICENSE">Full License</a><br>
 
