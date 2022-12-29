@@ -44,7 +44,6 @@ If the below cannot be found in the leading comment of a file, the above licensi
 <h2>Custom Command repositories:</h2>
 <a href="https://github.com/yagpdb-cc/yagpdb-cc">Official Repo</a> The official custom command repository. If you are searching for more custom commands you will find a lot of them there :).<br>
 <a href="https://github.com/BlackWolfWoof/yagpdb-cc">Wolf's Repo</a> A really advanced repository including database management.<br>
-<a href="https://github.com/l-zeuch/lagpdb-cc">Lzeuch's Repo</a> An extremely well documented custom command repository.
 
 <hr>
 
