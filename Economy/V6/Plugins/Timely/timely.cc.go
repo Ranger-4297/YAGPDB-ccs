@@ -41,6 +41,8 @@
 		{{if eq $cmd "daily"}}
 			{{if not ($cd := dbGet $userID "dCooldown")}}
 				{{dbSetExpire $userID "dCooldown" "cooldown" 86400}}
+				{{$embed.Set "description" (print "You've just claimed your " $symbol $daily " " $cmd"! Come back in " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
+				{{$embed.Set "color" $successColor}}
 				{{$newBalance := add $cash $daily}}
 				{{$a.Set "cash" $newBalance}}
 				{{dbSet $userID "EconomyInfo" $a}}
@@ -51,6 +53,8 @@
 		{{else if eq $cmd "weekly"}}
 			{{if not ($cd := dbGet $userID "wCooldown")}}
 				{{dbSetExpire $userID "wCooldown" "cooldown" 691200}}
+				{{$embed.Set "description" (print "You've just claimed your " $symbol $weekly " " $cmd"! Come back in " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
+				{{$embed.Set "color" $successColor}}
 				{{$newBalance := add $cash $weekly}}
 				{{$a.Set "cash" $newBalance}}
 				{{dbSet $userID "EconomyInfo" $a}}
@@ -61,6 +65,8 @@
 		{{else if eq $cmd "monthly"}}
 			{{if not ($cd := dbGet $userID "mCooldown")}}
 				{{dbSetExpire $userID "mCooldown" "cooldown" 2716400}}
+				{{$embed.Set "description" (print "You've just claimed your " $symbol $monthly " " $cmd"! Come back in " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
+				{{$embed.Set "color" $successColor}}
 				{{$newBalance := add $cash $monthly}}
 				{{$a.Set "cash" $newBalance}}
 				{{dbSet $userID "EconomyInfo" $a}}
