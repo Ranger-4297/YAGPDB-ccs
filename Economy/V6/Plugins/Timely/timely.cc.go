@@ -22,8 +22,39 @@
 {{/* Timely */}}
 
 {{/* Response */}}
+{{$embed := sdict}}
+{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$embed.Set "timestamp" currentTime}}
 {{with dbGet 0 "EconomySettings"}}
 	{{$a := sdict .Value}}
+	{{if not (dbGet $userID "EconomyInfo")}}
+		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+	{{end}}
+	{{with (dbGet $userID "EconomyInfo")}}
+		{{$cmd := $.Cmd | lower | toString}}
+		{{if eq $cmd "daily"}}
+			{{if not ($cd := dbGet $userID "dCooldown")}}
+				{{dbSetExpire $userID "dCooldown" "cooldown" 86400}}
+			{{else}}
+				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
+				{{$embed.Set "color" $errorColor}}
+			{{end}}
+		{{else if eq $cmd "weekly"}}
+			{{if not ($cd := dbGet $userID "wCooldown")}}
+				{{dbSetExpire $userID "wCooldown" "cooldown" 691200}}
+			{{else}}
+				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
+				{{$embed.Set "color" $errorColor}}
+			{{end}}
+		{{else if eq $cmd "monthly"}}
+			{{if not ($cd := dbGet $userID "mCooldown")}}
+				{{dbSetExpire $userID "mCooldown" "cooldown" 2716400}}
+			{{else}}
+				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
+				{{$embed.Set "color" $errorColor}}
+			{{end}}
+		{{end}}
+	{{end}}
 {{else}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
