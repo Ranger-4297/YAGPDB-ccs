@@ -60,7 +60,7 @@
 			{{end}}
 		{{else if eq $cmd "weekly"}}
 			{{if not ($cd := dbGet $userID "wCooldown")}}
-				{{dbSetExpire $userID "wCooldown" "cooldown" 691200}}
+				{{dbSetExpire $userID "wCooldown" "cooldown" 604800}}
 				{{$streak := $streaks.weekly}}
 				{{$streak = (print "1." $streak)}}
 				{{$weekly = mult (toFloat $streak) $weekly}}
@@ -79,7 +79,7 @@
 			{{end}}
 		{{else if eq $cmd "monthly"}}
 			{{if not ($cd := dbGet $userID "mCooldown")}}
-				{{dbSetExpire $userID "mCooldown" "cooldown" 2716400}}
+				{{dbSetExpire $userID "mCooldown" "cooldown" 2630000}}
 				{{$streak := $streaks.monthly}}
 				{{$streak = (print "1." $streak)}}
 				{{$monthly = mult (toFloat $streak) $monthly}}
