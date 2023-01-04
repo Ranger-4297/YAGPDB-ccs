@@ -16,6 +16,9 @@
 {{$userID := .User.ID}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
+{{$daily := 2500}}
+{{$weekly := 5000}}
+{{$monthly := 10000}}
 {{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
 
 
@@ -27,14 +30,20 @@
 {{$embed.Set "timestamp" currentTime}}
 {{with dbGet 0 "EconomySettings"}}
 	{{$a := sdict .Value}}
+	{{$symbol := $a.symbol}}
 	{{if not (dbGet $userID "EconomyInfo")}}
 		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
 	{{end}}
 	{{with (dbGet $userID "EconomyInfo")}}
+		{{$a = sdict .Value}}
+		{{$balance = $a.cash}}
 		{{$cmd := $.Cmd | lower | toString}}
 		{{if eq $cmd "daily"}}
 			{{if not ($cd := dbGet $userID "dCooldown")}}
 				{{dbSetExpire $userID "dCooldown" "cooldown" 86400}}
+				{{$newBalance := add $cash $daily}}
+				{{$a.Set "cash" $newBalance}}
+				{{dbSet $userID "EconomyInfo" $a}}
 			{{else}}
 				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
 				{{$embed.Set "color" $errorColor}}
@@ -42,6 +51,9 @@
 		{{else if eq $cmd "weekly"}}
 			{{if not ($cd := dbGet $userID "wCooldown")}}
 				{{dbSetExpire $userID "wCooldown" "cooldown" 691200}}
+				{{$newBalance := add $cash $weekly}}
+				{{$a.Set "cash" $newBalance}}
+				{{dbSet $userID "EconomyInfo" $a}}
 			{{else}}
 				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
 				{{$embed.Set "color" $errorColor}}
@@ -49,6 +61,9 @@
 		{{else if eq $cmd "monthly"}}
 			{{if not ($cd := dbGet $userID "mCooldown")}}
 				{{dbSetExpire $userID "mCooldown" "cooldown" 2716400}}
+				{{$newBalance := add $cash $monthly}}
+				{{$a.Set "cash" $newBalance}}
+				{{dbSet $userID "EconomyInfo" $a}}
 			{{else}}
 				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
 				{{$embed.Set "color" $errorColor}}
