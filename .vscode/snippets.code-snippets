@@ -23,7 +23,6 @@
 			"",
 			"{{/* Response */}}"
 		],
-		"description": "Log output to console"
 	},
 	"Economy variables": {
 		"prefix": "evar",
