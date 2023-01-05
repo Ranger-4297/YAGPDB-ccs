@@ -32,7 +32,7 @@
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
 	{{if not (dbGet $userID "EconomyInfo")}}
-		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0 "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
 	{{end}}
 	{{with (dbGet $userID "EconomyInfo")}}
 		{{$a = sdict .Value}}
