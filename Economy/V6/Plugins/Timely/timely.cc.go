@@ -36,6 +36,9 @@
 	{{end}}
 	{{with (dbGet $userID "EconomyInfo")}}
 		{{$a = sdict .Value}}
+		{{if not $a.streaks}}
+			{{$a.Set "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0)}}
+		{{end}}
 		{{$streaks := $a.streaks}}
 		{{$streak := $streaks.daily}}
 		{{$cash := $a.cash}}
