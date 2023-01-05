@@ -37,60 +37,83 @@
 	{{with (dbGet $userID "EconomyInfo")}}
 		{{$a = sdict .Value}}
 		{{$streaks := $a.streaks}}
-		{{$balance = $a.cash}}
-		{{$cmd := $.Cmd | lower | toString}}
-		{{if eq $cmd "daily"}}
+		{{$streak := $streaks.daily}}
+		{{$cash := $a.cash}}
+		{{if (reFind `daily` $.Cmd)}}
 			{{if not ($cd := dbGet $userID "dCooldown")}}
 				{{dbSetExpire $userID "dCooldown" "cooldown" 86400}}
-				{{$streak := $streaks.daily}}
-				{{$streak = (print "1." $streak)}}
-				{{$daily = mult (toFloat $streak) $daily}}
-				{{$embed.Set "description" (print "You've just claimed your " $symbol $daily " " $cmd"! Come back in " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
-				{{$embed.Set "color" $successColor}}
-				{{if not eq $streaks.daily 10}}
-					{{$streaks.Set "daily" (add $streaks.daily 1)}}
+				{{if (dbGet $userID "dGraceCooldown")}}
+					{{if not (eq $streaks.daily 9)}}
+						{{$streak = add $streak 1}}
+						{{$streaks.Set "daily" $streak}}
+						{{$a.Set "streaks" $streaks}}
+					{{end}}
+				{{else}}
+					{{$streak = 0}}
+					{{$streaks.Set "daily" $streak}}
 					{{$a.Set "streaks" $streaks}}
 				{{end}}
+				{{$streak = (print "1." $streak)}}
+				{{$daily = toInt (mult (toFloat $streak) $daily)}}
+				{{$embed.Set "description" (print "You've just claimed your " $symbol $daily " daily! Come back in 1 day")}}
+				{{$embed.Set "color" $successColor}}
 				{{$newBalance := add $cash $daily}}
 				{{$a.Set "cash" $newBalance}}
+				{{dbSetExpire $userID "dGraceCooldown" "cooldown" 129600}}
 				{{dbSet $userID "EconomyInfo" $a}}
 			{{else}}
 				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
 				{{$embed.Set "color" $errorColor}}
 			{{end}}
-		{{else if eq $cmd "weekly"}}
+		{{else if (reFind `weekly` $.Cmd)}}
 			{{if not ($cd := dbGet $userID "wCooldown")}}
 				{{dbSetExpire $userID "wCooldown" "cooldown" 604800}}
-				{{$streak := $streaks.weekly}}
-				{{$streak = (print "1." $streak)}}
-				{{$weekly = mult (toFloat $streak) $weekly}}
-				{{$embed.Set "description" (print "You've just claimed your " $symbol $weekly " " $cmd"! Come back in " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
-				{{$embed.Set "color" $successColor}}
-				{{if not eq $streaks.weekly 10}}
-					{{$streaks.Set "weekly" (add $streaks.weekly 1)}}
+				{{if (dbGet $userID "wGraceCooldown")}}
+					{{if not (eq $streaks.weekly 9)}}
+						{{$streak = add $streak 1}}
+						{{$streaks.Set "weekly" $streak}}
+						{{$a.Set "streaks" $streaks}}
+					{{end}}
+				{{else}}
+					{{$streak = 0}}
+					{{$streaks.Set "weekly" $streak}}
 					{{$a.Set "streaks" $streaks}}
 				{{end}}
+				{{$streak := $streaks.weekly}}
+				{{$streak = (print "1." $streak)}}
+				{{$weekly = toInt (mult (toFloat $streak) $weekly)}}
+				{{$embed.Set "description" (print "You've just claimed your " $symbol $weekly " weekly! Come back in 1 week")}}
+				{{$embed.Set "color" $successColor}}
 				{{$newBalance := add $cash $weekly}}
 				{{$a.Set "cash" $newBalance}}
+				{{dbSetExpire $userID "wGraceCooldown" "cooldown" 691200}}
 				{{dbSet $userID "EconomyInfo" $a}}
 			{{else}}
 				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
 				{{$embed.Set "color" $errorColor}}
 			{{end}}
-		{{else if eq $cmd "monthly"}}
+		{{else if (reFind `monthly` $.Cmd)}}
 			{{if not ($cd := dbGet $userID "mCooldown")}}
-				{{dbSetExpire $userID "mCooldown" "cooldown" 2630000}}
-				{{$streak := $streaks.monthly}}
-				{{$streak = (print "1." $streak)}}
-				{{$monthly = mult (toFloat $streak) $monthly}}
-				{{$embed.Set "description" (print "You've just claimed your " $symbol $monthly " " $cmd"! Come back in " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
-				{{$embed.Set "color" $successColor}}
-				{{if not eq $streaks.monthly 10}}
-					{{$streaks.Set "monthly" (add $streaks.monthly 1)}}
+				{{dbSetExpire $userID "mCooldown" "cooldown" 2419200}}
+				{{if (dbGet $userID "mGraceCooldown")}}
+					{{if not (eq $streaks.daily 9)}}
+						{{$streak = add $streak 1}}
+						{{$streaks.Set "monthly" $streak}}
+						{{$a.Set "streaks" $streaks}}
+					{{end}}
+				{{else}}
+					{{$streak = 0}}
+					{{$streaks.Set "monthly" $streak}}
 					{{$a.Set "streaks" $streaks}}
 				{{end}}
+				{{$streak := $streaks.monthly}}
+				{{$streak = (print "1." $streak)}}
+				{{$monthly = toInt (mult (toFloat $streak) $monthly)}}
+				{{$embed.Set "description" (print "You've just claimed your " $symbol $monthly " monthly! Come back in 1 month")}}
+				{{$embed.Set "color" $successColor}}
 				{{$newBalance := add $cash $monthly}}
 				{{$a.Set "cash" $newBalance}}
+				{{dbSetExpire $userID "mGraceCooldown" "cooldown" 2505600}}
 				{{dbSet $userID "EconomyInfo" $a}}
 			{{else}}
 				{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
@@ -102,3 +125,4 @@
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
 {{end}}
+{{sendMessage nil (cembed $embed)}}
