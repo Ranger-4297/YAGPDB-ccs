@@ -1,4 +1,4 @@
-<center><h1><img src="https://yagpdb.xyz/static/img/logo_y.png" alt="" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1></center>
+<div align="center"><h1><img src="https://yagpdb.xyz/static/img/logo_y.png" alt="" height=32px width=32px></img>&nbspYAGPDB Custom Commands</h1></div>
 
 <hr>
 

@@ -1,4 +1,4 @@
-<center><h1>Plugins</h1></center>
+<div align="center"><h1>Plugins</h1></div>
 
 > Plugins are software additions that allow for the customization of computer programs, apps, and web browsers.
 
