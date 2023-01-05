@@ -20,6 +20,5 @@ These commands **are not** standalone. You must add them all to use them.
 
 # Plugins
 Plugins are (OPTIONAL) addons to the Economy system that work to enhance your experience. These can be added and removed on your own whims.
-Plugins may be individual or in a system dependent on complexity.
 
 <blockquote>If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the <a href="https://discord.gg/4uY54rw">YAGPDB support server</a> or VIA <a href="mailto:a.rhyker@gmail.com">email</a></blockquote>
