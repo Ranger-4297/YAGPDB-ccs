@@ -1,7 +1,7 @@
 # Accounts
 
 # Info
-- Accounts are multi-user accessable bank accounts.<br />
+- Accounts are multi-user accessible bank accounts.<br />
 - Accounts can be created for free and come with 500 of your local currency.<br />
 - Users can withdraw and deposit freely as long as they are whitelisted.<br />
 - Users can access their available accounts with the `list` subcommand<br />
