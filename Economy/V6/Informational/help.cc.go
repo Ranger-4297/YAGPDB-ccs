@@ -34,11 +34,6 @@
 		{{$desc = "View your balance"}}
 		{{$use = "balance"}}
 		{{$alias = (print "`bal` " "`wallet` " "`money`")}}
-	{{else if eq $cmd "leaderboard" "lb" "top"}}
-		{{$cmd = "Leaderboard"}}
-		{{$desc = "Displays the leaderboard for the server"}}
-		{{$use = "leaderboard"}}
-		{{$alias = (print "`lb` " "`top`")}}
 	{{else if eq $cmd "coinflip"}}
 		{{$cmd = "Coin-flip"}}
 		{{$desc = "Flips a coin, if you win you get 2x the bet amount"}}
