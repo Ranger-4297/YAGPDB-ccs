@@ -13,7 +13,7 @@ Fully functioning custom moderation DM and logging commands that DM the user an 
 ## Other Info
 These commands **are not** standalone. You need to add them all to use them without error.
 
-Also, please note that; It would be best to stop the default logs from being sent. Or else you will have 2 logs being sent in your modlogs.
+Also, please note that; It would be best to stop the default logs from being sentnas well as the response in overrides. Or else you will have 2 logs being sent in your modlogs.
 
 
 <blockquote>If you find any bugs or issues, feel free to PR an issue or fix, alternatively contact me through the <a href="https://discord.gg/4uY54rw">YAGPDB support server</a> or VIA <a href="mailto:a.rhyker@gmail.com">email</a></blockquote>
