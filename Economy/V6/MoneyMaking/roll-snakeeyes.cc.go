@@ -64,7 +64,6 @@
 				{{end}}
 			{{end}}
 			{{if $continue}}
-				{{if not ($cooldown := dbGet $userID "snakeeyesCooldown")}}
 				{{if (reFind `rollnum(ber)?|rn` $.Cmd)}}
 					{{if not ($cooldown := dbGet $userID "rollCooldown")}}
 						{{dbSetExpire $userID "rollCooldown" "cooldown" $incomeCooldown}}
@@ -127,4 +126,4 @@
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
 {{end}}
-{{sendMessage nil (cembed $embed)}}
+{{sendMessage nil (cembed $embed)}} 	
