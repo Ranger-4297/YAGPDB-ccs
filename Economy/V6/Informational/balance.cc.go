@@ -38,14 +38,14 @@
 	{{end}}
 	{{with (dbGet $user.ID "EconomyInfo")}}
 		{{$a = sdict .Value}}
-		{{$cash := humanizeThousands ($a.cash | toInt)}}
-		{{$bank := humanizeThousands ($a.bank | toInt)}}
-		{{$net := $cash | add $bank}}
+		{{$cash := ($a.cash | toInt)}}
+		{{$bank := ($a.bank | toInt)}}
+		{{$net := humanizeThousands ($cash | add $bank)}}
 		{{$embed.Set "author" (sdict "name" $user.Username "icon_url" ($user.AvatarURL "128"))}}
 		{{$embed.Set "description" (print $user.Mention "'s balance")}}
 		{{$embed.Set "fields" (cslice 
-			(sdict "name" "Cash" "value" (print $symbol $cash) "inline" true)
-			(sdict "name" "Bank" "value" (print $symbol $bank) "inline" true)
+			(sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true)
+			(sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true)
 			(sdict "name" "Networth" "value" (print $symbol $net) "inline" true))}}
 		{{$embed.Set "color" $successColor}}
 		{{$embed.Set "timestamp" currentTime}}
