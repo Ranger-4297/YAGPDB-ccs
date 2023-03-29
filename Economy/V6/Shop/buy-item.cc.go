@@ -67,6 +67,7 @@
 							{{$nqty := (sub $qty $bqty)}}
 							{{if eq (toInt $nqty) 0}}
 								{{$items.Del $name}}
+								{{$info.Set "Items" $items}}
 								{{dbSet 0 "store" $info}}
 							{{else}}
 								{{$item.Set "qty" $nqty}}
