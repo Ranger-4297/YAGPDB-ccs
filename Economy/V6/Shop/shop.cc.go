@@ -41,8 +41,8 @@
 					{{$desc := $v.desc }}
 					{{$price := (print $symbol ($v.price | humanizeThousands))}}
 					{{$qty := ""}}
-					{{if $v.qty}}
-						{{$qty = $v.qty}}
+					{{if $v.quantity}}
+						{{$qty = $v.quantity}}
 						{{if not (reFind "infinite" (lower (toString $qty)))}}
 							{{$qty = toInt $qty | humanizeThousands}}
 						{{else}}

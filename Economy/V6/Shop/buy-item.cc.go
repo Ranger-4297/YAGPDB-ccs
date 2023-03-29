@@ -41,7 +41,7 @@
 					{{if $items.Get $name}}
 						{{$item := $items.Get (index . 0)}}
 						{{$price := $item.Get "price"}}
-						{{$qty := $item.Get "qty"}}
+						{{$qty := $item.Get "quantity"}}
 						{{$uqty := 0}} {{/* USER QUANTITY */}}
 						{{$inventory := $a.Get "inventory"}}
 						{{if ($inventory.Get $name)}} {{/* Checks if user has item with name*/}}
@@ -70,13 +70,13 @@
 								{{$info.Set "Items" $items}}
 								{{dbSet 0 "store" $info}}
 							{{else}}
-								{{$item.Set "qty" $nqty}}
+								{{$item.Set "quantity" $nqty}}
 								{{$items.Set $name $item}}
 								{{$info.Set "Items" $items}}
 								{{dbSet 0 "store" $info}}
 							{{end}}
 							{{$nbal := (sub $bal $price)}}
-							{{$inventory := (sdict $name (sdict "desc" ($item.Get "desc") "qty" (add $uqty $bqty)))}}
+							{{$inventory := (sdict $name (sdict "desc" ($item.Get "desc") "quantity" (add $uqty $bqty)))}}
 							{{$a.Set "cash" $nbal}}
 							{{$a.Set "inventory" $inventory}}
 							{{dbSet $userID "EconomyInfo" $a}}

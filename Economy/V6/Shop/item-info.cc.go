@@ -42,7 +42,7 @@
 					{{end}}
 					{{$qty := ""}}
 					{{if ($item.Get "qty")}}
-						{{$qty = ($item.Get "qty")}}
+						{{$qty = ($item.Get "quantity")}}
 						{{if not (reFind "infinite" (lower (toString $qty)))}}
 							{{$qty = toInt $qty | humanizeThousands}}
 						{{else}}

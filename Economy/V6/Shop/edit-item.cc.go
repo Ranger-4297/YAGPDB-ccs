@@ -66,7 +66,7 @@
 											{{end}}
 											{{if $cont}}
 												{{$item := $items.Get $name}}
-												{{$item.Set "qty" $value}}
+												{{$item.Set "quantity" $value}}
 												{{$items.Set $name $item}}
 												{{$store.Set "Items" $items}}
 												{{dbSet 0 "store" $store}}
@@ -75,7 +75,7 @@
 											{{if eq (lower (index . 2)) "infinite" "infinity" "inf"}}
 												{{$value = "Infinite"}}
 												{{$item := $items.Get $name}}
-												{{$item.Set "qty" $value}}
+												{{$item.Set "quantity" $value}}
 												{{$items.Set $name $item}}
 												{{$store.Set "Items" $items}}
 												{{dbSet 0 "store" $store}}
