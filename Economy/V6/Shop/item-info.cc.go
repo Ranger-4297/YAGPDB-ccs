@@ -1,8 +1,8 @@
 {{/*
 		Made by Ranger (765316548516380732)
 
-		Trigger Type: `Regex`
-		Trigger: `\A(-|<@!?204255221017214977>\s*)(item-?info)(\s+|\z)`
+	Trigger Type: `Regex`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(item-?info)(\s+|\z)`
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
