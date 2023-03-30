@@ -54,7 +54,8 @@
 
 - **V6**
 	**•** [`V6`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V5) - Oudated (30 Mar 23).  
-	**•** [`V6.3`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V6.3) - Current (30 Mar 23).
+	**•** [`V6.3`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V6.3) - Oudated (30 Mar 23).
+	**•** [`V6.5`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V6.5) - Current (30 Mar 23).
 </details>
 
 ---
