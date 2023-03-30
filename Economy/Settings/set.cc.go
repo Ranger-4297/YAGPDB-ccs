@@ -24,7 +24,7 @@
 {{$db := (dbGet 0 "EconomySettings").Value}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
-	{{$syntax := (print "\nAvailable settings: `max`, `min`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`\nTo set it with the default settings `" $.Cmd " default`")}}
+	{{$syntax := (print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`\nTo set it with the default settings `" $.Cmd " default`")}}
 	{{with .CmdArgs}}
 		{{if index $.CmdArgs 0}}
 			{{$setting := (index $.CmdArgs 0) | lower}}
@@ -39,7 +39,7 @@
 					{{$a := sdict .Value}}
 					{{$symbol := $a.symbol}}
 					{{$nv := (print "No or invalid `value` argument passed.")}}
-					{{if eq $setting "min" "max"}}
+					{{if eq $setting "min" "max" "betmax"}}
 						{{$smax := $a.max}}
 						{{$smin := $a.min}}
 						{{if gt (len $.CmdArgs) 1}}
@@ -64,6 +64,9 @@
 							{{if $ct}}
 								{{$msg.Set "description" (print "You set `" $setting "` to " $symbol $val)}}
 								{{$msg.Set "color" $sC}}
+								{{if eq $setting "betmax"}}
+									{{$setting = "betMax"}}
+								{{end}}
 								{{$db.Set $setting $val}}
 								{{dbSet 0 "EconomySettings" $db}}
 							{{else}}

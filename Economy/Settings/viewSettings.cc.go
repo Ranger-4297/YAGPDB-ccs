@@ -27,6 +27,7 @@
 	{{$a := sdict .Value}}
 	{{$min := (humanizeThousands $a.min)}}
 	{{$max := (humanizeThousands $a.max)}}
+	{{$betMax := (humanizeThousands $a.betMax)}}
 	{{$symbol := $a.symbol}}
 	{{$incomeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.incomeCooldown | toDuration)}}
 	{{$workCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.workCooldown | toDuration)}}
@@ -39,7 +40,7 @@
 		{{$symbol = (print "`" $symbol "`")}}
 	{{end}}
 	{{with $.CmdArgs}}
-		{{if (reFind `\A(m(ax|in)|s(tartbalance|ymbol)|(income|work|crime|rob)(cd|cooldown))(\s+|\z)` ((index . 0) | lower))}}
+		{{if (reFind `\A(m(ax|in)|s(tartbalance|ymbol)|(income|work|crime|rob)(cd|cooldown)|betmax)(\s+|\z)` ((index . 0) | lower))}}
 			{{$setting := (index . 0) | lower}}
 			{{$value := ""}}
 			{{if eq $setting "min" }}
@@ -58,15 +59,17 @@
 				{{$value = $crimeCooldown}}
 			{{else if eq $setting "robcooldown" "workcd"}}
 				{{$value = $robCooldown}}
+			{{else if eq $setting "betmax"}}
+				{{$value := $betMax}}
 			{{end}}
 			{{$embed.Set "description" (print $setting ": `" $value "`")}}
 			{{$embed.Set "color" $successColor}}
 		{{else}}
-			{{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
+			{{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nbetMax `" $betMax "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
 			{{$embed.Set "color" $successColor}}
 		{{end}}
 	{{else}}
-		{{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
+		{{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nbetMax `" $betMax "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
 		{{$embed.Set "color" $successColor}}
 	{{end}}
 {{else}}
