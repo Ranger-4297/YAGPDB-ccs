@@ -35,11 +35,11 @@
 	<summary>Version 4</summary>
 
 - **V4**
-	**•** [`V4`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4) - Oudated (17 Aug 22).
-	**•** [`V4.2`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.2) - Oudated (20 Aug 22).
-	**•** [`V4.4`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.4) - Outdated (22 Aug 22).
-	**•** [`V4.5`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.5) - Outdated (22 Aug 22).
-	**•** [`V4.6`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.6) - Outdated (23 Aug 22).
+	**•** [`V4`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4) - Oudated (17 Aug 22).  
+	**•** [`V4.2`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.2) - Oudated (20 Aug 22).  
+	**•** [`V4.4`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.4) - Outdated (22 Aug 22).  
+	**•** [`V4.5`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.5) - Outdated (22 Aug 22).  
+	**•** [`V4.6`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V4.6) - Outdated (23 Aug 22).  
 </details>
 
 <details>
@@ -53,7 +53,7 @@
 	<summary>Version 6</summary>
 
 - **V6**
-	**•** [`V6`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V5) - Oudated (30 Mar 23).
+	**•** [`V6`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V5) - Oudated (30 Mar 23).  
 	**•** [`V6.3`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V6.3) - Current (30 Mar 23).
 </details>
 
