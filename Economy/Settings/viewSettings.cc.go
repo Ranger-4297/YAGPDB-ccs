@@ -39,8 +39,39 @@
 	{{else}}
 		{{$symbol = (print "`" $symbol "`")}}
 	{{end}}
-	{{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nbetMax `" $betMax "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
-	{{$embed.Set "color" $successColor}}
+	{{with $.CmdArgs}}
+		{{if (reFind `\A(m(ax|in)|s(tartbalance|ymbol)|(income|work|crime|rob)(cd|cooldown)|betmax)(\s+|\z)` ((index . 0) | lower))}}
+			{{$setting := (index . 0) | lower}}
+			{{$value := ""}}
+			{{if eq $setting "min" }}
+				{{$value = $min}}
+			{{else if eq $setting "max"}}
+				{{$value = $max}}
+			{{else if eq $setting "symbol"}}
+				{{$value = $symbol}}
+			{{else if eq $setting "startbalance"}}
+				{{$value = $startBalance}}
+			{{else if eq $setting "incomecooldown" "incomecd"}}
+				{{$value = $incomeCooldown}}
+			{{else if eq $setting "workcooldown" "workcd"}}
+				{{$value = $workCooldown}}
+			{{else if eq $setting "crimecooldown" "workcd"}}
+				{{$value = $crimeCooldown}}
+			{{else if eq $setting "robcooldown" "workcd"}}
+				{{$value = $robCooldown}}
+			{{else if eq $setting "betmax"}}
+				{{$value := $betMax}}
+			{{end}}
+			{{$embed.Set "description" (print $setting ": `" $value "`")}}
+			{{$embed.Set "color" $successColor}}
+		{{else}}
+			{{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nbetMax `" $betMax "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
+			{{$embed.Set "color" $successColor}}
+		{{end}}
+	{{else}}
+		{{$embed.Set "description" (print "Min: `" $min "`\nMax: `" $max "`\nbetMax `" $betMax "`\nSymbol: " $symbol "\nstartBalance: `" $startBalance "`\nincomeCooldown: `" $incomeCooldown "`\nworkCooldown: `" $workCooldown "`\ncrimeCooldown: `" $crimeCooldown "`\nrobCooldown: `" $robCooldown "`")}}
+		{{$embed.Set "color" $successColor}}
+	{{end}}
 {{else}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
