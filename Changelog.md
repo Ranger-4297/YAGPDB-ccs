@@ -10,7 +10,7 @@
 <details>
 <summary>Version 1</summary>
 
-- **V1**  
+- **V1**
 	**•** [`V1.0`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V1) - Oudated (15 Feb 21).  
 	**•** [`V1.4`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V1.4) - Oudated (21 Aug 21).  
 	**•** [`v1.7`](https://github.com/Ranger-4297/YAGPDB-ccs/releases/tag/V1.7) - Oudated (24 Oct 21).
