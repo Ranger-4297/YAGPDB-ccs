@@ -37,7 +37,7 @@
 				{{with $.CmdArgs}}
 					{{$name := (index . 0)}}
 					{{if $items.Get $name}}
-						{{$options := cslice "description" "role" "name" "price" "quantity"}}
+						{{$options := cslice "description" "role-given" "name" "price" "quantity"}}
 						{{if gt (len $.CmdArgs) 1}}
 							{{$option := (index . 1) | lower}}
 							{{if in $options $option}}
@@ -126,7 +126,7 @@
 										{{if $.Guild.GetRole (toInt64 $role)}}
 											{{$value = $role}}
 											{{$item := $items.Get $name}}
-											{{$item.Set "role" $value}}
+											{{$item.Set "role-given" $value}}
 											{{$items.Set $name $item}}
 											{{$store.Set "Items" $items}}
 											{{dbSet 0 "store" $store}}
