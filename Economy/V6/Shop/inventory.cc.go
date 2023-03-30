@@ -38,8 +38,7 @@
 				{{range $k,$v := $items}}
 					{{$item := $k}}
 					{{$desc := $v.desc }}
-					{{$qty := ""}}
-					{{$qty = $v.qty}}
+					{{$qty = $v.quantity}}
 					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty))) "inline" false)}}
 				{{end}}
 				{{$page := ""}}

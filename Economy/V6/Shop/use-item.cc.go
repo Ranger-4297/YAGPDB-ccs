@@ -1,8 +1,8 @@
 {{/*
 		Made by Ranger (765316548516380732)
 
-		Trigger Type: `Regex`
-		Trigger: `\A(-|<@!?204255221017214977>\s*)(use(-?item)?)(\s+|\z)`
+	Trigger Type: `Regex`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(use(-?item)?)(\s+|\z)`
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
@@ -34,13 +34,13 @@
 				{{$name := (index . 0)}}
 				{{if $items.Get $name}}
 					{{$item := $items.Get (index . 0)}}
-					{{$qty := $item.Get "qty"}}
+					{{$qty := $item.Get "quantity"}}
 					{{$nqty := (sub (toInt $qty) 1)}}
 					{{if eq (toInt $nqty) 0}}
 						{{$items.Del $name}}
 						{{dbSet $userID "EconomyInfo" $info}}
 					{{else}}
-						{{$item.Set "qty" $nqty}}
+						{{$item.Set "quantity" $nqty}}
 						{{$items.Set $name $item}}
 						{{$info.Set "inventory" $items}}
 						{{dbSet $userID "EconomyInfo" $info}}

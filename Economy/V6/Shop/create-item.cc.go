@@ -65,11 +65,11 @@
 											{{end}}
 											{{$items = sdict ($store.Get "Items")}}
 										{{end}}
-										{{$items.Set $name (sdict "desc" $description "price" $price "qty" $qty)}}
+										{{$items.Set $name (sdict "desc" $description "price" $price "quantity" $qty)}}
 										{{$store.Set "Items" $items}}
 										{{dbSet 0 "store" $store}}
 										{{$embed.Set "description" (print "New item added to shop!")}}
-										{{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " (humanizeThousands $price) "\nQuantity: " (humanizeThousands $qty)) "inline" false))}}
+										{{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " (humanizeThousands $price) "\nQuantity: " (humanizeThousands $qty) "\nRole: Add role with " $prefix "edit-item") "inline" false))}}
 										{{$embed.Set "color" $successColor}}
 									{{else}}
 										{{$embed.Set "description" (print "No `description` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}

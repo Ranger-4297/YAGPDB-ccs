@@ -1,8 +1,8 @@
 {{/*
 		Made by Ranger (765316548516380732)
 
-		Trigger Type: `Regex`
-		Trigger: `\A(-|<@!?204255221017214977>\s*)(item-?info)(\s+|\z)`
+	Trigger Type: `Regex`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(item-?info|view-?item)(\s+|\z)`
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
@@ -36,9 +36,13 @@
 				{{if $items.Get $name}}
 					{{$item := $items.Get (index . 0)}}
 					{{$price := $item.Get "price"}}
+					{{$role := "none"}}
+					{{if ($item.Get "role-given")}}
+						{{$role = (print "<@&" ($item.Get "role") ">")}}
+					{{end}}
 					{{$qty := ""}}
 					{{if ($item.Get "qty")}}
-						{{$qty = ($item.Get "qty")}}
+						{{$qty = ($item.Get "quantity")}}
 						{{if not (reFind "infinite" (lower (toString $qty)))}}
 							{{$qty = toInt $qty | humanizeThousands}}
 						{{else}}
@@ -49,7 +53,7 @@
 					{{end}}
 					{{$desc := $item.Get "desc"}}
 					{{$embed.Set "title" (print "**Item info**")}}
-					{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" (print $name) "inline" true) (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true) (sdict "name" "Description" "value" (print $desc) "inline" false) (sdict "name" "Quantity" "value" (print $qty)))}}
+					{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" (print $name) "inline" true) (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true) (sdict "name" "Description" "value" (print $desc) "inline" true) (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Quantity" "value" (print $qty) "inline" true) (sdict "name" "Role given" "value" (print $role)))}}
 					{{$embed.Set "color" $successColor}}
 				{{else}}
 					{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
