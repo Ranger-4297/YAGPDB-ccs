@@ -27,6 +27,7 @@
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
+	{{$betMax := $a.betMax}}
 	{{$incomeCooldown := $a.incomeCooldown | toInt}}
 	{{if not (dbGet $userID "EconomyInfo")}}
 		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
@@ -51,28 +52,33 @@
 						{{if $bet | toInt}}
 							{{$bet = $bet | toInt}}
 							{{if gt $bet 0}}
-								{{if le $bet $bal}}
-									{{if not ($cooldown := dbGet $userID "coinflipCooldown")}}
-										{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
-										{{$newCashBalance := ""}}
-										{{$int := randInt 1 3}}
-										{{if eq $int 1}} {{/* Win */}}
-											{{$newCashBalance = $bal | add $bet}}
-											{{$embed.Set "description" (print "You flipped " $side " and won " $symbol (humanizeThousands $bet))}}
-											{{$embed.Set "color" $successColor}}
-										{{else}} {{/* Lose */}}
-											{{$newCashBalance = $bet | sub $bal}}
-											{{$embed.Set "description" (print "You flipped " $side " and lost.")}}
+								{{if le $bet $betMax}}
+									{{if le $bet $bal}}
+										{{if not ($cooldown := dbGet $userID "coinflipCooldown")}}
+											{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
+											{{$newCashBalance := ""}}
+											{{$int := randInt 1 3}}
+											{{if eq $int 1}} {{/* Win */}}
+												{{$newCashBalance = $bal | add $bet}}
+												{{$embed.Set "description" (print "You flipped " $side " and won " $symbol (humanizeThousands $bet))}}
+												{{$embed.Set "color" $successColor}}
+											{{else}} {{/* Lose */}}
+												{{$newCashBalance = $bet | sub $bal}}
+												{{$embed.Set "description" (print "You flipped " $side " and lost.")}}
+												{{$embed.Set "color" $errorColor}}
+											{{end}}
+											{{$a.Set "cash" $newCashBalance}}
+											{{dbSet $userID "EconomyInfo" $a}}
+										{{else}}
+											{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
 											{{$embed.Set "color" $errorColor}}
 										{{end}}
-										{{$a.Set "cash" $newCashBalance}}
-										{{dbSet $userID "EconomyInfo" $a}}
 									{{else}}
-										{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+										{{$embed.Set "description" (print "You can't bet more than you have!")}}
 										{{$embed.Set "color" $errorColor}}
 									{{end}}
 								{{else}}
-									{{$embed.Set "description" (print "You can't bet more than you have!")}}
+									{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
 									{{$embed.Set "color" $errorColor}}
 								{{end}}
 							{{else}}
