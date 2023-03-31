@@ -9,9 +9,6 @@
 	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
-//TODO
-+ Change storageDB to sdict
-
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}
@@ -88,11 +85,11 @@
 							{{end}}
 						{{else if eq $bet "retrieve" "collect"}}
 							{{$storageDB (dbGet 0 "rouletteStorage")}}
-							{{if $storageDB.Get (toString .User.ID)}}
-								{{$winnings :=  $storageDB.Get (toString .User.ID).amount}}
+							{{if $storageDB.Get (toString $userID)}}
+								{{$winnings :=  $storageDB.Get (toString $userID).amount}}
 								{{$embed.Set "description" (print "You've collected " $winnings)}}
 								{{$embed.Set "color" $successColor}}
-								{{$storageDB.Del (toString .User.ID)}}
+								{{$storageDB.Del (toString $userID )}}
 								{{dbSet 0 "rouletteStorage" $storageDB}}
 								{{$b.Set "cash" (add $bal $winnings)}}
 								{{dbSet $userID $b}}
@@ -106,7 +103,7 @@
 						{{end}}
 					{{end}}
 					{{if $continue}}
-						{{if not eq (len $players) 5}}
+						{{if not eq (len $players) 6}}
 							{{if in $players $userID}}
 								{{$embed.Set "description" (print "You're already in this game")}}
 								{{$embed.Set "color" $errorColor}}
@@ -117,7 +114,7 @@
 								{{$b.Set "cash" (sub $bal $bet)}}
 								{{dbSet $userID $b}}
 								{{$embed.Set "description" (print "You've joined this game of russian roulette with a bet of " $symbol $bet)}}
-								{{$embed.Set "footer" (sdict "name" (print (len $players) "/4"))}}
+								{{$embed.Set "footer" (sdict "name" (print (len $players) "/6"))}}
 								{{$embed.Set "color" $successColor}}
 							{{end}}
 						{{else}}
@@ -153,6 +150,10 @@
 							{{$storedUsers = $storageDB}}
 						{{end}}
 						{{range $winners}}
+							{{$amount := ($storedUsers.Get (toString $userID)).amount}}
+							{{if $amount}}
+								{{$bet = add $amount $bet}} 
+							{{end}}
 							{{- $entry = $entry.Append (sdict "Name" (print .) "value" .Mention "inline" false) -}}
 							{{- $storedUsers = $storedUsers.Append (sdict "user" .ID "amount" $bet) -}}
 						{{end}}
