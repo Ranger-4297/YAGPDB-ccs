@@ -10,8 +10,7 @@
 */}}
 
 //TODO
-+ Bet money into db for retrieval
-+ Autostart?
++ Change storageDB to sdict
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
@@ -85,6 +84,20 @@
 								{{$rr := true}}
 							{{else}}
 								{{$embed.Set "description" (print "You cannot start the game")}}
+								{{$embed.Set "color" $errorColor}}
+							{{end}}
+						{{else if eq $bet "retrieve" "collect"}}
+							{{$storageDB (dbGet 0 "rouletteStorage")}}
+							{{if $storageDB.Get (toString .User.ID)}}
+								{{$winnings :=  $storageDB.Get (toString .User.ID).amount}}
+								{{$embed.Set "description" (print "You've collected " $winnings)}}
+								{{$embed.Set "color" $successColor}}
+								{{$storageDB.Del (toString .User.ID)}}
+								{{dbSet 0 "rouletteStorage" $storageDB}}
+								{{$b.Set "cash" (add $bal $winnings)}}
+								{{dbSet $userID $b}}
+							{{else}}
+								{{$embed.Set "description" (print "You had no winning to collect!")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
