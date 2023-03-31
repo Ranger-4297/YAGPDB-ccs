@@ -12,7 +12,6 @@
 //TODO
 + Bet money into db for retrieval
 + Autostart?
-+ Check betmax
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
@@ -54,22 +53,33 @@
 						{{$bet := (index . 0)}}
 						{{$continue := false}}
 						{{if $bet | toInt}}
-							{{if gt (toInt $bet) 0}}
-								{{if le (toInt $bet) (toInt $bal)}}
-									{{$continue = true}}
+							{{if lt $bet $betMax}}
+								{{if gt (toInt $bet) 0}}
+									{{if le (toInt $bet) (toInt $bal)}}
+										{{$continue = true}}
+									{{else}}
+										{{$embed.Set "description" (print "You can't bet more than you have!")}}
+										{{$embed.Set "color" $errorColor}}
+									{{end}}
 								{{else}}
-									{{$embed.Set "description" (print "You can't bet more than you have!")}}
+									{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
 									{{$embed.Set "color" $errorColor}}
 								{{end}}
 							{{else}}
-								{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+								{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
 							{{$bet = $bet | lower}}
 							{{if eq $bet "all"}}
 								{{if ne (toInt $bal) 0}}
-									{{$continue = true}}
+									{{if lt $bet $betMax}}
+										{{$continue = true}}
+										{{$bet = $bal}}
+									{{else}}
+										{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+										{{$embed.Set "color" $errorColor}}
+									{{end}}
 								{{else}}
 									{{$embed.Set "description" (print "You had no money to bet.")}}
 									{{$embed.Set "color" $errorColor}}
