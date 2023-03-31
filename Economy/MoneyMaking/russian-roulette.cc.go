@@ -2,12 +2,15 @@
 		Made by Ranger (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(russian-?roulette(rr)(\s+|\z)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(russian-?roulette|rr)(\s+|\z)`
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
 	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
+
+//TODO
+Auto timeout after 5 minutes
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
@@ -28,10 +31,10 @@
 	{{$betMax := $a.betMax}}
 	{{$incomeCooldown := $a.incomeCooldown | toInt}}
 	{{$userDB := (dbGet $userID "EconomyInfo")}}
-	{{if not $db}}
+	{{if not $userDB}}
 		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
 	{{end}}
-	{{with $db}}
+	{{with $userDB}}
 		{{$a = sdict .Value}}
 		{{$b := sdict .Value}}
 		{{$bal := $a.cash}}
@@ -42,8 +45,9 @@
 					{{$game := $a.game}}
 					{{$cost := $game.cost}}
 					{{$players := $game.players}}
-					{{$bet := (index . 0)}}
+					{{$bet := (index $.CmdArgs 0)}}
 					{{$continue := false}}
+					{{$rr := false}}
 					{{if $bet | toInt}}
 						{{if lt $bet $betMax}}
 							{{if gt (toInt $bet) 0}}
@@ -54,7 +58,7 @@
 									{{$embed.Set "color" $errorColor}}
 								{{end}}
 							{{else}}
-								{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+								{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
@@ -78,13 +82,13 @@
 							{{end}}
 						{{else if eq $bet "start"}}
 							{{if eq $game.owner $userID}}
-								{{$rr := true}}
+								{{$rr = true}}
 							{{else}}
 								{{$embed.Set "description" (print "You cannot start the game")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else if eq $bet "retrieve" "collect"}}
-							{{$storageDB (dbGet 0 "rouletteStorage")}}
+							{{$storageDB := (dbGet 0 "rouletteStorage")}}
 							{{if $storageDB.Get (toString $userID)}}
 								{{$winnings :=  $storageDB.Get (toString $userID).amount}}
 								{{$embed.Set "description" (print "You've collected " $winnings)}}
@@ -103,7 +107,7 @@
 						{{end}}
 					{{end}}
 					{{if $continue}}
-						{{if not eq (len $players) 6}}
+						{{if not (eq (len $players) 6)}}
 							{{if in $players $userID}}
 								{{$embed.Set "description" (print "You're already in this game")}}
 								{{$embed.Set "color" $errorColor}}
@@ -126,21 +130,27 @@
 						{{sendMessage nil (cembed (sdict "title" "The russian roulette game has begun!" "color" 0x0088CC))}}
 						{{$winners := cslice}}
 						{{$loser := ""}}
-						{{$n := randInt (len $players)}}
-						{{range $i, $p := $players}}
-							{{- if ne $i $n -}}
-								{{sendMessage nil (cembed (sdict "description" (print "**" (userArg $p) "** pulled the trigger and survived") "color" 0x0088CC))}}
-								{{sleep 1}}
-								{{- continue -}}
-							{{- end -}}
-							{{$loser := (userArg $p)}}
-							{{sendMessage nil (cembed (sdict "description" (print "**" $loser "** pulled the trigger and dies") "color" 0xFF5F1F))}}
-							{{break}}
-						{{end}}
-						{{range $players}}
-							{{- if ne . $loser.ID}}
-								{{- $winners = $winners.Append (userArg .).Mention}}
-							{{- end -}}
+						{{if gt (len $players) 1}}
+							{{$n := randInt (len $players)}}
+							{{range $i, $p := $players}}
+								{{- if ne $i $n -}}
+									{{sendMessage nil (cembed (sdict "description" (print "**" (userArg $p) "** pulled the trigger and survived") "color" 0x0088CC))}}
+									{{sleep 1}}
+									{{- continue -}}
+								{{- end -}}
+								{{$loser := (userArg $p)}}
+								{{sendMessage nil (cembed (sdict "description" (print "**" $loser "** pulled the trigger and dies") "color" 0xFF5F1F))}}
+								{{break}}
+							{{end}}
+							{{range $players}}
+								{{- if ne . $loser.ID}}
+									{{- $winners = $winners.Append (userArg .).Mention}}
+								{{- end -}}
+							{{end}}
+						{{else}}
+							{{$embed.Set "description" (print "Not enough players to start the match :(\nStart a new one with " $.Cmd " <bet>")}}
+							{{$embed.Set "color" $errorColor}}
+							{{dbSet 0 "russianRoulette" sdict}}
 						{{end}}
 						{{$payout := (div $game.cost (len $winners))}}
 						{{$entry := cslice}}
@@ -162,29 +172,28 @@
 						{{$embed.Set "fields" $entry}}
 						{{$embed.Set "color" $successColor}}
 						{{dbSet 0 "rouletteStorage" $storedUsers}}
-						{{end}}
 					{{end}}
 				{{else}}
-					{{if (index . 0) | toInt}}
-						{{$bet := (index . 0) | toInt}}
+					{{if (index $.CmdArgs 0) | toInt}}
+						{{$bet := (index $.CmdArgs 0) | toInt}}
 						{{if gt (toInt $bet) 0}}
 							{{if le (toInt $bet) (toInt $bal)}}
 								{{dbSet 0 "russianRoulette" (sdict "game" (sdict "cost" $bet "players" (cslice $userID)))}}
-								{{$embed.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command " $.Cmd " " $bet " (1/6)\nTo start this game use the command " $.Cmd "start")}}
+								{{$embed.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" $.Cmd " " $bet "` (1/6)\nTo start this game use the command `" $.Cmd " start`")}}
 								{{$embed.Set "color" $successColor}}
 							{{else}}
 								{{$embed.Set "description" (print "You can't bet more than you have!")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
-							{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+							{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
 							{{$embed.Set "color" $errorColor}}
 						{{end}}
 					{{end}}
 				{{end}}
 			{{end}}
 		{{else}}
-			{{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+			{{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
 			{{$embed.Set "color" $errorColor}}
 		{{end}}
 	{{end}}
