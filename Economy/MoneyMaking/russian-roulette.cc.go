@@ -49,7 +49,7 @@ Auto timeout after 5 minutes
 					{{$continue := false}}
 					{{$rr := false}}
 					{{if $bet | toInt}}
-						{{if lt $bet $betMax}}
+						{{if lt (toInt $bet) (toInt $betMax)}}
 							{{if gt (toInt $bet) 0}}
 								{{if le (toInt $bet) (toInt $bal)}}
 									{{$continue = true}}
@@ -81,7 +81,7 @@ Auto timeout after 5 minutes
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else if eq $bet "start"}}
-							{{if eq $game.owner $userID}}
+							{{if eq (toString $userID) (toString $game.owner)}}
 								{{$rr = true}}
 							{{else}}
 								{{$embed.Set "description" (print "You cannot start the game")}}
@@ -178,9 +178,14 @@ Auto timeout after 5 minutes
 						{{$bet := (index $.CmdArgs 0) | toInt}}
 						{{if gt (toInt $bet) 0}}
 							{{if le (toInt $bet) (toInt $bal)}}
-								{{dbSet 0 "russianRoulette" (sdict "game" (sdict "cost" $bet "players" (cslice $userID)))}}
-								{{$embed.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" $.Cmd " " $bet "` (1/6)\nTo start this game use the command `" $.Cmd " start`")}}
-								{{$embed.Set "color" $successColor}}
+								{{if $game}}
+									{{$embed.Set "description" (print "There is already a current game. Join it with `" $.Cmd " " $game.cost "`")}}
+									{{$embed.Set "color" $errorColor}}
+								{{else}}
+									{{dbSet 0 "russianRoulette" (sdict "game" (sdict "cost" $bet "players" (cslice $userID)))}}
+									{{$embed.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" $.Cmd " " $bet "` (1/6)\nTo start this game use the command `" $.Cmd " start`")}}
+									{{$embed.Set "color" $successColor}}
+								{{end}}
 							{{else}}
 								{{$embed.Set "description" (print "You can't bet more than you have!")}}
 								{{$embed.Set "color" $errorColor}}
