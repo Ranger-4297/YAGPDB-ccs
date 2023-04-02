@@ -16,14 +16,15 @@
 {{$user := .User}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
+{{/* $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 */}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Balance */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{/* $embed.Set "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024"))}}
+{{$embed.Set "timestamp" currentTime */}}
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
@@ -48,7 +49,7 @@
 			(sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true)
 			(sdict "name" "Networth" "value" (print $symbol $net) "inline" true))}}
 		{{$embed.Set "color" $successColor}}
-		{{$embed.Set "timestamp" currentTime}}
+		{{/* $embed.Set "timestamp" currentTime */}}
 	{{end}}
 {{else}}
 	{{$embed.Set "description" (print "No database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
