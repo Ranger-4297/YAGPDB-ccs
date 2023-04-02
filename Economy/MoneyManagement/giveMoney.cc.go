@@ -28,7 +28,9 @@
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
-	{{if (dbGet $userID "EconomyInfo")}}
+	{{$dbecoInfo := dbGet $userID "EconomyInfo"}}
+	{{/* if (dbGet $userID "EconomyInfo") */}}
+	{{if $dbecoInfo}}
 		{{with $.CmdArgs}}
 			{{if index . 0}}
 				{{if index . 0 | getMember}}
@@ -38,17 +40,23 @@
 						{{$embed.Set "description" (print "You cannot give money to yourself.")}}
 						{{$embed.Set "color" $errorColor}}
 					{{else}}
-						{{if not (dbGet $receivingUser "EconomyInfo")}}
-							{{dbSet $receivingUser "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+						{{$dbecoInforecu := dbGet $receivingUser "EconomyInfo"}}
+						{{/* if not (dbGet $receivingUser "EconomyInfo") */}}
+						{{if not $dbecoInfo}}
+							{{$dbecoInforecu = sdict "cash" 200 "bank" 0}}
+							{{/* dbSet $receivingUser "EconomyInfo" (sdict "cash" 200 "bank" 0) */}}
+							{{dbSet $receivingUser "EconomyInfo" $dbecoInforecu}}
 						{{end}}
 						{{if gt (len $.CmdArgs) 1}}
 							{{$amount := (index $.CmdArgs 1)}}
 							{{if (toInt $amount)}}
 								{{if gt (toInt $amount) 0}}
-									{{with (dbGet $receivingUser "EconomyInfo")}}
+									{{/* with (dbGet $receivingUser "EconomyInfo") */}}
+									{{with $dbecoInforecu}}
 										{{$a = sdict .Value}}
 										{{$receivingBalance := $a.cash}}
-										{{with (dbGet $userID "EconomyInfo")}}
+										{{/* with (dbGet $userID "EconomyInfo") */}}
+										{{with $dbecoInfo}}
 											{{$b := sdict .Value}}
 											{{$yourBalance := $b.cash}}
 											{{if gt (toInt $amount) (toInt $yourBalance)}}
