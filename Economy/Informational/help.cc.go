@@ -15,14 +15,15 @@
 {{/* Initiates variables */}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
+{{/* $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 */}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Help */}}
 
 {{/* Resoponse */}}
-{{$embed := sdict}}
-{{$embed.Set "timestamp" currentTime}}
-{{$embed.Set "color" $successColor}}
+{{$embed := sdict "timestamp" currentTime "color" $successColor}}
+{{/* $embed.Set "timestamp" currentTime}}
+{{$embed.Set "color" $successColor */}}
 {{with .CmdArgs}}
 	{{$cmd := (index . 0) | lower}}
 	{{$desc := ""}}
@@ -33,29 +34,29 @@
 		{{$cmd = "Balance"}}
 		{{$desc = "View your balance"}}
 		{{$use = "balance"}}
-		{{$alias = (print "`bal` " "`wallet` " "`money`")}}
+		{{$alias = print "`bal` " "`wallet` " "`money`"}}
 	{{else if eq $cmd "coinflip"}}
 		{{$cmd = "Coin-flip"}}
 		{{$desc = "Flips a coin, if you win you get 2x the bet amount"}}
 		{{$use = "coinflip <Side:Heads/Tails> <Bet:Amount>"}}
-		{{$alias = (print "`flipcoin` " "`cf` " "`fc`")}}
+		{{$alias = print "`flipcoin` " "`cf` " "`fc`"}}
 	{{else if eq $cmd "rollnumber"}}
 		{{$cmd = "RollNumber"}}
 		{{$desc = "Rolls a number with a chance of high payouts"}}
 		{{$extra = "Payouts\n100 = <Bet>\\*5\n90-99 = <Bet>\\*3\n65-89 = <Bet>\\*1\n<65 = Lose"}}
 		{{$use = "rollnumber <Bet:Amount>"}}
-		{{$alias = (print "`rollnum` " "`rn`")}}
+		{{$alias = print "`rollnum` " "`rn`"}}
 	{{else if eq $cmd "snakeyes" "snakeeyes"}}
 		{{$cmd = "Snake-eyes"}}
 		{{$desc = "Bets on 2 die both rolling on 1's (Snake eyes)."}}
 		{{$extra = "Payout is 36*<Bet>"}}
 		{{$use = "snakeeyes <Bet:Amount>"}}
-		{{$alias = (print "`snakeyes`")}}
+		{{$alias = print "`snakeyes`"}}
 	{{else if eq $cmd "work"}}
 		{{$cmd = "Work"}}
 		{{$desc = "Work with no chance of being fined"}}
 		{{$use = "work"}}
-		{{$alias = (print "`work` " "`labour`")}}
+		{{$alias = print "`work` " "`labour`"}}
 	{{else if eq $cmd "crime" "commit-crime"}}
 		{{$cmd = "Crime"}}
 		{{$desc = "Commit a crime, higher risk for higher output"}}
@@ -65,7 +66,7 @@
 		{{$cmd = "Rob"}}
 		{{$desc = "Attempts to rob a user with a chance of failure"}}
 		{{$use = "rob <User:Mention/ID>"}}
-		{{$alias = (print "`mug` " "`steal`")}}
+		{{$alias = print "`mug` " "`steal`"}}
 	{{else if eq $cmd "addmoney"}}
 		{{$cmd = "Addmoney"}}
 		{{$desc = "Addmoney to a members cash or bank balance"}}
