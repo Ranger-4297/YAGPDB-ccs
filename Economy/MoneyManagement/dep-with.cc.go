@@ -16,30 +16,37 @@
 {{$user := .User}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
+{{/* $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 */}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Deposit, Withdraw */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{/* $embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$embed.Set "timestamp" currentTime */}}
 {{with .Cmd}}
 	{{$cmd := $.Cmd}}
 	{{with (dbGet 0 "EconomySettings")}}
 		{{$a := sdict .Value}}
 		{{$symbol := $a.symbol}}
+		{{$dbecoInfo := dbGet $user.ID "EconomyInfo"}}
+		{{if not $dbecoInfo}}
+			{{$dbecoInfo = sdict "cash" 200 "bank" 0}}
+			{{dbSet $user.ID "EconomyInfo" $dbecoInfo}}
+		{{end}}
 		{{if (reFind `deposit|dep` $cmd)}}
 			{{with $.CmdArgs}}
-				{{if not (dbGet $user.ID "EconomyInfo")}}
+				{{/* if not (dbGet $user.ID "EconomyInfo")}}
 					{{dbSet $user.ID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
-				{{end}}
-				{{with (dbGet $user.ID "EconomyInfo")}}
+				{{end */}}
+				{{/* with (dbGet $user.ID "EconomyInfo") */}}
+				{{with $dbecoInfo}}
 					{{$a = sdict .Value}}
-					{{$cash := (toInt $a.cash)}}
-					{{$bank := (toInt $a.bank)}}
-					{{$amount := (index $.CmdArgs 0)}}
-					{{if (toInt $amount)}}
+					{{$cash := toInt $a.cash}}
+					{{$bank := toInt $a.bank}}
+					{{$amount := index $.CmdArgs 0}}
+					{{if toInt $amount}}
 						{{if gt (toInt $amount) (toInt $cash)}}
 							{{$embed.Set "description" (print "You're unable to deposit more than you have on hand.\nYou currently have " $symbol (humanizeThousands $cash) " on you.")}}
 							{{$embed.Set "color" $errorColor}}
@@ -67,15 +74,16 @@
 			{{end}}
 		{{else if (reFind `withdraw|with` $cmd)}}
 			{{with $.CmdArgs}}
-				{{if not (dbGet $user.ID "EconomyInfo")}}
+				{{/* if not (dbGet $user.ID "EconomyInfo")}}
 					{{dbSet $user.ID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
-				{{end}}
-				{{with (dbGet $user.ID "EconomyInfo")}}
+				{{end */}}
+				{{/* with (dbGet $user.ID "EconomyInfo") */}}
+				{{with $dbecoInfo}}
 					{{$a = sdict .Value}}
-					{{$cash := (toInt $a.cash)}}
-					{{$bank := (toInt $a.bank)}}
-					{{$amount := (index $.CmdArgs 0)}}
-					{{if (toInt $amount)}}
+					{{$cash := toInt $a.cash}}
+					{{$bank := toInt $a.bank}}
+					{{$amount := index $.CmdArgs 0}}
+					{{if toInt $amount}}
 						{{if gt (toInt $amount) (toInt $bank)}}
 							{{$embed.Set "description" (print "You're unable to withdraw more than you have in your bank.\nYou currently have " $symbol (humanizeThousands $bank) " in your bank.")}}
 							{{$embed.Set "color" $errorColor}}
