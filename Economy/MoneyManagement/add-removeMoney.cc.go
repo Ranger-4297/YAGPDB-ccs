@@ -15,14 +15,15 @@
 {{/* Initiates variables */}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
+{{/* $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 */}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Removes money from given user */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{/* $embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$embed.Set "timestamp" currentTime */}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
 	{{with (dbGet 0 "EconomySettings")}}
@@ -33,13 +34,18 @@
 				{{if index . 0 | getMember}}
 					{{$user := getMember (index . 0)}}
 					{{$user = $user.User.ID}}
-					{{if not (dbGet $user "EconomyInfo")}}
-						{{dbSet $user "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+					{{$dbecoInfo := dbGet $user "EconomyInfo"}}
+					{{/* if not (dbGet $user "EconomyInfo") */}}
+					{{if not $dbecoInfo}}
+						{{$dbecoInfo = sdict "cash" 200 "bank" 0}}
+						{{/* dbSet $user "EconomyInfo" (sdict "cash" 200 "bank" 0) */}}
+						{{dbSet $user "EconomyInfo" $dbecoInfo}}
 					{{end}}
 					{{if gt (len $.CmdArgs) 1}}
 						{{$moneyDestination := (lower (index . 1))}}
 						{{if eq $moneyDestination "cash" "bank"}}
-							{{with (dbGet $user "EconomyInfo")}}
+							{{/* with (dbGet $user "EconomyInfo") */}}
+							{{with $dbecoInfo}}
 								{{$a = sdict .Value}}
 								{{$balance := $a.Get $moneyDestination}}
 								{{if gt (len $.CmdArgs) 2}}
