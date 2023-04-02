@@ -16,23 +16,29 @@
 {{$userID := .User.ID}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
+{{/* $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 */}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Roll, SnakeEyes */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{/* $embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$embed.Set "timestamp" currentTime */}}
 {{with dbGet 0 "EconomySettings"}}
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
 	{{$betMax := $a.betMax}}
 	{{$incomeCooldown := $a.incomeCooldown | toInt}}
-	{{if not (dbGet $userID "EconomyInfo")}}
-		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+	{{$dbecoInfo := dbGet $userID "EconomyInfo"}}
+	{{/* if not (dbGet $userID "EconomyInfo") */}}
+	{{if not $dbecoInfo}}
+		{{$dbecoInfo = sdict "cash" 200 "bank" 0}}
+		{{/* dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0) */}}
+		{{dbSet $userID "EconomyInfo" $dbecoInfo}}
 	{{end}}
-	{{with (dbGet $userID "EconomyInfo")}}
+	{{/* with (dbGet $userID "EconomyInfo") */}}
+	{{with $dbecoInfo}}
 		{{$a = sdict .Value}}
 		{{$bal := $a.cash}}
 		{{with $.CmdArgs}}
@@ -100,13 +106,13 @@
 					{{else if (reFind `snake?-?eyes` $.Cmd)}}
 						{{if not ($cooldown := dbGet $userID "snakeeyesCooldown")}}
 							{{dbSetExpire $userID "snakeeyesCooldown" "cooldown" $incomeCooldown}}
-							{{$die1 := (randInt 1 7)}}
-							{{$die2 := (randInt 1 7)}}
+							{{$die1 := randInt 1 7}}
+							{{$die2 := randInt 1 7}}
 							{{$newCash := (sub $bal $bet)}}
 							{{if and (eq $die1 1) (eq $die2 1)}}
 								{{$embed.Set "description" (print "You rolled snake eyes (" $die1 "&" $die2 ")\nAnd won " $symbol (humanizeThousands (mult $bet 36)))}}
 								{{$embed.Set "color" $successColor}}
-								{{$newCash = (add $bal (mult $bet 36))}}
+								{{$newCash = add $bal (mult $bet 36)}}
 							{{else}}
 								{{$embed.Set "description" (print "You rolled " $die1 "&" $die2 " and lost " $symbol (humanizeThousands $bet) ".")}}
 								{{$embed.Set "color" $errorColor}}
