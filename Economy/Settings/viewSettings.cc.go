@@ -15,29 +15,30 @@
 {{/* Initiates variables */}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 }}
+{{/* $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 */}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Configures economy settings */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{/* $embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$embed.Set "timestamp" currentTime */}}
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a := sdict .Value}}
-	{{$min := (humanizeThousands $a.min)}}
-	{{$max := (humanizeThousands $a.max)}}
-	{{$betMax := (humanizeThousands $a.betMax)}}
+	{{$min := humanizeThousands $a.min}}
+	{{$max := humanizeThousands $a.max}}
+	{{$betMax := humanizeThousands $a.betMax}}
 	{{$symbol := $a.symbol}}
 	{{$incomeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.incomeCooldown | toDuration)}}
 	{{$workCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.workCooldown | toDuration)}}
 	{{$crimeCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.crimeCooldown | toDuration)}}
 	{{$robCooldown := humanizeDurationSeconds (mult $.TimeSecond $a.robCooldown | toDuration)}}
-	{{$startBalance := (humanizeThousands $a.startBalance)}}
+	{{$startBalance := humanizeThousands $a.startBalance}}
 	{{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
 		{{$symbol = $symbol}}
 	{{else}}
-		{{$symbol = (print "`" $symbol "`")}}
+		{{$symbol = print "`" $symbol "`"}}
 	{{end}}
 	{{with $.CmdArgs}}
 		{{if (reFind `\A(m(ax|in)|s(tartbalance|ymbol)|(income|work|crime|rob)(cd|cooldown)|betmax)(\s+|\z)` ((index . 0) | lower))}}
