@@ -17,10 +17,10 @@
 {{/* Configures economy settings */}}
 
 {{/* Response */}}
-{{$msg := sdict}}
-{{$msg.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$msg := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime "color" 0xFF0000}}
+{{/* $msg.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
 {{$msg.Set "timestamp" currentTime}}
-{{$msg.Set "color" 0xFF0000}}
+{{$msg.Set "color" 0xFF0000 */}}
 {{$db := (dbGet 0 "EconomySettings").Value}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
@@ -35,8 +35,10 @@
 				{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600)}}
 				{{dbSet 0 "store" sdict}}
 			{{else}}
-				{{with (dbGet 0 "EconomySettings")}}
-					{{$a := sdict .Value}}
+				{{/* with (dbGet 0 "EconomySettings") */}}
+				{{with $db}}
+					{{/* $a := sdict .Value */}}
+					{{$a := sdict .}}
 					{{$symbol := $a.symbol}}
 					{{$nv := (print "No or invalid `value` argument passed.")}}
 					{{if eq $setting "min" "max" "betmax"}}
