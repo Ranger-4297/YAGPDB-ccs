@@ -16,23 +16,29 @@
 {{$userID := .User.ID}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
+{{/* $prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1 */}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Flip */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{/* $embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$embed.Set "timestamp" currentTime */}}
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
 	{{$betMax := $a.betMax}}
 	{{$incomeCooldown := $a.incomeCooldown | toInt}}
-	{{if not (dbGet $userID "EconomyInfo")}}
-		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+	{{$dbecoInfo := dbGet $userID "EconomyInfo"}}
+	{{/* if not (dbGet $userID "EconomyInfo") */}}
+	{{if not $dbecoInfo}}
+		{{$dbecoInfo = sdict "cash" 200 "bank" 0}}
+		{{dbSet $userID "EconomyInfo" $dbecoInfo}}
+		{{/* dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0) */}}
 	{{end}}
-	{{with (dbGet $userID "EconomyInfo")}}
+	{{/* with (dbGet $userID "EconomyInfo") */}}
+	{{with $dbecoInfo}}
 		{{$a = sdict .Value}}
 		{{$bal := $a.cash}}
 		{{with $.CmdArgs}}
