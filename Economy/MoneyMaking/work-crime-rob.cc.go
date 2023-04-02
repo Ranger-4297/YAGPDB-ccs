@@ -16,14 +16,15 @@
 {{$userID := .User.ID}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := (index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1)}}
+{{/* $prefix := (index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1) */}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Work, crime, rob */}}
 
 {{/* Resoponse */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{/* $embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+{{$embed.Set "timestamp" currentTime */}}
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a := sdict .Value}}
 	{{$min := $a.min}}
@@ -32,17 +33,22 @@
 	{{$workCooldown := $a.workCooldown | toInt}}
 	{{$robCooldown := $a.robCooldown | toInt}}
 	{{$crimeCooldown := $a.crimeCooldown | toInt}}
-	{{if not (dbGet $userID "EconomyInfo")}}
-		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+	{{$dbecoInfo := dbGet $userID "EconomyInfo"}}
+	{{/* if not (dbGet $userID "EconomyInfo") */}}
+	{{if not $dbecoInfo}}
+		{{$dbecoInfo = sdict "cash" 200 "bank" 0}}
+		{{/* dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0) */}}
+		{{dbSet $userID "EconomyInfo" $dbecoInfo}}
 	{{end}}
-	{{with (dbGet $userID "EconomyInfo")}}
+	{{/* with (dbGet $userID "EconomyInfo") */}}
+	{{with $dbecoInfo}}
 		{{$a = sdict .Value}}
 		{{$cash := $a.cash}}
 		{{$cmd := $.Cmd | toString | lower}}
 		{{if (reFind `(work|job|get-?paid|labor)` $cmd)}}
 			{{if not ($cooldown := dbGet $userID "workCooldown")}}
 				{{dbSetExpire $userID "workCooldown" "cooldown" $workCooldown}}
-				{{$workPay := (mult (randInt $min $max) (randInt 1 3))}}
+				{{$workPay := mult (randInt $min $max) (randInt 1 3)}}
 				{{$newCashBalance := $cash | add $workPay}}
 				{{$embed.Set "description" (print "You decided to work today! You got paid a hefty " $symbol (humanizeThousands $workPay))}}
 				{{$embed.Set "color" 0x00ff7b}}
@@ -55,7 +61,7 @@
 		{{else if (reFind `(commit-?)?crime` $cmd)}}
 			{{if not ($cooldown := dbGet $userID "crimeCooldown")}}
 				{{dbSetExpire $userID "crimeCooldown" "cooldown" $crimeCooldown}}
-				{{$amount := (mult (randInt $min $max) (randInt 1 5))}}
+				{{$amount := mult (randInt $min $max) (randInt 1 5)}}
 				{{$newCash := ""}}
 				{{$int := randInt 1 3}}
 				{{if eq $int 1}}
@@ -86,9 +92,9 @@
 									{{$b := sdict .Value}}
 									{{$victimsCash := $b.cash | toInt}}
 									{{if not (eq $victimsCash 0)}}
-										{{$amount := (randInt $victimsCash)}} {{/* Amount stolen from victim */}}
-										{{$victimsNewCash := (sub $victimsCash $amount)}} {{/* Amout victim will have after being robbed */}}
-										{{$yourNewCash := (add $cash $amount)}} {{/* Amount you will have after robbing vitim */}}
+										{{$amount := randInt $victimsCash)}} {{/* Amount stolen from victim */}}
+										{{$victimsNewCash := sub $victimsCash $amount}} {{/* Amout victim will have after being robbed */}}
+										{{$yourNewCash := add $cash $amount}} {{/* Amount you will have after robbing vitim */}}
 										{{$embed.Set "description" (print "You robbed " $symbol (humanizeThousands $amount) " from <@!" $victim ">")}}
 										{{$embed.Set "color" $successColor}}
 										{{$b.Set "cash" $victimsNewCash}}
