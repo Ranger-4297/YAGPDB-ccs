@@ -32,7 +32,7 @@
 			{{if eq $setting "default"}}
 				{{$msg.Set "description" (print "Set the `EconomySettings` to default values")}}
 				{{$msg.Set "color" $sC}}
-				{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" "betMax" 5000 500 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600)}}
+				{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "betMax" 5000 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600)}}
 				{{dbSet 0 "store" sdict}}
 			{{else}}
 				{{with (dbGet 0 "EconomySettings")}}
