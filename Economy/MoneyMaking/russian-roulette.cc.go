@@ -99,7 +99,7 @@
 									{{$em.Set "color" $successColor}}
 									{{$sDB.Del (toString $userID )}}
 									{{dbSet 0 "rouletteStorage" $sDB}}
-									{{$b.Set "cash" (add $bal $winnings)}}
+									{{$b.Set "cash" (add $bal $amount)}}
 									{{dbSet $userID $b}}
 								{{else}}
 									{{$em.Set "description" (print "You had no winning to collect!")}}
