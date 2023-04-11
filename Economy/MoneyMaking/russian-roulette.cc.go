@@ -120,9 +120,9 @@
 									{{$game.Set "players" $players}}
 									{{dbSet 0 "russianRoulette" (sdict "game" $game)}}
 									{{$b.Set "cash" (sub $bal $bet)}}
-									{{dbSet $userID "economyInfo" $b}}
+									{{dbSet $userID "EconomyInfo" $b}}
 									{{$embed.Set "description" (print "You've joined this game of russian roulette with a bet of " $symbol $bet)}}
-									{{$embed.Set "footer" (sdict "text" (print (len $players) "/6"))}}
+									{{$embed.Set "footer" (sdict "text" (print "Players: " (len $players) "/6"))}}
 									{{$embed.Set "color" $successColor}}
 									{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 									{{scheduleUniqueCC $.CCID nil 420 "rr-game-2" "cancel-2"}}
@@ -191,10 +191,10 @@
 										{{$embed.Set "description" (print "There is already a current game. Join it with `" $.Cmd " " $a.game.cost "`")}}
 										{{$embed.Set "color" $errorColor}}
 									{{else}}
-										{{dbSet 0 "russianRoulette" (sdict "game" (sdict "cost" $bet "players" (cslice $userID)))}}
+										{{dbSet 0 "russianRoulette" (sdict "game" (sdict "cost" $bet "players" (cslice $userID) "owner" $userID))}}
 										{{$bal = sub $bal $bet}}
 										{{$b.Set "cash" $bal}}
-										{{dbSet $userID "economyInfo" $bal}}
+										{{dbSet $userID "EconomyInfo" $b}}
 										{{$embed.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" $.Cmd " " $bet "` (1/6)\nTo start this game use the command `" $.Cmd " start`")}}
 										{{$embed.Set "color" $successColor}}
 										{{scheduleUniqueCC $.CCID nil 300 "rr-game" "cancel"}}
