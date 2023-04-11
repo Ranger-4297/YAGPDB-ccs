@@ -163,14 +163,14 @@
 							{{$fields := cslice}}
 							{{$sDB := (dbGet 0 "rouletteStorage").Value}}
 							{{range $winners}}
-								{{$amount := ($sU.Get (toString .ID)).amount}}
+								{{$amount := ($sDB.Get (toString .))}}
 								{{if $amount}}
 									{{$amount = add $amount $payout}} 
 								{{else}}
 									{{$amount = $payout}}
 								{{end}}
-								{{- $fields = $fields.Append (sdict "Name" (print .) "value" .Mention "inline" false) -}}
-								{{- $sDB = $sDB.Append (sdict "user" .ID "amount" $amount) -}}
+								{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
+								{{$sDB.Set (toString .) $amount}}
 							{{end}}
 							{{$em.Set "title" "Winners"}}
 							{{$em.Set "description" (print "payout is: " $payout " per-person")}}
