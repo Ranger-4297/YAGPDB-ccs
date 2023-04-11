@@ -171,6 +171,7 @@
 								{{end}}
 								{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
 								{{$sDB.Set (toString .) $amount}}
+								{{dbSet 0 "rouletteStorage" $sDB}}
 							{{end}}
 							{{$em.Set "title" "Winners"}}
 							{{$em.Set "description" (print "payout is: " $payout " per-person")}}
