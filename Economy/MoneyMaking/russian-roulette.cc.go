@@ -114,10 +114,9 @@
 									{{$game.Set "players" $players}}
 									{{dbSet 0 "russianRoulette" (sdict "game" $game)}}
 									{{$b.Set "cash" (sub $bal $bet)}}
-									{{$b}}
 									{{dbSet $userID "economyInfo" $b}}
 									{{$embed.Set "description" (print "You've joined this game of russian roulette with a bet of " $symbol $bet)}}
-									{{$embed.Set "footer" (sdict "name" (print (len $players) "/6"))}}
+									{{$embed.Set "footer" (sdict "text" (print (len $players) "/6"))}}
 									{{$embed.Set "color" $successColor}}
 									{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 									{{scheduleUniqueCC $.CCID nil 420 "rr-game-2" "cancel-2"}}
