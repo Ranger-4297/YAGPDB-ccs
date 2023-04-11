@@ -144,7 +144,7 @@
 										{{sleep 1}}
 										{{- continue -}}
 									{{- end -}}
-									{{$loser := (userArg $p)}}
+									{{$loser = (userArg $p)}}
 									{{sendMessage nil (cembed (sdict "description" (print "**" $loser "** pulled the trigger and dies") "color" 0xFF5F1F))}}
 									{{break}}
 								{{end}}
@@ -161,11 +161,7 @@
 							{{end}}
 							{{$payout := (div $game.cost (len $winners))}}
 							{{$fields := cslice}}
-							{{$sU := cslice}}
-							{{$sDB := (dbGet 0 "rouletteStorage")}}
-							{{if $sDB}}
-								{{$sU = $sDB}}
-							{{end}}
+							{{$sDB := (dbGet 0 "rouletteStorage").Value}}
 							{{range $winners}}
 								{{$amount := ($sU.Get (toString .ID)).amount}}
 								{{if $amount}}
@@ -174,13 +170,13 @@
 									{{$amount = $payout}}
 								{{end}}
 								{{- $fields = $fields.Append (sdict "Name" (print .) "value" .Mention "inline" false) -}}
-								{{- $sU = $sU.Append (sdict "user" .ID "amount" $amount) -}}
+								{{- $sDB = $sDB.Append (sdict "user" .ID "amount" $amount) -}}
 							{{end}}
 							{{$em.Set "title" "Winners"}}
 							{{$em.Set "description" (print "payout is: " $payout " per-person")}}
 							{{$em.Set "fields" $fields}}
 							{{$em.Set "color" $successColor}}
-							{{dbSet 0 "rouletteStorage" $sU}}
+							{{dbSet 0 "rouletteStorage" $sDB}}
 							{{dbSet 0 "russianRoulette" sdict}}
 							{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 						{{end}}
@@ -235,21 +231,17 @@
 		{{with dbGet 0 "russianRoulette"}}
 			{{$a := sdict .Value}}
 			{{$cost := $a.cost}}
-			{{$sU := cslice}}
-			{{$sDB := (dbGet 0 "rouletteStorage")}}
-			{{if $sDB}}
-				{{$sU = $sDB}}
-			{{end}}
+			{{$sDB := (dbGet 0 "rouletteStorage").Value}}
 			{{range $a.players}}
-				{{$amount := ($sU.Get (toString .ID)).amount}}
+				{{$amount := ($sDB.Get (toString .ID)).amount}}
 				{{if $amount}}
 					{{$amount = add $amount $cost}} 
 				{{else}}
 					{{$amount = $cost}}
 				{{end}}
-				{{- $sU = $sU.Append (sdict "user" .ID "amount" $amount) -}}
+				{{- $sDB = $sDB.Append (sdict "user" .ID "amount" $amount) -}}
 			{{end}}
-			{{dbSet 0 "rouletteStorage" $sU}}
+			{{dbSet 0 "rouletteStorage" $sDB}}
 		{{end}}
 	{{end}}
 {{end}}
