@@ -40,6 +40,7 @@
 				{{with dbGet 0 "russianRoulette"}}
 					{{$a = sdict .Value}}
 					{{if $a.game}}
+						{{$cost := $a.cost}}
 						{{$game := $a.game}}
 						{{$cost := $game.cost}}
 						{{$players := $game.players}}
@@ -50,7 +51,12 @@
 							{{if lt (toInt $bet) (toInt $betMax)}}
 								{{if gt (toInt $bet) 0}}
 									{{if le (toInt $bet) (toInt $bal)}}
-										{{$continue = true}}
+										{{if le (toInt $bet) (toInt $cost)}}
+											{{$continue = true}}
+										{{else}}
+											{{$embed.Set "description" (print "You can't bet more than " $cost)}}
+											{{$embed.Set "color" $errorColor}}
+										{{end}}
 									{{else}}
 										{{$embed.Set "description" (print "You can't bet more than you have!")}}
 										{{$embed.Set "color" $errorColor}}
