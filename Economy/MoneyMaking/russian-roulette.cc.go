@@ -156,15 +156,18 @@
 								{{$payout := (div $game.cost (len $winners))}}
 								{{$fields := cslice}}
 								{{$sDB := (dbGet 0 "rouletteStorage").Value}}
+								{{if not $sDB}}
+									{{$sDB = sdict}}
+								{{end}}
 								{{range $winners}}
-									{{$amount := ($sDB.Get (toString .))}}
+									{{$amount := ($sDB.Get (toString (userArg .).ID))}}
 									{{if $amount}}
-										{{$amount = add $amount $payout}} 
+										{{$amount = add $amount $payout}}
 									{{else}}
-										{{$amount = $payout}}
+										{{$amount = $payout}} 
 									{{end}}
 									{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
-									{{$sDB.Set (toString .) $amount}}
+									{{$sDB.Set (toString (userArg .).ID) $amount}}
 								{{end}}
 								{{dbSet 0 "rouletteStorage" $sDB}}
 								{{$em.Set "title" "Winners"}}
@@ -225,16 +228,17 @@
 		{{$em.Set "color" $errorColor}}
 		{{cancelScheduledUniqueCC .CCID "rr-game"}}
 	{{else}}
-		{{dbSet 0 "russianRoulette" sdict}}
 		{{$em.Set "description" (print "The host took too long to start the game. Please start a new one.")}}
 		{{$em.Set "color" $errorColor}}
-		{{cancelScheduledUniqueCC .CCID "rr-game-2"}}
 		{{with dbGet 0 "russianRoulette"}}
 			{{$a := sdict .Value}}
-			{{$cost := $a.cost}}
+			{{$cost := $a.game.cost}}
 			{{$sDB := (dbGet 0 "rouletteStorage").Value}}
-			{{range $a.players}}
-				{{$amount := ($sDB.Get (toString .ID))}}
+			{{if not $sDB}}
+				{{$sDB = sdict}}
+			{{end}}
+			{{range $a.game.players}}
+				{{$amount := ($sDB.Get (toString .))}}
 				{{if $amount}}
 					{{$amount = add $amount $cost}} 
 				{{else}}
@@ -244,6 +248,8 @@
 			{{end}}
 			{{dbSet 0 "rouletteStorage" $sDB}}
 		{{end}}
+		{{cancelScheduledUniqueCC .CCID "rr-game-2"}}
+		{{dbSet 0 "russianRoulette" sdict}}
 	{{end}}
 {{end}}
 {{sendMessage nil (cembed $em)}}
