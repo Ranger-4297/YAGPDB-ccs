@@ -160,19 +160,21 @@
 								{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 							{{end}}
 							{{$payout := (div $game.cost (len $winners))}}
-							{{$entry := cslice}}
-							{{$storedUsers := cslice}}
-							{{$storageDB := (dbGet 0 "rouletteStorage")}}
-							{{if $storageDB}}
-								{{$storedUsers = $storageDB}}
+							{{$fields := cslice}}
+							{{$sU := cslice}}
+							{{$sDB := (dbGet 0 "rouletteStorage")}}
+							{{if $sDB}}
+								{{$sU = $sDB}}
 							{{end}}
 							{{range $winners}}
-								{{$amount := ($storedUsers.Get (toString $userID)).amount}}
+								{{$amount := ($sU.Get (toString .ID)).amount}}
 								{{if $amount}}
-									{{$bet = add $amount $bet}} 
+									{{$amount = add $amount $payout}} 
+								{{else}}
+									{{$amount = $payout}}
 								{{end}}
-								{{- $entry = $entry.Append (sdict "Name" (print .) "value" .Mention "inline" false) -}}
-								{{- $storedUsers = $storedUsers.Append (sdict "user" .ID "amount" $bet) -}}
+								{{- $fields = $fields.Append (sdict "Name" (print .) "value" .Mention "inline" false) -}}
+								{{- $sU = $sU.Append (sdict "user" .ID "amount" $amount) -}}
 							{{end}}
 							{{$embed.Set "title" "Winners"}}
 							{{$embed.Set "description" (print "payout is: " $payout " per-person")}}
