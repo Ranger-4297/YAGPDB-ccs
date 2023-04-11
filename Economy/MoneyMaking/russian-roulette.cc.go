@@ -153,33 +153,33 @@
 										{{- $winners = $winners.Append (userArg .).Mention}}
 									{{- end -}}
 								{{end}}
+								{{$payout := (div $game.cost (len $winners))}}
+								{{$fields := cslice}}
+								{{$sDB := (dbGet 0 "rouletteStorage").Value}}
+								{{range $winners}}
+									{{$amount := ($sDB.Get (toString .))}}
+									{{if $amount}}
+										{{$amount = add $amount $payout}} 
+									{{else}}
+										{{$amount = $payout}}
+									{{end}}
+									{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
+									{{$sDB.Set (toString .) $amount}}
+								{{end}}
+								{{dbSet 0 "rouletteStorage" $sDB}}
+								{{$em.Set "title" "Winners"}}
+								{{$em.Set "description" (print "payout is: " $payout " per-person")}}
+								{{$em.Set "fields" $fields}}
+								{{$em.Set "color" $successColor}}
+								{{dbSet 0 "rouletteStorage" $sDB}}
+								{{dbSet 0 "russianRoulette" sdict}}
+								{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 							{{else}}
 								{{$em.Set "description" (print "Not enough players to start the match :(\nStart a new one with " $.Cmd " <bet>")}}
 								{{$em.Set "color" $errorColor}}
 								{{dbSet 0 "russianRoulette" sdict}}
 								{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 							{{end}}
-							{{$payout := (div $game.cost (len $winners))}}
-							{{$fields := cslice}}
-							{{$sDB := (dbGet 0 "rouletteStorage").Value}}
-							{{range $winners}}
-								{{$amount := ($sDB.Get (toString .))}}
-								{{if $amount}}
-									{{$amount = add $amount $payout}} 
-								{{else}}
-									{{$amount = $payout}}
-								{{end}}
-								{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
-								{{$sDB.Set (toString .) $amount}}
-								{{dbSet 0 "rouletteStorage" $sDB}}
-							{{end}}
-							{{$em.Set "title" "Winners"}}
-							{{$em.Set "description" (print "payout is: " $payout " per-person")}}
-							{{$em.Set "fields" $fields}}
-							{{$em.Set "color" $successColor}}
-							{{dbSet 0 "rouletteStorage" $sDB}}
-							{{dbSet 0 "russianRoulette" sdict}}
-							{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 						{{end}}
 					{{else}}
 						{{if (index $.CmdArgs 0) | toInt}}
@@ -234,13 +234,13 @@
 			{{$cost := $a.cost}}
 			{{$sDB := (dbGet 0 "rouletteStorage").Value}}
 			{{range $a.players}}
-				{{$amount := ($sDB.Get (toString .ID)).amount}}
+				{{$amount := ($sDB.Get (toString .ID))}}
 				{{if $amount}}
 					{{$amount = add $amount $cost}} 
 				{{else}}
 					{{$amount = $cost}}
 				{{end}}
-				{{- $sDB = $sDB.Append (sdict "user" .ID "amount" $amount) -}}
+				{{$sDB.Set (toString .) $amount}}
 			{{end}}
 			{{dbSet 0 "rouletteStorage" $sDB}}
 		{{end}}
