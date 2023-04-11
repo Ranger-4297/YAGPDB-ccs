@@ -93,9 +93,9 @@
 								{{end}}
 							{{else if eq $bet "retrieve" "collect"}}
 								{{$sDB := (dbGet 0 "rouletteStorage")}}
-								{{if $sDB.Get (toString $userID)}}
-									{{$winnings :=  $sDB.Get (toString $userID).amount}}
-									{{$em.Set "description" (print "You've collected " $winnings)}}
+								{{$amount := $sDB.Get (toString $userID)}}
+								{{if $amount}}
+									{{$em.Set "description" (print "You've collected " $amount)}}
 									{{$em.Set "color" $successColor}}
 									{{$sDB.Del (toString $userID )}}
 									{{dbSet 0 "rouletteStorage" $sDB}}
