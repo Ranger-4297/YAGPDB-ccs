@@ -230,6 +230,25 @@
 		{{$embed.Set "description" (print "The host took too long to start the game. Please start a new one.")}}
 		{{$embed.Set "color" $errorColor}}
 		{{cancelScheduledUniqueCC .CCID "rr-game-2"}}
+		{{with dbGet 0 "russianRoulette"}}
+			{{$a := sdict .Value}}
+			{{$cost := $a.cost}}
+			{{$sU := cslice}}
+			{{$sDB := (dbGet 0 "rouletteStorage")}}
+			{{if $sDB}}
+				{{$sU = $sDB}}
+			{{end}}
+			{{range $a.players}}
+				{{$amount := ($sU.Get (toString .ID)).amount}}
+				{{if $amount}}
+					{{$amount = add $amount $cost}} 
+				{{else}}
+					{{$amount = $cost}}
+				{{end}}
+				{{- $sU = $sU.Append (sdict "user" .ID "amount" $amount) -}}
+			{{end}}
+			{{dbSet 0 "rouletteStorage" $sU}}
+		{{end}}
 	{{end}}
 {{end}}
 {{sendMessage nil (cembed $embed)}}
