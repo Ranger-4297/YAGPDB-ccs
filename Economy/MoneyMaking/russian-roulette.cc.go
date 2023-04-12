@@ -15,7 +15,7 @@
 {{$userID := .User.ID}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Russian Roulette */}}
 
@@ -27,7 +27,6 @@
 		{{$a := sdict .Value}}
 		{{$symbol := $a.symbol}}
 		{{$betMax := $a.betMax}}
-		{{$incomeCooldown := $a.incomeCooldown | toInt}}
 		{{$userDB := (dbGet $userID "EconomyInfo")}}
 		{{if not $userDB}}
 			{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
@@ -45,14 +44,14 @@
 						{{$cost := $game.cost}}
 						{{$players := $game.players}}
 						{{$bet := (index $.CmdArgs 0)}}
-						{{$continue := false}}
+						{{$ct := false}}
 						{{$rr := false}}
 						{{if $bet | toInt}}
 							{{if lt (toInt $bet) (toInt $betMax)}}
 								{{if gt (toInt $bet) 0}}
 									{{if le (toInt $bet) (toInt $bal)}}
 										{{if le (toInt $bet) (toInt $cost)}}
-											{{$continue = true}}
+											{{$ct = true}}
 										{{else}}
 											{{$em.Set "description" (print "You can't bet more than " $cost)}}
 											{{$em.Set "color" $errorColor}}
@@ -74,7 +73,7 @@
 							{{if eq $bet "all"}}
 								{{if ne (toInt $bal) 0}}
 									{{if lt $bet $betMax}}
-										{{$continue = true}}
+										{{$ct = true}}
 										{{$bet = $bal}}
 									{{else}}
 										{{$em.Set "description" (print "You can't bet more than " $symbol $betMax)}}
@@ -91,26 +90,15 @@
 									{{$em.Set "description" (print "You cannot start the game")}}
 									{{$em.Set "color" $errorColor}}
 								{{end}}
-							{{else if eq $bet "retrieve" "collect"}}
-								{{$sDB := (dbGet 0 "rouletteStorage")}}
-								{{$amount := $sDB.Get (toString $userID)}}
-								{{if $amount}}
-									{{$em.Set "description" (print "You've collected " $amount)}}
-									{{$em.Set "color" $successColor}}
-									{{$sDB.Del (toString $userID )}}
-									{{dbSet 0 "rouletteStorage" $sDB}}
-									{{$b.Set "cash" (add $bal $amount)}}
-									{{dbSet $userID $b}}
-								{{else}}
-									{{$em.Set "description" (print "You had no winning to collect!")}}
-									{{$em.Set "color" $errorColor}}
-								{{end}}
+							{{else if eq $bet "collect"}}
+								{{$em.Set "description" (print "You cannot collect during a game. Please wait till it is over to collect any owed money.")}}
+								{{$em.Set "color" $errorColor}}
 							{{else}}
 								{{$em.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
 								{{$em.Set "color" $errorColor}}
 							{{end}}
 						{{end}}
-						{{if $continue}}
+						{{if $ct}}
 							{{if not (eq (len $players) 6)}}
 								{{if in $players $userID}}
 									{{$em.Set "description" (print "You're already in this game")}}
@@ -160,14 +148,14 @@
 									{{$sDB = sdict}}
 								{{end}}
 								{{range $winners}}
-									{{$amount := ($sDB.Get (toString (userArg .).ID))}}
-									{{if $amount}}
-										{{$amount = add $amount $payout}}
+									{{$amt := ($sDB.Get (toString (userArg .).ID))}}
+									{{if $amt}}
+										{{$amt = add $amt $payout}}
 									{{else}}
-										{{$amount = $payout}} 
+										{{$amt = $payout}} 
 									{{end}}
 									{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
-									{{$sDB.Set (toString (userArg .).ID) $amount}}
+									{{$sDB.Set (toString (userArg .).ID) $amt}}
 								{{end}}
 								{{dbSet 0 "rouletteStorage" $sDB}}
 								{{$em.Set "title" "Winners"}}
@@ -209,6 +197,20 @@
 								{{$em.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
 								{{$em.Set "color" $errorColor}}
 							{{end}}
+						{{else if eq (index $.CmdArgs 0) "collect"}}
+							{{$sDB := (dbGet 0 "rouletteStorage").Value}}
+							{{$amt := $sDB.Get (toString $userID)}}
+							{{if $amt}}
+								{{$em.Set "description" (print "You've collected " $amt)}}
+								{{$em.Set "color" $successColor}}
+								{{$sDB.Del (toString $userID )}}
+								{{dbSet 0 "rouletteStorage" $sDB}}
+								{{$b.Set "cash" (add $bal $amt)}}
+								{{dbSet $userID "EconomyInfo" $b}}
+							{{else}}
+								{{$em.Set "description" (print "You had no winning to collect!")}}
+								{{$em.Set "color" $errorColor}}
+							{{end}}
 						{{end}}
 					{{end}}
 				{{end}}
@@ -223,33 +225,32 @@
 	{{end}}
 {{else}}
 	{{if eq .ExecData "cancel"}}
-		{{dbSet 0 "russianRoulette" sdict}}
 		{{$em.Set "description" (print "Not enough players joined for Russian-roulette")}}
 		{{$em.Set "color" $errorColor}}
 		{{cancelScheduledUniqueCC .CCID "rr-game"}}
 	{{else}}
 		{{$em.Set "description" (print "The host took too long to start the game. Please start a new one.")}}
 		{{$em.Set "color" $errorColor}}
-		{{with dbGet 0 "russianRoulette"}}
-			{{$a := sdict .Value}}
-			{{$cost := $a.game.cost}}
-			{{$sDB := (dbGet 0 "rouletteStorage").Value}}
-			{{if not $sDB}}
-				{{$sDB = sdict}}
-			{{end}}
-			{{range $a.game.players}}
-				{{$amount := ($sDB.Get (toString .))}}
-				{{if $amount}}
-					{{$amount = add $amount $cost}} 
-				{{else}}
-					{{$amount = $cost}}
-				{{end}}
-				{{$sDB.Set (toString .) $amount}}
-			{{end}}
-			{{dbSet 0 "rouletteStorage" $sDB}}
-		{{end}}
-		{{cancelScheduledUniqueCC .CCID "rr-game-2"}}
-		{{dbSet 0 "russianRoulette" sdict}}
 	{{end}}
+	{{with dbGet 0 "russianRoulette"}}
+		{{$a := sdict .Value}}
+		{{$cost := $a.game.cost}}
+		{{$sDB := (dbGet 0 "rouletteStorage").Value}}
+		{{if not $sDB}}
+			{{$sDB = sdict}}
+		{{end}}
+		{{range $a.game.players}}
+			{{$amt := ($sDB.Get (toString .))}}
+			{{if $amt}}
+				{{$amt = add $amt $cost}} 
+			{{else}}
+				{{$amt = $cost}}
+			{{end}}
+			{{$sDB.Set (toString .) $amt}}
+		{{end}}
+		{{dbSet 0 "rouletteStorage" $sDB}}
+	{{end}}
+	{{cancelScheduledUniqueCC .CCID "rr-game-2"}}
+	{{dbSet 0 "russianRoulette" sdict}}
 {{end}}
 {{sendMessage nil (cembed $em)}}
