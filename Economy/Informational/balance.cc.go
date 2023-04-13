@@ -33,23 +33,17 @@
 			{{$user = $newUser}}
 		{{end}}
 	{{end}}
-	{{if not (dbGet $user.ID "EconomyInfo")}}
-		{{dbSet $user.ID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
-	{{end}}
-	{{with (dbGet $user.ID "EconomyInfo")}}
-		{{$a = sdict .Value}}
-		{{$cash := ($a.cash | toInt)}}
-		{{$bank := ($a.bank | toInt)}}
-		{{$net := humanizeThousands ($cash | add $bank)}}
-		{{$embed.Set "author" (sdict "name" $user.Username "icon_url" ($user.AvatarURL "128"))}}
-		{{$embed.Set "description" (print $user.Mention "'s balance")}}
-		{{$embed.Set "fields" (cslice 
-			(sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true)
-			(sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true)
-			(sdict "name" "Networth" "value" (print $symbol $net) "inline" true))}}
-		{{$embed.Set "color" $successColor}}
-		{{$embed.Set "timestamp" currentTime}}
-	{{end}}
+	{{$bank := or (((dbGet 0 "bank").Value).Get (toString $user.ID)) 0 | toInt}}
+	{{$cash := or (dbGet $user.ID "cash").Value 0 | toInt}}
+	{{$net := humanizeThousands ($cash | add $bank)}}
+	{{$embed.Set "author" (sdict "name" $user.Username "icon_url" ($user.AvatarURL "128"))}}
+	{{$embed.Set "description" (print $user.Mention "'s balance")}}
+	{{$embed.Set "fields" (cslice 
+		(sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true)
+		(sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true)
+		(sdict "name" "Networth" "value" (print $symbol $net) "inline" true))}}
+	{{$embed.Set "color" $successColor}}
+	{{$embed.Set "timestamp" currentTime}}
 {{else}}
 	{{$embed.Set "description" (print "No database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
