@@ -29,105 +29,96 @@
 	{{$symbol := $a.symbol}}
 	{{$betMax := $a.betMax}}
 	{{$incomeCooldown := $a.incomeCooldown | toInt}}
-	{{if not (dbGet $userID "EconomyInfo")}}
-		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
-	{{end}}
-	{{with (dbGet $userID "EconomyInfo")}}
-		{{$a = sdict .Value}}
-		{{$bal := $a.cash}}
-		{{with $.CmdArgs}}
-			{{$bet := (index . 0)}}
-			{{$continue := false}}
-			{{if $bet | toInt}}
-				{{if gt (toInt $bet) 0}}
-					{{if le (toInt $bet) (toInt $bal)}}
-						{{$continue = true}}
-					{{else}}
-						{{$embed.Set "description" (print "You can't bet more than you have!")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
+	{{$bal := or (dbGet .User.ID "cash").Value 0 | toInt}}
+	{{with $.CmdArgs}}
+		{{$bet := (index . 0)}}
+		{{$continue := false}}
+		{{if $bet | toInt}}
+			{{if gt (toInt $bet) 0}}
+				{{if le (toInt $bet) (toInt $bal)}}
+					{{$continue = true}}
 				{{else}}
-					{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+					{{$embed.Set "description" (print "You can't bet more than you have!")}}
 					{{$embed.Set "color" $errorColor}}
 				{{end}}
 			{{else}}
-				{{$bet = $bet | lower}}
-				{{if eq $bet "all"}}
-					{{if ne (toInt $bet) 0}}
-						{{$continue = true}}
-					{{else}}
-						{{$embed.Set "description" (print "You had no money to bet.")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{end}}
-			{{if $continue}}
-				{{if le $bet $betMax}}
-					{{if (reFind `rollnum(ber)?|rn` $.Cmd)}}
-						{{if not ($cooldown := dbGet $userID "rollCooldown")}}
-							{{dbSetExpire $userID "rollCooldown" "cooldown" $incomeCooldown}}
-							{{$roll := (randInt 1 101)}}
-							{{$amount := ""}}
-							{{$newBal := ""}}
-							{{if and (ge $roll 65) (lt $roll 90)}}
-								{{$amount = $bet}}
-								{{$newBal = (add $bal $amount)}}
-							{{else if and (ge $roll 90) (lt $roll 100)}}
-								{{$amount = (mult $bet 3)}}
-								{{$newBal = (add $bal $amount)}}
-							{{else if eq $roll 100}}
-								{{$amount = (mult $bet 5)}}
-								{{$newBal = (add $bal $amount)}}
-							{{else}}
-								{{$newBal = (sub $bal $bet)}}
-							{{end}}
-							{{if gt $newBal $bal}}
-								{{$embed.Set "description" (print "The roll landed on " $roll " and you and won " $symbol (humanizeThousands $amount) "!")}}
-								{{$embed.Set "color" $successColor}}
-							{{else}}
-								{{$embed.Set "description" (print "The roll landed on " $roll " and you and lost " $symbol (humanizeThousands $bet))}}
-								{{$embed.Set "color" $errorColor}}
-							{{end}}
-							{{$a.Set "cash" $newBal}}
-							{{dbSet $userID "EconomyInfo" $a}}
-						{{else}}
-							{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
-							{{$embed.Set "color" $errorColor}}
-						{{end}}
-					{{else if (reFind `snake?-?eyes` $.Cmd)}}
-						{{if not ($cooldown := dbGet $userID "snakeeyesCooldown")}}
-							{{dbSetExpire $userID "snakeeyesCooldown" "cooldown" $incomeCooldown}}
-							{{$die1 := (randInt 1 7)}}
-							{{$die2 := (randInt 1 7)}}
-							{{$newCash := (sub $bal $bet)}}
-							{{if and (eq $die1 1) (eq $die2 1)}}
-								{{$embed.Set "description" (print "You rolled snake eyes (" $die1 "&" $die2 ")\nAnd won " $symbol (humanizeThousands (mult $bet 36)))}}
-								{{$embed.Set "color" $successColor}}
-								{{$newCash = (add $bal (mult $bet 36))}}
-							{{else}}
-								{{$embed.Set "description" (print "You rolled " $die1 "&" $die2 " and lost " $symbol (humanizeThousands $bet) ".")}}
-								{{$embed.Set "color" $errorColor}}
-							{{end}}
-							{{$a.Set "cash" $newCash}}
-							{{dbSet $userID "EconomyInfo" $a}}
-						{{else}}
-							{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
-							{{$embed.Set "color" $errorColor}}
-						{{end}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
+				{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+				{{$embed.Set "color" $errorColor}}
 			{{end}}
 		{{else}}
-			{{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
-			{{$embed.Set "color" $errorColor}}
+			{{$bet = $bet | lower}}
+			{{if eq $bet "all"}}
+				{{if ne (toInt $bet) 0}}
+					{{$continue = true}}
+				{{else}}
+					{{$embed.Set "description" (print "You had no money to bet.")}}
+					{{$embed.Set "color" $errorColor}}
+				{{end}}
+			{{else}}
+				{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+				{{$embed.Set "color" $errorColor}}
+			{{end}}
 		{{end}}
+		{{if $continue}}
+			{{if le $bet $betMax}}
+				{{if (reFind `rollnum(ber)?|rn` $.Cmd)}}
+					{{if not ($cooldown := dbGet $userID "rollCooldown")}}
+						{{dbSetExpire $userID "rollCooldown" "cooldown" $incomeCooldown}}
+						{{$roll := (randInt 1 101)}}
+						{{$rs := 1}}
+						{{$amount := ""}}
+						{{if and (ge $roll 65) (lt $roll 90)}}
+							{{$amount = $bet}}
+							{{$bal = (add $bal $amount)}}
+						{{else if and (ge $roll 90) (lt $roll 100)}}
+							{{$amount = (mult $bet 3)}}
+							{{$bal = (add $bal $amount)}}
+						{{else if eq $roll 100}}
+							{{$amount = (mult $bet 5)}}
+							{{$bal = (add $bal $amount)}}
+						{{else}}
+							{{$bal = (sub $bal $bet)}}
+							{{$rs = 0}}
+						{{end}}
+						{{if $rs}}
+							{{$embed.Set "description" (print "The roll landed on " $roll " and you and won " $symbol (humanizeThousands $amount) "!")}}
+							{{$embed.Set "color" $successColor}}
+						{{else}}
+							{{$embed.Set "description" (print "The roll landed on " $roll " and you and lost " $symbol (humanizeThousands $bet))}}
+							{{$embed.Set "color" $errorColor}}
+						{{end}}
+					{{else}}
+						{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+						{{$embed.Set "color" $errorColor}}
+					{{end}}
+				{{else if (reFind `snake?-?eyes` $.Cmd)}}
+					{{if not ($cooldown := dbGet $userID "snakeeyesCooldown")}}
+						{{dbSetExpire $userID "snakeeyesCooldown" "cooldown" $incomeCooldown}}
+						{{$die1 := (randInt 1 7)}}
+						{{$die2 := (randInt 1 7)}}
+						{{if and (eq $die1 1) (eq $die2 1)}}
+							{{$embed.Set "description" (print "You rolled snake eyes (" $die1 "&" $die2 ")\nAnd won " $symbol (humanizeThousands (mult $bet 36)))}}
+							{{$embed.Set "color" $successColor}}
+							{{$bal = (add $bal (mult $bet 36))}}
+						{{else}}
+							{{$embed.Set "description" (print "You rolled " $die1 "&" $die2 " and lost " $symbol (humanizeThousands $bet) ".")}}
+							{{$embed.Set "color" $errorColor}}
+						{{end}}
+					{{else}}
+						{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+						{{$embed.Set "color" $errorColor}}
+					{{end}}
+				{{end}}
+			{{else}}
+				{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+				{{$embed.Set "color" $errorColor}}
+			{{end}}
+		{{end}}
+	{{else}}
+		{{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+		{{$embed.Set "color" $errorColor}}
 	{{end}}
+	{{dbSet .User.ID "cash" $bal}}
 {{else}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
