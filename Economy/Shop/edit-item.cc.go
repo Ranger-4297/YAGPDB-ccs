@@ -32,8 +32,8 @@
 			{{$store := sdict .Value}}
 			{{$items := sdict}}
 			{{$value := ""}}
-			{{if ($store.Get "Items")}}
-				{{$items = $store.Get "Items"}}
+			{{if ($store.Get "items")}}
+				{{$items = $store.Get "items"}}
 				{{with $.CmdArgs}}
 					{{$name := (index . 0)}}
 					{{if $items.Get $name}}
@@ -45,9 +45,9 @@
 								{{if eq $option "name"}}
 									{{if gt (len $.CmdArgs) 2}}
 										{{$value = (index . 2)}}
-										{{$items.Set $value (($store.Get "Items").Get $name)}}
+										{{$items.Set $value (($store.Get "items").Get $name)}}
 										{{$items.Del $name}}
-										{{$store.Set "Items" $items}}
+										{{$store.Set "items" $items}}
 										{{dbSet 0 "store" $store}}
 										{{$cont = 1}}
 									{{else}}
@@ -68,7 +68,7 @@
 												{{$item := $items.Get $name}}
 												{{$item.Set "quantity" $value}}
 												{{$items.Set $name $item}}
-												{{$store.Set "Items" $items}}
+												{{$store.Set "items" $items}}
 												{{dbSet 0 "store" $store}}
 											{{end}}
 										{{else}}
@@ -77,7 +77,7 @@
 												{{$item := $items.Get $name}}
 												{{$item.Set "quantity" $value}}
 												{{$items.Set $name $item}}
-												{{$store.Set "Items" $items}}
+												{{$store.Set "items" $items}}
 												{{dbSet 0 "store" $store}}
 												{{$cont = 1}}
 											{{else}}
@@ -96,7 +96,7 @@
 											{{$item := $items.Get $name}}
 											{{$item.Set "price" $value}}
 											{{$items.Set $name $item}}
-											{{$store.Set "Items" $items}}
+											{{$store.Set "items" $items}}
 											{{dbSet 0 "store" $store}}
 											{{$cont = 1}}
 										{{else}}
@@ -113,7 +113,7 @@
 										{{$item := $items.Get $name}}
 										{{$item.Set "description" $value}}
 										{{$items.Set $name $item}}
-										{{$store.Set "Items" $items}}
+										{{$store.Set "items" $items}}
 										{{dbSet 0 "store" $store}}
 										{{$cont = 1}}
 									{{else}}
@@ -128,7 +128,7 @@
 											{{$item := $items.Get $name}}
 											{{$item.Set "role-given" $value}}
 											{{$items.Set $name $item}}
-											{{$store.Set "Items" $items}}
+											{{$store.Set "items" $items}}
 											{{dbSet 0 "store" $store}}
 											{{$cont = 1}}
 										{{else}}
