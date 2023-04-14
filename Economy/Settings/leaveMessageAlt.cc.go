@@ -20,7 +20,7 @@ To retrieve a users economy data upon rejoining
 {{$cash := or (dbGet .User.ID "cash").Value 0 | toInt}}
 {{$bank := or (((dbGet 0 "bank").Value).Get (toString $user.ID)) 0 | toInt}}
 {{$economyData := or ($a := (dbGet $userID "userEconData").Value) ($a := sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
-{{with or ($a := (dbGet 0 "EconomyInfoLeftGuild").Value) sdict}}
+{{with or ($a := (dbGet 0 "EconomyInfoLeftGuild").Value) ($a := sdict)}}
 	{{$a.Set (toString $.User.ID) (sdict "cash" $cash "bank" $bank "data" $economyData)}}
 	{{dbSet 0 "EconomyInfoLeftGuild" $a}}
 	{{if $cash}}
