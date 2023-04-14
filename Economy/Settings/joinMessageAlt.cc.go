@@ -17,17 +17,15 @@ To retrieve a users economy data upon rejoining
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Response */}}
-{{with (dbGet 0 "EconomySettings")}}
-	{{$a := sdict .Value}}
-	{{with dbGet 0 "EconomyInfoLeftGuild"}}
-		{{$a := sdict .Value}}
-		{{if ($a.Get (toString $.User.ID))}}
-			{{dbSet $.User.ID "EconomyInfo" ($a.Get (toString $.User.ID))}}
-			{{$a.Del (toString $.User.ID)}}
-			{{dbSet 0 "EconomyInfoLeftGuild" $a}}
-		{{end}}
-	{{else}}
-		{{$startBalance := (toInt $a.startBalance)}}
-		{{dbSet .User.ID "EconomyInfo" (sdict "cash" $startBalance "bank" 0)}}
+{{with or ($a := (dbGet 0 "EconomyInfoLeftGuild").Value) ($a := sdict)}}
+	{{if ($user := $a.Get (toString $.User.ID))}}
+		{{$cash := $user.cash}}
+		{{$bank := $user.bank}}
+		{{$data := $user.data}}
+		{{dbSet $.User.ID "cash" $cash}}
+		{{dbSet $.User.ID "userEconData" $data}}
+		{{$bankDB := or (dbGet 0 "bank").Value sdict}}
+		{{$bankDB.Set (toString .User.ID) $bank}}
+		{{dbSet 0 "bank" $bankDB}}
 	{{end}}
 {{end}}
