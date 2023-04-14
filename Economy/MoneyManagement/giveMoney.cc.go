@@ -27,71 +27,54 @@
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
-	{{if (dbGet $userID "EconomyInfo")}}
-		{{with $.CmdArgs}}
-			{{if index . 0}}
-				{{if index . 0 | getMember}}
-					{{$user := getMember (index . 0)}}
-					{{$receivingUser := $user.User.ID}}
-					{{if eq $receivingUser $.User.ID}}
-						{{$embed.Set "description" (print "You cannot give money to yourself.")}}
-						{{$embed.Set "color" $errorColor}}
-					{{else}}
-						{{if not (dbGet $receivingUser "EconomyInfo")}}
-							{{dbSet $receivingUser "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
-						{{end}}
-						{{if gt (len $.CmdArgs) 1}}
-							{{$amount := (index $.CmdArgs 1)}}
-							{{if (toInt $amount)}}
-								{{if gt (toInt $amount) 0}}
-									{{with (dbGet $receivingUser "EconomyInfo")}}
-										{{$a = sdict .Value}}
-										{{$receivingBalance := $a.cash}}
-										{{with (dbGet $userID "EconomyInfo")}}
-											{{$b := sdict .Value}}
-											{{$yourBalance := $b.cash}}
-											{{if gt (toInt $amount) (toInt $yourBalance)}}
-												{{$embed.Set "description" (print "You cannot give more than you have.")}}
-												{{$embed.Set "color" $errorColor}}
-											{{else}}
-												{{$receivingNewBalance := $receivingBalance | add $amount}}
-												{{$yourNewBalance := $amount | sub $yourBalance}}
-												{{$embed.Set "description" (print "You gave " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">\nThey now have " $symbol (humanizeThousands $receivingNewBalance) " in cash!")}}
-												{{$embed.Set "color" $successColor}}
-												{{$a.Set "cash" $receivingNewBalance}}
-												{{dbSet $receivingUser "EconomyInfo" $a}}
-												{{$b.Set "cash" $yourNewBalance}}
-												{{dbSet $userID "EconomyInfo" $b}}
-											{{end}}
-										{{end}}
-									{{end}}
-								{{else}}
-									{{$embed.Set "description" (print "You're unable to give this value, check that you used a valid number above 1")}}
+	{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
+	{{with $.CmdArgs}}
+		{{if index . 0}}
+			{{if index . 0 | getMember}}
+				{{$user := getMember (index . 0)}}
+				{{$receivingUser := $user.User.ID}}
+				{{if eq $receivingUser $.User.ID}}
+					{{$embed.Set "description" (print "You cannot give money to yourself.")}}
+					{{$embed.Set "color" $errorColor}}
+				{{else}}
+					{{if gt (len $.CmdArgs) 1}}
+						{{$amount := (index $.CmdArgs 1)}}
+						{{if (toInt $amount)}}
+							{{if gt (toInt $amount) 0}}
+								{{$rCash := or (dbGet $receivingUser "cash").Value 0 | toInt}}
+								{{if gt (toInt $amount) (toInt $cash)}}
+									{{$embed.Set "description" (print "You cannot give more than you have.")}}
 									{{$embed.Set "color" $errorColor}}
+								{{else}}
+									{{$rCash = add $rCash $amount}}
+									{{$cash = sub $amount $yourBalance}}
+									{{$embed.Set "description" (print "You gave " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">\nThey now have " $symbol (humanizeThousands $rCash) " in cash!")}}
+									{{$embed.Set "color" $successColor}}
 								{{end}}
+								{{dbSet $receivingUser "cash" $rCash}}
 							{{else}}
-								{{$embed.Set "description" (print "Invalid `Amount argument passed.\nCheck that you used a valid number above 1")}}
+								{{$embed.Set "description" (print "You're unable to give this value, check that you used a valid number above 1")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
-							{{$embed.Set "description" (print "No `Amount` argument passed.\nSyntax is: `" $.Cmd " <Member:Mention/ID> <Amount:Amount>`")}}
+							{{$embed.Set "description" (print "Invalid `Amount argument passed.\nCheck that you used a valid number above 1")}}
 							{{$embed.Set "color" $errorColor}}
 						{{end}}
+					{{else}}
+						{{$embed.Set "description" (print "No `Amount` argument passed.\nSyntax is: `" $.Cmd " <Member:Mention/ID> <Amount:Amount>`")}}
+						{{$embed.Set "color" $errorColor}}
 					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "Invalid `user` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Amount:Amount>`")}}
-					{{$embed.Set "color" $errorColor}}
 				{{end}}
+			{{else}}
+				{{$embed.Set "description" (print "Invalid `user` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Amount:Amount>`")}}
+				{{$embed.Set "color" $errorColor}}
 			{{end}}
-		{{else}}
-			{{$embed.Set "description" (print "No `User` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Amount:Amount>`")}}
-			{{$embed.Set "color" $errorColor}}
 		{{end}}
 	{{else}}
-		{{dbSet $userID "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
-		{{$embed.Set "description" (print "You were not in the economy database....adding you now\nPlease try again")}}
+		{{$embed.Set "description" (print "No `User` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Amount:Amount>`")}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
+	{{dbSet $userID "cash" $cash}}
 {{else}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
