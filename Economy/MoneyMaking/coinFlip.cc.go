@@ -27,16 +27,16 @@
 {{with (dbGet 0 "EconomySettings")}}
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
-	{{$betMax := $a.betMax}}
+	{{$betMax := $a.betMax | toInt}}
 	{{$incomeCooldown := $a.incomeCooldown | toInt}}
-	{{$bal := or (dbGet .User.ID "cash").Value 0 | toInt}}
+	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
 	{{with $.CmdArgs}}
 		{{if (index . 0)}}
 			{{$side := (index . 0) | toString | lower}}
 			{{$picker1 := ""}}
 			{{$win := ""}}
 			{{$lose := ""}}
-			{{if (reFind `(t(ails?)?|h(eads?)?)` $side)}}
+			{{if (reFind `(t(ails?)?|h(eads?)?)` (lower $side))}}
 				{{if eq $side "t" "tails" "tail"}}
 					{{$side = "tails"}}
 				{{else if eq $side "h" "heads" "head"}}
@@ -47,7 +47,7 @@
 					{{if $bet | toInt}}
 						{{$bet = $bet | toInt}}
 						{{if gt $bet 0}}
-							{{if le $bet $betMax}}
+							{{if gt $bet $betMax}}
 								{{if le $bet $bal}}
 									{{if not ($cooldown := dbGet $userID "coinflipCooldown")}}
 										{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
@@ -94,7 +94,7 @@
 		{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
-	{{dbSet .User.ID "cash" $bal}}
+	{{dbSet $userID "cash" $bal}}
 {{else}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
