@@ -30,7 +30,7 @@
 		{{$a := sdict .Value}}
 		{{$symbol := $a.symbol}}
 		{{$bankDB := (dbGet 0 "bank").Value}}
-		{{bank := or ($bankDB.Get (toString $userID)) 0 | toInt}}
+		{{$bank := or ($bankDB.Get (toString $userID)) 0 | toInt}}
 		{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
 		{{if (reFind `deposit|dep` $cmd)}}
 			{{with $.CmdArgs}}
