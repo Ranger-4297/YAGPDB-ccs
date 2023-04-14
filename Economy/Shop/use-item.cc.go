@@ -25,40 +25,34 @@
 {{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
 {{$embed.Set "timestamp" currentTime}}
 {{with dbGet 0 "EconomySettings"}}
-	{{$a := sdict .Value}}
-	{{with dbGet $userID "EconomyInfo"}}
-		{{$info := sdict .Value}}
-		{{if ($info.Get "inventory")}}
-			{{$items := sdict ($info.Get "inventory")}}
-			{{with $.CmdArgs}}
-				{{$name := (index . 0)}}
-				{{if $items.Get $name}}
-					{{$item := $items.Get (index . 0)}}
-					{{$qty := $item.Get "quantity"}}
-					{{$nqty := (sub (toInt $qty) 1)}}
-					{{if eq (toInt $nqty) 0}}
-						{{$items.Del $name}}
-						{{dbSet $userID "EconomyInfo" $info}}
-					{{else}}
-						{{$item.Set "quantity" $nqty}}
-						{{$items.Set $name $item}}
-						{{$info.Set "inventory" $items}}
-						{{dbSet $userID "EconomyInfo" $info}}
-					{{end}}
-					{{$embed.Set "description" (print "You've just used " $name "!\nYou had " (humanizeThousands $qty) " and now have " (humanizeThousands $nqty))}}
-					{{$embed.Set "color" $successColor}}
+	{{$userdata := or (dbGet $userID "userEconData").Value (sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
+	{{if $inventory := $userdata.inventory}} 
+		{{with $.CmdArgs}}
+			{{$name := (index . 0)}}
+			{{if $item := $inventory.Get $name}}
+				{{$qty := $item.Get "quantity"}}
+				{{$nqty := (sub (toInt $qty) 1)}}
+				{{if eq (toInt $nqty) 0}}
+					{{$inventory.Del $name}}
 				{{else}}
-					{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
-					{{$embed.Set "color" $errorColor}}
+					{{$item.Set "quantity" $nqty}}
+					{{$inventory.Set $name $item}}
+					{{$userdata.Set "inventory" $inventory}}
 				{{end}}
+				{{$embed.Set "description" (print "You've just used " $name "!\nYou had " (humanizeThousands $qty) " and now have " (humanizeThousands $nqty))}}
+				{{$embed.Set "color" $successColor}}
 			{{else}}
-				{{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
+				{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
 				{{$embed.Set "color" $errorColor}}
 			{{end}}
 		{{else}}
-			{{$embed.Set "description" (print "You have no items in your inventory, purchase some from the shop!")}}
+			{{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
+			{{$embed.Set "color" $errorColor}}
 		{{end}}
+	{{else}}
+		{{$embed.Set "description" (print "You have no items in your inventory, purchase some from the shop!")}}
 	{{end}}
+	{{dbSet $userID "userEconData" $userdata}}
 {{else}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
