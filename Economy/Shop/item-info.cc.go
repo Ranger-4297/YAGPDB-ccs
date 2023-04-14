@@ -29,8 +29,8 @@
 	{{with (dbGet 0 "store")}}
 		{{$info := sdict .Value}}
 		{{$items := sdict}}
-		{{if ($info.Get "Items")}}
-			{{$items = sdict ($info.Get "Items")}}
+		{{if ($info.Get "items")}}
+			{{$items = sdict ($info.Get "items")}}
 			{{with $.CmdArgs}}
 				{{$name := (index . 0)}}
 				{{if $items.Get $name}}
