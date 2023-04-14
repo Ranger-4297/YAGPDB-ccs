@@ -37,7 +37,7 @@
 				{{end}}
 			{{else}}
 				{{with $d := (dbGet 0 "accounts")}}
-					{{$a := sdict .VLue}}
+					{{$a := sdict .Value}}
 					{{$C := cslice}}
 					{{if $d}}
 						{{range $k,$v:= $a}}
@@ -72,20 +72,20 @@
 								{{if eq $v "w" "whitelist"}}
 									{{if gt (len $.CmdArgs) 2}}
 										{{$ID := (joinStr " " (slice $.CmdArgs 2))}}
-										{{$u := cslice}}
+										{{$us := cslice}}
 										{{range (reFindAll `\d{17,19}` $ID)}}
 											{{- if not (eq (toInt .) $u) -}}
-												{{- $u = $u.Append .}}
+												{{- $us = $us.Append .}}
 											{{else}}
 												{{$e.Set "description" (print "You cannot add yourself to the whitelist")}}
 											{{end}}
 										{{- end}}
-										{{if $u}}
+										{{if $us}}
 											{{$c = true}}
 											{{$A = $a.Get (toString $u)}}
 											{{$s = $A.Get "accountSettings"}}
 											{{$w := $s.Get "whitelistedUsers"}}
-											{{$s.Set "whitelistedUsers" ($w.AppendSlice $u)}}
+											{{$s.Set "whitelistedUsers" ($w.AppendSlice $us)}}
 											{{$A.Set "accountSettings" $s}}
 											{{$a.Set (toString $u) $A}}
 											{{$e.Set "description" (print "User(s) now added to whitelist.")}}
@@ -163,7 +163,7 @@
 											{{- $c = true -}}
 										{{end}}
 									{{end}}
-									{{$B := ($a.Get (toString $A)).accountBLance}}
+									{{$B := ($a.Get (toString $A)).accountBalance}}
 									{{if and ((reFind `bal(ance)?` $c)) $c}}
 										{{$e.Set "description" (print "The account `" $A "` has a balance of " (humanizeThousands $B))}}
 										{{$e.Set "color" 0x00ff7b}}
@@ -173,53 +173,46 @@
 											{{$lm := (toInt ($a.Get (toString $A)).accountSettings.withdrawimit)}}
 											{{if gt (toInt $p) 0}}
 												{{$p = toInt $p}}
-												{{if not (dbGet $u "EconomyInfo")}}
-													{{dbSet $u "EconomyInfo" (sdict "cash" 200 "bank" 0)}}
+												{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
+												{{$N := ""}}
+												{{$E := ""}}
+												{{if (reFind `with(draw)?` $c)}}
+													{{$c = "withdraw"}}
+												{{else if (reFind `dep(osit)?` $c)}}
+													{{$c = "deposit"}}
 												{{end}}
-												{{with (dbGet $u "EconomyInfo")}}
-													{{$b := sdict .Value}}
-													{{$N := ""}}
-													{{$E := ""}}
-													{{if (reFind `with(draw)?` $c)}}
-														{{$c = "withdraw"}}
-													{{else if (reFind `dep(osit)?` $c)}}
-														{{$c = "deposit"}}
+												{{if le $p $lm}}
+													{{$c := false}}
+													{{$n := ""}}
+													{{if eq $c "with" "withdraw"}}
+														{{$n = "the account has"}}
+														{{if le $p (toInt $B)}}
+															{{$c = "withdrawn"}}
+															{{$N = add (toInt $b.cash) $p}}
+															{{$E = sub $B $p}}
+														{{end}}
+													{{else if eq $c "dep" "deposit"}}
+														{{$n = "you have"}}
+														{{if le $p (toInt $b.cash)}}
+															{{$c = "deposited"}}
+															{{$N = sub (toInt $b.cash) $p}}
+															{{$E = add $B $p}}
+														{{end}}
 													{{end}}
-													{{if le $p $lm}}
-														{{$c := false}}
-														{{$n := ""}}
-														{{if eq $c "with" "withdraw"}}
-															{{$n = "the account has"}}
-															{{if le $p (toInt $B)}}
-																{{$c = true}}
-																{{$c = "withdrawn"}}
-																{{$N = add (toInt $b.cash) $p}}
-																{{$E = sub $B $p}}
-															{{end}}
-														{{else if eq $c "dep" "deposit"}}
-															{{$n = "you have"}}
-															{{if le $p (toInt $b.cash)}}
-																{{$c = true}}
-																{{$c = "deposited"}}
-																{{$N = sub (toInt $b.cash) $p}}
-																{{$E = add $B $p}}
-															{{end}}
-														{{end}}
-														{{if $c}}
-															{{$b := $a.Get (toString $A)}}
-															{{$b.Set "accountBalance" $E}}
-															{{$a.Set $A $b}}
-															{{$e.Set "description" (print "You've just " $c " " $p)}}
-															{{$e.Set "color" 0x00ff7b}}
-															{{dbSet $u "EconomyInfo" (sdict "cash" $N "bank" $b.bank)}}
-															{{dbSet 0 "accounts" $a}}
-														{{else}}
-															{{$e.Set "description" (print "You can't " $c " more than " $n)}}
-														{{end}}
+													{{if $c}}
+														{{$b := $a.Get (toString $A)}}
+														{{$b.Set "accountBalance" $E}}
+														{{$e.Set "description" (print "You've just " $c " " $p)}}
+														{{$e.Set "color" 0x00ff7b}}
+														{{$a.Set $A $b}}
+														{{dbSet 0 "accounts" $a}}
 													{{else}}
-														{{$e.Set "description" (print "You can't " $c " more than " $lm " at one time")}}
+														{{$e.Set "description" (print "You can't " $c " more than " $n)}}
 													{{end}}
+												{{else}}
+													{{$e.Set "description" (print "You can't " $c " more than " $lm " at one time")}}
 												{{end}}
+												{{dbSet $userID "cash" $cash}}
 											{{else}}
 												{{$e.Set "description" (print "Invalid `amount` argument provided")}}
 											{{end}}
