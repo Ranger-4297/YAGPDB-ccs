@@ -27,53 +27,44 @@
 {{with (dbGet 0 "EconomySettings")}}
     {{$a := sdict .Value}}
     {{$symbol := $a.symbol}}
-	{{with (dbGet $userID "EconomyInfo")}}
-		{{$info := sdict .Value}}
-		{{$items := sdict}}
-		{{if ($info.Get "inventory")}}
-			{{$items = sdict ($info.Get "inventory")}}
-			{{$entry := cslice}}
-			{{$field := cslice}}
-			{{if $items}}
-				{{range $k,$v := $items}}
-					{{$item := $k}}
-					{{$desc := $v.desc }}
-					{{$qty = $v.quantity}}
-					{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty))) "inline" false)}}
-				{{end}}
-				{{$page := ""}}
-				{{if $.CmdArgs}}
-					{{$page = (index $.CmdArgs 0) | toInt}}
-					{{if lt $page 1}}
-						{{$page = 1}}
-					{{end}}
-				{{else}}
-					{{$page = 1}}
-				{{end}}
-				{{$start := (mult 10 (sub $page 1))}}
-				{{$stop := (mult $page 10)}}
-				{{if ge $stop (len $entry)}}
-					{{$stop = (len $entry)}}
-				{{end}}
-				{{if and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry))}}
-					{{range (seq $start $stop)}}
-						{{$field = $field.Append (index $entry .)}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "This page is empty")}}
-				{{end}}
-                {{$embed.Set "title" (print "Inventory")}}
-				{{$embed.Set "fields" $field}}
-				{{$embed.Set "color" $successColor}}
-				{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
-			{{else}}
-				{{$embed.Set "description" (print "Your inventory is empty :(\nGet some items from the shop!")}}
-				{{$embed.Set "color" $errorColor}}
+	{{$userdata := or (dbGet $userID "userEconData").Value (sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
+	{{if $inventory := $userdata.inventory}} 
+		{{$entry := cslice}}
+		{{$field := cslice}}
+		{{range $k,$v := $inventory}}
+			{{$item := $k}}
+			{{$desc := $v.desc}}
+			{{$qty = $v.quantity}}
+			{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty))) "inline" false)}}
+		{{end}}
+		{{$page := ""}}
+		{{if $.CmdArgs}}
+			{{$page = (index $.CmdArgs 0) | toInt}}
+			{{if lt $page 1}}
+				{{$page = 1}}
 			{{end}}
 		{{else}}
-			{{$embed.Set "description" (print "Your inventory is empty :(\nGet some items from the shop!")}}
-			{{$embed.Set "color" $errorColor}}
+			{{$page = 1}}
 		{{end}}
+		{{$start := (mult 10 (sub $page 1))}}
+		{{$stop := (mult $page 10)}}
+		{{if ge $stop (len $entry)}}
+			{{$stop = (len $entry)}}
+		{{end}}
+		{{if and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry))}}
+			{{range (seq $start $stop)}}
+				{{$field = $field.Append (index $entry .)}}
+			{{end}}
+		{{else}}
+			{{$embed.Set "description" (print "This page is empty")}}
+		{{end}}
+        {{$embed.Set "title" (print "Inventory")}}
+		{{$embed.Set "fields" $field}}
+		{{$embed.Set "color" $successColor}}
+		{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
+	{{else}}
+		{{$embed.Set "description" (print "Your inventory is empty :(\nGet some items from the shop!")}}
+		{{$embed.Set "color" $errorColor}}
 	{{end}}
 {{else}}
     {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
