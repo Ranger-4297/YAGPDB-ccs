@@ -47,7 +47,7 @@
 									{{$embed.Set "color" $errorColor}}
 								{{else}}
 									{{$rCash = add $rCash $amount}}
-									{{$cash = sub $amount $yourBalance}}
+									{{$cash = sub $cash $amount}}
 									{{$embed.Set "description" (print "You gave " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">\nThey now have " $symbol (humanizeThousands $rCash) " in cash!")}}
 									{{$embed.Set "color" $successColor}}
 								{{end}}
@@ -57,7 +57,7 @@
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
-							{{$embed.Set "description" (print "Invalid `Amount argument passed.\nCheck that you used a valid number above 1")}}
+							{{$embed.Set "description" (print "Invalid `Amount` argument passed.\nCheck that you used a valid number above 1")}}
 							{{$embed.Set "color" $errorColor}}
 						{{end}}
 					{{else}}
