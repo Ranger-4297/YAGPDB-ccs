@@ -47,7 +47,7 @@
 					{{if $bet | toInt}}
 						{{$bet = $bet | toInt}}
 						{{if gt $bet 0}}
-							{{if gt $bet $betMax}}
+							{{if le $bet $betMax}}
 								{{if le $bet $bal}}
 									{{if not ($cooldown := dbGet $userID "coinflipCooldown")}}
 										{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}

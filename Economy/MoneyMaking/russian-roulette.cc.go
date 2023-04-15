@@ -26,8 +26,8 @@
 	{{with dbGet 0 "EconomySettings"}}
 		{{$a := sdict .Value}}
 		{{$symbol := $a.symbol}}
-		{{$betMax := $a.betMax}}
-		{{$bal := or (dbGet .User.ID "cash").Value 0 | toInt}}
+		{{$betMax := $a.betMax | toInt}}
+		{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
 		{{with $.CmdArgs}}
 			{{with dbGet 0 "russianRoulette"}}
 				{{$a := sdict .Value}}
@@ -39,11 +39,14 @@
 					{{$bet := (index $.CmdArgs 0)}}
 					{{$ct := false}}
 					{{$rr := false}}
-					{{if $bet | toInt}}
-						{{if lt (toInt $bet) (toInt $betMax)}}
-							{{if gt (toInt $bet) 0}}
-								{{if le (toInt $bet) (toInt $bal)}}
-									{{if le (toInt $bet) (toInt $cost)}}
+					{{if eq ($bet | toString) "all"}}
+						{{$bet = $bal}}
+					{{end}}
+					{{if $bet = $bet}}
+						{{if le $bet $betMax}}
+							{{if gt $bet 0}}
+								{{if le $bet $bal}}
+									{{if le $bet $cost}}
 										{{$ct = true}}
 									{{else}}
 										{{$em.Set "description" (print "You can't bet more than " $cost)}}
@@ -63,20 +66,7 @@
 						{{end}}
 					{{else}}
 						{{$bet = $bet | lower}}
-						{{if eq $bet "all"}}
-							{{if ne (toInt $bal) 0}}
-								{{if lt $bet $betMax}}
-									{{$ct = true}}
-									{{$bet = $bal}}
-								{{else}}
-									{{$em.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-									{{$em.Set "color" $errorColor}}
-								{{end}}
-							{{else}}
-								{{$em.Set "description" (print "You had no money to bet.")}}
-								{{$em.Set "color" $errorColor}}
-							{{end}}
-						{{else if eq $bet "start"}}
+						{{if eq $bet "start"}}
 							{{if eq (toString $userID) (toString $game.owner)}}
 								{{$rr = true}}
 							{{else}}
@@ -100,7 +90,7 @@
 								{{$players = $players.Append $userID}}
 								{{$game.Set "players" $players}}
 								{{dbSet 0 "russianRoulette" (sdict "game" $game)}}
-								{{$bal = (sub $bal $bet)}}
+								{{$bal = sub $bal $bet}}
 								{{$em.Set "description" (print "You've joined this game of russian roulette with a bet of " $symbol $bet)}}
 								{{$em.Set "footer" (sdict "text" (print "Players: " (len $players) "/6"))}}
 								{{$em.Set "color" $successColor}}
@@ -174,7 +164,7 @@
 									{{$em.Set "color" $errorColor}}
 								{{else}}
 									{{dbSet 0 "russianRoulette" (sdict "game" (sdict "cost" $bet "players" (cslice $userID) "owner" $userID))}}
-									{{$bal = (sub $bal $bet)}}
+									{{$bal = sub $bal $bet}}
 									{{$em.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" $.Cmd " " $bet "` (1/6)\nTo start this game use the command `" $.Cmd " start`")}}
 									{{$em.Set "color" $successColor}}
 									{{scheduleUniqueCC $.CCID nil 300 "rr-game" "cancel"}}
@@ -195,7 +185,7 @@
 							{{$em.Set "color" $successColor}}
 							{{$sDB.Del (toString $userID )}}
 							{{dbSet 0 "rouletteStorage" $sDB}}
-							{{$bal = (add $bal $amt)}}
+							{{$bal = add $bal $amt}}
 						{{else}}
 							{{$em.Set "description" (print "You had no winning to collect!")}}
 							{{$em.Set "color" $errorColor}}
@@ -207,11 +197,11 @@
 			{{$em.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
 			{{$em.Set "color" $errorColor}}
 		{{end}}
+		{{dbSet $userID "cash" $bal}}
 	{{else}}
 		{{$em.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 		{{$em.Set "color" $errorColor}}
 	{{end}}
-	{{dbSet $userID "cash" $bal}}
 {{else}}
 	{{if eq .ExecData "cancel"}}
 		{{$em.Set "description" (print "Not enough players joined for Russian-roulette")}}

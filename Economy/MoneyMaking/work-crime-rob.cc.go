@@ -32,12 +32,12 @@
 	{{$workCooldown := $a.workCooldown | toInt}}
 	{{$robCooldown := $a.robCooldown | toInt}}
 	{{$crimeCooldown := $a.crimeCooldown | toInt}}
-	{{$cash := or (dbGet .User.ID "cash").Value 0 | toInt}}
+	{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
 	{{$cmd := $.Cmd | toString | lower}}
 	{{if (reFind `(work|job|get-?paid|labor)` $cmd)}}
 		{{if not ($cooldown := dbGet $userID "workCooldown")}}
 			{{dbSetExpire $userID "workCooldown" "cooldown" $workCooldown}}
-			{{$workPay := (mult (randInt $min $max) (randInt 1 3))}}
+			{{$workPay := randInt $min $max}}
 			{{$cash =  add $cash $workPay}}
 			{{$embed.Set "description" (print "You decided to work today! You got paid a hefty " $symbol (humanizeThousands $workPay))}}
 			{{$embed.Set "color" 0x00ff7b}}
@@ -57,7 +57,7 @@
 			{{else}}
 				{{$cash = sub $cash $amount}}
 				{{$embed.Set "description" (print "You broke the law trying to commit a felony! You were arrested and lost " $symbol (humanizeThousands $amount) " due to your bail.")}}
-				{{$embed.Set "color" $errorColor}}
+				{{$embed.Set "color" $errorColor}}99
 			{{end}}
 		{{else}}
 			{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
@@ -74,16 +74,16 @@
 							{{dbSetExpire $userID "robCooldown" "cooldown" $robCooldown}}
 							{{$vicCash := or (dbGet $victim "cash").Value 0 | toInt}}
 							{{if $vicCash}}
-								{{$amount := (randInt $victimsCash)}} {{/* Amount stolen from victim */}}
-								{{$vicCash := sub $vicCash $amount}} {{/* Amout victim will have after being robbed */}}
+								{{$amount := (randInt $vicCash)}} {{/* Amount stolen from victim */}}
+								{{$vicCash = sub $vicCash $amount}} {{/* Amout victim will have after being robbed */}}
 								{{$cash = add $cash $amount}} {{/* Amount you will have after robbing vitim */}}
 								{{$embed.Set "description" (print "You robbed " $symbol (humanizeThousands $amount) " from <@!" $victim ">")}}
 								{{$embed.Set "color" $successColor}}
-								{{dbSet $victim "cash" $vicCash}}
 							{{else}}
 								{{$embed.Set "description" (print "<@!" $victim "> doesn't have any money for you to rob!")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
+							{{dbSet $victim "cash" $vicCash}}
 						{{else}}
 							{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
 							{{$embed.Set "color" $errorColor}}
