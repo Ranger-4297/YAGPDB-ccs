@@ -37,7 +37,7 @@
 						{{$moneyDestination := (lower (index . 1))}}
 						{{if eq $moneyDestination "cash" "bank"}}
 							{{$bankDB := (dbGet 0 "bank").Value}}
-							{{bankUser := or ($bankDB.Get (toString $user)) 0 | toInt}}
+							{{$bankUser := or ($bankDB.Get (toString $user)) 0 | toInt}}
 							{{$cash := or (dbGet $user "cash").Value 0 | toInt}}
 							{{$balance := ""}}
 							{{if eq $moneyDestination "bank"}}
@@ -57,7 +57,7 @@
 											{{$opt = "added"}}
 											{{$balance = $balance | add $amount}}
 										{{end}}
-										{{$embed.Set "description" (print "You " $opt " " $symbol (humanizeThousands $amount) " to <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $newBalance   ) " in their " $moneyDestination "!")}}
+										{{$embed.Set "description" (print "You " $opt " " $symbol (humanizeThousands $amount) " to <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $balance) " in their " $moneyDestination "!")}}
 										{{$embed.Set "color" $successColor}}
 										{{if eq $moneyDestination "bank"}}
 											{{$bankDB.Set (toString $user) $balance}}
