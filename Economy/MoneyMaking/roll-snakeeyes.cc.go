@@ -27,15 +27,18 @@
 {{with dbGet 0 "EconomySettings"}}
 	{{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
-	{{$betMax := $a.betMax}}
+	{{$betMax := $a.betMax | toInt}}
 	{{$incomeCooldown := $a.incomeCooldown | toInt}}
-	{{$bal := or (dbGet .User.ID "cash").Value 0 | toInt}}
+	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
 	{{with $.CmdArgs}}
 		{{$bet := (index . 0)}}
 		{{$continue := false}}
-		{{if $bet | toInt}}
-			{{if gt (toInt $bet) 0}}
-				{{if le (toInt $bet) (toInt $bal)}}
+		{{if eq ($bet | toString) "all"}}
+			{{$bet = $bal}}
+		{{end}}
+		{{if $bet = (toInt $bet)}}
+			{{if gt $bet 0}}
+				{{if le $bet $bal}}
 					{{$continue = true}}
 				{{else}}
 					{{$embed.Set "description" (print "You can't bet more than you have!")}}
@@ -46,18 +49,8 @@
 				{{$embed.Set "color" $errorColor}}
 			{{end}}
 		{{else}}
-			{{$bet = $bet | lower}}
-			{{if eq $bet "all"}}
-				{{if ne (toInt $bet) 0}}
-					{{$continue = true}}
-				{{else}}
-					{{$embed.Set "description" (print "You had no money to bet.")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
+			{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
+			{{$embed.Set "color" $errorColor}}
 		{{end}}
 		{{if $continue}}
 			{{if le $bet $betMax}}
@@ -69,15 +62,15 @@
 						{{$amount := ""}}
 						{{if and (ge $roll 65) (lt $roll 90)}}
 							{{$amount = $bet}}
-							{{$bal = (add $bal $amount)}}
+							{{$bal = add $bal $amount}}
 						{{else if and (ge $roll 90) (lt $roll 100)}}
 							{{$amount = (mult $bet 3)}}
-							{{$bal = (add $bal $amount)}}
+							{{$bal = add $bal $amount}}
 						{{else if eq $roll 100}}
 							{{$amount = (mult $bet 5)}}
-							{{$bal = (add $bal $amount)}}
+							{{$bal = add $bal $amount}}
 						{{else}}
-							{{$bal = (sub $bal $bet)}}
+							{{$bal = sub $bal $bet}}
 							{{$rs = 0}}
 						{{end}}
 						{{if $rs}}
@@ -99,10 +92,11 @@
 						{{if and (eq $die1 1) (eq $die2 1)}}
 							{{$embed.Set "description" (print "You rolled snake eyes (" $die1 "&" $die2 ")\nAnd won " $symbol (humanizeThousands (mult $bet 36)))}}
 							{{$embed.Set "color" $successColor}}
-							{{$bal = (add $bal (mult $bet 36))}}
+							{{$bal = add $bal (mult $bet 36)}}
 						{{else}}
 							{{$embed.Set "description" (print "You rolled " $die1 "&" $die2 " and lost " $symbol (humanizeThousands $bet) ".")}}
 							{{$embed.Set "color" $errorColor}}
+							{{$bal = sub $bal $bet}}
 						{{end}}
 					{{else}}
 						{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
@@ -118,9 +112,9 @@
 		{{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
-	{{dbSet .User.ID "cash" $bal}}
+	{{dbSet $userID "cash" $bal}}
 {{else}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
 	{{$embed.Set "color" $errorColor}}
 {{end}}
-{{sendMessage nil (cembed $embed)}} 	
+{{sendMessage nil (cembed $embed)}}
