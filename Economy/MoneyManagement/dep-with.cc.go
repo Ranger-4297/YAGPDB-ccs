@@ -34,7 +34,6 @@
 		{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
 		{{if (reFind `deposit|dep` $cmd)}}
 			{{with $.CmdArgs}}
-				{{$a = sdict .Value}}
 				{{$amount := (index $.CmdArgs 0)}}
 				{{if (toInt $amount)}}
 					{{if gt (toInt $amount) (toInt $cash)}}
@@ -86,7 +85,7 @@
 				{{$embed.Set "color" $errorColor}}
 			{{end}}
 		{{end}}
-		{{$bankDB.Set $userID $bank}}
+		{{$bankDB.Set (toString $userID) $bank}}
 		{{dbSet 0 "bank" $bankDB}}
 		{{dbSet $userID "cash" $cash}}
 	{{else}}
