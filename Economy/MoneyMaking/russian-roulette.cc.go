@@ -40,9 +40,10 @@
 					{{$ct := false}}
 					{{$rr := false}}
 					{{if eq ($bet | toString) "all"}}
-						{{$bet = $bal}}
+						{{$bet = $bal | toInt}}
 					{{end}}
-					{{if $bet = $bet}}
+					{{if toInt $bet}}
+						{{$bet = toInt $bet}}
 						{{if le $bet $betMax}}
 							{{if gt $bet 0}}
 								{{if le $bet $bal}}
@@ -65,7 +66,7 @@
 							{{$em.Set "color" $errorColor}}
 						{{end}}
 					{{else}}
-						{{$bet = $bet | lower}}
+						{{$bet = lower (toString $bet)}}
 						{{if eq $bet "start"}}
 							{{if eq (toString $userID) (toString $game.owner)}}
 								{{$rr = true}}
@@ -132,16 +133,16 @@
 							{{range $winners}}
 								{{$amt := ($sDB.Get (toString (userArg .).ID))}}
 								{{if $amt}}
-									{{$amt = add $amt $payout}}
+									{{$amt = add $amt $payout $cost}}
 								{{else}}
-									{{$amt = $payout}} 
+									{{$amt = add $payout $cost}} 
 								{{end}}
 								{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
 								{{$sDB.Set (toString (userArg .).ID) $amt}}
 							{{end}}
 							{{dbSet 0 "rouletteStorage" $sDB}}
 							{{$em.Set "title" "Winners"}}
-							{{$em.Set "description" (print "payout is: " $payout " per-person")}}
+							{{$em.Set "description" (print "payout is: " $symbol $payout " per-person")}}
 							{{$em.Set "fields" $fields}}
 							{{$em.Set "color" $successColor}}
 							{{dbSet 0 "rouletteStorage" $sDB}}
@@ -181,7 +182,7 @@
 						{{$sDB := (dbGet 0 "rouletteStorage").Value}}
 						{{$amt := $sDB.Get (toString $userID)}}
 						{{if $amt}}
-							{{$em.Set "description" (print "You've collected " $amt)}}
+							{{$em.Set "description" (print "You've collected " $symbol $amt)}}
 							{{$em.Set "color" $successColor}}
 							{{$sDB.Del (toString $userID )}}
 							{{dbSet 0 "rouletteStorage" $sDB}}
