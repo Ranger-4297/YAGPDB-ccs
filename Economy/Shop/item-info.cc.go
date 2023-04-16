@@ -38,10 +38,10 @@
 					{{$price := $item.Get "price"}}
 					{{$role := "none"}}
 					{{if ($item.Get "role-given")}}
-						{{$role = (print "<@&" ($item.Get "role") ">")}}
+						{{$role = ($item.Get "role-given")}}
 					{{end}}
 					{{$qty := ""}}
-					{{if ($item.Get "qty")}}
+					{{if ($item.Get "quantity")}}
 						{{$qty = ($item.Get "quantity")}}
 						{{if not (reFind "infinite" (lower (toString $qty)))}}
 							{{$qty = toInt $qty | humanizeThousands}}
