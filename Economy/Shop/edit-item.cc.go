@@ -37,7 +37,7 @@
 				{{with $.CmdArgs}}
 					{{$name := (index . 0)}}
 					{{if $items.Get $name}}
-						{{$options := cslice "description" "role-given" "name" "price" "quantity"}}
+						{{$options := cslice "description" "role" "name" "price" "quantity"}}
 						{{if gt (len $.CmdArgs) 1}}
 							{{$option := (index . 1) | lower}}
 							{{if in $options $option}}
@@ -81,12 +81,12 @@
 												{{dbSet 0 "store" $store}}
 												{{$cont = 1}}
 											{{else}}
-												{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`")}}
+												{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Quantity:Int/Infinity>`")}}
 												{{$embed.Set "color" $errorColor}}
 											{{end}}
 										{{end}}
 									{{else}}
-										{{$embed.Set "description" (print "No quantity argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`")}}
+										{{$embed.Set "description" (print "No quantity argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Quantity:Int/Infinity>`")}}
 										{{$embed.Set "color" $errorColor}}
 									{{end}}
 								{{else if eq $option "price"}}
@@ -100,11 +100,11 @@
 											{{dbSet 0 "store" $store}}
 											{{$cont = 1}}
 										{{else}}
-											{{$embed.Set "description" (print "Invalid price argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`")}}
+											{{$embed.Set "description" (print "Invalid price argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Price:Int>`")}}
 											{{$embed.Set "color" $errorColor}}
 										{{end}}
 									{{else}}
-										{{$embed.Set "description" (print "No price argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`")}}
+										{{$embed.Set "description" (print "No price argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Price:Int>`")}}
 										{{$embed.Set "color" $errorColor}}
 									{{end}}
 								{{else if eq $option "description"}}
@@ -117,14 +117,14 @@
 										{{dbSet 0 "store" $store}}
 										{{$cont = 1}}
 									{{else}}
-										{{$embed.Set "description" (print "No description argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`")}}
+										{{$embed.Set "description" (print "No description argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Description>`")}}
 										{{$embed.Set "color" $errorColor}}
 									{{end}}
 								{{else if eq $option "role"}}
 									{{if gt (len $.CmdArgs) 2}}
 										{{$role := (index . 2)}}
 										{{if $.Guild.GetRole (toInt64 $role)}}
-											{{$value = $role}}
+											{{$value = print "<@&" $role ">"}}
 											{{$item := $items.Get $name}}
 											{{$item.Set "role-given" $value}}
 											{{$items.Set $name $item}}
@@ -132,11 +132,11 @@
 											{{dbSet 0 "store" $store}}
 											{{$cont = 1}}
 										{{else}}
-											{{$embed.Set "description" (print "Invalid role argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`")}}
+											{{$embed.Set "description" (print "Invalid role argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Role:ID>`")}}
 											{{$embed.Set "color" $errorColor}}
 										{{end}}
 									{{else}}
-										{{$embed.Set "description" (print "No role argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`")}}
+										{{$embed.Set "description" (print "No role argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Role:ID>`")}}
 										{{$embed.Set "color" $errorColor}}
 									{{end}}
 								{{end}}
@@ -145,7 +145,7 @@
 									{{$embed.Set "color" $successColor}}
 								{{end}}
 							{{else}}
-								{{$embed.Set "description" (print "Invalid option argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>\nAvailable options are: `name`, `description`, `price`, `quantity` and `role``")}}
+								{{$embed.Set "description" (print "Invalid option argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nAvailable options are: `name`, `description`, `price`, `quantity` and `role``")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
