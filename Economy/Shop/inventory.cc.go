@@ -34,7 +34,7 @@
 		{{range $k,$v := $inventory}}
 			{{$item := $k}}
 			{{$desc := $v.desc}}
-			{{$qty = $v.quantity}}
+			{{$qty := $v.quantity}}
 			{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty))) "inline" false)}}
 		{{end}}
 		{{$page := ""}}
