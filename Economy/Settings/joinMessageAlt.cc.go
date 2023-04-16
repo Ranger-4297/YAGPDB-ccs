@@ -27,5 +27,8 @@ To retrieve a users economy data upon rejoining
 		{{$bankDB := or (dbGet 0 "bank").Value sdict}}
 		{{$bankDB.Set (toString .User.ID) $bank}}
 		{{dbSet 0 "bank" $bankDB}}
+	{{else}}
+		{{$startBalance := (dbGet 0 "EconomySettings").Value.startBalance}}
+		{{dbSet $.User.ID "cash" $startBalance}}
 	{{end}}
 {{end}}
