@@ -35,6 +35,7 @@
 				{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "betMax" 5000 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600)}}
 				{{dbSet 0 "store" sdict}}
 				{{dbSet 0 "russianRoulette" sdict}}
+				{{dbSet 0 "bank"}}
 			{{else}}
 				{{with (dbGet 0 "EconomySettings")}}
 					{{$a := sdict .Value}}
