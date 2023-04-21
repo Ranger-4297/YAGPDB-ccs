@@ -126,7 +126,7 @@
 							{{end}}
 							{{$payout := (div $game.cost (len $winners))}}
 							{{$fields := cslice}}
-							{{$sDB := (dbGet 0 "rouletteStorage").Value}}
+							{{$sDB := $a.storage}}
 							{{if not $sDB}}
 								{{$sDB = sdict}}
 							{{end}}
@@ -140,13 +140,11 @@
 								{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
 								{{$sDB.Set (toString (userArg .).ID) $amt}}
 							{{end}}
-							{{dbSet 0 "rouletteStorage" $sDB}}
 							{{$em.Set "title" "Winners"}}
 							{{$em.Set "description" (print "payout is: " $symbol $payout " per-person")}}
 							{{$em.Set "fields" $fields}}
 							{{$em.Set "color" $successColor}}
-							{{dbSet 0 "rouletteStorage" $sDB}}
-							{{dbSet 0 "russianRoulette" sdict}}
+							{{dbSet 0 "russianRoulette" (sdict "storage" $sDB)}}
 							{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 						{{else}}
 							{{$em.Set "description" (print "Not enough players to start the match :(\nStart a new one with " $.Cmd " <bet>")}}
@@ -179,13 +177,13 @@
 							{{$em.Set "color" $errorColor}}
 						{{end}}
 					{{else if eq (index $.CmdArgs 0) "collect"}}
-						{{$sDB := (dbGet 0 "rouletteStorage").Value}}
+						{{$sDB := $a.storage}}
 						{{$amt := $sDB.Get (toString $userID)}}
 						{{if $amt}}
 							{{$em.Set "description" (print "You've collected " $symbol $amt)}}
 							{{$em.Set "color" $successColor}}
 							{{$sDB.Del (toString $userID )}}
-							{{dbSet 0 "rouletteStorage" $sDB}}
+							{{dbSet 0 "russianRoulette" (sdict "storage" $sDB)}}
 							{{$bal = add $bal $amt}}
 						{{else}}
 							{{$em.Set "description" (print "You had no winning to collect!")}}
@@ -193,6 +191,9 @@
 						{{end}}
 					{{end}}
 				{{end}}
+			{{else}}
+				{{$em.Set "description" (print "No `russianRoulette` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
+				{{$em.Set "color" $errorColor}}
 			{{end}}
 		{{else}}
 			{{$em.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
@@ -215,7 +216,7 @@
 	{{with dbGet 0 "russianRoulette"}}
 		{{$a := sdict .Value}}
 		{{$cost := $a.game.cost}}
-		{{$sDB := (dbGet 0 "rouletteStorage").Value}}
+		{{$sDB := $a.storage}}
 		{{if not $sDB}}
 			{{$sDB = sdict}}
 		{{end}}
@@ -228,9 +229,8 @@
 			{{end}}
 			{{$sDB.Set (toString .) $amt}}
 		{{end}}
-		{{dbSet 0 "rouletteStorage" $sDB}}
+		{{dbSet 0 "russianRoulette" (sdict "storage" $sDB)}}
 	{{end}}
 	{{cancelScheduledUniqueCC .CCID "rr-game-2"}}
-	{{dbSet 0 "russianRoulette" sdict}}
 {{end}}
 {{sendMessage nil (cembed $em)}}
