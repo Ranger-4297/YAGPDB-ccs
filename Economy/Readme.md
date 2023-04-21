@@ -1,20 +1,20 @@
-> :warning: **Migrating from V6.6 to V7**
-If you attempt to migrate from V6.6 to V7 you will encounter several issues.
-V7 introduces a reworked balance system. This new system is a **breaking change**.
+> :warning: **Migrating from V6.6 to V7**   
+If you attempt to migrate from V6.6 to V7 you will encounter several issues.    
+V7 introduces a reworked balance system. This new system is a **breaking change**.  
 Please be warned that there is no quick way to migrate data AS-OF-YET.
 
 # Economy CCs V6.6 and V7
-Fully functional economy system for your server!
-These commands work perfectly on base YAGPDB. Meaning you don't have to worry about database limits. 
-These commands are thoroughly tested before release and are ensured to keep working 
+Fully functional economy system for your server!    
+These commands work perfectly on base YAGPDB. Meaning you don't have to worry about database limits.    
+These commands are thoroughly tested before release and are ensured to keep working
 
 ## Features
-Customizable server shop
-Configurable settings
-Extensive and well-tested commands
-Documentation on each command
-Easy-to-read embeds
-Optional plugins
+Customizable server shop    
+Configurable settings   
+Extensive and well-tested commands  
+Documentation on each command   
+Easy-to-read embeds 
+Optional plugins    
 More
 
 ## Setup & Documentation
