@@ -36,8 +36,24 @@
 	{{$bank := or (((dbGet 0 "bank").Value).Get (toString $user.ID)) 0 | toInt}}
 	{{$cash := or (dbGet $user.ID "cash").Value 0 | toInt}}
 	{{$net := humanizeThousands ($cash | add $bank)}}
+	{{$pos := dict 1 "🥇" 2 "🥈" 3 "🥉"}}
+	{{$rank := dbRank (sdict "pattern" "cash") $user.ID "cash"}}
+	{{if in (cslice 1 2 3) $rank }}
+		{{$rank = $pos.Get $rank}}
+	{{else}}
+	{{$ord := "th"}}
+	{{$cent := toInt (mod $rank 100)}}
+	{{$dec := toInt (mod $rank 10)}}
+	{{if not (and (ge $cent 10) (le $cent 19))}}
+		{{if eq $dec 1}}{{$ord = "st"}}
+		{{else if eq $dec 2}}{{$ord = "nd"}}
+		{{else if eq $dec 3}}{{$ord = "rd"}}
+		{{end}}
+	{{end}}
+		{{$rank = print $rank $ord "."}}
+	{{end}}
 	{{$embed.Set "author" (sdict "name" $user.Username "icon_url" ($user.AvatarURL "128"))}}
-	{{$embed.Set "description" (print $user.Mention "'s balance")}}
+	{{$embed.Set "description" (print $user.Mention "'s balance\nLeaderboard rank: " $rank)}}
 	{{$embed.Set "fields" (cslice 
 		(sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true)
 		(sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true)
