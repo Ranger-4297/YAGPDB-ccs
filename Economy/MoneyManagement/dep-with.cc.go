@@ -16,7 +16,7 @@
 {{$userID := .User.ID}}
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
+{{$prefix := .ServerPrefix}}
 
 {{/* Deposit, Withdraw */}}
 

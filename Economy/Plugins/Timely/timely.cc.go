@@ -19,7 +19,7 @@
 {{$daily := 2500}}
 {{$weekly := 5000}}
 {{$monthly := 10000}}
-{{$prefix := index (reFindAllSubmatches `.*?: \x60(.*)\x60\z` (execAdmin "Prefix")) 0 1}}
+{{$prefix := .ServerPrefix}}
 
 
 {{/* Timely */}}
