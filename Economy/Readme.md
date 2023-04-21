@@ -1,4 +1,5 @@
-> :warning: **Migrating from V6.6 to V7**   
+> # :warning: **Migrating from V6.6 to V7**   
+
 If you attempt to migrate from V6.6 to V7 you will encounter several issues.    
 V7 introduces a reworked balance system. This new system is a **breaking change**.  
 Please be warned that there is no quick way to migrate data AS-OF-YET.
