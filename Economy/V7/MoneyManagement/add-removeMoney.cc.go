@@ -36,7 +36,7 @@
 					{{if gt (len $.CmdArgs) 1}}
 						{{$moneyDestination := (lower (index . 1))}}
 						{{if eq $moneyDestination "cash" "bank"}}
-							{{$bankDB := (dbGet 0 "bank").Value}}
+							{{$bankDB := or (dbGet 0 "bank").Value sdict}}
 							{{$bankUser := or ($bankDB.Get (toString $user)) 0 | toInt}}
 							{{$cash := or (dbGet $user "cash").Value 0 | toInt}}
 							{{$balance := ""}}

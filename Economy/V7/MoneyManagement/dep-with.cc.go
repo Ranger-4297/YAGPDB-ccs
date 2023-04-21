@@ -29,7 +29,7 @@
 	{{with (dbGet 0 "EconomySettings")}}
 		{{$a := sdict .Value}}
 		{{$symbol := $a.symbol}}
-		{{$bankDB := (dbGet 0 "bank").Value}}
+		{{$bankDB := or (dbGet 0 "bank").Value sdict}}
 		{{$bank := or ($bankDB.Get (toString $userID)) 0 | toInt}}
 		{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
 		{{if (reFind `deposit|dep` $cmd)}}
