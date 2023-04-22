@@ -2,7 +2,7 @@
 		Made by Ranger (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(buy-?item)(\s+|\z)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(buy(-?item)?)(\s+|\z)`
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
@@ -81,7 +81,7 @@
 						{{$embed.Set "color" $errorColor}}
 					{{end}}
 				{{else}}
-					{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name> [Quantity:Int]`\n\nTo view all items, run the `" $prefix "shop` command.")}}
+					{{$embed.Set "description" (print "This item doesn't exist :( Create it with `" $prefix "create-item " $name "`\n\nTo view all items, run the `" $prefix "shop` command.")}}
 					{{$embed.Set "color" $errorColor}}
 				{{end}}
 			{{else}}
