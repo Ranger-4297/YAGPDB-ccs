@@ -28,12 +28,12 @@
 	{{with $.CmdArgs}}
 		{{if index $.CmdArgs 0}}
 			{{$setting := (index $.CmdArgs 0) | lower}}
-			{{$settings := or $econData.settings (sdict "trading" "yes" "inventory" "yes" "leaderboard" "yes")}}
+			{{$settings := or $econData.settings (sdict "balance" "yes" "trading" "yes" "inventory" "yes" "leaderboard" "yes")}}
 			{{if eq $setting "default"}}
 				{{$embed.Set "description" (print "Set your account to default values")}}
 				{{$embed.Set "color" $successColor}}
 				{{$econData.Set "settings" $settings}}
-			{{else if eq $setting "inventory" "leaderboard" "trading"}}
+			{{else if eq $setting "inventory" "leaderboard" "trading" "balance"}}
 				{{if gt (len $.CmdArgs) 1}}
 					{{$value := (index $.CmdArgs 1)}}
 					{{if eq $value "yes" "no"}}
