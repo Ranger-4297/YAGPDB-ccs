@@ -17,7 +17,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
 
-{{/* Create item */}}
+{{/* edits item */}}
 
 {{/* Response */}}
 {{$embed := sdict}}

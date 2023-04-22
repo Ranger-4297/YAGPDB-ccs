@@ -14,6 +14,7 @@
 
 {{/* Initiates variables */}}
 {{$sC := 0x00ff7b}}
+
 {{/* Configures economy settings */}}
 
 {{/* Response */}}

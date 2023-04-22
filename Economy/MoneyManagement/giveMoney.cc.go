@@ -18,7 +18,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
 
-{{/* Gives money from your balance to the given user */}}
+{{/* Give money */}}
 
 {{/* Response */}}
 {{$embed := sdict}}
