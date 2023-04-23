@@ -31,53 +31,92 @@
 	{{$userdata := or (dbGet $userID "userEconData").Value (sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
 	{{$inventory := $userdata.inventory}}
 	{{with (dbGet 0 "store")}}
-		{{$info := sdict .Value}}
+		{{$shop := sdict .Value}}
 		{{$items := sdict}}
-		{{if ($info.Get "items")}}
-			{{$items = sdict ($info.Get "items")}}
+		{{if ($shop.Get "items")}}
+			{{$items = sdict ($shop.Get "items")}}
 			{{with $.CmdArgs}}
 				{{$name := (index . 0)}}
 				{{if $items.Get $name}}
-					{{$item := $items.Get (index . 0)}}
+					{{$item := $items.Get $name}}
 					{{$price := $item.Get "price"}}
-					{{$qty := $item.Get "quantity"}}
-					{{$uqty := 0}} {{/* USER QUANTITY */}}
-					{{if ($inventory.Get $name)}} {{/* Checks if user has item with name*/}}
+					{{$shopQuantity := $item.Get "quantity"}}
+					{{$userQuantity := 0}}
+					{{if ($inventory.Get $name)}}
 						{{$invitem := ($inventory.Get $name)}}
-						{{$uqty = ($invitem.Get "quantity")}}
+						{{$userQuantity = ($invitem.Get "quantity")}}
 					{{end}}
-					{{$bqty := 1}}
+					{{$buyQuantity := 1}}
 					{{if gt (len $.CmdArgs) 1}}
-						{{$inp := (index . 1)}}
-						{{if (toInt $inp)}}
-							{{if lt (toInt $bqty) (toInt $qty)}}
-								{{$bqty = (mult $bqty $inp)}}
-								{{$price = (mult $price $inp)}}
+						{{$buyQuantity = (index . 1)}}
+						{{$cont := false}}
+						{{if toInt $buyQuantity}}
+							{{if ge (toInt $buyQuantity) 1}}
+								{{if not (eq (toString $shopQuantity) "inf")}}
+									{{if le (toInt $buyQuantity) (toInt $shopQuantity)}}
+										{{$cont = true}}
+										{{$shopQuantity = sub $shopQuantity $buyQuantity}}
+									{{else}}
+										{{$embed.Set "description" (print "There's not enough of this in the shop to buy that much!")}}
+										{{$embed.Set "color" $errorColor}}
+									{{end}}
+								{{else}}
+									{{$cont = true}}
+								{{end}}
+							{{else}}
+								{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd " " $name " <Quantity:Int/All>`")}}
+								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
-							{{if (eq $inp "all" "max")}}
-								{{$bqty = (mult (toInt $bqty) (toInt $qty))}}
-								{{$price = (mult (toInt $price) (toInt $qty))}}
+							{{$buyQuantity = lower $buyQuantity}}
+							{{if eq (toString $buyQuantity) "all"}}
+								{{if eq (toString $shopQuantity) "inf"}}
+									{{$buyQuantity = div (toInt $bal) $price}}
+									{{$cont = true}}
+								{{else}}
+									{{$buyQuantity = $shopQuantity}}
+									{{$shopQuantity = sub $shopQuantity $buyQuantity}}
+									{{$cont = true}}
+								{{end}}
+							{{else}}
+								{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd " " $name " <Quantity:Int/All>`")}}
+								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{end}}
-					{{end}}
-					{{if le (toInt $price) (toInt $bal)}}
-						{{$nqty := (sub $qty $bqty)}}
-						{{if eq (toInt $nqty) 0}}
-							{{$items.Del $name}}
-						{{else}}
-							{{$item.Set "quantity" $nqty}}
-							{{$items.Set $name $item}}
+						{{if $cont}}
+							{{if not (and (eq $name "chicken") (gt (toInt $buyQuantity) 1))}}
+								{{$price = mult $buyQuantity $price}}
+								{{if ge $bal $price}}
+									{{$userQuantity = add $userQuantity $buyQuantity}}
+									{{$bal = sub $bal $price}}
+									{{if not $shopQuantity}}
+										{{$items.Del $name}}
+									{{else}}
+										{{$item.Set "quantity" $shopQuantity}}
+										{{$items.Set $name $item}}
+									{{end}}
+									{{$shop.Set "items" $items}}
+									{{dbSet 0 "store" $shop}}
+									{{if $inventory.Get $name}}
+										{{$item = $inventory.Get $name}}
+										{{$item.Set "quantity" $userQuantity}}
+										{{$inventory.Set $name $item}}
+									{{else}}
+										{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role)}}
+									{{end}}
+									{{$embed.Set "description" (print "You've bought  " $buyQuantity " of " $name " for " $symbol $price "!")}}
+									{{$embed.Set "color" $successColor}}
+								{{else}}
+									{{$embed.Set "description" (print "You don't have enough to buy this :(")}}
+									{{$embed.Set "color" $errorColor}}
+								{{end}}
+							{{else}}
+								{{$embed.Set "description" (print "You can only buy 1 of the item " $name)}}
+								{{$embed.Set "color" $errorColor}}
+							{{end}}
 						{{end}}
-						{{$info.Set "items" $items}}
-						{{dbSet 0 "store" $info}}
-						{{$bal = (sub $bal $price)}}
-						{{$inventory.Set $name (sdict "desc" ($item.Get "desc") "quantity" (add $uqty $bqty))}}
-						{{$userdata.Set "inventory" $inventory}}
-						{{$embed.Set "description" (print "Purchase successful!\nYou're now a proud owner of a(n) " $name)}}
-						{{$embed.Set "color" $successColor}}
 					{{else}}
-						{{$embed.Set "description" (print "You don't have enough money for this")}}
+						{{$embed.Set "description" (print "No quantity argument provided :(\nSyntax is `" $.Cmd " " $name " [Quantity:Int]`\n\nTo view all items, run the `" $prefix "shop` command.")}}
 						{{$embed.Set "color" $errorColor}}
 					{{end}}
 				{{else}}

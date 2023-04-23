@@ -43,7 +43,13 @@
 				{{$item := $k}}
 				{{$desc := $v.desc}}
 				{{$qty := $v.quantity}}
-				{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty))) "inline" false)}}
+				{{$role := $v.role}}
+				{{if $role}}
+					{{$role = print "<@&" $role ">"}}
+				{{else}}
+					{{$role = "none"}}
+				{{end}}
+				{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty)) (print "Role given: " $role)) "inline" false)}}
 			{{end}}
 			{{$page := ""}}
 			{{if $.CmdArgs}}

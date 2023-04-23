@@ -39,11 +39,11 @@
 				{{range $k,$v := $items}}
 					{{$item := $k}}
 					{{$desc := $v.desc }}
-					{{$price := (print $symbol ($v.price | humanizeThousands))}}
+					{{$price := (print $symbol ($v.price))}}
 					{{$qty := ""}}
 					{{if $v.quantity}}
 						{{$qty = $v.quantity}}
-						{{if not (reFind "infinite" (lower (toString $qty)))}}
+						{{if not (reFind "inf" (lower (toString $qty)))}}
 							{{$qty = toInt $qty | humanizeThousands}}
 						{{else}}
 							{{$qty = "Infinite"}}

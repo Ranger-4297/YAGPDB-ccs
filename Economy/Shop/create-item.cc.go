@@ -38,16 +38,16 @@
 							{{if ge (toInt (index . 1)) 1}}
 								{{$price := (index . 1)}}
 								{{if gt (len $.CmdArgs) 2}}
-									{{$qty := ""}}
+									{{$qty := "1"}}
 									{{if (index . 2) | toInt}}
 										{{if ge (toInt (index . 2)) 1}}
-											{{$qty = (index . 2)}}
+											{{$qty = (humanizeThousands (index . 2))}}
 										{{else}}
-											{{$qty = "Infinite"}}
+											{{$qty = "inf"}}
 										{{end}}
 									{{else}}
 										{{if eq (lower (index . 2)) "infinite" "infinity" "inf"}}
-											{{$qty = "Infinite"}}
+											{{$qty = "inf"}}
 										{{else}}
 											{{$embed.Set "description" (print "Invalid `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
 											{{$embed.Set "color" $errorColor}}
@@ -65,11 +65,11 @@
 											{{end}}
 											{{$items = sdict ($store.Get "items")}}
 										{{end}}
-										{{$items.Set $name (sdict "desc" $description "price" $price "quantity" $qty)}}
+										{{$items.Set $name (sdict "desc" $description "price" $price "quantity" $qty "role" 0)}}
 										{{$store.Set "items" $items}}
 										{{dbSet 0 "store" $store}}
 										{{$embed.Set "description" (print "New item added to shop!")}}
-										{{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " (humanizeThousands $price) "\nQuantity: " (humanizeThousands $qty) "\nRole: Add role with " $prefix "edit-item") "inline" false))}}
+										{{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " (humanizeThousands $price) "\nQuantity: " $qty "\nRole: 0 || *Add role with `" $prefix "edit-item`*") "inline" false))}}
 										{{$embed.Set "color" $successColor}}
 									{{else}}
 										{{$embed.Set "description" (print "No `description` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}

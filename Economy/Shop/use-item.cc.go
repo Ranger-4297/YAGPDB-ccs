@@ -30,7 +30,8 @@
 		{{with $.CmdArgs}}
 			{{$name := (index . 0)}}
 			{{if $item := $inventory.Get $name}}
-				{{$qty := $item.Get "quantity"}}
+				{{$qty := $item.quantity}}
+				{{$role := $item.role}}
 				{{$nqty := (sub (toInt $qty) 1)}}
 				{{if eq (toInt $nqty) 0}}
 					{{$inventory.Del $name}}
@@ -39,7 +40,10 @@
 					{{$inventory.Set $name $item}}
 					{{$userdata.Set "inventory" $inventory}}
 				{{end}}
-				{{$embed.Set "description" (print "You've just used " $name "!\nYou had " (humanizeThousands $qty) " and now have " (humanizeThousands $nqty))}}
+				{{if $role}}
+					{{addRoleID $role}}
+				{{end}}
+				{{$embed.Set "description" (print "You've just used " $name "!\nYou had " (humanizeThousands $qty) " and now have " (humanizeThousands $nqty) "\nIf there was a role associated with this item it has been assigned!")}}
 				{{$embed.Set "color" $successColor}}
 			{{else}}
 				{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}

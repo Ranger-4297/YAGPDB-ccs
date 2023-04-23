@@ -61,7 +61,7 @@
 												{{$value = (index . 2)}}
 												{{$cont = 1}}
 											{{else}}
-												{{$value = "Infinite"}}
+												{{$value = "inf"}}
 												{{$cont = 1}}
 											{{end}}
 											{{if $cont}}
@@ -73,7 +73,7 @@
 											{{end}}
 										{{else}}
 											{{if eq (lower (index . 2)) "infinite" "infinity" "inf"}}
-												{{$value = "Infinite"}}
+												{{$value = "inf"}}
 												{{$item := $items.Get $name}}
 												{{$item.Set "quantity" $value}}
 												{{$items.Set $name $item}}
@@ -111,7 +111,7 @@
 									{{if gt (len $.CmdArgs) 2}}
 										{{$value = (joinStr " " (slice $.CmdArgs 2))}}
 										{{$item := $items.Get $name}}
-										{{$item.Set "description" $value}}
+										{{$item.Set "desc" $value}}
 										{{$items.Set $name $item}}
 										{{$store.Set "items" $items}}
 										{{dbSet 0 "store" $store}}
@@ -124,12 +124,13 @@
 									{{if gt (len $.CmdArgs) 2}}
 										{{$role := (index . 2)}}
 										{{if $.Guild.GetRole (toInt64 $role)}}
-											{{$value = print "<@&" $role ">"}}
+											{{$value = print $role}}
 											{{$item := $items.Get $name}}
 											{{$item.Set "role-given" $value}}
 											{{$items.Set $name $item}}
 											{{$store.Set "items" $items}}
 											{{dbSet 0 "store" $store}}
+											{{$value = print "<@&" $role ">"}}
 											{{$cont = 1}}
 										{{else}}
 											{{$embed.Set "description" (print "Invalid role argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Role:ID>`")}}
