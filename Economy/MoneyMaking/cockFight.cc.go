@@ -55,7 +55,16 @@
 			{{$embed.Set "color" $errorColor}}
 		{{end}}
 		{{if $continue}}
-			{{if le $bet $betMax}}
+			{{if $betMax}}
+				{{if le $bet $betMax}}
+					{{$continue = true}}
+				{{else}}
+					{{$continue = false}}
+					{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+					{{$embed.Set "color" $errorColor}}
+				{{end}}
+			{{end}}
+			{{if $continue}}
 				{{$inventory := $econData.inventory}}
 				{{if $inventory.Get "chicken"}}
 					{{if not ($cooldown := dbGet $userID "cockFightCooldown")}}
@@ -84,9 +93,6 @@
 					{{$embed.Set "description" (print "You can't bet without a chicken! Buy one from the shop with `" $prefix "buy-item chicken`")}}
 					{{$embed.Set "color" $errorColor}}
 				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-				{{$embed.Set "color" $errorColor}}
 			{{end}}
 		{{end}}
 	{{else}}

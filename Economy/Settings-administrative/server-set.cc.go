@@ -61,6 +61,8 @@
 								{{else}}
 									{{$desc = $unable}}
 								{{end}}
+							{{else if and (eq $setting "betmax") (eq (toInt $val) 0)}}
+								{{$ct = true}}
 							{{else}}
 								{{$desc = $unable}}
 							{{end}}

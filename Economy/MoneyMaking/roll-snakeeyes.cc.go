@@ -53,7 +53,14 @@
 			{{$embed.Set "color" $errorColor}}
 		{{end}}
 		{{if $continue}}
-			{{if le $bet $betMax}}
+			{{if $betMax}}
+				{{if gt $bet $betMax}}
+					{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+					{{$embed.Set "color" $errorColor}}
+					{{$continue = false}}
+				{{end}}
+			{{end}}
+			{{if $continue}}
 				{{if (reFind `rollnum(ber)?|rn` $.Cmd)}}
 					{{if not ($cooldown := dbGet $userID "rollCooldown")}}
 						{{dbSetExpire $userID "rollCooldown" "cooldown" $incomeCooldown}}
@@ -103,9 +110,6 @@
 						{{$embed.Set "color" $errorColor}}
 					{{end}}
 				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-				{{$embed.Set "color" $errorColor}}
 			{{end}}
 		{{end}}
 	{{else}}

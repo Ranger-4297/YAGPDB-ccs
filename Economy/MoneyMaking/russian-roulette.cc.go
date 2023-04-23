@@ -44,25 +44,27 @@
 					{{end}}
 					{{if toInt $bet}}
 						{{$bet = toInt $bet}}
-						{{if le $bet $betMax}}
-							{{if gt $bet 0}}
-								{{if le $bet $bal}}
-									{{if le $bet $cost}}
-										{{$ct = true}}
-									{{else}}
-										{{$em.Set "description" (print "You can't bet more than " $cost)}}
-										{{$em.Set "color" $errorColor}}
+						{{if gt $bet 0}}
+							{{if le $bet $bal}}
+								{{if le $bet $cost}}
+									{{$ct = true}}
+									{{if $betMax}}
+										{{if gt $bet $betMax}}
+											{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+											{{$embed.Set "color" $errorColor}}
+											{{$ct = false}}
+										{{end}}
 									{{end}}
 								{{else}}
-									{{$em.Set "description" (print "You can't bet more than you have!")}}
+									{{$em.Set "description" (print "You can't bet more than " $cost)}}
 									{{$em.Set "color" $errorColor}}
 								{{end}}
 							{{else}}
-								{{$em.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
+								{{$em.Set "description" (print "You can't bet more than you have!")}}
 								{{$em.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
-							{{$em.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+							{{$em.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
 							{{$em.Set "color" $errorColor}}
 						{{end}}
 					{{else}}
@@ -158,10 +160,15 @@
 						{{$bet := (index $.CmdArgs 0) | toInt}}
 						{{if gt (toInt $bet) 0}}
 							{{if le (toInt $bet) (toInt $bal)}}
-								{{if $a.game}}
-									{{$em.Set "description" (print "There is already a current game. Join it with `" $.Cmd " " $a.game.cost "`")}}
-									{{$em.Set "color" $errorColor}}
-								{{else}}
+								{{$continue := true}}
+								{{if $betMax}}
+									{{if gt $bet $betMax}}
+										{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+										{{$embed.Set "color" $errorColor}}
+										{{$continue = false}}
+									{{end}}
+								{{end}}
+								{{if $continue}}
 									{{dbSet 0 "russianRoulette" (sdict "game" (sdict "cost" $bet "players" (cslice $userID) "owner" $userID))}}
 									{{$bal = sub $bal $bet}}
 									{{$em.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" $.Cmd " " $bet "` (1/6)\nTo start this game use the command `" $.Cmd " start`")}}

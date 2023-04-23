@@ -47,8 +47,16 @@
 					{{if $bet | toInt}}
 						{{$bet = $bet | toInt}}
 						{{if gt $bet 0}}
-							{{if le $bet $betMax}}
-								{{if le $bet $bal}}
+							{{if le $bet $bal}}
+								{{$continue := true}}
+								{{if $betMax}}
+									{{if gt $bet $betMax}}
+										{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+										{{$embed.Set "color" $errorColor}}
+										{{$continue = false}}
+									{{end}}
+								{{end}}
+								{{if $continue}}
 									{{if not ($cooldown := dbGet $userID "coinflipCooldown")}}
 										{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
 										{{$int := randInt 1 3}}
@@ -65,12 +73,9 @@
 										{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
 										{{$embed.Set "color" $errorColor}}
 									{{end}}
-								{{else}}
-									{{$embed.Set "description" (print "You can't bet more than you have!")}}
-									{{$embed.Set "color" $errorColor}}
 								{{end}}
 							{{else}}
-								{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+								{{$embed.Set "description" (print "You can't bet more than you have!")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
