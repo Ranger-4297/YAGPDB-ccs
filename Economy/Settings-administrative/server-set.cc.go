@@ -25,7 +25,7 @@
 {{$db := (dbGet 0 "EconomySettings").Value}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if or (in $perms "Administrator") (in $perms "ManageServer")}}
-	{{$syntax := (print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`\nTo set it with the default settings `" $.Cmd " default`")}}
+	{{$syntax := (print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`, `responses`\nTo set it with the default settings `" $.Cmd " default`")}}
 	{{with .CmdArgs}}
 		{{if index $.CmdArgs 0}}
 			{{$setting := (index $.CmdArgs 0) | lower}}
@@ -33,7 +33,7 @@
 			{{if eq $setting "default"}}
 				{{$msg.Set "description" (print "Set the `EconomySettings` to default values")}}
 				{{$msg.Set "color" $sC}}
-				{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "betMax" 5000 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600)}}
+				{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "betMax" 5000 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600 "enable-responses" false "responses" (sdict "work" cslice "crime" cslice))}}
 				{{dbSet 0 "store" sdict}}
 				{{dbSet 0 "russianRoulette" sdict}}
 				{{dbSet 0 "bank"}}
@@ -106,6 +106,28 @@
 							{{$msg.Set "color" $sC}}
 							{{$db.Set "symbol" $symbol}}
 							{{dbSet 0 "EconomySettings" $db}}
+						{{else}}
+							{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value>`")}}
+						{{end}}
+					{{else if eq $setting "responses"}}
+						{{if gt (len $.CmdArgs) 1}}
+							{{$value := (index $.CmdArgs 1) | lower}}
+							{{if eq $value "yes" "enable" "enabled" "no" "disable" "disabled"}}
+								{{$status := ""}}
+								{{if eq $value "yes" "enable" "enabled"}}
+									{{$status = "enabled"}}
+									{{$value = true}}
+								{{else}}
+									{{$status = "disabled"}}
+									{{$value = false}}
+								{{end}}
+								{{$msg.Set "description" (print "You " $status " custom responses")}}
+								{{$msg.Set "color" $sC}}
+								{{$db.Set "enable-responses" $value}}
+								{{dbSet 0 "EconomySettings" $db}}
+							{{else}}
+								{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value>`")}}
+							{{end}}
 						{{else}}
 							{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value>`")}}
 						{{end}}
