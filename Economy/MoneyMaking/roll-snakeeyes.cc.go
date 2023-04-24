@@ -35,6 +35,8 @@
 		{{$continue := false}}
 		{{if eq ($bet | toString) "all"}}
 			{{$bet = $bal}}
+		{{else if and $betMax (eq (toString $bet) "max")}}
+			{{$bet = $betMax}}
 		{{end}}
 		{{if $bet = (toInt $bet)}}
 			{{if gt $bet 0}}
