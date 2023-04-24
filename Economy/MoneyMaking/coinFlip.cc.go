@@ -36,7 +36,7 @@
 			{{$picker1 := ""}}
 			{{$win := ""}}
 			{{$lose := ""}}
-			{{if (reFind `(t(ails?)?|h(eads?)?)` (lower $side))}}
+			{{if (reFind `\A(t(ails?)?|h(eads?)?)(\s+|\z)` (lower $side))}}
 				{{if eq $side "t" "tails" "tail"}}
 					{{$side = "tails"}}
 				{{else if eq $side "h" "heads" "head"}}
