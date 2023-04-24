@@ -40,7 +40,9 @@
 					{{$ct := false}}
 					{{$rr := false}}
 					{{if eq ($bet | toString) "all"}}
-						{{$bet = $bal | toInt}}
+						{{$bet = $bal}}
+					{{else if and $betMax (eq (toString $bet) "max")}}
+						{{$bet = $betMax}}
 					{{end}}
 					{{if toInt $bet}}
 						{{$bet = toInt $bet}}
