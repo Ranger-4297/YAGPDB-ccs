@@ -42,19 +42,23 @@
 	{{if eq $leaderboard "yes"}}
 		{{$pos := dict 1 "🥇" 2 "🥈" 3 "🥉"}}
 		{{$rank = dbRank (sdict "pattern" "cash") $user.ID "cash"}}
-		{{if in (cslice 1 2 3) $rank }}
-			{{$rank = $pos.Get $rank}}
+		{{if not $rank}}
+			{{$rank = "None"}}
 		{{else}}
-		{{$ord := "th"}}
-		{{$cent := toInt (mod $rank 100)}}
-		{{$dec := toInt (mod $rank 10)}}
-		{{if not (and (ge $cent 10) (le $cent 19))}}
-			{{if eq $dec 1}}{{$ord = "st"}}
-			{{else if eq $dec 2}}{{$ord = "nd"}}
-			{{else if eq $dec 3}}{{$ord = "rd"}}
+			{{if in (cslice 1 2 3) $rank }}
+				{{$rank = $pos.Get $rank}}
+			{{else}}
+			{{$ord := "th"}}
+			{{$cent := toInt (mod $rank 100)}}
+			{{$dec := toInt (mod $rank 10)}}
+			{{if not (and (ge $cent 10) (le $cent 19))}}
+				{{if eq $dec 1}}{{$ord = "st"}}
+				{{else if eq $dec 2}}{{$ord = "nd"}}
+				{{else if eq $dec 3}}{{$ord = "rd"}}
+				{{end}}
 			{{end}}
-		{{end}}
-			{{$rank = print $rank $ord "."}}
+				{{$rank = print $rank $ord "."}}
+			{{end}}
 		{{end}}
 	{{end}}
 	{{$balStatus := $userdata.settings.balance | toString}}
