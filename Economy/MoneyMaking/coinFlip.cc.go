@@ -36,7 +36,7 @@
 			{{$picker1 := ""}}
 			{{$win := ""}}
 			{{$lose := ""}}
-			{{if (reFind `(t(ails?)?|h(eads?)?)` (lower $side))}}
+			{{if (reFind `\A(t(ails?)?|h(eads?)?)(\s+|\z)` (lower $side))}}
 				{{if eq $side "t" "tails" "tail"}}
 					{{$side = "tails"}}
 				{{else if eq $side "h" "heads" "head"}}
@@ -44,39 +44,45 @@
 				{{end}}
 				{{if gt (len .) 1}}
 					{{$bet := (index . 1)}}
+					{{$continue := false}}
+					{{if eq ($bet | toString) "all"}}
+						{{$bet = $bal}}
+					{{else if and $betMax (eq (toString $bet) "max")}}
+						{{$bet = $betMax}}
+					{{end}}
 					{{if $bet | toInt}}
 						{{$bet = $bet | toInt}}
 						{{if gt $bet 0}}
 							{{if le $bet $bal}}
-								{{$continue := true}}
-								{{if $betMax}}
-									{{if gt $bet $betMax}}
-										{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-										{{$embed.Set "color" $errorColor}}
-										{{$continue = false}}
-									{{end}}
-								{{end}}
-								{{if $continue}}
-									{{if not ($cooldown := dbGet $userID "coinflipCooldown")}}
-										{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
-										{{$int := randInt 1 3}}
-										{{if eq $int 1}} {{/* Win */}}
-											{{$bal = add $bal $bet}}
-											{{$embed.Set "description" (print "You flipped " $side " and won " $symbol (humanizeThousands $bet))}}
-											{{$embed.Set "color" $successColor}}
-										{{else}} {{/* Lose */}}
-											{{$bal = sub $bal $bet}}
-											{{$embed.Set "description" (print "You flipped " $side " and lost.")}}
-											{{$embed.Set "color" $errorColor}}
-										{{end}}
-									{{else}}
-										{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{end}}
+								{{$continue = true}}
 							{{else}}
 								{{$embed.Set "description" (print "You can't bet more than you have!")}}
 								{{$embed.Set "color" $errorColor}}
+							{{end}}
+							{{if $betMax}}
+								{{if gt $bet $betMax}}
+									{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+									{{$embed.Set "color" $errorColor}}
+									{{$continue = false}}
+								{{end}}
+							{{end}}
+							{{if $continue}}
+								{{if not ($cooldown := dbGet $userID "coinflipCooldown")}}
+									{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
+									{{$int := randInt 1 3}}
+									{{if eq $int 1}} {{/* Win */}}
+										{{$bal = add $bal $bet}}
+										{{$embed.Set "description" (print "You flipped " $side " and won " $symbol (humanizeThousands $bet))}}
+										{{$embed.Set "color" $successColor}}
+									{{else}} {{/* Lose */}}
+										{{$bal = sub $bal $bet}}
+										{{$embed.Set "description" (print "You flipped " $side " and lost.")}}
+										{{$embed.Set "color" $errorColor}}
+									{{end}}
+								{{else}}
+									{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+									{{$embed.Set "color" $errorColor}}
+								{{end}}
 							{{end}}
 						{{else}}
 							{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}

@@ -2,7 +2,7 @@
 		Made by Ranger (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)((cock|chicken)-?fight))(\s+|\z)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)((cock|chicken)-?fight)(\s+|\z)`
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
@@ -37,6 +37,8 @@
 		{{$continue := false}}
 		{{if eq ($bet | toString) "all"}}
 			{{$bet = $bal}}
+		{{else if and $betMax (eq (toString $bet) "max")}}
+			{{$bet = $betMax}}
 		{{end}}
 		{{if $bet = (toInt $bet)}}
 			{{if gt $bet 0}}
@@ -75,11 +77,11 @@
 								{{$cfWC = $cfWC | add 1}}
 							{{end}}
 							{{$bal = add $bal $bet}}
-							{{$embed.Set "description" (print "Your chicken won the fight!\nPlay again with `" $.Cmd " <Bet:Amount>`")}}
+							{{$embed.Set "description" (print "Your chicken won the fight and got you " $symbol $bet "!\nPlay again with `" $.Cmd " <Bet:Amount>`")}}
 							{{$embed.Set "color" $successColor}}
 						{{else}}
 							{{$cfWC = 50}}
-							{{$embed.Set "description" (print "Your chicken lost the fight and died :(\nBuy a new one to play again!")}}
+							{{$embed.Set "description" (print "Your chicken lost the fight, " $symbol $bet " and died :(\nBuy a new one to play again!")}}
 							{{$embed.Set "color" $errorColor}}
 							{{$bal = sub $bal $bet}}
 							{{$inventory.Del "chicken"}}
