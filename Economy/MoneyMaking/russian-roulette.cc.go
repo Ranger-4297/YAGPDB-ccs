@@ -50,8 +50,8 @@
 									{{$ct = true}}
 									{{if $betMax}}
 										{{if gt $bet $betMax}}
-											{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-											{{$embed.Set "color" $errorColor}}
+											{{$em.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+											{{$em.Set "color" $errorColor}}
 											{{$ct = false}}
 										{{end}}
 									{{end}}
@@ -163,8 +163,8 @@
 								{{$continue := true}}
 								{{if $betMax}}
 									{{if gt $bet $betMax}}
-										{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-										{{$embed.Set "color" $errorColor}}
+										{{$em.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+										{{$em.Set "color" $errorColor}}
 										{{$continue = false}}
 									{{end}}
 								{{end}}
