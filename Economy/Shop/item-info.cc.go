@@ -40,20 +40,14 @@
 					{{if ($item.Get "role-given")}}
 						{{$role = ($item.Get "role-given")}}
 					{{end}}
-					{{$qty := ""}}
-					{{if ($item.Get "quantity")}}
-						{{$qty = ($item.Get "quantity")}}
-						{{if not (reFind "infinite" (lower (toString $qty)))}}
-							{{$qty = toInt $qty | humanizeThousands}}
-						{{else}}
-							{{$qty = "Infinite"}}
-						{{end}}
-					{{else}}
-						{{$qty = "Infinite"}}
+					{{$qty := $item.quantity}}
+					{{if not $qty}}
+						{{$qty = "inf"}}
 					{{end}}
+					{{$reply := $item.replyMsg}}
 					{{$desc := $item.Get "desc"}}
 					{{$embed.Set "title" (print "**Item info**")}}
-					{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" (print $name) "inline" true) (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true) (sdict "name" "Description" "value" (print $desc) "inline" true) (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Shop quantity" "value" (print $qty) "inline" true) (sdict "name" "Role given" "value" (print $role)))}}
+					{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" (print $name) "inline" true) (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true) (sdict "name" "Description" "value" (print $desc) "inline" true)  (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Shop quantity" "value" (print $qty) "inline" true) (sdict "name" "Role given" "value" (print $role)) (sdict "name" "Reply message" "Value" $reply))}}
 					{{$embed.Set "color" $successColor}}
 				{{else}}
 					{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
