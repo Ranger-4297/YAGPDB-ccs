@@ -1,111 +1,203 @@
 {{/*
 		Made by Ranger (765316548516380732)
+		Wait response logic by DZ (438789314101379072)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)((create|new)-?item)(\s+|\z)`
+	Trigger: `.*`
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
 	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
+{{/* If your prefix isn't - change the value below to your prefix */}}
+{{$trigger:=`(-|<@!?204255221017214977>\s*)((create|new)-?item)`}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}
-{{$successColor := 0x00ff7b}}
+{{$userID := .User.ID}}
 {{$errorColor := 0xFF0000}}
-{{$prefix := .ServerPrefix }}
+{{$dbVal := toInt (dbGet .User.ID "waitResponse").Value}}
+{{$cmdStage := 0}}
 
 {{/* Create item */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "title" "Item info" "footer" (sdict "text" "Type cancel to cancel the setup") "color" 0x00ff7b "timestamp" currentTime}}
+{{$shop := or (dbGet 0 "store").Value (sdict "items" sdict)}}
+{{$items := $shop.items}}
+{{$itemData := sdict "desc" "" "price" 0 "quantity" 0 "role" 0 "reply-msg" ""}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
-{{if or (in $perms "Administrator") (in $perms "ManageServer")}}
-	{{with (dbGet 0 "EconomySettings")}}
-		{{$a := sdict .Value}}
-		{{$symbol := $a.symbol}}
-		{{with (dbGet 0 "store")}}
-			{{$store := sdict .Value}}
-			{{with $.CmdArgs}}
-				{{if gt (len $.CmdArgs) 0}}
-					{{$name := (index . 0)}}
-					{{if gt (len $.CmdArgs) 1}}
-						{{if (index . 1) | toInt}}
-							{{if ge (toInt (index . 1)) 1}}
-								{{$price := (index . 1)}}
-								{{if gt (len $.CmdArgs) 2}}
-									{{$qty := "1"}}
-									{{if (index . 2) | toInt}}
-										{{if ge (toInt (index . 2)) 1}}
-											{{$qty = (humanizeThousands (index . 2))}}
-										{{else}}
-											{{$qty = "inf"}}
-										{{end}}
-									{{else}}
-										{{if eq (lower (index . 2)) "infinite" "infinity" "inf"}}
-											{{$qty = "inf"}}
-										{{else}}
-											{{$embed.Set "description" (print "Invalid `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
-											{{$embed.Set "color" $errorColor}}
-										{{end}}
-									{{end}}
-									{{if gt (len $.CmdArgs) 3}}
-										{{$description := (joinStr " " (slice $.CmdArgs 3))}}
-										{{$items := sdict}}
-										{{if ($store.Get "items")}}
-											{{$items = sdict ($store.Get "items")}}
-										{{else}}
-											{{dbSet 0 "store" (sdict "items" sdict)}}
-											{{with (dbGet 0 "store")}}
-												{{$store = sdict .Value}}
-											{{end}}
-											{{$items = sdict ($store.Get "items")}}
-										{{end}}
-										{{$items.Set $name (sdict "desc" $description "price" $price "quantity" $qty "role" 0)}}
-										{{$store.Set "items" $items}}
-										{{dbSet 0 "store" $store}}
-										{{$embed.Set "description" (print "New item added to shop!")}}
-										{{$embed.Set "fields" (cslice (sdict "Name" $name "value" (print "Description: " $description "\nPrice: " (humanizeThousands $price) "\nQuantity: " $qty "\nRole: 0 || *Add role with `" $prefix "edit-item`*") "inline" false))}}
-										{{$embed.Set "color" $successColor}}
-									{{else}}
-										{{$embed.Set "description" (print "No `description` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else}}
-									{{$embed.Set "description" (print "No `Quantity` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
-									{{$embed.Set "color" $errorColor}}
-								{{end}}
-							{{else}}
-								{{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
-								{{$embed.Set "color" $errorColor}}
-							{{end}}
-						{{else}}
-							{{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
-							{{$embed.Set "color" $errorColor}}
-						{{end}}
-					{{else}}
-						{{$embed.Set "description" (print "No `Price` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
+{{if not .ExecData}}
+	{{with $eco := (dbGet 0 "EconomySettings").Value}}
+		{{$symbol := $eco.symbol}}
+		{{if not $dbVal}}
+			{{/* checks if message matches regex to begin tutorial */}}
+			{{if reFind (print `\A(?i)` $trigger `(\s+|\z)`) $.Message.Content}}
+				{{if or (in $perms "Administrator") (in $perms "ManageServer")}}
+					{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" "⠀⠀"))}}
+					{{$cmdStage = 1}}
+					{{$embed := sendMessageRetID nil (complexMessage "content" "Please enter a name for the item (under 60 characters)" "embed" (cembed $embed))}}
+					{{dbSet 0 "createItem" (sdict "embed" (toString $embed) "item" (sdict "name" "" "data" $itemData) "user" (toString $userID))}}
+					{{scheduleUniqueCC $.CCID nil 120 1 1}}
 				{{else}}
-					{{$embed.Set "description" (print "No `Name` argument provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
+					{{$embed.Del "footer"}}{{$embed.Del "title"}}
+					{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+					{{$embed.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
 					{{$embed.Set "color" $errorColor}}
+					{{sendMessage nil (cembed $embed)}}
 				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "No arguments provided.\nSyntax is `" $.Cmd " <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
-				{{$embed.Set "color" $errorColor}}
+			{{end}}
+		{{else}}
+			{{$createItem := (dbGet 0 "createItem").Value}}
+			{{if and $createItem.user (eq (toString $createItem.user) (toString $userID))}}
+				{{if eq $dbVal 1}}
+					{{if and (le (len (toRune $.Message.Content)) 60) (not (eq $.Message.Content "cancel"))}}
+						{{$name := $.Message.Content}}
+						{{$item := $createItem.item}}
+						{{$item.Set "name" $name}}
+						{{dbSet 0 "createItem" $createItem}}
+						{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" $name "inline" true))}}
+						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Please enter a price for the item" "embed" (cembed $embed))}}
+						{{$cmdStage = 1}}
+					{{else if not (eq $.Message.Content "cancel")}}
+						{{$msg := sendMessageRetID nil "Please try again and enter name under 60 characters"}}
+						{{deleteTrigger 0}}
+						{{deleteMessage nil $msg 10}}
+						{{$cmdStage = 0}}
+					{{end}}
+					{{scheduleUniqueCC $.CCID nil 120 1 2}}
+				{{else if eq $dbVal 2}}
+					{{with toInt $.Message.Content}}
+						{{if gt . 0}}
+							{{$price := .}}
+							{{$item := $createItem.item}}
+							{{$item.data.Set "price" $price}}
+							{{dbSet 0 "createItem" $createItem}}
+							{{$msg := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
+							{{$field := sdict "name" "Price" "value" (print $symbol .) "inline" true}}
+							{{$embed.Set "fields" ((cslice.AppendSlice $msg.Fields).Append $field)}}
+							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Please enter a description for the item (under 200 characters)" "embed" (cembed $embed))}}
+							{{$cmdStage = 1}}
+						{{else}}
+							{{$msg := sendMessageRetID nil "Please try again and enter a valid number"}}
+							{{deleteTrigger 0}}
+							{{deleteMessage nil $msg 10}}
+							{{$cmdStage = 0}}
+						{{end}}
+					{{else if not (eq (lower $.Message.Content) "cancel")}}
+						{{$msg := sendMessageRetID nil "Please try again and enter a valid number"}}
+						{{deleteTrigger 0}}
+						{{deleteMessage nil $msg 10}}
+						{{$cmdStage = 0}}
+					{{end}}
+					{{scheduleUniqueCC $.CCID nil 120 1 3}}
+				{{else if or (eq $dbVal 3) (eq $dbVal 6)}}
+					{{if and (le (len (toRune $.Message.Content)) 200) (not (eq $.Message.Content "cancel"))}}
+						{{$option := ""}}
+						{{$fieldValue := ""}}
+						{{if eq $dbVal 3}}
+							{{$option = "desc"}}
+							{{$fieldValue = "description"}}
+						{{else}}
+							{{$option = "replyMsg"}}
+							{{$fieldValue = "reply"}}
+						{{end}}
+						{{$item := $createItem.item}}
+						{{$item.data.Set $option $.Message.Content}}
+						{{$msg := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
+						{{$field := sdict "name" $fieldValue "value" $.Message.Content}}
+						{{$embed.Set "fields" ((cslice.AppendSlice $msg.Fields).Append $field)}}
+						{{if eq $dbVal 3}}
+							{{dbSet 0 "createItem" $createItem}}
+							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "How much of this item should the store stock?\nIf unlimited just reply `skip` or `inf`" "embed" (cembed $embed))}}
+							{{scheduleUniqueCC $.CCID nil 120 1 4}}
+						{{else}}
+							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Item created! ✅" "embed" (cembed $embed))}}
+							{{$items.Set $createItem.item.name $createItem.item.data}}
+							{{dbSet 0 "store" $shop}}
+							{{dbDel 0 "createItem"}}
+							{{dbDel $userID "waitResponse"}}
+							{{cancelScheduledUniqueCC $.CCID 1}}
+						{{end}}
+						{{$cmdStage = 1}}
+					{{else if not (eq $.Message.Content "cancel")}}
+						{{$msg := sendMessageRetID nil "Please try again and enter name under 60 characters"}}
+						{{deleteTrigger 0}}
+						{{deleteMessage nil $msg 10}}
+						{{$cmdStage = 0}}
+						{{scheduleUniqueCC $.CCID nil 120 1 5}}
+					{{end}}
+				{{else if eq $dbVal 4}}
+					{{if or (gt (toInt $.Message.Content) 0) (eq (lower $.Message.Content) "inf" "skip")}}
+						{{$quantity := $.Message.Content}}
+						{{if eq $quantity "skip"}}
+							{{$quantity = "inf"}}
+						{{end}}
+						{{$item := $createItem.item}}
+						{{$item.data.Set "quantity" $quantity}}
+						{{$msg := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
+						{{$field := sdict "name" "Stock" "value" (toString $quantity) "inline" true}}
+						{{$embed.Set "fields" ((cslice.AppendSlice $msg.Fields).Append $field)}}
+						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "What role do you want to be given when this item is used?\nType `skip` to skip this." "embed" (cembed $embed))}}
+						{{$cmdStage = 1}}
+						{{dbSet 0 "createItem" $createItem}}
+					{{else if not (eq $.Message.Content "cancel")}}
+						{{$msg := sendMessageRetID nil "Please try again and enter a valid number"}}
+						{{deleteTrigger 0}}
+						{{deleteMessage nil $msg 10}}
+						{{$cmdStage = 0}}
+					{{end}}
+					{{scheduleUniqueCC $.CCID nil 120 1 6}}
+				{{else if eq $dbVal 5}}
+					{{$role := $.Message.Content}}
+					{{if or ($.Guild.GetRole (toInt64 $role)) (eq $role "skip")}}
+						{{if eq $role "skip"}}
+							{{$role = 0}}
+						{{end}}
+						{{$item := $createItem.item}}
+						{{$item.data.Set "role" $role}}
+						{{dbSet 0 "createItem" $createItem}}
+						{{if not $role}}
+							{{$role = "none"}}
+						{{else}}
+							{{$role = print "<@&" $role ">"}}
+						{{end}}
+						{{$msg := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
+						{{$field := sdict "name" "Role-given" "value" (toString $role) "inline" true}}
+						{{$embed.Set "fields" ((cslice.AppendSlice $msg.Fields).Append $field)}}
+						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "What message should I reply with when the item is used? (under 200 character)" "embed" (cembed $embed))}}
+						{{$cmdStage = 1}}
+					{{else if not (eq (lower $role) "cancel")}}
+						{{$msg := sendMessageRetID nil "Please try again with a valid roleID"}}
+						{{deleteTrigger 0}}
+						{{deleteMessage nil $msg 10}}
+						{{$cmdStage = 0}}
+					{{end}}
+					{{scheduleUniqueCC $.CCID nil 120 1 7}}
+				{{end}}
+				{{if eq (lower $.Message.Content) "cancel"}}
+					{{sendMessage nil "Create-item was cancelled"}}
+					{{dbDel $userID "waitResponse"}}
+					{{dbDel 0 "createItem"}}
+					{{$cmdStage = 0}}
+					{{cancelScheduledUniqueCC $.CCID 1}}
+				{{end}}
 			{{end}}
 		{{end}}
 	{{else}}
-		{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
+		{{$embed.Del "footer"}}{{$embed.Del "title"}}
+		{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
+		{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $.ServerPrefix "set default`")}}
 		{{$embed.Set "color" $errorColor}}
+		{{sendMessage nil (cembed $embed)}}
 	{{end}}
 {{else}}
-	{{$embed.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
-	{{$embed.Set "color" $errorColor}}
+	{{sendMessage nil "Create-item was cancelled"}}
+	{{dbDel .User.ID "waitResponse"}}
+	{{dbDel 0 "createItem"}}
 {{end}}
-{{sendMessage nil (cembed $embed)}}
+{{if $cmdStage}}
+	{{dbSetExpire .User.ID "waitResponse" (str (add $dbVal 1)) 120}}
+{{end}}
