@@ -10,13 +10,13 @@
 	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
+{{/* If your prefix isn't - change the value below to your prefix */}}
 {{$trigger:=`(-|<@!?204255221017214977>\s*)((create|new)-?item)`}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}
 {{$userID := .User.ID}}
-{{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
 {{$dbVal := toInt (dbGet .User.ID "waitResponse").Value}}
 {{$cmdStage := 0}}
@@ -24,7 +24,7 @@
 {{/* Create item */}}
 
 {{/* Response */}}
-{{$embed := sdict "title" "Item info" "footer" (sdict "text" "Type cancel to cancel the setup") "color" $successColor "timestamp" currentTime}}
+{{$embed := sdict "title" "Item info" "footer" (sdict "text" "Type cancel to cancel the setup") "color" 0x00ff7b "timestamp" currentTime}}
 {{$shop := or (dbGet 0 "store").Value (sdict "items" sdict)}}
 {{$items := $shop.items}}
 {{$itemData := sdict "desc" "" "price" 0 "quantity" 0 "role" 0 "reply-msg" ""}}
