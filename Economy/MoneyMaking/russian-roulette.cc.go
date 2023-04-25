@@ -22,13 +22,13 @@
 {{/* Response */}}
 {{$em := sdict}}
 {{$em.Set "timestamp" currentTime}}
-{{if not .ExecData}}
+{{if not (eq (toString .ExecData) "start")}}
 	{{with dbGet 0 "EconomySettings"}}
 		{{$a := sdict .Value}}
 		{{$symbol := $a.symbol}}
 		{{$betMax := $a.betMax | toInt}}
 		{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
-		{{with $.CmdArgs}}
+		{{with or $.CmdArgs (eq (toString $.ExecData) "start")}}
 			{{with dbGet 0 "russianRoulette"}}
 				{{$a := sdict .Value}}
 				{{if $a.game}}
@@ -81,7 +81,7 @@
 						{{else if eq $bet "collect"}}
 							{{$em.Set "description" (print "You cannot collect during a game. Please wait till it is over to collect any owed money.")}}
 							{{$em.Set "color" $errorColor}}
-						{{else}}
+						{{else if not $.ExecData}}
 							{{$em.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
 							{{$em.Set "color" $errorColor}}
 						{{end}}
@@ -107,7 +107,7 @@
 							{{$em.Set "color" $errorColor}}
 						{{end}}
 					{{end}}
-					{{if $rr}}
+					{{if or $rr (eq (toString $.ExecData) "start")}}
 						{{sendMessage nil (cembed (sdict "title" "The russian roulette game has begun!" "color" 0x0088CC))}}
 						{{$winners := cslice}}
 						{{$loser := ""}}
