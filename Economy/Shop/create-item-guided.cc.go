@@ -93,15 +93,33 @@
 						{{$cmdStage = 0}}
 					{{end}}
 					{{scheduleUniqueCC $.CCID nil 120 1 3}}
-				{{else if eq $dbVal 3}}
+				{{else if or (eq $dbVal 3) (eq $dbVal 6)}}
 					{{if and (le (len (toRune $.Message.Content)) 200) (not (eq $.Message.Content "cancel"))}}
+						{{$option := ""}}
+						{{$fieldValue := ""}}
+						{{if eq $dbVal 3}}
+							{{$option = "desc"}}
+							{{$fieldValue = "description"}}
+						{{else}}
+							{{$option = "replyMsg"}}
+							{{$fieldValue = "reply"}}
+						{{end}}
 						{{$item := $createItem.item}}
-						{{$item.data.Set "desc" $.Message.Content}}
-						{{dbSet 0 "createItem" $createItem}}
+						{{$item.data.Set $option $.Message.Content}}
 						{{$msg := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
-						{{$field := sdict "name" "Description" "value" $.Message.Content}}
+						{{$field := sdict "name" $fieldValue "value" $.Message.Content}}
 						{{$embed.Set "fields" ((cslice.AppendSlice $msg.Fields).Append $field)}}
-						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "How much of this item should the store stock?\nIf unlimited just reply `skip` or `inf`" "embed" (cembed $embed))}}
+						{{if eq $dbVal 3}}
+							{{dbSet 0 "createItem" $createItem}}
+							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "How much of this item should the store stock?\nIf unlimited just reply `skip` or `inf`" "embed" (cembed $embed))}}
+						{{else}}
+							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Item created! ✅" "embed" (cembed $embed))}}
+							{{$items.Set $createItem.item.name $createItem.item.data}}
+							{{dbSet 0 "store" $shop}}
+							{{dbDel 0 "createItem"}}
+							{{dbDel $userID "waitResponse"}}
+							{{cancelScheduledUniqueCC $.CCID 1}}
+						{{end}}
 						{{$cmdStage = 1}}
 					{{else if not (eq $.Message.Content "cancel")}}
 						{{$msg := sendMessageRetID nil "Please try again and enter name under 60 characters"}}
@@ -148,37 +166,15 @@
 						{{$msg := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
 						{{$field := sdict "name" "Role-given" "value" (toString $role) "inline" true}}
 						{{$embed.Set "fields" ((cslice.AppendSlice $msg.Fields).Append $field)}}
-						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "What message should I reply with when the item is used? (under 100 character)" "embed" (cembed $embed))}}
+						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "What message should I reply with when the item is used? (under 200 character)" "embed" (cembed $embed))}}
 						{{$cmdStage = 1}}
 					{{else if not (eq (lower $role) "cancel")}}
 						{{$msg := sendMessageRetID nil "Please try again with a valid roleID"}}
 						{{deleteTrigger 0}}
 						{{deleteMessage nil $msg 10}}
+						{{$cmdStage = 0}}
 					{{end}}
 					{{scheduleUniqueCC $.CCID nil 120 1 6}}
-				{{else if eq $dbVal 6}}
-					{{if and (le (len (toRune $.Message.Content)) 100) (not (eq $.Message.Content "cancel"))}}
-						{{$item := $createItem.item}}
-						{{$item.data.Set "replyMsg" $.Message.Content}}
-						{{dbSet 0 "createItem" $createItem}}
-						{{$msg := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
-						{{$field := sdict "name" "Reply" "value" $.Message.Content}}
-						{{$embed.Set "fields" ((cslice.AppendSlice $msg.Fields).Append $field)}}
-						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Item created! ✅" "embed" (cembed $embed))}}
-						{{$cmdStage = 0}}
-						{{$items.Set $createItem.item.name $createItem.item.data}}
-						{{dbSet 0 "store" $shop}}
-						{{dbDel 0 "createItem"}}
-						{{dbDel $userID "waitResponse"}}
-						{{cancelScheduledUniqueCC $.CCID 1}}
-					{{else if not (eq $.Message.Content "cancel")}}
-						{{$msg := sendMessageRetID nil "Please try again and enter name under 60 characters"}}
-						{{deleteTrigger 0}}
-						{{deleteMessage nil $msg 10}}
-						{{$cmdStage = 0}}
-						{{dbDel 0 "createItem"}}
-						{{scheduleUniqueCC $.CCID nil 120 1 6}}
-					{{end}}
 				{{end}}
 				{{if eq (lower $.Message.Content) "cancel"}}
 					{{sendMessage nil "Create-item was cancelled"}}
