@@ -112,6 +112,7 @@
 						{{if eq $dbVal 3}}
 							{{dbSet 0 "createItem" $createItem}}
 							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "How much of this item should the store stock?\nIf unlimited just reply `skip` or `inf`" "embed" (cembed $embed))}}
+							{{scheduleUniqueCC $.CCID nil 120 1 4}}
 						{{else}}
 							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Item created! ✅" "embed" (cembed $embed))}}
 							{{$items.Set $createItem.item.name $createItem.item.data}}
@@ -126,8 +127,8 @@
 						{{deleteTrigger 0}}
 						{{deleteMessage nil $msg 10}}
 						{{$cmdStage = 0}}
+						{{scheduleUniqueCC $.CCID nil 120 1 5}}
 					{{end}}
-					{{scheduleUniqueCC $.CCID nil 120 1 4}}
 				{{else if eq $dbVal 4}}
 					{{if or (gt (toInt $.Message.Content) 0) (eq (lower $.Message.Content) "inf" "skip")}}
 						{{$quantity := $.Message.Content}}
@@ -148,7 +149,7 @@
 						{{deleteMessage nil $msg 10}}
 						{{$cmdStage = 0}}
 					{{end}}
-					{{scheduleUniqueCC $.CCID nil 120 1 5}}
+					{{scheduleUniqueCC $.CCID nil 120 1 6}}
 				{{else if eq $dbVal 5}}
 					{{$role := $.Message.Content}}
 					{{if or ($.Guild.GetRole (toInt64 $role)) (eq $role "skip")}}
@@ -174,7 +175,7 @@
 						{{deleteMessage nil $msg 10}}
 						{{$cmdStage = 0}}
 					{{end}}
-					{{scheduleUniqueCC $.CCID nil 120 1 6}}
+					{{scheduleUniqueCC $.CCID nil 120 1 7}}
 				{{end}}
 				{{if eq (lower $.Message.Content) "cancel"}}
 					{{sendMessage nil "Create-item was cancelled"}}
@@ -193,7 +194,6 @@
 		{{sendMessage nil (cembed $embed)}}
 	{{end}}
 {{else}}
-	{{.ExecData}}
 	{{sendMessage nil "Create-item was cancelled"}}
 	{{dbDel .User.ID "waitResponse"}}
 	{{dbDel 0 "createItem"}}
