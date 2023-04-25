@@ -159,7 +159,7 @@
 				{{else if eq $dbVal 6}}
 					{{if and (le (len (toRune $.Message.Content)) 100) (not (eq $.Message.Content "cancel"))}}
 						{{$item := $createItem.item}}
-						{{$item.data.Set "reply-msg" $.Message.Content}}
+						{{$item.data.Set "replyMsg" $.Message.Content}}
 						{{dbSet 0 "createItem" $createItem}}
 						{{$msg := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
 						{{$field := sdict "name" "Reply" "value" $.Message.Content}}
