@@ -24,8 +24,7 @@
 {{/* Create item */}}
 
 {{/* Response */}}
-{{$embed := sdict "title" "Item info" "footer" (sdict "text" "Type cancel to cancel the setup") "color" $successColor}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "title" "Item info" "footer" (sdict "text" "Type cancel to cancel the setup") "color" $successColor "timestamp" currentTime}}
 {{$shop := or (dbGet 0 "store").Value (sdict "items" sdict)}}
 {{$items := $shop.items}}
 {{$itemData := sdict "desc" "" "price" 0 "quantity" 0 "role" 0 "reply-msg" ""}}
