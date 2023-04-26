@@ -140,9 +140,9 @@
 							{{range $winners}}
 								{{$amt := ($sDB.Get (toString (userArg .).ID))}}
 								{{if $amt}}
-									{{$amt = add $amt $payout $cost}}
+									{{$amt = add $amt $payout}}
 								{{else}}
-									{{$amt = add $payout $cost}} 
+									{{$amt = $payout}} 
 								{{end}}
 								{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
 								{{$sDB.Set (toString (userArg .).ID) $amt}}
