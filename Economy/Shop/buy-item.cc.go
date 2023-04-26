@@ -109,7 +109,7 @@
 									{{$item.Set "quantity" $userQuantity}}
 									{{$inventory.Set $name $item}}
 								{{else}}
-									{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role)}}
+									{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role "replyMsg" $item.replyMsg)}}
 								{{end}}
 								{{$embed.Set "description" (print "You've bought  " $buyQuantity " of " $name " for " $symbol $price "!")}}
 								{{$embed.Set "color" $successColor}}

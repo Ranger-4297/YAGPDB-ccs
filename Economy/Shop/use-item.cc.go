@@ -43,7 +43,7 @@
 				{{if $role}}
 					{{addRoleID $role}}
 				{{end}}
-				{{$embed.Set "description" (print "You've just used " $name "!\nYou had " (humanizeThousands $qty) " and now have " (humanizeThousands $nqty) "\nIf there was a role associated with this item it has been assigned!")}}
+				{{$embed.Set "description" (print $item.replyMsg)}}
 				{{$embed.Set "color" $successColor}}
 			{{else}}
 				{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}

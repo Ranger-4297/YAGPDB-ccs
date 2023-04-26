@@ -22,13 +22,13 @@
 {{/* Response */}}
 {{$em := sdict}}
 {{$em.Set "timestamp" currentTime}}
-{{if not .ExecData}}
+{{if not (eq (toString .ExecData) "cancel" "cancel2")}}
 	{{with dbGet 0 "EconomySettings"}}
 		{{$a := sdict .Value}}
 		{{$symbol := $a.symbol}}
 		{{$betMax := $a.betMax | toInt}}
 		{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
-		{{with $.CmdArgs}}
+		{{with or $.CmdArgs (eq (toString $.ExecData) "start")}}
 			{{with dbGet 0 "russianRoulette"}}
 				{{$a := sdict .Value}}
 				{{if $a.game}}
@@ -36,7 +36,10 @@
 					{{$game := $a.game}}
 					{{$cost := $game.cost}}
 					{{$players := $game.players}}
-					{{$bet := (index $.CmdArgs 0)}}
+					{{$bet := ""}}
+					{{if not $.ExecData}}
+						{{$bet = (index $.CmdArgs 0)}}
+					{{end}}
 					{{$ct := false}}
 					{{$rr := false}}
 					{{if eq ($bet | toString) "all"}}
@@ -81,37 +84,37 @@
 						{{else if eq $bet "collect"}}
 							{{$em.Set "description" (print "You cannot collect during a game. Please wait till it is over to collect any owed money.")}}
 							{{$em.Set "color" $errorColor}}
-						{{else}}
+						{{else if not $.ExecData}}
 							{{$em.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
 							{{$em.Set "color" $errorColor}}
 						{{end}}
 					{{end}}
 					{{if $ct}}
-						{{if not (eq (len $players) 6)}}
-							{{if in $players $userID}}
-								{{$em.Set "description" (print "You're already in this game")}}
-								{{$em.Set "color" $errorColor}}
-							{{else}}
-								{{$players = $players.Append $userID}}
-								{{$game.Set "players" $players}}
-								{{dbSet 0 "russianRoulette" (sdict "game" $game)}}
-								{{$bal = sub $bal $bet}}
-								{{$em.Set "description" (print "You've joined this game of russian roulette with a bet of " $symbol $bet)}}
-								{{$em.Set "footer" (sdict "text" (print "Players: " (len $players) "/6"))}}
-								{{$em.Set "color" $successColor}}
-								{{cancelScheduledUniqueCC $.CCID "rr-game"}}
-								{{scheduleUniqueCC $.CCID nil 420 "rr-game-2" "cancel-2"}}
-							{{end}}
-						{{else}}
-							{{$em.Set "description" (print "The maximum number of players have already joined ;( Sorry")}}
+						{{if in $players $userID}}
+							{{$em.Set "description" (print "You're already in this game")}}
 							{{$em.Set "color" $errorColor}}
+						{{else}}
+							{{$players = $players.Append $userID}}
+							{{$game.Set "players" $players}}
+							{{dbSet 0 "russianRoulette" $a}}
+							{{$bal = sub $bal $bet}}
+							{{$em.Set "description" (print "You've joined this game of russian roulette with a bet of " $symbol $bet)}}
+							{{$em.Set "footer" (sdict "text" (print "Players: " (len $players) "/6"))}}
+							{{$em.Set "color" $successColor}}
+							{{if eq (len $players) 6}}
+								{{cancelScheduledUniqueCC $.CCID "rr-game"}}
+								{{execCC $.CCID nil 0 "start"}}
+							{{else}}
+								{{scheduleUniqueCC $.CCID nil 10 "rr-game" "cancel2"}}
+							{{end}}
 						{{end}}
 					{{end}}
-					{{if $rr}}
-						{{sendMessage nil (cembed (sdict "title" "The russian roulette game has begun!" "color" 0x0088CC))}}
-						{{$winners := cslice}}
-						{{$loser := ""}}
+					{{if or $rr (eq (toString $.ExecData) "start")}}
+						{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 						{{if gt (len $players) 1}}
+							{{sendMessage nil (cembed (sdict "title" "The russian roulette game has begun!" "color" 0x0088CC))}}
+							{{$winners := cslice}}
+							{{$loser := ""}}
 							{{$n := randInt (len $players)}}
 							{{range $i, $p := $players}}
 								{{- if ne $i $n -}}
@@ -137,9 +140,9 @@
 							{{range $winners}}
 								{{$amt := ($sDB.Get (toString (userArg .).ID))}}
 								{{if $amt}}
-									{{$amt = add $amt $payout $cost}}
+									{{$amt = add $amt $payout}}
 								{{else}}
-									{{$amt = add $payout $cost}} 
+									{{$amt = $payout}} 
 								{{end}}
 								{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
 								{{$sDB.Set (toString (userArg .).ID) $amt}}
@@ -149,12 +152,10 @@
 							{{$em.Set "fields" $fields}}
 							{{$em.Set "color" $successColor}}
 							{{dbSet 0 "russianRoulette" (sdict "storage" $sDB)}}
-							{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 						{{else}}
-							{{$em.Set "description" (print "Not enough players to start the match :(\nStart a new one with " $.Cmd " <bet>")}}
+							{{$em.Set "description" (print "Not enough players to start the match :(\nStart a new one with `" $.Cmd " <bet>`")}}
 							{{$em.Set "color" $errorColor}}
 							{{dbSet 0 "russianRoulette" sdict}}
-							{{cancelScheduledUniqueCC $.CCID "rr-game"}}
 						{{end}}
 					{{end}}
 				{{else}}
@@ -171,7 +172,8 @@
 									{{end}}
 								{{end}}
 								{{if $continue}}
-									{{dbSet 0 "russianRoulette" (sdict "game" (sdict "cost" $bet "players" (cslice $userID) "owner" $userID))}}
+									{{$a.Set "game" (sdict "cost" $bet "players" (cslice $userID) "owner" $userID)}}
+									{{dbSet 0 "russianRoulette" $a}}
 									{{$bal = sub $bal $bet}}
 									{{$em.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" $.Cmd " " $bet "` (1/6)\nTo start this game use the command `" $.Cmd " start`")}}
 									{{$em.Set "color" $successColor}}
@@ -198,6 +200,9 @@
 							{{$em.Set "description" (print "You had no winning to collect!")}}
 							{{$em.Set "color" $errorColor}}
 						{{end}}
+					{{else}}
+						{{$em.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet>`")}}
+						{{$em.Set "color" $errorColor}}
 					{{end}}
 				{{end}}
 			{{else}}
@@ -217,29 +222,21 @@
 	{{if eq .ExecData "cancel"}}
 		{{$em.Set "description" (print "Not enough players joined for Russian-roulette")}}
 		{{$em.Set "color" $errorColor}}
-		{{cancelScheduledUniqueCC .CCID "rr-game"}}
-	{{else}}
+	{{else if eq .ExecData "cancel2"}}
 		{{$em.Set "description" (print "The host took too long to start the game. Please start a new one.")}}
 		{{$em.Set "color" $errorColor}}
 	{{end}}
-	{{with dbGet 0 "russianRoulette"}}
-		{{$a := sdict .Value}}
-		{{$cost := $a.game.cost}}
-		{{$sDB := $a.storage}}
-		{{if not $sDB}}
-			{{$sDB = sdict}}
+	{{with $russianRoulette := (dbGet 0 "russianRoulette").Value}}
+		{{$game := $russianRoulette.game}}
+		{{$storage := or $russianRoulette.storage sdict}}
+		{{range $game.players}}
+			{{$storageAmt := add (or ($storage.Get (toString .)) 0) $game.cost}}
+			{{$storage.Set (toString .) $storageAmt}}
 		{{end}}
-		{{range $a.game.players}}
-			{{$amt := ($sDB.Get (toString .))}}
-			{{if $amt}}
-				{{$amt = add $amt $cost}} 
-			{{else}}
-				{{$amt = $cost}}
-			{{end}}
-			{{$sDB.Set (toString .) $amt}}
-		{{end}}
-		{{dbSet 0 "russianRoulette" (sdict "storage" $sDB)}}
+		{{$russianRoulette.Set "storage" $storage}}
+		{{$russianRoulette.Del "game"}}
+		{{dbSet 0 "russianRoulette" $russianRoulette}}
 	{{end}}
-	{{cancelScheduledUniqueCC .CCID "rr-game-2"}}
+	{{cancelScheduledUniqueCC .CCID "rr-game"}}
 {{end}}
 {{sendMessage nil (cembed $em)}}
