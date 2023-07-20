@@ -20,15 +20,15 @@
   <p align="center">
     <a href="https://github.com/Ranger-4297/YAGPDB-ccs/wiki"><strong>Explore the docs »</strong></a>
     <br />
-    <a href="https://github.com/Ranger-4297/YAGPDB-ccs/wiki#welcome-message">Welcome message</a>
+    <a href="#welcome-message">Welcome message</a>
     ·
-    <a href="https://github.com/Ranger-4297/YAGPDB-ccs/wiki#license">License</a>
+    <a href="#license">License</a>
     ·
-    <a href="https://github.com/Ranger-4297/YAGPDB-ccs/wiki#custom-command-repositories">Other repositories</a>
+    <a href="#custom-command-repositories">Other repositories</a>
     ·
-    <a href="https://github.com/Ranger-4297/YAGPDB-ccs/wiki#official-yagpdb-xyz-links">Official links</a>
+    <a href="#official-yagpdb-xyz-links">Official links</a>
     ·
-    <a href="https://github.com/Ranger-4297/YAGPDB-ccs/wiki#bugs-and-more">Bugs and more</a>
+    <a href="#bugs-and-more">Bugs and more</a>
   </p>
 </div>
 
@@ -39,7 +39,7 @@ As you can see, a lot of effort has gone into these
 I appreciate every fork and star and those who use my commands!
 
 
-If you'd like to help test with commands and be the first to know when new releases will be coming, consider joining the server below 
+If you'd like to help test with commands and be the first to know when new releases will be coming, consider joining the server below<br />
 https://discord.gg/bbvzRgQvB7
 
 ## License
