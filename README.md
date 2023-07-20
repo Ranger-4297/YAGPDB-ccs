@@ -61,7 +61,7 @@ https://discord.gg/bbvzRgQvB7
 ## Custom Command repositories
 <a href="https://yagpdb-cc.github.io">Official Repo</a> The custom command 
 repository maintained by the YAGPDB.xyz support server staff. 
-If you are searching for more custom commands you will find a lot of them there :). 
+If you are searching for more custom commands you will find a lot of them there :).<br />
 <a href="https://github.com/BlackWolfWoof/yagpdb-cc">Wolf's Repo</a> A really advanced repository including database management.<br>
 
 ## Official YAGPDB.xyz links
