@@ -8,10 +8,9 @@
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
 	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
-*/}}
 
-{{/* If your prefix isn't - change the value below to your prefix */}}
-{{$trigger:=`(-|<@!?204255221017214977>\s*)((create|new)-?item)`}}
+	Note: Command is `create-item`/`new-item`. Use your severs default prefix
+*/}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
@@ -20,6 +19,7 @@
 {{$errorColor := 0xFF0000}}
 {{$dbVal := toInt (dbGet .User.ID "waitResponse").Value}}
 {{$cmdStage := 0}}
+{{$trigger := print `(` .ServerPrefix `|<@!?204255221017214977>\s*)((create|new)-?item)`}} 
 
 {{/* Create item */}}
 
