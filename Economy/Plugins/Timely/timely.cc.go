@@ -36,6 +36,7 @@
 			{{$a.Set "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0)}}
 		{{end}}
 		{{$streaks := $a.streaks}}
+		{{$streak := or $a.streak 0}}
 		{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
 		{{if (reFind `daily` $.Cmd)}}
 			{{if not ($cd := dbGet $userID "dCooldown")}}

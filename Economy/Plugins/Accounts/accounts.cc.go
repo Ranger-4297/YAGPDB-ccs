@@ -30,7 +30,7 @@
 				{{$p := split (index (split (exec "viewperms") "\n") 2) ", "}}
 				{{if or (in $p "Administrator") (in $p "ManageServer")}}
 					{{dbSet 0 "accounts" sdict}}
-					{{$e.Set "description" (print "Database initiLized")}}
+					{{$e.Set "description" (print "Database initialized")}}
 					{{$e.Set "color" 0x00ff7b}}
 				{{else}}
 					{{$e.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
@@ -163,9 +163,9 @@
 											{{- $c = true -}}
 										{{end}}
 									{{end}}
-									{{$B := ($a.Get (toString $A)).accountBalance}}
+									{{$b := ($a.Get (toString $A)).accountBalance}}
 									{{if and ((reFind `bal(ance)?` $c)) $c}}
-										{{$e.Set "description" (print "The account `" $A "` has a balance of " (humanizeThousands $B))}}
+										{{$e.Set "description" (print "The account `" $A "` has a balance of " (humanizeThousands $b))}}
 										{{$e.Set "color" 0x00ff7b}}
 									{{else if and ((reFind `with(draw)?|dep(osit)?` $c)) $c}}
 										{{if gt (len $.CmdArgs) 2}}
@@ -173,7 +173,7 @@
 											{{$lm := (toInt ($a.Get (toString $A)).accountSettings.withdrawimit)}}
 											{{if gt (toInt $p) 0}}
 												{{$p = toInt $p}}
-												{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
+												{{$cash := or (dbGet $u "cash").Value 0 | toInt}}
 												{{$N := ""}}
 												{{$E := ""}}
 												{{if (reFind `with(draw)?` $c)}}
@@ -186,17 +186,17 @@
 													{{$n := ""}}
 													{{if eq $c "with" "withdraw"}}
 														{{$n = "the account has"}}
-														{{if le $p (toInt $B)}}
+														{{if le $p (toInt $b)}}
 															{{$c = "withdrawn"}}
 															{{$N = add (toInt $b.cash) $p}}
-															{{$E = sub $B $p}}
+															{{$E = sub $b $p}}
 														{{end}}
 													{{else if eq $c "dep" "deposit"}}
 														{{$n = "you have"}}
 														{{if le $p (toInt $b.cash)}}
 															{{$c = "deposited"}}
 															{{$N = sub (toInt $b.cash) $p}}
-															{{$E = add $B $p}}
+															{{$E = add $b $p}}
 														{{end}}
 													{{end}}
 													{{if $c}}
@@ -212,7 +212,7 @@
 												{{else}}
 													{{$e.Set "description" (print "You can't " $c " more than " $lm " at one time")}}
 												{{end}}
-												{{dbSet $userID "cash" $cash}}
+												{{dbSet $u "cash" $cash}}
 											{{else}}
 												{{$e.Set "description" (print "Invalid `amount` argument provided")}}
 											{{end}}
