@@ -189,7 +189,7 @@
 	{{else}}
 		{{$embed.Del "footer"}}{{$embed.Del "title"}}
 		{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-		{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $.ServerPrefix "set default`")}}
+		{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $.ServerPrefix "server-set default`")}}
 		{{$embed.Set "color" $errorColor}}
 		{{sendMessage nil (cembed $embed)}}
 	{{end}}

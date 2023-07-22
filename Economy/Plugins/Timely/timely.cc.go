@@ -109,7 +109,7 @@
 		{{dbSet $userID "userEconData" $a}}
 	{{end}}
 {{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
 	{{$embed.Set "color" $errorColor}}
 {{end}}
 {{sendMessage nil (cembed $embed)}}
