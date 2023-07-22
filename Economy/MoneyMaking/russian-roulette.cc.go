@@ -206,7 +206,7 @@
 					{{end}}
 				{{end}}
 			{{else}}
-				{{$em.Set "description" (print "No `russianRoulette` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
+				{{$em.Set "description" (print "No `russianRoulette` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
 				{{$em.Set "color" $errorColor}}
 			{{end}}
 		{{else}}
@@ -215,7 +215,7 @@
 		{{end}}
 		{{dbSet $userID "cash" $bal}}
 	{{else}}
-		{{$em.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "set default`")}}
+		{{$em.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
 		{{$em.Set "color" $errorColor}}
 	{{end}}
 {{else}}

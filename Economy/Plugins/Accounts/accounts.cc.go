@@ -243,6 +243,6 @@
 		{{$e.Set "description" (print "No option argument passed." $o)}}
 	{{end}}
 {{else}}
-	{{$e.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "set default`")}}
+	{{$e.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
 {{end}}
 {{sendMessage nil (cembed $e)}}
