@@ -37,7 +37,7 @@
 				{{with $.CmdArgs}}
 					{{$name := (index . 0)}}
 					{{if $items.Get $name}}
-						{{$options := cslice "description" "role" "name" "price" "quantity"}}
+						{{$options := cslice "description" "role" "name" "price" "quantity" "expiry"}}
 						{{if gt (len $.CmdArgs) 1}}
 							{{$option := (index . 1) | lower}}
 							{{if in $options $option}}
@@ -107,11 +107,16 @@
 										{{$embed.Set "description" (print "No price argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Price:Int>`")}}
 										{{$embed.Set "color" $errorColor}}
 									{{end}}
-								{{else if eq $option "description"}}
+								{{else if eq $option "description" "replymsg"}}
 									{{if gt (len $.CmdArgs) 2}}
 										{{$value = (joinStr " " (slice $.CmdArgs 2))}}
 										{{$item := $items.Get $name}}
-										{{$item.Set "desc" $value}}
+										{{if eq $option "description"}}
+											{{$option = "desc"}}
+										{{else}}
+											{{$option = "replyMsg"}}
+										{{end}}
+										{{$item.Set $option $value}}
 										{{$items.Set $name $item}}
 										{{$store.Set "items" $items}}
 										{{dbSet 0 "store" $store}}
@@ -140,17 +145,43 @@
 										{{$embed.Set "description" (print "No role argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Role:ID>`")}}
 										{{$embed.Set "color" $errorColor}}
 									{{end}}
+								{{else if eq $option "expiry"}}
+									{{if gt (len $.CmdArgs) 2}}
+										{{$value = (index . 2)}}
+										{{if or (toDuration $value) (eq (lower $value) "none" "remove")}}
+											{{if (toDuration $value)}}
+												{{$value = (toDuration $value).Seconds}}
+											{{else}}
+												{{$value = "none"}}
+											{{end}}
+											{{$item := $items.Get $name}}
+											{{$item.Set "expiry" $value}}
+											{{$items.Set $name $item}}
+											{{$store.Set "items" $items}}
+											{{dbSet 0 "store" $store}}
+											{{if (toDuration $value)}}
+												{{$value = humanizeDurationSeconds (mult $value $.TimeSecond)}}
+											{{end}}
+											{{$cont = 1}}
+										{{else}}
+											{{$embed.Set "description" (print "Invalid duration argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Duration>`")}}
+											{{$embed.Set "color" $errorColor}}
+										{{end}}
+									{{else}}
+										{{$embed.Set "description" (print "No duration argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Duration>`")}}
+										{{$embed.Set "color" $errorColor}}
+									{{end}}
 								{{end}}
 								{{if $cont}}
 									{{$embed.Set "description" (print $name "'s `" $option "` has been changed to " $value)}}
 									{{$embed.Set "color" $successColor}}
 								{{end}}
 							{{else}}
-								{{$embed.Set "description" (print "Invalid option argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nAvailable options are: `name`, `description`, `price`, `quantity` and `role``")}}
+								{{$embed.Set "description" (print "Invalid option argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nAvailable options are: `name`, `description`, `price`, `quantity`, `expiry` and `role``")}}
 								{{$embed.Set "color" $errorColor}}
 							{{end}}
 						{{else}}
-							{{$embed.Set "description" (print "No option argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nAvailable options are: `name`, `description`, `price`, `quantity` and `role`")}}
+							{{$embed.Set "description" (print "No option argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nAvailable options are: `name`, `description`, `price`, `quantity`, `expiry` and `role`")}}
 							{{$embed.Set "color" $errorColor}}
 						{{end}}
 					{{else}}
