@@ -19,7 +19,7 @@
 {{$eC := 0xFF0000}}
 {{$dV := toInt (dbGet .User.ID "waitResponse").Value}}
 {{$cS := 0}}
-{{$trigger := print `(` .ServerPrefix `|<@!?204255221017214977>\s*)((create|new)-?item)`}} 
+{{$t := print `(` .ServerPrefix `|<@!?204255221017214977>\s*)((create|new)-?item)`}} 
 
 {{/* Create item */}}
 
@@ -31,10 +31,10 @@
 {{$p := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if not .ExecData}}
 	{{with $eco := (dbGet 0 "EconomySettings").Value}}
-		{{$symbol := $eco.symbol}}
+		{{$sB := $eco.symbol}}
 		{{if not $dV}}
 			{{/* checks if message matches regex to begin tutorial */}}
-			{{if reFind (print `\A(?i)` $trigger `(\s+|\z)`) $.Message.Content}}
+			{{if reFind (print `\A(?i)` $t `(\s+|\z)`) $.Message.Content}}
 				{{if or (in $p "Administrator") (in $p "ManageServer")}}
 					{{$e.Set "fields" (cslice (sdict "name" "Name" "value" "⠀⠀"))}}
 					{{$cS = 1}}
@@ -76,7 +76,7 @@
 							{{$im.data.Set "price" $price}}
 							{{dbSet 0 "createItem" $cE}}
 							{{$m := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
-							{{$f := sdict "name" "Price" "value" (print $symbol .) "inline" true}}
+							{{$f := sdict "name" "Price" "value" (print $sB .) "inline" true}}
 							{{$e.Set "fields" ((cslice.AppendSlice $m.Fields).Append $f)}}
 							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Please enter a description for the item (under 200 characters)" "embed" (cembed $e))}}
 							{{$cS = 1}}
@@ -96,18 +96,18 @@
 				{{else if or (eq $dV 3) (eq $dV 6)}}
 					{{if and (le (len (toRune $.Message.Content)) 200) (not (eq $.Message.Content "cancel"))}}
 						{{$o := ""}}
-						{{$fieldValue := ""}}
+						{{$fV := ""}}
 						{{if eq $dV 3}}
 							{{$o = "desc"}}
-							{{$fieldValue = "description"}}
+							{{$fV = "description"}}
 						{{else}}
 							{{$o = "replyMsg"}}
-							{{$fieldValue = "reply"}}
+							{{$fV = "reply"}}
 						{{end}}
 						{{$im := $cE.item}}
 						{{$im.data.Set $o $.Message.Content}}
 						{{$m := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
-						{{$f := sdict "name" $fieldValue "value" $.Message.Content}}
+						{{$f := sdict "name" $fV "value" $.Message.Content}}
 						{{$e.Set "fields" ((cslice.AppendSlice $m.Fields).Append $f)}}
 						{{if eq $dV 3}}
 							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "How much of this item should the store stock?\nIf unlimited just reply `skip` or `inf`" "embed" (cembed $e))}}
@@ -175,16 +175,18 @@
 					{{scheduleUniqueCC $.CCID nil 120 1 7}}
 					{{$d := $.Message.Content}}
 					{{if or (toDuration $d) (eq (lower $d) "skip" "inf")}}
-						{{if eq (lower $d) "skip" "inf"}}
-							{{$d = "none"}}
-						{{else}}
+						{{$eV := "none"}}
+						{{if (toDuration $d)}}
 							{{$d = (toDuration $d).Seconds}}
+							{{$eV = humanizeDurationSeconds (mult $d $.TimeSecond)}}
+						{{else}}
+							{{$d = "none"}}
 						{{end}}
 						{{$im := $cE.item}}
 						{{$im.data.Set "expiry" $d}}
 						{{$i.Set $cE.item.name $cE.item.data}}
 						{{$m := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
-						{{$f := sdict "name" "Inventory expiry" "value" (toString (toInt $d)) "inline" true}}
+						{{$f := sdict "name" "Inventory expiry" "value" (toString $eV) "inline" true}}
 						{{$e.Set "fields" ((cslice.AppendSlice $m.Fields).Append $f)}}
 						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Item created! ✅" "embed" (cembed $e))}}
 						{{dbSet 0 "store" $s}}
