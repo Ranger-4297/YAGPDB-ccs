@@ -104,6 +104,11 @@
 										{{$items.Set $name $item}}
 									{{end}}
 									{{$exp := $item.expiry}}
+									{{$expires := "never"}}
+									{{if (toDuration $exp)}}
+										{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $exp $.TimeSecond))}}
+										{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
+									{{end}}
 									{{$shop.Set "items" $items}}
 									{{dbSet 0 "store" $shop}}
 									{{if $inventory.Get $name}}
@@ -111,7 +116,7 @@
 										{{$item.Set "quantity" $userQuantity}}
 										{{$inventory.Set $name $item}}
 									{{else}}
-										{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role "replyMsg" $item.replyMsg "expiry" $exp)}}
+										{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role "replyMsg" $item.replyMsg "expiry" $exp "expires" $expires)}}
 									{{end}}
 									{{$embed.Set "description" (print "You've bought  " $buyQuantity " of " $name " for " $symbol $price "!")}}
 									{{$embed.Set "color" $successColor}}
