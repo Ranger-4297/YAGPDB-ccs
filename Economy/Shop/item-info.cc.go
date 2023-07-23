@@ -36,18 +36,32 @@
 				{{if $items.Get $name}}
 					{{$item := $items.Get (index . 0)}}
 					{{$price := $item.Get "price"}}
-					{{$role := "none"}}
-					{{if ($item.Get "role-given")}}
-						{{$role = ($item.Get "role-given")}}
-					{{end}}
+					{{$desc := $item.Get "desc"}}
 					{{$qty := $item.quantity}}
 					{{if not $qty}}
 						{{$qty = "inf"}}
 					{{end}}
+					{{$role := "none"}}
+					{{if ($item.Get "role-given")}}
+						{{$role = ($item.Get "role-given")}}
+					{{end}}
 					{{$reply := $item.replyMsg}}
-					{{$desc := $item.Get "desc"}}
+					{{$exp := $item.expiry}}
+					{{if (toDuration $exp)}}
+						{{$exp = humanizeDurationSeconds (mult $exp $.TimeSecond)}}
+					{{end}}
 					{{$embed.Set "title" (print "**Item info**")}}
-					{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" (print $name) "inline" true) (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true) (sdict "name" "Description" "value" (print $desc) "inline" true)  (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true) (sdict "name" "Shop quantity" "value" (print $qty) "inline" true) (sdict "name" "Role given" "value" (print $role)) (sdict "name" "Reply message" "Value" $reply))}}
+					{{$embed.Set "fields" (cslice 
+						(sdict "name" "Name" "value" (print $name) "inline" true)
+						(sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true)
+						(sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true)
+						(sdict "name" "Description" "value" (print $desc) "inline" true)
+						(sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true)
+						(sdict "name" "Shop quantity" "value" (print $qty) "inline" true)
+						(sdict "name" "Role given" "value" (print $role) "inline" true) 
+						(sdict "name" "Reply message" "value" $reply)
+						(sdict "name" "Inventory expiry" "value" $exp)
+					)}}
 					{{$embed.Set "color" $successColor}}
 				{{else}}
 					{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
