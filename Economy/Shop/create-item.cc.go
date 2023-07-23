@@ -180,7 +180,7 @@
 							{{$d = (toDuration $d).Seconds}}
 							{{$eV = humanizeDurationSeconds (mult $d $.TimeSecond)}}
 						{{else}}
-							{{$d = "none"}}
+							{{$d = ""}}
 						{{end}}
 						{{$im := $cE.item}}
 						{{$im.data.Set "expiry" $d}}
