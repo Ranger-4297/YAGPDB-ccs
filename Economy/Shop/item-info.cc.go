@@ -50,6 +50,7 @@
 					{{if (toDuration $exp)}}
 						{{$exp = humanizeDurationSeconds (mult $exp $.TimeSecond)}}
 					{{end}}
+					{{$user := $item.user}}
 					{{$embed.Set "title" (print "**Item info**")}}
 					{{$embed.Set "fields" (cslice 
 						(sdict "name" "Name" "value" (print $name) "inline" true)
@@ -62,6 +63,11 @@
 						(sdict "name" "Reply message" "value" $reply)
 						(sdict "name" "Inventory expiry" "value" $exp)
 					)}}
+					{{if $user}}
+						{{$fields := $embed.fields}}
+						{{$fields = $fields.Append (sdict "name" "On market from" "value" (print "<@!" $user ">"))}}
+						{{$embed.set "fields" $fields}}
+					{{end}}
 					{{$embed.Set "color" $successColor}}
 				{{else}}
 					{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
