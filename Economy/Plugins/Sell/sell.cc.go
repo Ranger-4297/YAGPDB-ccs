@@ -34,15 +34,61 @@
     {{with $.CmdArgs}}
         {{$item := (index . 0)}}
         {{with $inventory.Get $item}}
-            {{$shopEntry := .}}
-            {{$shopEntry.Set "user" $userID}}
-            {{$items.Set $item $shopEntry}}
+            {{$invQuantity := .quantity}}
+            {{$shopItem := $item}}
+            {{if $items.Get $item}}
+                {{$shopItem = (print $item "." $.User.Username)}}
+            {{end}}
+            {{$item := $inventory.Get $item}}
+            {{if gt (len $.CmdArgs) 1}}
+                {{$price := (index $.CmdArgs 1)}}
+                {{if toInt $price}}
+                    {{$sellQuantity := 1}}
+                    {{$cont = 0}}
+                    {{if gt (len $.CmdArgs) 1}}
+                        {{$sellQuantity = (index . 1)}}
+                        {{if toInt $sellQuantity}}
+                            {{if ge (toInt $sellQuantity) 1}}
+                                {{if le (toInt $sellQuantity) (toInt $invQuantity)}}
+                                    {{$cont = true}}
+                                    {{$invQuantity = sub $invQuantity $sellQuantity}}
+                                {{else}}
+                                    {{$embed.Set "description" (print "There's not enough of this in the shop to buy that much!")}}
+                                    {{$embed.Set "color" $errorColor}}
+                                {{end}}
+                            {{else}}
+                                {{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd "<Item:Item name> <Price:Int> [Quantity:Int/All]`")}}
+                                {{$embed.Set "color" $errorColor}}
+                            {{end}}
+                        {{else}}
+                            {{$sellQuantity = lower $sellQuantity}}
+                            {{if eq (toString $sellQuantity) "all"}}
+                                {{$sellQuantity = $invQuantity}}
+                                {{$invQuantity = 0 }}
+                                {{$cont = 1}}
+                            {{else}}
+                                {{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd "<Item:Item name> <Price:Int> [Quantity:Int/All]`")}}
+                                {{$embed.Set "color" $errorColor}}
+                            {{end}}
+                        {{end}}
+                    {{end}}
+                    {{if $cont}}
+                        
+                    {{end}}
+                {{else}}
+                    {{$embed.Set "description" (print "Invalid `price` argument provided.\nSyntax is `" $.Cmd " <Item:Item name> <Price:Int> [Quantity:Int/All]\n\nTo view your items, run " $prefix "inventory`")}}
+                    {{$embed.Set "color" $errorColor}}
+                {{end}}
+            {{else}}
+                {{$embed.Set "description" (print "No `price` argument provided.\nSyntax is `" $.Cmd " <Item:Item name> <Price:Int> [Quantity:Int/All]\n\nTo view your items, run " $prefix "inventory`")}}
+                {{$embed.Set "color" $errorColor}}
+            {{end}}
         {{else}}
-            {{$embed.Set "description" (print "Invalid <item> argument provided.\nSyntax is `" $.Cmd " <Item:Item name> [Quantity:Int/All]\n\nTo view your items, run " $prefix "inventory`")}}
+            {{$embed.Set "description" (print "Invalid `item` argument provided.\nSyntax is `" $.Cmd " <Item:Item name> <Price:Int> [Quantity:Int/All]\n\nTo view your items, run " $prefix "inventory`")}}
             {{$embed.Set "color" $errorColor}}
         {{end}}
     {{else}}
-        {{$embed.Set "description" (print "No <item> argument provided.\nSyntax is `" $.Cmd " <Item:Item name> [Quantity:Int/All]")}}
+        {{$embed.Set "description" (print "No `item` argument provided.\nSyntax is `" $.Cmd " <Item:Item name> <Price:Int> [Quantity:Int/All]")}}
         {{$embed.Set "color" $errorColor}}
     {{end}}
     {{dbSet 0 "store"}}
