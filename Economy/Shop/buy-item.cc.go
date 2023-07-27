@@ -95,33 +95,38 @@
 							{{if not (and (eq $name "chicken") (gt (toInt $buyQuantity) 1))}}
 								{{$price = mult $buyQuantity $price}}
 								{{if ge $bal $price}}
-									{{$userQuantity = add $userQuantity $buyQuantity}}
-									{{$bal = sub $bal $price}}
-									{{if not $shopQuantity}}
-										{{$items.Del $name}}
+									{{if not (and $item.ID (eq $item.ID $.User.ID))}}
+										{{$userQuantity = add $userQuantity $buyQuantity}}
+										{{$bal = sub $bal $price}}
+										{{if not $shopQuantity}}
+											{{$items.Del $name}}
+										{{else}}
+											{{$item.Set "quantity" $shopQuantity}}  
+											{{$items.Set $name $item}}
+										{{end}}
+										{{$exp := $item.expiry}}
+										{{$expires := "never"}}
+										{{if (toDuration $exp)}}
+											{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $exp $.TimeSecond))}}
+											{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
+										{{end}}
+										{{$shop.Set "items" $items}}
+										{{dbSet 0 "store" $shop}}
+										{{if $inventory.Get $name}}
+											{{$item = $inventory.Get $name}}
+											{{$item.Set "quantity" $userQuantity}}
+											{{$inventory.Set $name $item}}
+										{{else}}
+											{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role "replyMsg" $item.replyMsg "expiry" $exp "expires" $expires)}}
+										{{end}}
+										{{$embed.Set "description" (print "You've bought  " $buyQuantity " of " $name " for " $symbol $price "!")}}
+										{{$embed.Set "color" $successColor}}
+										{{if $exp}}
+											{{scheduleUniqueCC $.CCID nil $exp $name (sdict "user" $.User.ID "itemName" $name "expiry" $exp)}}
+										{{end}}
 									{{else}}
-										{{$item.Set "quantity" $shopQuantity}}  
-										{{$items.Set $name $item}}
-									{{end}}
-									{{$exp := $item.expiry}}
-									{{$expires := "never"}}
-									{{if (toDuration $exp)}}
-										{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $exp $.TimeSecond))}}
-										{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
-									{{end}}
-									{{$shop.Set "items" $items}}
-									{{dbSet 0 "store" $shop}}
-									{{if $inventory.Get $name}}
-										{{$item = $inventory.Get $name}}
-										{{$item.Set "quantity" $userQuantity}}
-										{{$inventory.Set $name $item}}
-									{{else}}
-										{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role "replyMsg" $item.replyMsg "expiry" $exp "expires" $expires)}}
-									{{end}}
-									{{$embed.Set "description" (print "You've bought  " $buyQuantity " of " $name " for " $symbol $price "!")}}
-									{{$embed.Set "color" $successColor}}
-									{{if $exp}}
-										{{scheduleUniqueCC $.CCID nil $exp $name (sdict "user" $.User.ID "itemName" $name "expiry" $exp)}}
+										{{$embed.Set "description" (print "You cannot buy your own item")}}
+										{{$embed.Set "color" $errorColor}}
 									{{end}}
 								{{else}}
 									{{$embed.Set "description" (print "You don't have enough to buy this :(")}}
