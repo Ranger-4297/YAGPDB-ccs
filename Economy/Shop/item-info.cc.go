@@ -50,7 +50,7 @@
 					{{if (toDuration $exp)}}
 						{{$exp = humanizeDurationSeconds (mult $exp $.TimeSecond)}}
 					{{end}}
-					{{$user := $item.user}}
+					{{$user := $item.ID}}
 					{{$embed.Set "title" (print "**Item info**")}}
 					{{$embed.Set "fields" (cslice 
 						(sdict "name" "Name" "value" (print $name) "inline" true)
@@ -66,7 +66,7 @@
 					{{if $user}}
 						{{$fields := $embed.fields}}
 						{{$fields = $fields.Append (sdict "name" "On market from" "value" (print "<@!" $user ">"))}}
-						{{$embed.set "fields" $fields}}
+						{{$embed.Set "fields" $fields}}
 					{{end}}
 					{{$embed.Set "color" $successColor}}
 				{{else}}
