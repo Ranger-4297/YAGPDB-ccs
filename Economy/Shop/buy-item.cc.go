@@ -95,7 +95,7 @@
 							{{if not (and (eq $name "chicken") (gt (toInt $buyQuantity) 1))}}
 								{{$price = mult $buyQuantity $price}}
 								{{if ge $bal $price}}
-									{{if not (and $item.ID (eq $item.ID $.User.ID))}}
+									{{if not (and $item.ID (eq (toInt $item.ID) (toInt $.User.ID)))}}
 										{{$userQuantity = add $userQuantity $buyQuantity}}
 										{{$bal = sub $bal $price}}
 										{{if not $shopQuantity}}
