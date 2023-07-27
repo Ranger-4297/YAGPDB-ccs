@@ -49,8 +49,7 @@
 				{{else}}
 					{{$role = "none"}}
 				{{end}}
-				{{$expires := $v.expires}}
-				{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty)) (print "Role given: " $role) (print "Expiry: " $expires)) "inline" false)}}
+				{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty)) (print "Role given: " $role) (print "Expiry: " $v.expires)) "inline" false)}}
 			{{end}}
 			{{$page := ""}}
 			{{if $.CmdArgs}}
