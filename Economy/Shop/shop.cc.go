@@ -51,9 +51,9 @@
 					{{else}}
 						{{$qty = "Infinite"}}
 					{{end}}
-					{{$user := $v.user}}
+					{{$user := $v.ID}}
 					{{if $user}}
-						{{$entry = $entry.Append (sdict "Name" (print $item " - " $price " - " $qty " - <@!" $user ">") "value"  $desc "inline" false)}}
+						{{$entry = $entry.Append (sdict "Name" (print $item " - " $price " - " $qty " - " $user ) "value"  $desc "inline" false)}}
 					{{else}}
 						{{$entry = $entry.Append (sdict "Name" (print $item " - " $price " - " $qty) "value"  $desc "inline" false)}}
 					{{end}}
