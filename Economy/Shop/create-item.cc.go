@@ -27,7 +27,7 @@
 {{$e := sdict "title" "Item info" "footer" (sdict "text" "Type cancel to cancel the setup") "color" 0x00ff7b "timestamp" currentTime}}
 {{$s := or (dbGet 0 "store").Value (sdict "items" sdict)}}
 {{$i := $s.items}}
-{{$iD := sdict "desc" "" "price" 0 "quantity" 0 "role" 0 "reply-msg" ""}}
+{{$iD := sdict "desc" "" "price" 0 "quantity" 0 "role" 0 "replyMsg" "" "expiry" 0}}
 {{$p := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if not .ExecData}}
 	{{with $eco := (dbGet 0 "EconomySettings").Value}}
