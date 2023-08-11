@@ -77,13 +77,19 @@
 											{{end}}
 											{{$shopQuantity = sub $shopQuantity $buyQuantity}}
 										{{end}}
+									{{else}}
+										{{if toInt $shopQuantity}}
+											{{$buyQuantity = $shopQuantity}}
+											{{$shopQuantity = 0}}
+										{{else}}
+											{{$buyQuantity = div (toInt $bal) $price}}
+										{{end}}
+									{{end}}
+									{{if $buyQuantity}}
 										{{$cont = true}}
 									{{else}}
-										{{$buyQuantity = $shopQuantity}}
-										{{if toInt $shopQuantity}}
-											{{$shopQuantity = 0}}
-										{{end}}
-										{{$cont = true}}
+										{{$embed.Set "description" (print "You don't have enough money to buy this :(")}}
+										{{$embed.Set "color" $errorColor}}
 									{{end}}
 								{{else}}
 									{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd " " $name " [Quantity:Int/All[`")}}
