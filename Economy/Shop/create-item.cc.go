@@ -15,7 +15,7 @@
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}
-{{$uI := .User.ID}}
+{{$u := .User.ID}}
 {{$eC := 0xFF0000}}
 {{$dV := toInt (dbGet .User.ID "waitResponse").Value}}
 {{$cS := 0}}
@@ -39,7 +39,7 @@
 					{{$e.Set "fields" (cslice (sdict "name" "Name" "value" "⠀⠀"))}}
 					{{$cS = 1}}
 					{{$e := sendMessageRetID nil (complexMessage "content" "Please enter a name for the item (under 60 characters)" "embed" (cembed $e))}}
-					{{dbSet 0 "createItem" (sdict "embed" (toString $e) "item" (sdict "name" "" "data" $iD) "user" (toString $uI))}}
+					{{dbSet 0 "createItem" (sdict "embed" (toString $e) "item" (sdict "name" "" "data" $iD) "user" (toString $u))}}
 					{{scheduleUniqueCC $.CCID nil 120 1 1}}
 				{{else}}
 					{{$e.Del "footer"}}{{$e.Del "title"}}
@@ -51,7 +51,7 @@
 			{{end}}
 		{{else}}
 			{{$cE := (dbGet 0 "createItem").Value}}
-			{{if and $cE.user (eq (toString $cE.user) (toString $uI))}}
+			{{if and $cE.user (eq (toString $cE.user) (toString $u))}}
 				{{if eq $dV 1}}
 					{{if and (le (len (toRune $.Message.Content)) 60) (not (eq $.Message.Content "cancel"))}}
 						{{$name := $.Message.Content}}
@@ -191,7 +191,7 @@
 						{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Item created! ✅" "embed" (cembed $e))}}
 						{{dbSet 0 "store" $s}}
 						{{dbDel 0 "createItem"}}
-						{{dbDel $uI "waitResponse"}}
+						{{dbDel $u "waitResponse"}}
 						{{cancelScheduledUniqueCC $.CCID 1}}
 					{{else}}
 						{{$m := sendMessageRetID nil "Please try again with a valid duration"}}
@@ -202,7 +202,7 @@
 				{{end}}
 				{{if eq (lower $.Message.Content) "cancel"}}
 					{{sendMessage nil "Create-item was cancelled"}}
-					{{dbDel $uI "waitResponse"}}
+					{{dbDel $u "waitResponse"}}
 					{{dbDel 0 "createItem"}}
 					{{$cS = 0}}
 					{{cancelScheduledUniqueCC $.CCID 1}}
