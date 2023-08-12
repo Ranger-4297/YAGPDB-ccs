@@ -40,7 +40,8 @@
 					{{$qty := $item.quantity}}
 					{{if not $qty}}
 						{{$qty = "inf"}}
-					{{end}}
+					{{else}}
+						{{$qty = humanizeThousands $qty}}
 					{{$role := "none"}}
 					{{if ($item.Get "role-given")}}
 						{{$role = ($item.Get "role-given")}}

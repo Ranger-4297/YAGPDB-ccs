@@ -39,7 +39,7 @@
 				{{range $k,$v := $items}}
 					{{$item := $k}}
 					{{$desc := $v.desc }}
-					{{$price := (print $symbol ($v.price))}}
+					{{$price := (print $symbol (humanizeThousands $v.price))}}
 					{{$qty := ""}}
 					{{if $v.quantity}}
 						{{$qty = $v.quantity}}

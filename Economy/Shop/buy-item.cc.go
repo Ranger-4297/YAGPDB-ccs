@@ -130,7 +130,7 @@
 										{{else}}
 											{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role "replyMsg" $item.replyMsg "expiry" $exp "expires" $expires)}}
 										{{end}}
-										{{$embed.Set "description" (print "You've bought  " $buyQuantity " of " $name " for " $symbol $price "!")}}
+										{{$embed.Set "description" (print "You've bought  " (humanizeThousands $buyQuantity) " of " $name " for " $symbol (humanizeThousands $price) "!")}}
 										{{$embed.Set "color" $successColor}}
 										{{if $exp}}
 											{{scheduleUniqueCC $.CCID nil $exp $name (sdict "user" $.User.ID "itemName" $name "expiry" $exp)}}

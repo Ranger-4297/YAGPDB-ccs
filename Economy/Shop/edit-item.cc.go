@@ -85,6 +85,9 @@
 												{{$embed.Set "color" $errorColor}}
 											{{end}}
 										{{end}}
+										{{if toInt $value}}
+											{{$value = humanizeThousands $value}}
+										{{end}}
 									{{else}}
 										{{$embed.Set "description" (print "No quantity argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Quantity:Int/Infinity>`")}}
 										{{$embed.Set "color" $errorColor}}
@@ -99,6 +102,7 @@
 											{{$store.Set "items" $items}}
 											{{dbSet 0 "store" $store}}
 											{{$cont = 1}}
+											{{$value = humanizeThousands (toInt (index . 2))}}
 										{{else}}
 											{{$embed.Set "description" (print "Invalid price argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Price:Int>`")}}
 											{{$embed.Set "color" $errorColor}}
