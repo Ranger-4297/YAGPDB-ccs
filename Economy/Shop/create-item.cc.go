@@ -76,7 +76,7 @@
 							{{$im.data.Set "price" $price}}
 							{{dbSet 0 "createItem" $cE}}
 							{{$m := structToSdict (index (getMessage nil (dbGet 0 "createItem").Value.embed).Embeds 0)}}
-							{{$f := sdict "name" "Price" "value" (print $sB .) "inline" true}}
+							{{$f := sdict "name" "Price" "value" (print $sB (humanizeThousands .)) "inline" true}}
 							{{$e.Set "fields" ((cslice.AppendSlice $m.Fields).Append $f)}}
 							{{editMessage nil (dbGet 0 "createItem").Value.embed (complexMessageEdit "content" "Please enter a description for the item (under 200 characters)" "embed" (cembed $e))}}
 							{{$cS = 1}}
