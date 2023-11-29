@@ -1,5 +1,5 @@
 {{/*
-		Made by Ranger (765316548516380732)
+		Made by ranger_4297 (765316548516380732)
 
 	Trigger Type: `Leave message in channel`
 
