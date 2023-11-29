@@ -1,6 +1,6 @@
 {{/*
         Made by Maverick Wolf (549820835230253060)
-        Edited by Ranger (765316548516380732)
+        Edited by ranger_4297 (765316548516380732)
         Credit to LemmeCry (664118444739919882)
 
     Trigger Type: `Regex`

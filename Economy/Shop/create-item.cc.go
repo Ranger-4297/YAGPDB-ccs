@@ -1,5 +1,5 @@
 {{/*
-		Made by Ranger (765316548516380732)
+		Made by ranger_4297 (765316548516380732)
 		Wait response logic by DZ (438789314101379072)
 
 	Trigger Type: `Regex`

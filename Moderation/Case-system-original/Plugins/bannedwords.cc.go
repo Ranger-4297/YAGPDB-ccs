@@ -1,6 +1,6 @@
 {{/* 
         Made by Unknown User
-        Edited by Ranger (765316548516380732)
+        Edited by ranger_4297 (765316548516380732)
 
     Trigger Type: `Command`
     Trigger: `bannedwords`

@@ -1,6 +1,6 @@
 {{/*
         Case system by Maverick Wolf (549820835230253060)
-        Made & modified by Ranger (765316548516380732)
+        Made & modified by ranger_4297 (765316548516380732)
 
     **Tools & Util > Moderation > Kick > Kick DM**
 
