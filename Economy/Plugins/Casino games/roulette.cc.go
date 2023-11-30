@@ -72,25 +72,35 @@
                                 {{end}}
                             {{end}}
                             {{if $cont}}
+                                {{$cond := "won"}}
                                 {{$land := randInt 37}}
+                                {{$embed.Set "color" $successColor}}
                                 {{if eq (toInt $side) $land}}
                                     {{/* bet*35 + bet */}}
-                                    {{$bet = mult $bet 35 | add $bet }}
+                                    {{$bet = mult $bet 35 | add $bet}}
+                                    {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "1-12") (in $d1 $land)) (and (eq (str $side) "13-24") (in $d2 $land)) (and (eq (str $side) "25-36") (in $d3 $land)))}}
                                     {{/* bet*2 + bet */}}
                                     {{$bet = mult $bet 2 | add $bet}}
+                                    {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "1st") (in $c1 $land)) (and (eq (str $side) "2nd") (in $c2 $land)) (and (eq (str $side) "3rd") (in $c3 $land)))}}
-                                    {{/* bet*2 + bet */}}
                                     {{$bet = mult $bet 2 | add $bet}}
+                                    {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "1-18") (in $h1 $land)) (and (eq (str $side) "19-36") (in $c2 $land)))}}
-                                    {{/* bet*2 + bet */}}
                                     {{$bet = mult $bet 2 | add $bet}}
+                                    {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "even") (in $even $land)) (and (eq (str $side) "odd") (in $odd $land)))}}
                                     {{/* bet + bet */}}
                                     {{$bet = mult $bet 2}}
+                                    {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "red") (in $red $land)) (and (eq (str $side) "black") (in $black $land)))}}
                                     {{/* bet + bet */}}
                                     {{$bet = mult $bet 2}}
+                                    {{$bal = add $bal $bet}}
+                                {{else}}
+                                    {{$bal = sub $bal $bet}}
+                                    {{$cond = "lost"}}
+                                    {{$embed.Set "color" $errorColor}}
                                 {{end}}
                                 {{$space := ""}}
                                 {{if in $black $land}}
@@ -98,8 +108,7 @@
                                 {{else if in $red $land}}
                                     {{$space = "red"}}
                                 {{end}}
-                                {{$embed.Set "description" (print "The ball landed on " $space " " $land)}}
-                                {{$embed.Set "color" $successColor}}
+                                {{$embed.Set "description" (print "The ball landed on " $space " " $land "\nYou " $cond " " $bet)}}
                             {{end}}
                         {{else}}
                             {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Space>`")}}
@@ -122,6 +131,7 @@
         {{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" $.Cmd " <Space> <Bet:Amount>`")}}
         {{$embed.Set "color" $errorColor}}
     {{end}}
+	{{dbSet $userID "cash" $bal}}
 {{else}}
     {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
     {{$embed.Set "color" $errorColor}}
