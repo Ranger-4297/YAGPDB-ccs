@@ -18,7 +18,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix}}
 
-{{/* Sell  */}}
+{{/* Roulette */}}
 
 {{/* Response */}}
 {{$embed := sdict}}
@@ -28,7 +28,6 @@
     {{$a := sdict .Value}}
 	{{$symbol := $a.symbol}}
 	{{$betMax := $a.betMax | toInt}}
-	{{$incomeCooldown := $a.incomeCooldown | toInt}}
 	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
 	{{with $.CmdArgs}}
         {{$numbers := seq 1 37}}
@@ -80,11 +79,11 @@
                                     {{$bet = mult $bet 35 | add $bet}}
                                     {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "1-12") (in $d1 $land)) (and (eq (str $side) "13-24") (in $d2 $land)) (and (eq (str $side) "25-36") (in $d3 $land)))}}
-                                    {{/* bet*2 + bet */}}
-                                    {{$bet = mult $bet 2 | add $bet}}
+                                    {{/* bet*3 + bet */}}
+                                    {{$bet = mult $bet 3 | add $bet}}
                                     {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "1st") (in $c1 $land)) (and (eq (str $side) "2nd") (in $c2 $land)) (and (eq (str $side) "3rd") (in $c3 $land)))}}
-                                    {{$bet = mult $bet 2 | add $bet}}
+                                    {{$bet = mult $bet 3 | add $bet}}
                                     {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "1-18") (in $h1 $land)) (and (eq (str $side) "19-36") (in $c2 $land)))}}
                                     {{$bet = mult $bet 2 | add $bet}}
@@ -122,6 +121,9 @@
                     {{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Space>`")}}
                     {{$embed.Set "color" $errorColor}}
                 {{end}}
+            {{else if eq $side "info"}}
+                {{$embed.Set "description" (print "**Payout:**\n[x35] Single number\n[x3] Dozens (1-12, 13-24, 25-36)\n[x3] Columns (1st, 2nd, 3rd)\n[x2] Halves (1-18, 19-36)\n[x2] Odd/Even\n[2x] Colours (red, black)")}}
+                {{$embed.Set "color" $successColor}}
             {{else}}
                 {{$embed.Set "description" (print "Invalid `Space` argument provided.\nSyntax is `" $.Cmd " <Space> <Bet:Amount>`")}}
                 {{$embed.Set "color" $errorColor}}
