@@ -9,6 +9,7 @@
 	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
+
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}
