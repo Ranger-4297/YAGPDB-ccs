@@ -75,11 +75,9 @@
                                 {{$land := randInt 37}}
                                 {{$embed.Set "color" $successColor}}
                                 {{if eq (toInt $side) $land}}
-                                    {{/* bet*35 + bet */}}
                                     {{$bet = mult $bet 35 | add $bet}}
                                     {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "1-12") (in $d1 $land)) (and (eq (str $side) "13-24") (in $d2 $land)) (and (eq (str $side) "25-36") (in $d3 $land)))}}
-                                    {{/* bet*3 + bet */}}
                                     {{$bet = mult $bet 3 | add $bet}}
                                     {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "1st") (in $c1 $land)) (and (eq (str $side) "2nd") (in $c2 $land)) (and (eq (str $side) "3rd") (in $c3 $land)))}}
@@ -89,11 +87,9 @@
                                     {{$bet = mult $bet 2 | add $bet}}
                                     {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "even") (in $even $land)) (and (eq (str $side) "odd") (in $odd $land)))}}
-                                    {{/* bet + bet */}}
                                     {{$bet = mult $bet 2}}
                                     {{$bal = add $bal $bet}}
                                 {{else if (or (and (eq (str $side) "red") (in $red $land)) (and (eq (str $side) "black") (in $black $land)))}}
-                                    {{/* bet + bet */}}
                                     {{$bet = mult $bet 2}}
                                     {{$bal = add $bal $bet}}
                                 {{else}}
@@ -107,7 +103,7 @@
                                 {{else if in $red $land}}
                                     {{$space = "red"}}
                                 {{end}}
-                                {{$embed.Set "description" (print "The ball landed on " $space " " $land "\nYou " $cond " " $bet)}}
+                                {{$embed.Set "description" (print "The ball landed on **" $space " " $land "**\nYou " $cond " " $bet)}}
                             {{end}}
                         {{else}}
                             {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Space>`")}}
@@ -123,6 +119,7 @@
                 {{end}}
             {{else if eq $side "info"}}
                 {{$embed.Set "description" (print "**Payout:**\n[x35] Single number\n[x3] Dozens (1-12, 13-24, 25-36)\n[x3] Columns (1st, 2nd, 3rd)\n[x2] Halves (1-18, 19-36)\n[x2] Odd/Even\n[2x] Colours (red, black)")}}
+                {{$embed.Set "image" (sdict "url" "https://raw.githubusercontent.com/Ranger-4297/YAGPDB-ccs/casino-games/Economy/Plugins/Casino%20games/roulette-board.png")}}
                 {{$embed.Set "color" $successColor}}
             {{else}}
                 {{$embed.Set "description" (print "Invalid `Space` argument provided.\nSyntax is `" $.Cmd " <Space> <Bet:Amount>`")}}
