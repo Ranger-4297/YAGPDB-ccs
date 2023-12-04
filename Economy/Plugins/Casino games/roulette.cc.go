@@ -29,8 +29,8 @@
 	{{$symbol := $a.symbol}}
 	{{$betMax := $a.betMax | toInt}}
 	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
-	{{with or $.CmdArgs $.ExecData}}
-		{{with dbGet 0 "roulette"}}
+	{{with dbGet 0 "roulette"}}
+		{{with or $.CmdArgs $.ExecData}}
 			{{$a = sdict .Value}}
 			{{$game := $a.game}}
 			{{$numbers := seq 1 37}}
@@ -166,14 +166,14 @@
 				{{dbSet 0 "roulette" (sdict "storage" $storageDB)}}
 			{{end}}
 		{{else}}
-			{{$embed.Set "description" (print "No `roulette` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
+			{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" $.Cmd " <Space> <Bet:Amount>`")}}
 			{{$embed.Set "color" $errorColor}}
 		{{end}}
+		{{dbSet $userID "cash" $bal}}
 	{{else}}
-		{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" $.Cmd " <Space> <Bet:Amount>`")}}
+		{{$embed.Set "description" (print "No `roulette` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
-	{{dbSet $userID "cash" $bal}}
 {{else}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
 	{{$embed.Set "color" $errorColor}}
