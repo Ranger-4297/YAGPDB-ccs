@@ -30,9 +30,9 @@
 	{{$betMax := $a.betMax | toInt}}
 	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
 	{{with dbGet 0 "roulette"}}
+		{{$a = sdict .Value}}
+		{{$game := $a.game}}
 		{{with or $.CmdArgs $.ExecData}}
-			{{$a = sdict .Value}}
-			{{$game := $a.game}}
 			{{$numbers := seq 1 37}}
 			{{$d1 := seq 1 13}}
 			{{$d2 := seq 13 25}}
@@ -82,9 +82,10 @@
 											{{$embed.Set "description" (print "You placed a bet of " $symbol $bet " on " $side "!")}}
 											{{$embed.Set "color" $successColor}}
 											{{if not $game}}
-												{{scheduleUniqueCC $.CCID nil 30 "r-game"}}
+												{{scheduleUniqueCC $.CCID nil 30 "r-game" "start"}}
+												{{$embed.Set "footer" (sdict "text" (print "The game will start in 30s"))}}
 											{{end}}
-											{{$a.Set "game" (sdict $userID (sdict "bet" $bet "space" $side))}}
+											{{$a.Set "game" (sdict (toString $userID) (sdict "bet" $bet "space" $side))}}
 											{{$bal = sub $bal $bet}}
 											{{dbSet 0 "roulette" $a}}
 										{{end}}
@@ -163,6 +164,7 @@
 				{{end}}
 				{{$embed.Set "description" (print "The ball landed on **" $space " " $land "**\n**Winners:**")}}
 				{{$embed.Set "fields" $fields}}
+				{{$embed.Set "color" $successColor}}
 				{{dbSet 0 "roulette" (sdict "storage" $storageDB)}}
 			{{end}}
 		{{else}}
