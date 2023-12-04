@@ -37,6 +37,7 @@
 				{{dbSet 0 "store" (sdict "items" sdict)}}
 				{{dbSet 0 "russianRoulette" sdict}}
 				{{dbSet 0 "bank" sdict}}
+				{{dbSet 0 "roulette" sdict}}
 			{{else}}
 				{{with (dbGet 0 "EconomySettings")}}
 					{{$a := sdict .Value}}
