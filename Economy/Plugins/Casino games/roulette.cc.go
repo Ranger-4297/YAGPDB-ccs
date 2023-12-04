@@ -132,12 +132,10 @@
 				{{range $k, $v := $game}}
 					{{$pay := 0}}
 					{{if eq (toInt $v.space) $land}}
-						{{$pay = mult $v.bet 35 | add $v.bet}}
+						{{$pay = mult $v.bet 35}}
 					{{else if (or (and (eq (str $v.space) "1-12") (in $d1 $land)) (and (eq (str $v.space) "13-24") (in $d2 $land)) (and (eq (str $v.space) "25-36") (in $d3 $land)) (and (eq (str $v.space) "1st") (in $c1 $land)) (and (eq (str $v.space) "2nd") (in $c2 $land)) (and (eq (str $v.space) "3rd") (in $c3 $land)))}}
-						{{$pay = mult $v.bet 3 | add $v.bet}}
-					{{else if (or (and (eq (str $v.space) "1-18") (in $h1 $land)) (and (eq (str $v.space) "19-36") (in $c2 $land)))}}
-						{{$pay = mult $v.bet 2 | add $v.bet}}
-					{{else if (or (and (eq (str $v.space) "even") (in $even $land)) (and (eq (str $v.space) "odd") (in $odd $land)) (and (eq (str $v.space) "red") (in $red $land)) (and (eq (str $v.space) "black") (in $black $land)))}}
+						{{$pay = mult $v.bet 3}}
+					{{else if (or (and (eq (str $v.space) "1-18") (in $h1 $land)) (and (eq (str $v.space) "19-36") (in $c2 $land)) (and (eq (str $v.space) "even") (in $even $land)) (and (eq (str $v.space) "odd") (in $odd $land)) (and (eq (str $v.space) "red") (in $red $land)) (and (eq (str $v.space) "black") (in $black $land)))}}
 						{{$pay = mult $v.bet 2}}
 					{{end}}
 					{{if $pay}}
