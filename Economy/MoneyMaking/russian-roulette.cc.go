@@ -9,6 +9,7 @@
 	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
+
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}
@@ -30,7 +31,7 @@
 		{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
 		{{with or $.CmdArgs (eq (toString $.ExecData) "start")}}
 			{{with dbGet 0 "russianRoulette"}}
-				{{$a := sdict .Value}}
+				{{$a = sdict .Value}}
 				{{if $a.game}}
 					{{$cost := $a.cost}}
 					{{$game := $a.game}}
