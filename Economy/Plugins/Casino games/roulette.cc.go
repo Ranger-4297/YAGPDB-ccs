@@ -75,7 +75,7 @@
 										{{end}}
 									{{end}}
 									{{if $cont}}
-										{{if $game.Get $userID}}
+										{{if $game.Get (toString $userID)}}
 											{{$embed.Set "description" (print "You can't bet again. Wait until next spin.")}}
 											{{$embed.Set "color" $errorColor}}
 										{{else}}
@@ -156,15 +156,22 @@
 					{{$storageDB = sdict}}
 				{{end}}
 				{{range $k, $v := $winners}}
-					{{- $fields = $fields.Append (sdict "name" "" "value" (print " won " $symbol $v))}}
-					{{$storageDB.Set (toString $k) $v}}
+					{{$amt := $storageDB.Get (toString $k)}}
+					{{if $amt}}
+						{{$amt = add $amt $v}}
+					{{else}}
+						{{$amt = $v}} 
+					{{end}}
+					{{- $fields = $fields.Append (sdict "name" "⠀⠀" "value" (print (userArg $k) " won " $symbol $v)) -}}
+					{{- $storageDB.Set (toString $k) $amt -}}
 				{{end}}
+				{{$embed.Set "color" $successColor}}
 				{{if not $fields}}
-					{{- $fields = cslice (sdict "name" (print "⠀⠀") "value" (print "**No winners**"))}}
+					{{- $fields = cslice (sdict "name" (print "⠀⠀") "value" (print "**No winners**")) -}}
+					{{- $embed.Set "color" $errorColor -}}
 				{{end}}
 				{{$embed.Set "description" (print "The ball landed on **" $space " " $land "**\n**Winners:**")}}
 				{{$embed.Set "fields" $fields}}
-				{{$embed.Set "color" $successColor}}
 				{{dbSet 0 "roulette" (sdict "storage" $storageDB)}}
 			{{end}}
 		{{else}}
