@@ -1,6 +1,5 @@
 {{/*
-	Made by ranger_4297 (765316548516380732)
-
+		Made by ranger_4297 (765316548516380732)
 
 	Trigger Type: `Regex`
 	Trigger: `\A(-|<@!?204255221017214977>\s*)(roulette)(\s+|\z)`

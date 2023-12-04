@@ -9,6 +9,7 @@
 	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
+
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}
@@ -17,7 +18,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix}}
 
-{{/* Set */}}
+{{/* Add response */}}
 
 {{/* Response */}}
 {{$embed := sdict}}

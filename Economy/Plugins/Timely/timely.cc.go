@@ -21,7 +21,6 @@
 {{$monthly := 10000}}
 {{$prefix := .ServerPrefix}}
 
-
 {{/* Timely */}}
 
 {{/* Response */}}
