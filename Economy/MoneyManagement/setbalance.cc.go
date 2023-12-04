@@ -17,7 +17,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
 
-{{/* Sets balance */}}
+{{/* Set balance */}}
 
 {{/* Response */}}
 {{$embed := sdict}}

@@ -17,7 +17,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
 
-{{/* Removes money */}}
+{{/* Add, remove money */}}
 
 {{/* Response */}}
 {{$embed := sdict}}

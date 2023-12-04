@@ -12,6 +12,7 @@
 	Note: Command is `create-item`/`new-item`. Use your severs default prefix
 */}}
 
+
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}

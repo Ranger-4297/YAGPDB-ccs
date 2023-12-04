@@ -17,7 +17,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
 
-{{/* Sets balance */}}
+{{/* Reset user */}}
 
 {{/* Response */}}
 {{$embed := sdict}}

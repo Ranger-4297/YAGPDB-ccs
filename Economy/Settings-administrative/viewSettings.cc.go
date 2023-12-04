@@ -17,7 +17,7 @@
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
 
-{{/* Configures economy settings */}}
+{{/* View settings */}}
 
 {{/* Response */}}
 {{$embed := sdict}}
