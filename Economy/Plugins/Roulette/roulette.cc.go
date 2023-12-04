@@ -31,7 +31,7 @@
 	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
 	{{with dbGet 0 "roulette"}}
 		{{$a = sdict .Value}}
-		{{$game := $a.game}}
+		{{$game := or $a.game sdict}}
 		{{with or $.CmdArgs $.ExecData}}
 			{{$numbers := seq 1 37}}
 			{{$d1 := seq 1 13}}
@@ -42,7 +42,7 @@
 			{{$c3 := cslice 3 6 9 12 15 18 21 24 27 30 33 36}}
 			{{$h1 := seq 1 19}}
 			{{$h2 := seq 19 37}}
-			{{$red := cslice 1 3 5 7 9 12 14 16 18 21 23 25 27 30 32 34 36}}
+			{{$red := cslice 1 3 5 7 9 12 14 16 18 19 21 23 25 27 30 32 34 36}}
 			{{$black := cslice 2 4 6 8 10 11 13 15 17 20 22 24 26 28 29 31 33 35}}
 			{{$even := cslice 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36}}
 			{{$odd := cslice 1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31 33 35}}
@@ -75,20 +75,21 @@
 										{{end}}
 									{{end}}
 									{{if $cont}}
-										{{if $game.Get (toString $userID)}}
-											{{$embed.Set "description" (print "You can't bet again. Wait until next spin.")}}
-											{{$embed.Set "color" $errorColor}}
+										{{with $game.Get (toString $userID)}}
+											{{.Set "betNo" (add .betNo 1)}}
+											{{.bets.Set .betNo (sdict "bet" $bet "space" $side)}}
 										{{else}}
-											{{$embed.Set "description" (print "You placed a bet of " $symbol $bet " on " $side "!")}}
-											{{$embed.Set "color" $successColor}}
 											{{if not $game}}
 												{{scheduleUniqueCC $.CCID nil 30 "r-game" "start"}}
 												{{$embed.Set "footer" (sdict "text" (print "The game will start in 30s"))}}
 											{{end}}
-											{{$a.Set "game" (sdict (toString $userID) (sdict "bet" $bet "space" $side))}}
+											{{$game.Set (toString $userID) (sdict "betNo" 1 "bets" (dict 1 (sdict "bet" $bet "space" $side)))}}
 											{{$bal = sub $bal $bet}}
-											{{dbSet 0 "roulette" $a}}
+											{{$a.Set "game" $game}}
 										{{end}}
+										{{$embed.Set "description" (print "You placed a bet of " $symbol $bet " on " $side "!")}}
+										{{$embed.Set "color" $successColor}}
+										{{dbSet 0 "roulette" $a}}
 									{{end}}
 								{{else}}
 									{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Space>`")}}
@@ -104,7 +105,7 @@
 						{{end}}
 					{{else if eq $side "info"}}
 						{{$embed.Set "description" (print "**Payout:**\n[x35] Single number\n[x3] Dozens (1-12, 13-24, 25-36)\n[x3] Columns (1st, 2nd, 3rd)\n[x2] Halves (1-18, 19-36)\n[x2] Odd/Even\n[2x] Colours (red, black)")}}
-						{{$embed.Set "image" (sdict "url" "https://raw.githubusercontent.com/Ranger-4297/YAGPDB-ccs/casino-games/Economy/Plugins/Casino%20games/roulette-board.png")}}
+						{{$embed.Set "image" (sdict "url" "https://raw.githubusercontent.com/Ranger-4297/YAGPDB-ccs/main/Economy/Plugins/Roulette/roulette-board.png")}}
 						{{$embed.Set "color" $successColor}}
 					{{else if eq $side "collect"}}
 						{{$storageDB := $a.storage}}
@@ -127,19 +128,20 @@
 			{{else}}
 				{{cancelScheduledUniqueCC $.CCID "r-game"}}
 				{{$winners := sdict}}
-				{{$winners := sdict}}
 				{{$land := randInt 37}}
 				{{range $k, $v := $game}}
 					{{$pay := 0}}
-					{{if eq (toInt $v.space) $land}}
-						{{$pay = mult $v.bet 35}}
-					{{else if (or (and (eq (str $v.space) "1-12") (in $d1 $land)) (and (eq (str $v.space) "13-24") (in $d2 $land)) (and (eq (str $v.space) "25-36") (in $d3 $land)) (and (eq (str $v.space) "1st") (in $c1 $land)) (and (eq (str $v.space) "2nd") (in $c2 $land)) (and (eq (str $v.space) "3rd") (in $c3 $land)))}}
-						{{$pay = mult $v.bet 3}}
-					{{else if (or (and (eq (str $v.space) "1-18") (in $h1 $land)) (and (eq (str $v.space) "19-36") (in $c2 $land)) (and (eq (str $v.space) "even") (in $even $land)) (and (eq (str $v.space) "odd") (in $odd $land)) (and (eq (str $v.space) "red") (in $red $land)) (and (eq (str $v.space) "black") (in $black $land)))}}
-						{{$pay = mult $v.bet 2}}
-					{{end}}
-					{{if $pay}}
-						{{$winners.Set $k $pay}}
+					{{range $v.bets}}
+						{{if eq (toInt .space) $land}}
+							{{$pay = add (mult .bet 35) $pay}}
+						{{else if (or (and (eq (str .space) "1-12") (in $d1 $land)) (and (eq (str .space) "13-24") (in $d2 $land)) (and (eq (str .space) "25-36") (in $d3 $land)) (and (eq (str .space) "1st") (in $c1 $land)) (and (eq (str .space) "2nd") (in $c2 $land)) (and (eq (str .space) "3rd") (in $c3 $land)))}}
+							{{$pay = add (mult .bet 3) $pay}}
+						{{else if (or (and (eq (str .space) "1-18") (in $h1 $land)) (and (eq (str .space) "19-36") (in $c2 $land)) (and (eq (str .space) "even") (in $even $land)) (and (eq (str .space) "odd") (in $odd $land)) (and (eq (str .space) "red") (in $red $land)) (and (eq (str .space) "black") (in $black $land)))}}
+							{{$pay = add (mult .bet 2) $pay}}
+						{{end}}
+						{{if $pay}}
+							{{$winners.Set $k $pay}}
+						{{end}}
 					{{end}}
 				{{end}}
 				{{$space := ""}}
@@ -170,7 +172,7 @@
 				{{end}}
 				{{$embed.Set "description" (print "The ball landed on **" $space " " $land "**\n**Winners:**")}}
 				{{$embed.Set "fields" $fields}}
-				{{dbSet 0 "roulette" (sdict "storage" $storageDB)}}
+				{{dbSet 0 "roulette" (sdict "storage" $storageDB "game" sdict)}}
 			{{end}}
 		{{else}}
 			{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" $.Cmd " <Space> <Bet:Amount>`")}}
