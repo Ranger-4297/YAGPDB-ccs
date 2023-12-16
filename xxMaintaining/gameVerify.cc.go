@@ -17,6 +17,7 @@
 {{$nameChannel := 1185350063417983067}} {{/* channelID of the **name** channel */}}
 {{$nameRole := 1185703261613863013}} {{/* roleID of the **name** role */}}
 {{$multipleChannel := 1185342836518957187}} {{/* channelID of the **2in1** channel */}}
+{{$rankChannel := 1185723603086491648}}
 {{$enableMultiple := false}} {{/* Enable the 2in1 version */}}
 {{/* Configuration values end */}}
 
@@ -140,6 +141,8 @@
 			{{editNickname (reReplace `[a-zA-Z]{3,15}` .Member.Nick $name)}}
 			{{addReactions ":white_check_mark:"}}
 			{{addRoleID $nameRole}}
+			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" $.Message.ID "content" (print "Your display name has been updated. Please make your way to the <#" $rankChannel ">"))}}
+			{{deleteMessage nil $m 10}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please input a username between 3 and 15 characters"}}
