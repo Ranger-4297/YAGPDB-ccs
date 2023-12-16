@@ -13,7 +13,9 @@
 
 {{/* Configuration values start */}}
 {{$tagChannel := 1185342810312945804}} {{/* channelID of the **tag** channel */}}
+{{$tagRole := 1185703179254505582}} {{/* roleID of the **tag** role */}}
 {{$nameChannel := 1185350063417983067}} {{/* channelID of the **name** channel */}}
+{{$nameRole := 1185703261613863013}} {{/* roleID of the **name** role */}}
 {{$multipleChannel := 1185342836518957187}} {{/* channelID of the **2in1** channel */}}
 {{$enableMultiple := false}} {{/* Enable the 2in1 version */}}
 {{/* Configuration values end */}}
@@ -73,8 +75,8 @@
 						{{dbDel 0 "displayName"}}
 						{{dbDel $user "displayNameWaitResponse"}}
 						{{editNickname (printf "[%d] | %s" $data.tag $name)}}
-						{{addRoleID 1185703179254505582}}
-						{{addRoleID 1185703261613863013}}
+						{{addRoleID $tagRole}}
+						{{addRoleID $nameRole}}
 						{{cancelScheduledUniqueCC .CCID 1}}
 					{{else if not (eq $.Message.Content "cancel")}}
 						{{$m := sendMessageRetID nil "Please try again with a username of 3-15 characters"}}
@@ -108,7 +110,7 @@
 				{{if not (eq (print "[" $tag "]") .)}}
 					{{editNickname (reReplace `(\[\d{1,4}\])` $.Member.Nick (print "[" $tag "]"))}}
 					{{addReactions ":white_check_mark:"}}
-					{{addRoleID 1185703179254505582}}
+					{{addRoleID $tagRole}}
 				{{else}}
 					{{deleteTrigger 0}}
 					{{$m := sendMessageRetID nil "Please input a different tag"}}
@@ -117,7 +119,7 @@
 			{{else}}
 				{{editNickname (printf "[%d] %s" $tag $.User.Globalname)}}
 				{{addReactions ":white_check_mark:"}}
-				{{addRoleID 1185703179254505582}}
+				{{addRoleID $tagRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" $.Message.ID "content" (print "You've just verified! Now you need to adjust your game name at <#" $nameChannel ">"))}}
 				{{deleteMessage nil $m 10}}
 			{{end}}
@@ -137,7 +139,7 @@
 		{{if (reFind `^([a-zA-Z]|[\d]){3,15}$` $name)}}
 			{{editNickname (reReplace `[a-zA-Z]{3,15}` .Member.Nick $name)}}
 			{{addReactions ":white_check_mark:"}}
-			{{addRoleID 1185703261613863013}}
+			{{addRoleID $nameRole}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please input a username between 3 and 15 characters"}}
