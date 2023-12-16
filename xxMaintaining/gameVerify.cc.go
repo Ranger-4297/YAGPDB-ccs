@@ -135,15 +135,9 @@
 	{{$name := .Message.Content}}
 	{{if not (reFind `[^a-zA-Z\d\s:]` $name)}}
 		{{if (reFind `^([a-zA-Z]|[\d]){3,15}$` $name)}}
-			{{if not (eq (reFind ` ([a-zA-Z]|\d){3,15}` .Member.Nick) (print " " $name))}}
-				{{editNickname (reReplace `[a-zA-Z]{3,15}` .Member.Nick $name)}}
-				{{addReactions ":white_check_mark:"}}
-				{{addRoleID 1185703179254505582}}
-			{{else}}
-				{{deleteTrigger 0}}
-				{{$m := sendMessageRetID nil "Please input a username you aren't currently using"}}
-				{{deleteMessage nil $m 10}}
-			{{end}}
+			{{editNickname (reReplace `[a-zA-Z]{3,15}` .Member.Nick $name)}}
+			{{addReactions ":white_check_mark:"}}
+			{{addRoleID 1185703179254505582}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please input a username between 3 and 15 characters"}}
