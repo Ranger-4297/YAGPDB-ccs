@@ -137,7 +137,7 @@
 		{{if (reFind `^([a-zA-Z]|[\d]){3,15}$` $name)}}
 			{{editNickname (reReplace `[a-zA-Z]{3,15}` .Member.Nick $name)}}
 			{{addReactions ":white_check_mark:"}}
-			{{addRoleID 1185703179254505582}}
+			{{addRoleID 1185703261613863013}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please input a username between 3 and 15 characters"}}
