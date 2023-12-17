@@ -110,9 +110,9 @@
 		{{$server := .Message.Content}}
 		{{if (reFind `^[\d]{3,4}$` $server)}}
 			{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\])` .Member.Nick)}}
-				{{editNickname (reReplace `(\[[\d]{3,4}\])` $.Member.Nick (print "[" $server "]"))}}
+				{{editNickname (reReplace `(\[[\d]{3,4}\])` .Member.Nick (print "[" $server "]"))}}
 			{{else}}
-				{{editNickname (printf "[%s] %s" $server $.User.Globalname)}}
+				{{editNickname (printf "[%s] %s" $server (joinStr "" (split .User.Globalname " ")))}}
 				{{addRoleID $serverRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "You've just verified! Now you need to join an alliance <#" $allianceChannel ">"))}}
 				{{deleteMessage nil $m 10}}
