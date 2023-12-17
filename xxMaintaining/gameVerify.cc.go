@@ -12,8 +12,8 @@
 */}}
 
 {{/* Configuration values start */}}
-{{$tagChannel := 1185342810312945804}} {{/* channelID of the **tag** channel */}}
-{{$tagRole := 1185703179254505582}} {{/* roleID of the **tag** role */}}
+{{$serverChannel := 1185342810312945804}} {{/* channelID of the **tag** channel */}}
+{{$serverRole := 1185703179254505582}} {{/* roleID of the **tag** role */}}
 {{$nameChannel := 1185350063417983067}} {{/* channelID of the **name** channel */}}
 {{$nameRole := 1185703261613863013}} {{/* roleID of the **name** role */}}
 {{$multipleChannel := 1185342836518957187}} {{/* channelID of the **2in1** channel */}}
@@ -105,20 +105,20 @@
 	{{end}}
 {{else if eq .Channel.ID $tagChannel}}
 	{{if toInt .Message.Content}}
-		{{$tag := toInt .Message.Content}}
-		{{if and (ge (len (toRune $tag)) 3) (le (len (toRune $tag)) 4)}}
+		{{$server := toInt .Message.Content}}
+		{{if and (ge (len (toRune $server)) 3) (le (len (toRune $server)) 4)}}
 			{{with (reFind `(\[\d{1,4}\])` .Member.Nick)}}
-				{{if not (eq (print "[" $tag "]") .)}}
-					{{editNickname (reReplace `(\[\d{1,4}\])` $.Member.Nick (print "[" $tag "]"))}}
+				{{if not (eq (print "[" $server "]") .)}}
+					{{editNickname (reReplace `(\[\d{1,4}\])` $.Member.Nick (print "[" $server "]"))}}
 					{{addReactions ":white_check_mark:"}}
 					{{addRoleID $tagRole}}
 				{{else}}
 					{{deleteTrigger 0}}
-					{{$m := sendMessageRetID nil "Please input a different tag"}}
+					{{$m := sendMessageRetID nil "Please input a different server"}}
 					{{deleteMessage nil $m 10}}
 				{{end}}
 			{{else}}
-				{{editNickname (printf "[%d] %s" $tag $.User.Globalname)}}
+				{{editNickname (printf "[%d] %s" $server $.User.Globalname)}}
 				{{addReactions ":white_check_mark:"}}
 				{{addRoleID $tagRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" $.Message.ID "content" (print "You've just verified! Now you need to adjust your game name at <#" $nameChannel ">"))}}
