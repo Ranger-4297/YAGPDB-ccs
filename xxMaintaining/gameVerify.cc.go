@@ -107,9 +107,9 @@
 	{{if toInt .Message.Content}}
 		{{$server := toInt .Message.Content}}
 		{{if and (ge (len (toRune $server)) 3) (le (len (toRune $server)) 4)}}
-			{{with (reFind `(\[\d{1,4}\])` .Member.Nick)}}
+			{{with (reFind `(\[[\d]{3,4}\]))` .Member.Nick)}}
 				{{if not (eq (print "[" $server "]") .)}}
-					{{editNickname (reReplace `(\[\d{1,4}\])` $.Member.Nick (print "[" $server "]"))}}
+					{{editNickname (reReplace `(\[[\d]{3,4}\])` $.Member.Nick (print "[" $server "]"))}}
 					{{addReactions ":white_check_mark:"}}
 					{{addRoleID $tagRole}}
 				{{else}}
@@ -137,8 +137,8 @@
 {{else if eq .Channel.ID $nameChannel}}
 	{{$name := .Message.Content}}
 	{{if not (reFind `[^a-zA-Z\d\s:]` $name)}}
-		{{if (reFind `^([a-zA-Z]|[\d]){3,15}$` $name)}}
-			{{editNickname (reReplace `[a-zA-Z]{3,15}` .Member.Nick $name)}}
+		{{if (reFind `^([a-zA-Z\d]{3,15})$` $name)}}
+			{{editNickname (reReplace `([a-zA-Z\d]{3,15})` .Member.Nick $name)}}
 			{{addReactions ":white_check_mark:"}}
 			{{addRoleID $nameRole}}
 			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" $.Message.ID "content" (print "Your display name has been updated. Please make your way to the <#" $rankChannel ">"))}}
