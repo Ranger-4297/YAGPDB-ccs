@@ -14,6 +14,8 @@
 {{/* Configuration values start */}}
 {{$serverChannel := 1185342810312945804}} {{/* channelID of the **tag** channel */}}
 {{$serverRole := 1185703179254505582}} {{/* roleID of the **tag** role */}}
+{{$allianceChannel := 1185725114566836304}} {{/* channelID of the **alliance** channel */}}
+{{$allianceRole := 1185727965397516379}} {{/* roleID of the **alliance** role */}}
 {{$nameChannel := 1185350063417983067}} {{/* channelID of the **name** channel */}}
 {{$nameRole := 1185703261613863013}} {{/* roleID of the **name** role */}}
 {{$multipleChannel := 1185342836518957187}} {{/* channelID of the **2in1** channel */}}
@@ -76,7 +78,7 @@
 						{{dbDel 0 "displayName"}}
 						{{dbDel $user "displayNameWaitResponse"}}
 						{{editNickname (printf "[%d] | %s" $data.tag $name)}}
-						{{addRoleID $tagRole}}
+						{{addRoleID $serverRole}}
 						{{addRoleID $nameRole}}
 						{{cancelScheduledUniqueCC .CCID 1}}
 					{{else if not (eq $.Message.Content "cancel")}}
@@ -103,27 +105,19 @@
 	{{if $stage}}
 		{{dbSetExpire $user "displayNameWaitResponse" (str (add $waitResponseDB 1)) 120}}
 	{{end}}
-{{else if eq .Channel.ID $tagChannel}}
+{{else if eq .Channel.ID $serverChannel}}
 	{{if toInt .Message.Content}}
-		{{$server := toInt .Message.Content}}
-		{{if and (ge (len (toRune $server)) 3) (le (len (toRune $server)) 4)}}
-			{{with (reFind `(\[[\d]{3,4}\]))` .Member.Nick)}}
-				{{if not (eq (print "[" $server "]") .)}}
-					{{editNickname (reReplace `(\[[\d]{3,4}\])` $.Member.Nick (print "[" $server "]"))}}
-					{{addReactions ":white_check_mark:"}}
-					{{addRoleID $tagRole}}
-				{{else}}
-					{{deleteTrigger 0}}
-					{{$m := sendMessageRetID nil "Please input a different server"}}
-					{{deleteMessage nil $m 10}}
-				{{end}}
+		{{$server := .Message.Content}}
+		{{if (reFind `^[\d]{3,4}$` $server)}}
+			{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\])` .Member.Nick)}}
+				{{editNickname (reReplace `(\[[\d]{3,4}\])` $.Member.Nick (print "[" $server "]"))}}
 			{{else}}
-				{{editNickname (printf "[%d] %s" $server $.User.Globalname)}}
-				{{addReactions ":white_check_mark:"}}
-				{{addRoleID $tagRole}}
-				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" $.Message.ID "content" (print "You've just verified! Now you need to adjust your game name at <#" $nameChannel ">"))}}
+				{{editNickname (printf "[%s] %s" $server $.User.Globalname)}}
+				{{addRoleID $serverRole}}
+				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "You've just verified! Now you need to join an alliance <#" $allianceChannel ">"))}}
 				{{deleteMessage nil $m 10}}
 			{{end}}
+			{{addReactions ":white_check_mark:"}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please input a 3-4 digit tag"}}
@@ -134,14 +128,49 @@
 		{{$m := sendMessageRetID nil "Please input a numeric tag"}}
 		{{deleteMessage nil $m 10}}
 	{{end}}
+{{else if eq .Channel.ID $allianceChannel}}
+	{{$alliance := .Message.Content}}
+	{{if not (eq (lower $alliance) "skip")}}
+		{{if (reFind `^[a-zA-Z\d]+$` $alliance)}}
+			{{if (reFind `^[a-zA-Z\d]{3,4}$` $alliance)}}
+				{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\])` .Member.Nick)}}
+					{{editNickname (reReplace ` (\[[a-zA-Z\d]{3,4}\])` .Member.Nick (printf " [%s]" $alliance))}}
+				{{else if (reFind `^(\[[\d]{3,4}\]) ([a-zA-Z\d]{3,15})` .Member.Nick)}}
+					{{editNickname (reReplace `(\[[\d]{3,4}\]) ([a-zA-Z\d]{3,15})` .Member.Nick (printf "$1 [%s] $2" $alliance))}}
+				{{end}}
+				{{addReactions ":white_check_mark:"}}
+				{{addRoleID $allianceRole}}
+				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Your alliance name has been updated. Please make your way to update your name at <#" $nameChannel ">"))}}
+				{{deleteMessage nil $m 10}}
+			{{else}}
+				{{deleteTrigger 0}}
+				{{$m := sendMessageRetID nil "Please input an alliance between 3 and 4 characters (a-Z)"}}
+				{{deleteMessage nil $m 10}}
+			{{end}}
+		{{else}}
+			{{deleteTrigger 0}}
+			{{$m := sendMessageRetID nil "Please only use alphabetical characters (a-Z)"}}
+			{{deleteMessage nil $m 10}}
+		{{end}}
+	{{else}}
+		{{addRoleID $allianceRole}}
+		{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Please make your way to update your name at <#" $nameChannel ">"))}}
+		{{deleteMessage nil $m 10}}
+	{{end}}
+	{{$embed := sdict "title" "`[!]` **Important** `[!]`" "description" "IF YOU ARE NOT PART OF AN ALLIANCE. TYPE `skip`"}}
+	{{if $db := dbGet $allianceChannel "stickymessage"}}
+		{{deleteMessage $allianceChannel (toInt $db.Value) 0}}
+	{{end}}
+	{{$id := sendMessageRetID nil (cembed $embed)}}
+	{{dbSet $allianceChannel "stickymessage" (str $id)}}
 {{else if eq .Channel.ID $nameChannel}}
 	{{$name := .Message.Content}}
 	{{if not (reFind `[^a-zA-Z\d\s:]` $name)}}
 		{{if (reFind `^([a-zA-Z\d]{3,15})$` $name)}}
-			{{editNickname (reReplace `([a-zA-Z\d]{3,15})` .Member.Nick $name)}}
+			{{editNickname (reReplace `([a-zA-Z\d]{3,15})$` .Member.Nick $name)}}
 			{{addReactions ":white_check_mark:"}}
 			{{addRoleID $nameRole}}
-			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" $.Message.ID "content" (print "Your display name has been updated. Please make your way to the <#" $rankChannel ">"))}}
+			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Your display name has been updated. Please make your way to the <#" $rankChannel ">"))}}
 			{{deleteMessage nil $m 10}}
 		{{else}}
 			{{deleteTrigger 0}}
