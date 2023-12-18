@@ -1,15 +1,13 @@
 {{/*
 		Made by ranger_4297 (765316548516380732)
-		Wait response logic by DZ (438789314101379072)
 
 	Trigger Type: `Regex`
 	Trigger: `.*`
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
-
-	Note: Command is `setup`. Use your severs default prefix
 */}}
+
 
 {{/* Configuration values start */}}
 {{$serverChannel := 1185342810312945804}}		{{/* channelID of the **tag** channel */}}
@@ -18,9 +16,7 @@
 {{$allianceRole := 1185727965397516379}}		{{/* roleID of the **alliance** role */}}
 {{$nameChannel := 1185350063417983067}}			{{/* channelID of the **name** channel */}}
 {{$nameRole := 1185703261613863013}}			{{/* roleID of the **name** role */}}
-{{$multipleChannel := 1185342836518957187}}		{{/* channelID of the **2in1** channel */}}
 {{$rankChannel := 1185723603086491648}}			{{/* channelID of the **2in1** channel */}}
-{{$enableMultiple := false}} 					{{/* Enable the 2in1 version */}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
@@ -36,76 +32,6 @@
 {{/* User setup */}}
 
 {{/* Response */}}
-{{if and (eq .Channel.ID $multipleChannel) $enableMultiple}} {{/* Command based 2 in 1 */}}
-	{{$embed := sdict "title" "User data" "footer" (sdict "text" "Type cancel to cancel your assignment") "color" 0x00ff7b "timestamp" currentTime}}
-	{{if not .ExecData}}
-		{{if not $waitResponseDB}}
-			{{if reFind (print `\A(?i)` $prefix `(\s+|\z)`) $.Message.Content}}
-				{{$embed.Set "fields" (cslice (sdict "name" "Server tag" "value" "⠀⠀"))}}
-				{{$stage = 1}}
-				{{$embedID := sendMessageRetID nil (complexMessage "content" "Please enter your servers tag (000-9999)" "embed" (cembed $embed))}}
-				{{dbSet $user "displayName" (sdict "embed" (toString $embedID) "userData" (sdict  "tag" 0 "name" "") "user" (toString $user))}}
-				{{scheduleUniqueCC .CCID nil 120 1 1}}
-			{{end}}
-		{{else}}
-			{{$userData := (dbGet $user "displayName").Value}}
-			{{if and $userData.user (eq (toString $userData.user) (toString $user))}}
-				{{if eq $waitResponseDB 1}}
-					{{if and (reFind `\A(?i)([\d]{3,4})(\s+|\z)` $.Message.Content) (not (eq $.Message.Content "cancel"))}}
-						{{$tag := (reFind `\A(?i)([\d]{3,4})(\s+|\z)` $.Message.Content) | toInt}}
-						{{$data := $userData.userData}}
-						{{$data.Set "tag" $tag}}
-						{{dbSet $user "displayName" $userData}}
-						{{$embed.Set "fields" (cslice (sdict "name" "Server tag" "value" (toString $tag) "inline" true))}}
-						{{editMessage nil $userData.embed (complexMessageEdit "content" "Please enter your display name (between 3 & 15 characters)" "embed" (cembed $embed))}}
-						{{$stage = 1}}
-					{{else if not (eq $.Message.Content "cancel")}}
-						{{$m := sendMessageRetID nil "Please try again and input a 3-4 digit tag"}}
-						{{deleteTrigger 0}}
-						{{deleteMessage nil $m 10}}
-						{{$stage = 0}}
-					{{end}}
-					{{scheduleUniqueCC .CCID nil 120 1 2}}
-				{{else if eq $waitResponseDB 2}}
-					{{scheduleUniqueCC .CCID nil 120 1 2}}
-					{{if and (ge (len (toRune $.Message.Content)) 3) (le (len (toRune $.Message.Content)) 15) (not (eq $.Message.Content "cancel"))}}
-						{{$name := $.Message.Content}}
-						{{$data := $userData.userData}}
-						{{$message := structToSdict (index (getMessage nil $userData.embed).Embeds 0)}}
-						{{$field := sdict "name" "Game username" "value" (toString $name) "inline" true}}
-						{{$embed.Set "fields" ((cslice.AppendSlice $message.Fields).Append $field)}}
-						{{$embed.Del "footer"}}
-						{{editMessage nil $userData.embed (complexMessageEdit "content" "User submitted ✅" "embed" (cembed $embed))}}
-						{{dbDel 0 "displayName"}}
-						{{dbDel $user "displayNameWaitResponse"}}
-						{{editNickname (printf "[%d] | %s" $data.tag $name)}}
-						{{addRoleID $serverRole}}
-						{{addRoleID $nameRole}}
-						{{cancelScheduledUniqueCC .CCID 1}}
-					{{else if not (eq $.Message.Content "cancel")}}
-						{{$m := sendMessageRetID nil "Please try again with a username of 3-15 characters"}}
-						{{deleteTrigger 0}}
-						{{deleteMessage nil $m 10}}
-						{{$stage = 0}}
-					{{end}}
-				{{end}}
-				{{if eq (lower $.Message.Content) "cancel"}}
-					{{sendMessage nil (print "Server display cancelled. Please begin with the `" .ServerPrefix "setup` command")}}
-					{{dbDel $user "displayName"}}
-					{{dbDel $user "displayNameWaitResponse"}}
-					{{$stage = 0}}
-					{{cancelScheduledUniqueCC .CCID 1}}
-				{{end}}
-			{{end}}
-		{{end}}
-	{{else}}
-		{{sendMessage nil (print "Server display cancelled. Please send the `" .ServerPrefix "setup` command to set up your tag and username")}}
-		{{dbDel $user "displayNameWaitResponse"}}
-		{{dbDel $user "displayName"}}
-	{{end}}
-	{{if $stage}}
-		{{dbSetExpire $user "displayNameWaitResponse" (str (add $waitResponseDB 1)) 120}}
-	{{end}}
 {{else if eq .Channel.ID $serverChannel $allianceChannel $nameChannel}}
 	{{$embed := sdict "color" $embedColour "footer" (sdict "text" (print "Welcome to" .Server.Name) "icon_url" (.Guild.IconURL "1024") "timestamp" currentTime)}}
 	{{if eq .Channel.ID $serverChannel}}
