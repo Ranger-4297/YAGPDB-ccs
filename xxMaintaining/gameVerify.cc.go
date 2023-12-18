@@ -120,7 +120,11 @@
 					{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "You've just verified! Now you need to join an alliance <#" $allianceChannel ">"))}}
 					{{deleteMessage nil $m 45}}
 				{{end}}
-				{{addReactions ":white_check_mark:"}}
+				{{try}}
+					{{addReactions ":white_check_mark:"}}
+				{{catch}}
+					{{sendMessage "Cannot add reaction to user who has blocked bot. Nickname updated"}}
+				{{end}}
 			{{else}}
 				{{deleteTrigger 0}}
 				{{$m := sendMessageRetID nil "Please input a 3-4 digit tag"}}
@@ -142,7 +146,11 @@
 					{{else if (reFind `^(\[[\d]{3,4}\]) ([\p{L}\p{N}\p{Zs}]{3,15})$` .Member.Nick)}}{{/* If user does not have an alliance */}}
 						{{editNickname (reReplace `(\[[\d]{3,4}\]) \\\\\\\\\\\\\` .Member.Nick (printf "$1 [%s] $2" $alliance))}}
 					{{end}}
-					{{addReactions ":white_check_mark:"}}
+					{{try}}
+						{{addReactions ":white_check_mark:"}}
+					{{catch}}
+						{{sendMessage "Cannot add reaction to user who has blocked bot. Nickname updated"}}
+					{{end}}
 					{{addRoleID $allianceRole}}
 					{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Your alliance name has been updated. Please make your way to update your name at <#" $nameChannel ">"))}}
 					{{deleteMessage nil $m 45}}
@@ -167,7 +175,11 @@
 		{{if not (reFind `[^a-zA-Z\d\s:]` $name)}}
 			{{if (reFind `^([a-zA-Z\d]{3,15})$` $name)}}
 				{{editNickname (reReplace `([a-zA-Z\d]{3,15})$` .Member.Nick $name)}}
-				{{addReactions ":white_check_mark:"}}
+				{{try}}
+					{{addReactions ":white_check_mark:"}}
+				{{catch}}
+					{{sendMessage "Cannot add reaction to user who has blocked bot. Nickname updated"}}
+				{{end}}
 				{{addRoleID $nameRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Your display name has been updated. Please make your way to the <#" $rankChannel ">"))}}
 				{{deleteMessage nil $m 45}}
