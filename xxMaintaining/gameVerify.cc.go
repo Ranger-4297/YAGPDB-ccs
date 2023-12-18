@@ -115,18 +115,18 @@
 				{{editNickname (printf "[%s] %s" $server (joinStr "" (split .User.Globalname " ")))}}
 				{{addRoleID $serverRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "You've just verified! Now you need to join an alliance <#" $allianceChannel ">"))}}
-				{{deleteMessage nil $m 10}}
+				{{deleteMessage nil $m 45}}
 			{{end}}
 			{{addReactions ":white_check_mark:"}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please input a 3-4 digit tag"}}
-			{{deleteMessage nil $m 10}}
+			{{deleteMessage nil $m 45}}
 		{{end}}
 	{{else}}
 		{{deleteTrigger 0}}
 		{{$m := sendMessageRetID nil "Please input a numeric tag"}}
-		{{deleteMessage nil $m 10}}
+		{{deleteMessage nil $m 45}}
 	{{end}}
 {{else if eq .Channel.ID $allianceChannel}}
 	{{$alliance := .Message.Content}}
@@ -141,21 +141,21 @@
 				{{addReactions ":white_check_mark:"}}
 				{{addRoleID $allianceRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Your alliance name has been updated. Please make your way to update your name at <#" $nameChannel ">"))}}
-				{{deleteMessage nil $m 10}}
+				{{deleteMessage nil $m 45}}
 			{{else}}
 				{{deleteTrigger 0}}
 				{{$m := sendMessageRetID nil "Please input an alliance between 3 and 4 characters (a-Z)"}}
-				{{deleteMessage nil $m 10}}
+				{{deleteMessage nil $m 45}}
 			{{end}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please don't use special characters characters (a-Z)"}}
-			{{deleteMessage nil $m 10}}
+			{{deleteMessage nil $m 45}}
 		{{end}}
 	{{else}}
 		{{addRoleID $allianceRole}}
 		{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Please make your way to update your name at <#" $nameChannel ">"))}}
-		{{deleteMessage nil $m 10}}
+		{{deleteMessage nil $m 45}}
 	{{end}}
 	{{$embed := sdict "title" "`[!]` **Important** `[!]`" "description" "IF YOU ARE NOT PART OF AN ALLIANCE. TYPE `skip`"}}
 	{{if $db := dbGet $allianceChannel "stickymessage"}}
@@ -171,15 +171,15 @@
 			{{addReactions ":white_check_mark:"}}
 			{{addRoleID $nameRole}}
 			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Your display name has been updated. Please make your way to the <#" $rankChannel ">"))}}
-			{{deleteMessage nil $m 10}}
+			{{deleteMessage nil $m 45}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please input a username between 3 and 15 characters"}}
-			{{deleteMessage nil $m 10}}
+			{{deleteMessage nil $m 45}}
 		{{end}}
 	{{else}}
 		{{deleteTrigger 0}}
 		{{$m := sendMessageRetID nil "Please only use alphanumeric characters (a-Z/0-9)"}}
-		{{deleteMessage nil $m 10}}
+		{{deleteMessage nil $m 45}}
 	{{end}}
 {{end}}
