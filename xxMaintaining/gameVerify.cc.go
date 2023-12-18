@@ -109,8 +109,8 @@
 	{{if toInt .Message.Content}}
 		{{$server := .Message.Content}}
 		{{if (reFind `^[\d]{3,4}$` $server)}}
-			{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\])` .Member.Nick)}}
-				{{editNickname (reReplace `(\[[\d]{3,4}\])` .Member.Nick (print "[" $server "]"))}}
+			{{if (reFind `^(\[[\d]{3,4}\])` .Member.Nick)}}
+				{{editNickname (reReplace `(\[[\d]{3,4}\])` .Member.Nick (printf "[%s]" $server))}}
 			{{else}}
 				{{editNickname (printf "[%s] %s" $server (joinStr "" (split .User.Globalname " ")))}}
 				{{addRoleID $serverRole}}
@@ -133,10 +133,10 @@
 	{{if not (eq (lower $alliance) "skip")}}
 		{{if (reFind `^[a-zA-Z\d]+$` $alliance)}}
 			{{if (reFind `^[a-zA-Z\d]{3,4}$` $alliance)}}
-				{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\])` .Member.Nick)}}
+				{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\])` .Member.Nick)}}{{/* If user has an alliance */}}
 					{{editNickname (reReplace ` (\[[a-zA-Z\d]{3,4}\])` .Member.Nick (printf " [%s]" $alliance))}}
-				{{else if (reFind `^(\[[\d]{3,4}\]) ([a-zA-Z\d]{3,15})` .Member.Nick)}}
-					{{editNickname (reReplace `(\[[\d]{3,4}\]) ([a-zA-Z\d]{3,15})` .Member.Nick (printf "$1 [%s] $2" $alliance))}}
+				{{else if (reFind `^(\[[\d]{3,4}\]) ([\p{L}\p{N}\p{Zs}]{3,15})$` .Member.Nick)}}{{/* If user does not have an alliance */}}
+					{{editNickname (reReplace `(\[[\d]{3,4}\]) \\\\\\\\\\\\\` .Member.Nick (printf "$1 [%s] $2" $alliance))}}
 				{{end}}
 				{{addReactions ":white_check_mark:"}}
 				{{addRoleID $allianceRole}}
@@ -149,7 +149,7 @@
 			{{end}}
 		{{else}}
 			{{deleteTrigger 0}}
-			{{$m := sendMessageRetID nil "Please only use alphabetical characters (a-Z)"}}
+			{{$m := sendMessageRetID nil "Please don't use special characters characters (a-Z)"}}
 			{{deleteMessage nil $m 10}}
 		{{end}}
 	{{else}}
