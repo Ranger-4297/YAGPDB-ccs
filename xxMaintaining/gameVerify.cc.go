@@ -32,7 +32,7 @@
 {{/* User setup */}}
 
 {{/* Response */}}
-{{else if eq .Channel.ID $serverChannel $allianceChannel $nameChannel}}
+{{if eq .Channel.ID $serverChannel $allianceChannel $nameChannel}}
 	{{$embed := sdict "color" $embedColour "footer" (sdict "text" (print "Welcome to" .Server.Name) "icon_url" (.Guild.IconURL "1024") "timestamp" currentTime)}}
 	{{if eq .Channel.ID $serverChannel}}
 		{{if toInt .Message.Content}}
@@ -49,7 +49,7 @@
 				{{try}}
 					{{addReactions ":white_check_mark:"}}
 				{{catch}}
-					{{sendMessage "Cannot add reaction to user who has blocked bot. Nickname updated"}}
+					{{sendMessage nil "Cannot add reaction to user who has blocked bot. Nickname updated"}}
 				{{end}}
 			{{else}}
 				{{deleteTrigger 0}}
@@ -69,13 +69,13 @@
 				{{if (reFind `^[a-zA-Z\d]{3,4}$` $alliance)}}
 					{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\])` .Member.Nick)}}{{/* If user has an alliance */}}
 						{{editNickname (reReplace ` (\[[a-zA-Z\d]{3,4}\])` .Member.Nick (printf " [%s]" $alliance))}}
-					{{else if (reFind `^(\[[\d]{3,4}\]) ([\p{L}\p{N}\p{Zs}]{3,15})$` .Member.Nick)}}{{/* If user does not have an alliance */}}
-						{{editNickname (reReplace `(\[[\d]{3,4}\]) \\\\\\\\\\\\\` .Member.Nick (printf "$1 [%s] $2" $alliance))}}
+					{{else if (reFind `^(\[[\d]{3,4}\]) (.{3,15})$` .Member.Nick)}}{{/* If user does not have an alliance */}}
+						{{editNickname (reReplace `(\[[\d]{3,4}\])` .Member.Nick (printf "$1 [%s]$2" $alliance))}}
 					{{end}}
 					{{try}}
 						{{addReactions ":white_check_mark:"}}
 					{{catch}}
-						{{sendMessage "Cannot add reaction to user who has blocked bot. Nickname updated"}}
+						{{sendMessage nil "Cannot add reaction to user who has blocked bot. Nickname updated"}}
 					{{end}}
 					{{addRoleID $allianceRole}}
 					{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Your alliance name has been updated. Please make your way to update your name at <#" $nameChannel ">"))}}
@@ -100,11 +100,11 @@
 		{{$name := .Message.Content}}
 		{{if not (reFind `[^a-zA-Z\d\s:]` $name)}}
 			{{if (reFind `^([a-zA-Z\d]{3,15})$` $name)}}
-				{{editNickname (reReplace `([a-zA-Z\d]{3,15})$` .Member.Nick $name)}}
+				{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\]) (.{3,15})$` .Member.Nick (printf "$1 $2 %s" $name))}}
 				{{try}}
 					{{addReactions ":white_check_mark:"}}
 				{{catch}}
-					{{sendMessage "Cannot add reaction to user who has blocked bot. Nickname updated"}}
+					{{sendMessage nil "Cannot add reaction to user who has blocked bot. Nickname updated"}}
 				{{end}}
 				{{addRoleID $nameRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Your display name has been updated. Please make your way to the <#" $rankChannel ">"))}}
@@ -116,7 +116,7 @@
 			{{end}}
 		{{else}}
 			{{deleteTrigger 0}}
-			{{$m := sendMessageRetID nil "Please only use alphanumeric characters (a-Z/0-9)"}}
+			{{$m := sendMessageRetID nil "Please only use unicode characters"}}
 			{{deleteMessage nil $m 45}}
 		{{end}}
 		{{$embed.Set "description" (print "`Insert your game name to proceed 🎮`\nThis is *STAMPED* to the bottom of the channel:smirk:")}}
