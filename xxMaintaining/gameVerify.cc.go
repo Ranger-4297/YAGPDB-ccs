@@ -50,18 +50,18 @@
 					{{sendMessage nil "Cannot add reaction to user who has blocked bot. Nickname updated"}}
 				{{end}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (printf "Awesome! %s You've just received your Server Tag! Now proceed to <#%d>. <1/5>" .User.Mention $allianceChannel))}}
-				{{deleteMessage nil $m 45}}
+				{{deleteMessage nil $m 60}}
 				{{$m2 := sendMessageNoEscapeRetID $allianceChannel (printf "%s Enter your alliance tag here <2/5>" .User.Mention)}}
-				{{deleteMessage $allianceChannel $m2 45}}
+				{{deleteMessage $allianceChannel $m2 60}}
 			{{else}}
 				{{deleteTrigger 0}}
 				{{$m := sendMessageRetID nil "Please input a 3-4 digit tag"}}
-				{{deleteMessage nil $m 45}}
+				{{deleteMessage nil $m 60}}
 			{{end}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please input a numeric tag"}}
-			{{deleteMessage nil $m 45}}
+			{{deleteMessage nil $m 60}}
 		{{end}}
 		{{$embed.Set "description" (print "`Step 1/5: Type your Server Number #### 📩`\n\n`Click `<#" $allianceChannel ">`to proceed in verification`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
 	{{else if eq .Channel.ID $allianceChannel}}
@@ -81,23 +81,23 @@
 					{{end}}
 					{{addRoleID $allianceRole}}
 					{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (printf "This is cool! %s you now have an Alliance Tag! Continue and proceed to <#%d>. <2/5>" .User.Mention $nameChannel))}}
-					{{deleteMessage nil $m 45}}
+					{{deleteMessage nil $m 60}}
 					{{$m2 := sendMessageNoEscapeRetID $nameChannel (printf "%s type your Character Game Name over here! <3/5>" .User.Mention)}}
-					{{deleteMessage $nameChannel $m2 45}}
+					{{deleteMessage $nameChannel $m2 60}}
 				{{else}}
 					{{deleteTrigger 0}}
 					{{$m := sendMessageRetID nil "Please input a 3-4 character alliance tag"}}
-					{{deleteMessage nil $m 45}}
+					{{deleteMessage nil $m 60}}
 				{{end}}
 			{{else}}
 				{{deleteTrigger 0}}
 				{{$m := sendMessageRetID nil "Please don't use special characters"}}
-				{{deleteMessage nil $m 45}}
+				{{deleteMessage nil $m 60}}
 			{{end}}
 		{{else}}
 			{{addRoleID $allianceRole}}
 			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Please make your way to update your name at <#" $nameChannel ">"))}}
-			{{deleteMessage nil $m 45}}
+			{{deleteMessage nil $m 60}}
 		{{end}}
 		{{$embed.Set "description" (print "`Step 2/5: Type your Alliance Tag #### 🏰`\n\n`Click `<#" $nameChannel ">`to proceed in verification`\n\n`💥 No alliance? Type \"skip\" 💥`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
 	{{else if eq .Channel.ID $nameChannel}}
@@ -112,18 +112,18 @@
 				{{end}}
 				{{addRoleID $nameRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (printf "Perfect! %s you've updated your display name to your Character Game Name! Two more steps, proceed to <#%d>. <3/5>" .User.Mention $rankChannel))}}
-				{{deleteMessage nil $m 45}}
+				{{deleteMessage nil $m 60}}
 				{{$m2 := sendMessageNoEscapeRetID $rankChannel (printf "%s select your in-game alliance rank. <4/5>" .User.Mention)}}
-				{{deleteMessage $rankChannel $m2 45}}
+				{{deleteMessage $rankChannel $m2 60}}
 			{{else}}
 				{{deleteTrigger 0}}
 				{{$m := sendMessageRetID nil "Please input a 3-15 character username"}}
-				{{deleteMessage nil $m 45}}
+				{{deleteMessage nil $m 60}}
 			{{end}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil "Please don't use special characters"}}
-			{{deleteMessage nil $m 45}}
+			{{deleteMessage nil $m 60}}
 		{{end}}
 		{{$embed.Set "description" (print "`Step 3/5: Type your game name to proceed 🎮`\n\n`Click `<#" $rankChannel ">`to proceed in verification`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
 	{{end}}
