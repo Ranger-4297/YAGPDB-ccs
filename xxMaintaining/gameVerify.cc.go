@@ -111,7 +111,7 @@
 					{{sendMessage nil "Cannot add reaction to user who has blocked bot. Nickname updated"}}
 				{{end}}
 				{{addRoleID $nameRole}}
-				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (printf "%s you've updated your display name to your Character Game Name! Two more steps, proceed to <#%d>. <3/5>" .User.Mention $rankChannel))}}
+				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (printf "Perfect! %s you've updated your display name to your Character Game Name! Two more steps, proceed to <#%d>. <3/5>" .User.Mention $rankChannel))}}
 				{{deleteMessage nil $m 45}}
 				{{$m2 := sendMessageNoEscapeRetID $rankChannel (printf "%s select your in-game alliance rank. <4/5>" .User.Mention)}}
 				{{deleteMessage $rankChannel $m2 45}}
