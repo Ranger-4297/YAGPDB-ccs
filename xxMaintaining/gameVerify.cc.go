@@ -87,7 +87,7 @@
 				{{end}}
 			{{else}}
 				{{deleteTrigger 0}}
-				{{$m := sendMessageRetID nil "Please don't use special characters characters (a-Z)"}}
+				{{$m := sendMessageRetID nil "Please don't use special characters (a-Z)"}}
 				{{deleteMessage nil $m 45}}
 			{{end}}
 		{{else}}
