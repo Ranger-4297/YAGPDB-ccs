@@ -16,11 +16,11 @@
 )
 "spanish" (dict
 	1 "¿Sin alianza? Escribe \"skip\""
-	2 "¡Impresionante! <@!> ¡Acabas de recibir tu etiqueta de servidor! Ahora procede a $$CANAL$$ <1/5>"
+	2 "¡Impresionante! <@!> ¡Acabas de recibir tu etiqueta de servidor! Ahora procede a <#> <1/5>"
 	3 "<@!> Introduce tu etiqueta de alianza aquí <2/5>"
-	4 "¡Esto es genial! <@!> ¡ahora tienes una etiqueta de alianza! Continúe y pase a $$CHANNEL$$ <2/5>"
+	4 "¡Esto es genial! <@!> ¡ahora tienes una etiqueta de alianza! Continúe y pase a <#> <2/5>"
 	5 "<@!> ¡escribe el nombre del juego de tu personaje aquí! <3/5>"
-	6 "¡Perfecto! <@!> ¡Has actualizado tu nombre para mostrar al nombre del juego de tu personaje! Dos pasos más, continúa con $$CHANNEL$$ <3/5>"
+	6 "¡Perfecto! <@!> ¡Has actualizado tu nombre para mostrar al nombre del juego de tu personaje! Dos pasos más, continúa con <#> <3/5>"
 	7 "<@!> selecciona tu rango de alianza en el juego <4/5>"
 	8 "No se puede agregar una reacción al usuario que ha bloqueado el bot. Apodo actualizado"
 	9 "Ingrese una etiqueta de 3 a 4 dígitos"
@@ -31,11 +31,11 @@
 )
 "french" (dict
 	1 "Pas d'alliance ? Tapez \"skip\""
-	2 "Génial! <@!> Vous venez de recevoir votre Server Tag ! Passez maintenant à $$CHANNEL$$ <1/5>"
+	2 "Génial! <@!> Vous venez de recevoir votre Server Tag ! Passez maintenant à <#> <1/5>"
 	3 "<@!> Entrez votre tag d'alliance ici <2/5>"
-	4 "C'est cool! <@!> vous avez maintenant un tag Alliance ! Continuez et passez à $$CHANNEL$$ <2/5>"
+	4 "C'est cool! <@!> vous avez maintenant un tag Alliance ! Continuez et passez à <#> <2/5>"
 	5 "<@!> tapez le nom de votre jeu de personnage ici ! <3/5>"
-	6 "Parfait! <@!> vous avez mis à jour votre nom d'affichage avec le nom de votre jeu de personnage ! Deux étapes supplémentaires, passez à $$CHANNEL$$ <3/5>"
+	6 "Parfait! <@!> vous avez mis à jour votre nom d'affichage avec le nom de votre jeu de personnage ! Deux étapes supplémentaires, passez à <#> <3/5>"
 	7 "<@!> sélectionnez votre rang d'alliance dans le jeu <4/5>"
 	8 "Impossible d'ajouter une réaction à l'utilisateur qui a bloqué le bot. Pseudonyme mis à jour"
 	9 "Veuillez saisir une balise à 3-4 chiffres"
@@ -46,11 +46,11 @@
 )
 "russian" (dict
 	1 "Нет союза? Напишите \"skip\""
-	2 "Потрясающий! <@!> Вы только что получили тег сервера! Теперь перейдите к $$CHANNEL$$ <1/5>"
+	2 "Потрясающий! <@!> Вы только что получили тег сервера! Теперь перейдите к <#> <1/5>"
 	3 "<@!> Введите здесь тег вашего альянса <2/5>"
-	4 "Это здорово! <@!> теперь у вас есть тег альянса! Продолжайте и перейдите к $$CHANNEL$$ <2/5>"
+	4 "Это здорово! <@!> теперь у вас есть тег альянса! Продолжайте и перейдите к <#> <2/5>"
 	5 "<@!> введите здесь свое игровое имя персонажа! <3/5>"
-	6 "Идеальный! <@!> вы обновили отображаемое имя на игровое имя вашего персонажа! Еще два шага, переходим к $$CHANNEL$$ <3/5>"
+	6 "Идеальный! <@!> вы обновили отображаемое имя на игровое имя вашего персонажа! Еще два шага, переходим к <#> <3/5>"
 	7 "<@!> выберите свой внутриигровой рейтинг альянса <4/5>"
 	8 "Невозможно добавить реакцию на пользователя, заблокировавшего бота. Псевдоним обновлен"
 	9 "Введите тег из 3-4 цифр"
@@ -61,11 +61,11 @@
 )
 "chinese" (dict
 	1 " 没有联盟? 输入 \"skip\""
-	2 "惊人的! <@!> 您刚刚收到您的服务器标签! 现在前往$$CHANNEL$$ <1/5>"
+	2 "惊人的! <@!> 您刚刚收到您的服务器标签! 现在前往 <#> <1/5>"
 	3 "<@!> 在此输入您的联盟标签 <2/5>"
-	4 "这很酷! <@!> 您现在拥有联盟标签! 继续并前往$$CHANNEL$$ <2/5>"
+	4 "这很酷! <@!> 您现在拥有联盟标签! 继续并前往<#> <2/5>"
 	5 "<@!> 在这里输入您的角色游戏名称! <3/5>"
-	6 "完美的! <@!> 您已将您的显示名称更新为您的角色游戏名称! 再执行两步，继续$$CHANNEL$$! <3/5>"
+	6 "完美的! <@!> 您已将您的显示名称更新为您的角色游戏名称! 再执行两步，继续 <#>! <3/5>"
 	7 " <@!> 选择您的游戏内联盟等级 <4/5>"
 	8 "无法向阻止机器人的用户添加反应. 昵称已更新"
 	9 "请输入3-4位标签"
@@ -76,11 +76,11 @@
 )
 "arabic" (dict
 	1 "لا يوجد تحالف؟ اكتب \"skip\""
-	2 "مذهل! <@!> لقد استلمت للتو علامة الخادم الخاصة بك! انتقل الآن إلى $$CHANNEL$$ <1/5>"
+	2 "مذهل! <@!> لقد استلمت للتو علامة الخادم الخاصة بك! انتقل الآن إلى <#> <1/5>"
 	3 "<@!> أدخل علامة التحالف الخاصة بك هنا <2/5>"
-	4 "ان هذا رائع! <@!> لديك الآن علامة تحالف! تابع وانتقل إلى $$CHANNEL$$ <2/5>"
+	4 "ان هذا رائع! <@!> لديك الآن علامة تحالف! تابع وانتقل إلى <#> <2/5>"
 	5 "<@!> اكتب اسم لعبة الشخصية الخاصة بك هنا! <3/5>"
-	6 "ممتاز! <@!> لقد قمت بتحديث اسم العرض الخاص بك إلى اسم لعبة الشخصية الخاصة بك! خطوتان أخريان، تابع إلى $$CHANNEL$$ <3/5>"
+	6 "ممتاز! <@!> لقد قمت بتحديث اسم العرض الخاص بك إلى اسم لعبة الشخصية الخاصة بك! خطوتان أخريان، تابع إلى <#> <3/5>"
 	7 "<@!> حدد رتبة تحالفك داخل اللعبة. <4/5>"
 	8 "لا يمكن إضافة رد فعل للمستخدم الذي قام بحظر الروبوت. تم تحديث اللقب"
 	9 "الرجاء إدخال علامة مكونة من 3-4 أرقام"
@@ -91,11 +91,11 @@
 )
 "korean" (dict
 	1 "얼라이언스가 없나요? \"skip\" 를 입력하세요."
-	2 "엄청난! <@!> 방금 서버 태그를 받았습니다! 이제 $$CHANNEL$$로 이동하세요 <1/5>"
+	2 "엄청난! <@!> 방금 서버 태그를 받았습니다! 이제 <#>로 이동하세요 <1/5>"
 	3 "<@!> 여기에 동맹 태그를 입력하세요 <2/5>"
-	4 "이것은 멋지다! <@!> 이제 동맹 태그를 가지게 되었습니다! 계속해서 $$CHANNEL$$로 이동하세요 <2/5>"
+	4 "이것은 멋지다! <@!> 이제 동맹 태그를 가지게 되었습니다! 계속해서 <#> 로 이동하세요 <2/5>"
 	5 "<@!> 여기에 캐릭터 게임 이름을 입력하세요! <3/5>"
-	6 "완벽한! <@!> 표시 이름을 캐릭터 게임 이름으로 업데이트했습니다! 두 단계만 더 진행하면 $$CHANNEL$$로 이동합니다 <3/5>"
+	6 "완벽한! <@!> 표시 이름을 캐릭터 게임 이름으로 업데이트했습니다! 두 단계만 더 진행하면 <#> 로 이동합니다 <3/5>"
 	7 "<@!> 게임 내 동맹 순위를 선택하세요 <4/5>"
 	8 "봇을 차단한 사용자에게는 반응을 추가할 수 없습니다. 닉네임이 업데이트되었습니다"
 	9 "3~4자리 태그를 입력해주세요"
@@ -107,11 +107,11 @@
 )
 "german" (dict
 	1 "Kein Bündnis? Geben Sie \"skip\" ein"
-	2 "Eindrucksvoll! <@!> Sie haben gerade Ihr Server-Tag erhalten! Fahren Sie nun mit $$CHANNEL$$ fort\ <1/5>"
+	2 "Eindrucksvoll! <@!> Sie haben gerade Ihr Server-Tag erhalten! Fahren Sie nun mit <#> fort\ <1/5>"
 	3 "<@!> Geben Sie hier Ihr Allianz-Tag ein <2/5>"
-	4 "Das ist cool! <@!> Sie haben jetzt ein Allianz-Tag! Fahren Sie fort und fahren Sie mit $$CHANNEL$$ fort <2/5>"
+	4 "Das ist cool! <@!> Sie haben jetzt ein Allianz-Tag! Fahren Sie fort und fahren Sie mit <#> fort <2/5>"
 	5 "<@!> Geben Sie hier Ihren Charakter-Spielnamen ein! <3/5>"
-	6 "Perfekt! <@!> Sie haben Ihren Anzeigenamen auf den Namen Ihres Charakterspiels aktualisiert! Zwei weitere Schritte, fahren Sie mit $$CHANNEL$$ fort <3/5>"
+	6 "Perfekt! <@!> Sie haben Ihren Anzeigenamen auf den Namen Ihres Charakterspiels aktualisiert! Zwei weitere Schritte, fahren Sie mit <#> fort <3/5>"
 	7 "<@!> wähle deinen Allianzrang im Spiel aus <4/5"
 	8 "Dem Benutzer, der den Bot blockiert hat, kann keine Reaktion hinzugefügt werden. Spitzname aktualisiert"
 	9 "Bitte geben Sie ein 3-4-stelliges Tag ein"
@@ -122,11 +122,11 @@
 )
 "vietnamese" (dict
 	1 "Không có liên minh? Gõ \"skip\""
-	2 "Tuyệt vời! <@!> Bạn vừa nhận được Thẻ máy chủ của mình! Bây giờ hãy chuyển sang $$CHANNEL$$ <1/5>"
+	2 "Tuyệt vời! <@!> Bạn vừa nhận được Thẻ máy chủ của mình! Bây giờ hãy chuyển sang <#> <1/5>"
 	3 "<@!> Nhập thẻ liên minh của bạn vào đây <2/5>"
-	4 "Cái này hay đấy! <@!> bạn hiện có Thẻ Liên minh! Tiếp tục và tiến tới $$CHANNEL$$ <2/5>"
+	4 "Cái này hay đấy! <@!> bạn hiện có Thẻ Liên minh! Tiếp tục và tiến tới <#> <2/5>"
 	5 "<@!> nhập Tên trò chơi nhân vật của bạn vào đây! <3/5>"
-	6 "Hoàn hảo! <@!> bạn đã cập nhật tên hiển thị thành Tên trò chơi nhân vật của mình! Hai bước nữa, tiến tới $$CHANNEL$$ <3/5>"
+	6 "Hoàn hảo! <@!> bạn đã cập nhật tên hiển thị thành Tên trò chơi nhân vật của mình! Hai bước nữa, tiến tới <#> <3/5>"
 	7 "<@!> chọn thứ hạng liên minh trong trò chơi của bạn <4/5>"
 	8 "Không thể thêm phản ứng cho người dùng đã chặn bot. Đã cập nhật biệt hiệu"
 	9 "Vui lòng nhập thẻ 3-4 chữ số"
@@ -137,11 +137,11 @@
 )
 "japanese" (dict
 	1 "同盟はありませんか？ \"skip\"ップ」と入力してください"
-	2 " 素晴らしい！ <@!> サーバー タグを受け取りました。 $$CHANNEL$$ に進みます <1/5>"
+	2 " 素晴らしい！ <@!> サーバー タグを受け取りました。 <#> に進みます <1/5>"
 	3 "<@!> ここに同盟タグを入力してください <2/5>"
-	4 "これはカッコいい！ <@!> さんは同盟タグを獲得しました! 続行して $$CHANNEL$$ に進みます <2/5>"
+	4 "これはカッコいい！ <@!> さんは同盟タグを獲得しました! 続行して <#> に進みます <2/5>"
 	5 "<@!> ここにキャラクター ゲーム名を入力してください! <3/5>"
-	6 "完璧！ <@!> 表示名をキャラクター ゲーム名に更新しました! さらに 2 つの手順を実行して、$$CHANNEL$$ に進みます <3/5>"
+	6 "完璧！ <@!> 表示名をキャラクター ゲーム名に更新しました! さらに 2 つの手順を実行して、<#> に進みます <3/5>"
 	7 "<@!> はゲーム内の同盟ランクを選択します <4/5>"
 	8 "ボットをブロックしたユーザーにリアクションを追加することはできません。 ニックネームを更新しました"
 	9 "3-4桁のタグを入力してください"
@@ -152,11 +152,11 @@
 )
 "turkish" (dict
 	1 "İttifak yok mu? \"skip\" yazın"
-	2 "Mükemmel! <@!> Sunucu Etiketinizi yeni aldınız! Şimdi $$CHANNEL$$'a ilerleyin <1/5>"
+	2 "Mükemmel! <@!> Sunucu Etiketinizi yeni aldınız! Şimdi <#>'a ilerleyin <1/5>"
 	3 "<@!> İttifak etiketinizi buraya girin <2/5>"
-	4 "Bu havalı! <@!> artık bir İttifak Etiketine sahipsiniz! Devam edin ve $$CHANNEL$$'a ilerleyin <2/5>"
+	4 "Bu havalı! <@!> artık bir İttifak Etiketine sahipsiniz! Devam edin ve <#>'a ilerleyin <2/5>"
 	5 "<@!> Karakter Oyunu Adınızı buraya yazın! <3/5>"
-	6 "Mükemmel! <@!>, görünen adınızı Karakter Oyunu Adınızla güncellediniz! İki adım daha, $$CHANNEL$$'a ilerleyin <3/5>"
+	6 "Mükemmel! <@!>, görünen adınızı Karakter Oyunu Adınızla güncellediniz! İki adım daha, <#>'a ilerleyin <3/5>"
 	7 "<@!> oyun içi ittifak rütbenizi seçin <4/5>"
 	8 "Botu engelleyen kullanıcıya tepki eklenemez. Takma ad güncellendi"
 	9 "Lütfen 3-4 haneli bir etiket girin"
@@ -167,11 +167,11 @@
 )
 "portugese" (dict
 	1 "Sem aliança? Digite \"skip\""
-	2 "Incrível! <@!> Você acabou de receber sua etiqueta de servidor! Agora prossiga para $$CHANNEL$$ <1/5>"
+	2 "Incrível! <@!> Você acabou de receber sua etiqueta de servidor! Agora prossiga para <#> <1/5>"
 	3 "<@!> Digite sua tag de aliança aqui <2/5>"
-	4 "Isso é legal! <@!> agora você tem uma etiqueta de aliança! Continue e prossiga para $$CHANNEL$$ <2/5>"
+	4 "Isso é legal! <@!> agora você tem uma etiqueta de aliança! Continue e prossiga para <#> <2/5>"
 	5 "<@!> digite o nome do jogo do seu personagem aqui! <3/5>"
-	6 "Perfeito! <@!> você atualizou seu nome de exibição para o nome do jogo do seu personagem! Mais duas etapas, prossiga para $$CHANNEL$$ <3/5>"
+	6 "Perfeito! <@!> você atualizou seu nome de exibição para o nome do jogo do seu personagem! Mais duas etapas, prossiga para <#> <3/5>"
 	7 "<@!> selecione a classificação da sua aliança no jogo. <4/5>"
 	8 "Não é possível adicionar reação ao usuário que bloqueou o bot. Apelido atualizado"
 	9 "Insira uma etiqueta de 3 a 4 dígitos"
@@ -182,11 +182,11 @@
 )
 "malaysian" (dict
 	1 "Tiada pakatan? Taip \"skip\""
-	2 "Hebat! <@!> Anda baru sahaja menerima Teg Pelayan anda! Sekarang teruskan ke $$CHANNEL$$ <1/5>"
+	2 "Hebat! <@!> Anda baru sahaja menerima Teg Pelayan anda! Sekarang teruskan ke <#> <1/5>"
 	3 "<@!> Masukkan teg pakatan anda di sini <2/5>"
-	4 "Ini hebat! <@!> anda kini mempunyai Teg Perikatan! Teruskan dan teruskan ke $$CHANNEL$$ <2/5>"
+	4 "Ini hebat! <@!> anda kini mempunyai Teg Perikatan! Teruskan dan teruskan ke <#> <2/5>"
 	5 "<@!> taip Nama Permainan Watak anda di sini! <3/5>"
-	6 "Sempurna! <@!> anda telah mengemas kini nama paparan anda kepada Nama Permainan Watak anda! Dua langkah lagi, teruskan ke $$CHANNEL$$ <3/5>"
+	6 "Sempurna! <@!> anda telah mengemas kini nama paparan anda kepada Nama Permainan Watak anda! Dua langkah lagi, teruskan ke <#> <3/5>"
 	7 "<@!> pilih pangkat pakatan dalam permainan anda <4/5>"
 	8 "Tidak boleh menambah reaksi kepada pengguna yang telah menyekat bot. Nama samaran dikemas kini"
 	9 "Sila masukkan teg 3-4 digit"
@@ -197,11 +197,11 @@
 )
 "filipino" (dict
 	1 "Walang alyansa? I-type ang \"skip\""
-	2 "Galing! <@!> Natanggap mo lang ang iyong Server Tag! Ngayon magpatuloy sa $$CHANNEL$$ <1/5>"
+	2 "Galing! <@!> Natanggap mo lang ang iyong Server Tag! Ngayon magpatuloy sa <#> <1/5>"
 	3 "<@!> Ilagay ang iyong alliance tag dito <2/5>"
-	4 "Ito ay cool! <@!> mayroon ka na ngayong Alliance Tag! Magpatuloy at magpatuloy sa $$CHANNEL$$ <2/5>"
+	4 "Ito ay cool! <@!> mayroon ka na ngayong Alliance Tag! Magpatuloy at magpatuloy sa <#> <2/5>"
 	5 "<@!> i-type ang iyong Character Game Name dito! <3/5>"
-	6 "Perpekto! <@!> na-update mo ang iyong display name sa iyong Character Game Name! Dalawa pang hakbang, magpatuloy sa $$CHANNEL$$ <3/5>"
+	6 "Perpekto! <@!> na-update mo ang iyong display name sa iyong Character Game Name! Dalawa pang hakbang, magpatuloy sa <#> <3/5>"
 	7 "<@!> piliin ang iyong in-game alliance rank <4/5>"
 	8 "Hindi makapagdagdag ng reaksyon sa user na nag-block ng bot. Na-update ang palayaw"
 	9 "Mangyaring maglagay ng 3-4 na digit na tag"
@@ -212,11 +212,11 @@
 )
 "ukranian" (dict
 	1 "Немає альянсу? Введіть \"skip\""
-	2 "Чудово! <@!> Ви щойно отримали тег сервера! Тепер перейдіть до $$CHANNEL$$ <1/5>"
+	2 "Чудово! <@!> Ви щойно отримали тег сервера! Тепер перейдіть до <#> <1/5>"
 	3 "<@!> Введіть свій тег альянсу тут <2/5>"
-	4 "Це круто! <@!> тепер у вас є тег Альянсу! Продовжте та перейдіть до $$CHANNEL$$ <2/5>"
+	4 "Це круто! <@!> тепер у вас є тег Альянсу! Продовжте та перейдіть до <#> <2/5>"
 	5 "- <@!> введіть тут своє ім'я гри персонажа! <3/5>"
-	6 "Ідеально! <@!> ви оновили своє відображуване ім’я на ім’я гри персонажів! Ще два кроки, перейдіть до $$CHANNEL$$ <3/5>"
+	6 "Ідеально! <@!> ви оновили своє відображуване ім’я на ім’я гри персонажів! Ще два кроки, перейдіть до <#> <3/5>"
 	7 "<@!> виберіть ранг вашого альянсу в грі <4/5>"
 	8 "Неможливо додати реакцію на користувача, який заблокував бота. Псевдонім оновлено"
 	9 "Будь ласка, введіть тег із 3-4 цифр"
@@ -227,11 +227,11 @@
 )
 "indonesian" (dict
 	1 "Tidak ada aliansi? Ketik \"skip\""
-	2 "Luar biasa! <@!> Anda baru saja menerima Tag Server Anda! Sekarang lanjutkan ke $$CHANNEL$$ <1/5>"
+	2 "Luar biasa! <@!> Anda baru saja menerima Tag Server Anda! Sekarang lanjutkan ke <#> <1/5>"
 	3 "<@!> Masukkan tag aliansi Anda di sini <2/5>"
-	4 "Ini keren! <@!> Anda sekarang memiliki Tag Aliansi! Lanjutkan dan lanjutkan ke $$CHANNEL$$ <2/5>"
+	4 "Ini keren! <@!> Anda sekarang memiliki Tag Aliansi! Lanjutkan dan lanjutkan ke <#> <2/5>"
 	5 "<@!> ketik Nama Karakter Game Anda di sini! <3/5>"    
-	6 "Sempurna! <@!> Anda telah memperbarui nama tampilan Anda menjadi Nama Permainan Karakter Anda! Dua langkah lagi, lanjutkan ke $$CHANNEL$$ <3/5>"
+	6 "Sempurna! <@!> Anda telah memperbarui nama tampilan Anda menjadi Nama Permainan Karakter Anda! Dua langkah lagi, lanjutkan ke <#> <3/5>"
 	7 "<@!> pilih peringkat aliansi dalam game Anda. <4/5>"    
 	8 "Tidak dapat menambahkan reaksi kepada pengguna yang telah memblokir bot. Nama panggilan diperbarui"
 	9 "Silakan masukan tag 3-4 digit"
@@ -242,11 +242,11 @@
 )
 "greek" (dict
 	1 "Δεν υπάρχει συμμαχία; Πληκτρολογήστε \"skip\""
-	2 "Φοβερό! <@!> Μόλις λάβατε την ετικέτα διακομιστή σας! Τώρα προχωρήστε στο $$CHANNEL$$ <1/5>"
+	2 "Φοβερό! <@!> Μόλις λάβατε την ετικέτα διακομιστή σας! Τώρα προχωρήστε στο <#> <1/5>"
 	3 "<@!> Εισαγάγετε την ετικέτα συμμαχίας σας εδώ <2/5>"    
-	4 "Αυτό είναι ωραίο! <@!> έχετε τώρα Ετικέτα Συμμαχίας! Συνεχίστε και προχωρήστε στο $$CHANNEL$$ <2/5>"
+	4 "Αυτό είναι ωραίο! <@!> έχετε τώρα Ετικέτα Συμμαχίας! Συνεχίστε και προχωρήστε στο <#> <2/5>"
 	5 "<@!> πληκτρολογήστε το όνομα του παιχνιδιού χαρακτήρων εδώ! <3/5>"	
-	6 "Τέλειος! <@!> έχετε ενημερώσει το εμφανιζόμενο όνομά σας στο όνομα του παιχνιδιού χαρακτήρων! Δύο ακόμη βήματα, προχωρήστε στο $$CHANNEL$$ <3/5>"
+	6 "Τέλειος! <@!> έχετε ενημερώσει το εμφανιζόμενο όνομά σας στο όνομα του παιχνιδιού χαρακτήρων! Δύο ακόμη βήματα, προχωρήστε στο <#> <3/5>"
 	7 "<@!> επιλέξτε την κατάταξη συμμαχίας στο παιχνίδι <4/5>"	
 	8 "Δεν είναι δυνατή η προσθήκη αντίδρασης σε χρήστη που έχει αποκλείσει το bot. Το ψευδώνυμο ενημερώθηκε"
 	9 "Εισαγάγετε μια ετικέτα 3-4 ψηφίων"
@@ -257,11 +257,11 @@
 )
 "dutch" (dict
 	1 "Geen alliantie? Typ \"skip\""
-	2 "Geweldig! <@!> U heeft zojuist uw servertag ontvangen! Ga nu verder naar $$CHANNEL$$ <1/5>"
+	2 "Geweldig! <@!> U heeft zojuist uw servertag ontvangen! Ga nu verder naar <#> <1/5>"
 	3 "<@!> Voer hier uw alliantietag in <2/5>"
-	4 "Dit is cool! <@!> je hebt nu een alliantietag! Ga verder en ga naar $$CHANNEL$$ <2/5>"
+	4 "Dit is cool! <@!> je hebt nu een alliantietag! Ga verder en ga naar <#> <2/5>"
 	5 "<@!> typ hier de naam van je personagespel! <3/5>"	
-	6 "Perfect! <@!> je hebt je weergavenaam bijgewerkt naar je personagespelnaam! Nog twee stappen, ga verder naar $$CHANNEL$$ <3/5>"
+	6 "Perfect! <@!> je hebt je weergavenaam bijgewerkt naar je personagespelnaam! Nog twee stappen, ga verder naar <#> <3/5>"
 	7 "<@!> selecteer je in-game alliantierang <4/5>"	
 	8 "Kan geen reactie toevoegen aan de gebruiker die de bot heeft geblokkeerd. Bijnaam bijgewerkt"
 	9 "Voer een tag van 3 tot 4 cijfers in"
@@ -272,11 +272,11 @@
 )
 "italian" (dict
 	1 "Nessuna alleanza? Digita \"skip\""
-	2 "Eccezionale! <@!> Hai appena ricevuto il tuo Tag Server! Ora procedi a $$CHANNEL$$ <1/5>"
+	2 "Eccezionale! <@!> Hai appena ricevuto il tuo Tag Server! Ora procedi a <#> <1/5>"
 	3 "<@!> Inserisci qui il tag della tua alleanza <2/5>"	
-	4 "È fantastico! <@!> ora hai un tag dell'Alleanza! Continua e procedi con $$CHANNEL$$ <2/5>"
+	4 "È fantastico! <@!> ora hai un tag dell'Alleanza! Continua e procedi con <#> <2/5>"
 	5 "<@!> digita il nome del gioco del tuo personaggio qui! <3/5>"
-	6 "Perfetto! <@!> hai aggiornato il tuo nome visualizzato con il nome del gioco del tuo personaggio! Altri due passaggi, procedi a $$CHANNEL$$ <3/5>"
+	6 "Perfetto! <@!> hai aggiornato il tuo nome visualizzato con il nome del gioco del tuo personaggio! Altri due passaggi, procedi a <#> <3/5>"
 	7 "<@!> seleziona il grado della tua alleanza nel gioco <4/5>"
 	8 "Impossibile aggiungere una reazione all'utente che ha bloccato il bot. Soprannome aggiornato"
 	9 "Inserisci un tag di 3-4 cifre"
@@ -287,11 +287,11 @@
 )
 "romanian" (dict
 	1 "Fără alianță? Tastați \"skip\""
-	2 "Minunat! <@!> Tocmai ați primit eticheta de server! Acum treceți la $$CHANNEL$$ <1/5>"
+	2 "Minunat! <@!> Tocmai ați primit eticheta de server! Acum treceți la <#> <1/5>"
 	3 "<@!> Introdu eticheta de alianță aici <2/5>"
-	4 "Aceasta este cool! <@!> acum aveți o etichetă de alianță! Continuați și treceți la $$CHANNEL$$ <2/5>"
+	4 "Aceasta este cool! <@!> acum aveți o etichetă de alianță! Continuați și treceți la <#> <2/5>"
 	5 "<@!> introduceți numele jocului dvs. de personaj aici! <3/5>"
-	6 "Perfect! <@!> ți-ai actualizat numele afișat la Numele jocului de personaj! Încă doi pași, treceți la $$CHANNEL$$ <3/5>"
+	6 "Perfect! <@!> ți-ai actualizat numele afișat la Numele jocului de personaj! Încă doi pași, treceți la <#> <3/5>"
 	7 "<@!> selectează rangul alianței în joc <4/5>"
 	8 "Nu se poate adăuga reacție utilizatorului care a blocat bot. Pseudomul a fost actualizat"
 	9 "Vă rugăm să introduceți o etichetă de 3-4 cifre"
@@ -302,11 +302,11 @@
 )
 "danish" (dict
 	1 "Ingen alliance? Skriv \"skip\""
-	2 "Fantastisk! <@!> Du har lige modtaget dit server-tag! Fortsæt nu til $$CHANNEL$$ <1/5>"
+	2 "Fantastisk! <@!> Du har lige modtaget dit server-tag! Fortsæt nu til <#> <1/5>"
 	3 "<@!> Indtast dit alliance-tag her <2/5>"
-	4 "Det her er sejt! <@!> du har nu et Alliance-tag! Fortsæt og fortsæt til $$CHANNEL$$ <2/5>"
+	4 "Det her er sejt! <@!> du har nu et Alliance-tag! Fortsæt og fortsæt til <#> <2/5>"
 	5 " <@!> skriv dit karakterspils navn her! <3/5>"
-	6 "Perfekt! <@!> du har opdateret dit viste navn til dit karakterspilsnavn! To trin mere, fortsæt til $$CHANNEL$$ <3/5>"
+	6 "Perfekt! <@!> du har opdateret dit viste navn til dit karakterspilsnavn! To trin mere, fortsæt til <#> <3/5>"
 	7 "<@!> vælg din alliancerangering i spillet <4/5>"
 	8 "Kan ikke tilføje reaktion til bruger, der har blokeret bot. Kaldenavnet er opdateret"
 	9 "Indtast venligst et 3-4-cifret tag"
@@ -317,11 +317,11 @@
 )
 "polish" (dict
 	1 "Brak sojuszu? Wpisz \"skip\""
-	2 "Wspaniały! <@!> Właśnie otrzymałeś swój tag serwera! Teraz przejdź do $$CHANNEL$$ <1/5>"
+	2 "Wspaniały! <@!> Właśnie otrzymałeś swój tag serwera! Teraz przejdź do <#> <1/5>"
 	3 "<@!> Wpisz tutaj swój tag sojuszu <2/5>"
-	4 "To jest fajne! <@!> masz teraz tag sojuszu! Kontynuuj i przejdź do $$CHANNEL$$ <2/5>"
+	4 "To jest fajne! <@!> masz teraz tag sojuszu! Kontynuuj i przejdź do <#> <2/5>"
 	5 "<@!> wpisz tutaj swoją nazwę gry postaci! <3/5>"
-	6 "Doskonały! <@!> zaktualizowałeś swoją nazwę wyświetlaną do nazwy gry postaci! Jeszcze dwa kroki i przejdź do $$CHANNEL$$ <3/5>"
+	6 "Doskonały! <@!> zaktualizowałeś swoją nazwę wyświetlaną do nazwy gry postaci! Jeszcze dwa kroki i przejdź do <#> <3/5>"
 	7 "<@!> wybierz swoją rangę sojuszu w grze <4/5>"
 	8 "Nie można dodać reakcji do użytkownika, który zablokował bota. Pseudonim zaktualizowany"
 	9 "Proszę wprowadzić 3-4 cyfrowy znacznik"
@@ -332,11 +332,11 @@
 )
 "hebrew" (dict
 	1 "אין ברית? הקלד \"skip\""
-	2 "מדהים! <@!> זה עתה קיבלת את תג השרת שלך! כעת המשך ל-$$CHANNEL$$ <1/5>"
+	2 "מדהים! <@!> זה עתה קיבלת את תג השרת שלך! כעת המשך ל-<#> <1/5>"
 	3 "<@!> הזן את תג הברית שלך כאן <2/5>"
-	4 "זה מגניב! <@!> יש לך כעת תג ברית! המשך והמשיך אל $$CHANNEL$$ <2/5>"
+	4 "זה מגניב! <@!> יש לך כעת תג ברית! המשך והמשיך אל <#> <2/5>"
 	5 "<@!> הקלד את שם משחק הדמות שלך כאן! <3/5>"
-	6 "מושלם! <@!> עדכנת את שם התצוגה שלך לשם משחק הדמות שלך! שני שלבים נוספים, המשך אל $$CHANNEL$$ <3/5>"
+	6 "מושלם! <@!> עדכנת את שם התצוגה שלך לשם משחק הדמות שלך! שני שלבים נוספים, המשך אל <#> <3/5>"
 	7 "<@!> בחר את דירוג הברית שלך במשחק. <4/5>"
 	8 "לא ניתן להוסיף תגובה למשתמש שחסם בוט. הכינוי עודכן"
 	9 "נא להזין תג בן 3-4 ספרות"
