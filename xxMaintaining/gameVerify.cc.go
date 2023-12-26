@@ -16,7 +16,7 @@
 {{$allianceRole := 1185727965397516379}}		{{/* roleID of the **alliance** role */}}
 {{$nameChannel := 1185350063417983067}}			{{/* channelID of the **name** channel */}}
 {{$nameRole := 1185703261613863013}}			{{/* roleID of the **name** role */}}
-{{$rankChannel := 1185723603086491648}}			{{/* channelID of the **2in1** channel */}}
+{{$rankChannel := 1185723603086491648}}			{{/* channelID of the **rank** channel */}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
