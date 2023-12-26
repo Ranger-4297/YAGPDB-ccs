@@ -71,7 +71,7 @@
 			{{$m := sendMessageRetID nil ($language.Get 10)}}
 			{{deleteMessage nil $m 60}}
 		{{end}}
-		{{$embed.Set "description" (print "`Step 1/5: Type your Server Number #### 📩`\n\n`Click `<#" $allianceChannel ">`to proceed in verification`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
+		{{$embed.Set "description" (print "`Step 1/5: Type your Server Number #### 📩`\n\n`Click `<#" $allianceChannel ">` to proceed in verification`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
 	{{else if eq .Channel.ID $allianceChannel}}
 		{{$alliance := .Message.Content}}
 		{{if not (eq (lower $alliance) "skip")}}
@@ -107,33 +107,27 @@
 			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print "Please make your way to update your name at <#" $nameChannel ">"))}}
 			{{deleteMessage nil $m 60}}
 		{{end}}
-		{{$embed.Set "description" (print "`Step 2/5: Type your Alliance Tag #### 🏰`\n\n`Click `<#" $nameChannel ">`to proceed in verification`\n\n`💥 " ($language.Get 1) " 💥`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
+		{{$embed.Set "description" (print "`Step 2/5: Type your Alliance Tag #### 🏰`\n\n`Click `<#" $nameChannel ">` to proceed in verification`\n\n`💥 " ($language.Get 1) " 💥`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
 	{{else if eq .Channel.ID $nameChannel}}
 		{{$name := .Message.Content}}
-		{{if not (reFind `[^\p{L}\p{N}\p{Zs}a-zA-Z\d\s:]` $name)}}
-			{{if (reFind `.{3,15}$` $name)}}
-				{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\]) (.{3,15})$` .Member.Nick (printf "$1 $2 %s" $name))}}
-				{{try}}
-					{{addReactions ":white_check_mark:"}}
-				{{catch}}
-					{{sendMessage nil ($language.Get 8)}}
-				{{end}}
-				{{addRoleID $nameRole}}
-				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print (reReplace `<#>` (reReplace `<@!>` ($language.Get 6) .User.Mention) (printf "<#%d>" $rankChannel))))}}
-				{{deleteMessage nil $m 60}}
-				{{$m2 := sendMessageNoEscapeRetID $rankChannel (print (reReplace `<@!>` ($language.Get 7) .User.Mention))}}
-				{{deleteMessage $rankChannel $m2 60}}
-			{{else}}
-				{{deleteTrigger 0}}
-				{{$m := sendMessageRetID nil ($language.Get 13)}}
-				{{deleteMessage nil $m 60}}
+		{{if and (le (len $name) 15) (ge (len $name) 3)}}
+			{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 $2 %s" $name))}}
+			{{try}}
+				{{addReactions ":white_check_mark:"}}
+			{{catch}}
+				{{sendMessage nil ($language.Get 8)}}
 			{{end}}
+			{{addRoleID $nameRole}}
+			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print (reReplace `<#>` (reReplace `<@!>` ($language.Get 6) .User.Mention) (printf "<#%d>" $rankChannel))))}}
+			{{deleteMessage nil $m 60}}
+			{{$m2 := sendMessageNoEscapeRetID $rankChannel (print (reReplace `<@!>` ($language.Get 7) .User.Mention))}}
+			{{deleteMessage $rankChannel $m2 60}}
 		{{else}}
 			{{deleteTrigger 0}}
-			{{$m := sendMessageRetID nil ($language.Get 12)}}
+			{{$m := sendMessageRetID nil ($language.Get 13)}}
 			{{deleteMessage nil $m 60}}
 		{{end}}
-		{{$embed.Set "description" (print "`Step 3/5: Type your game name to proceed 🎮`\n\n`Click `<#" $rankChannel ">`to proceed in verification`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
+		{{$embed.Set "description" (print "`Step 3/5: Type your game name to proceed 🎮`\n\n`Click `<#" $rankChannel ">` to proceed in verification`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
 	{{end}}
 	{{if $db := dbGet .Channel.ID "stickymessage"}}
 		{{deleteMessage .Channel.ID (toInt $db.Value) 0}}
