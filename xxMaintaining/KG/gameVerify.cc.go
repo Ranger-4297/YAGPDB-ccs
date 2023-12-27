@@ -24,7 +24,6 @@
 {{/* Initiates variables */}}
 {{$user := .User.ID}}
 {{$embedColour := 0x2b2d31}}
-{{$prefix := print `(` .ServerPrefix `|<@!?204255221017214977>\s*)(setup)`}} 
 {{/* User setup */}}
 
 {{/* Response */}}
