@@ -23,10 +23,7 @@
 
 {{/* Initiates variables */}}
 {{$user := .User.ID}}
-{{$errorColor := 0xFF0000}}
 {{$embedColour := 0x2b2d31}}
-{{$waitResponseDB := toInt (dbGet $user "displayNameWaitResponse").Value}}
-{{$stage := 0}}
 {{$prefix := print `(` .ServerPrefix `|<@!?204255221017214977>\s*)(setup)`}} 
 {{/* User setup */}}
 
