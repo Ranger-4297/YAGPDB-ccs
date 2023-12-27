@@ -31,7 +31,7 @@
 {{/* User setup */}}
 
 {{/* Response */}}
-{{$languages := cslice "english" "spanish" "french" "russian" "arabic" "korean" "german" "vietnamese" "japanese" "turkish" "portugese" "malaysian" "fillipino" "ukranian" "indonesian" "greek" "dutch" "italian" "romanian" "danish" "polish" "hebrew"}}
+{{$languages := cslice "english" "spanish" "french" "russian" "chinese" "arabic" "korean" "german" "vietnamese" "japanese" "turkish" "portugese" "malaysian" "fillipino" "ukranian" "indonesian" "greek" "dutch" "italian" "romanian" "danish" "polish" "hebrew"}}
 {{$language := "english"}}
 {{range .Member.Roles}}
 	{{if in $languages (getRole .).Name}}
@@ -110,8 +110,23 @@
 		{{$embed.Set "description" (print "`Step 2/5: Type your Alliance Tag #### 🏰`\n\n`Click `<#" $nameChannel ">` to proceed in verification`\n\n`💥 " ($language.Get 1) " 💥`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
 	{{else if eq .Channel.ID $nameChannel}}
 		{{$name := .Message.Content}}
-		{{if and (le (len $name) 15) (ge (len $name) 3)}}
-			{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 $2 %s" $name))}}
+		{{if ge (len $name) 3}}
+			{{try}}
+				{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 $2 %s" $name))}}
+			{{catch}}
+				{{if in .Error "fewer in length"}}
+					{{deleteTrigger 0}}
+					{{$m := sendMessageRetID nil ($language.Get 13)}}
+					{{deleteMessage nil $m 60}}
+					{{$embed.Set "description" (print "`Step 3/5: Type your game name to proceed 🎮`\n\n`Click `<#" $rankChannel ">` to proceed in verification`\n\n*This is STAMPED to the bottom of the channel!*:smirk:")}}
+					{{if $db := dbGet $.Channel.ID "stickymessage"}}
+						{{deleteMessage $.Channel.ID (toInt $db.Value) 0}}
+					{{end}}
+					{{$id := sendMessageRetID nil (cembed $embed)}}
+					{{dbSet $.Channel.ID "stickymessage" (str $id)}}
+					{{return}}
+				{{end}}
+			{{end}}
 			{{try}}
 				{{addReactions ":white_check_mark:"}}
 			{{catch}}
