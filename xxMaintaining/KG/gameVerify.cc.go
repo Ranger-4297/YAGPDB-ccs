@@ -43,16 +43,16 @@
 			{{$server := .Message.Content}}
 			{{if (reFind `^[\d]{3,4}$` $server)}}
 				{{if (reFind `^(\[[\d]{3,4}\])` .Member.Nick)}}
-					{{editNickname (reReplace `(\[[\d]{3,4}\])` .Member.Nick (printf "[%s]" $server))}}
+					{{editNickname (reReplace `^(\[[\d]{3,4}\])` .Member.Nick (printf "[%s]" $server))}}
 				{{else}}
 					{{editNickname (printf "[%s] %s" $server (joinStr "" (split .User.Globalname " ")))}}
-					{{addRoleID $serverRole}}
 				{{end}}
 				{{try}}
 					{{addReactions ":white_check_mark:"}}
 				{{catch}}
 					{{sendMessage nil $language.Get 8}}
 				{{end}}
+				{{addRoleID $serverRole}}
 				{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print (reReplace `<#>` (reReplace `<@!>` ($language.Get 2) .User.Mention) (printf "<#%d>" $allianceChannel))))}}
 				{{deleteMessage nil $m 60}}
 				{{$m2 := sendMessageNoEscapeRetID $allianceChannel (print (reReplace `<@!>` ($language.Get 3) .User.Mention))}}
@@ -108,7 +108,11 @@
 		{{$name := .Message.Content}}
 		{{if ge (len $name) 3}}
 			{{try}}
-				{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 $2 %s" $name))}}
+				{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\])` .Member.Nick)}}
+					{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 $2 %s" $name))}}
+				{{else}}
+					{{editNickname (reReplace `^(\[[\d]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 %s" $name))}}
+				{{end}}
 			{{catch}}
 				{{if in .Error "fewer in length"}}
 					{{deleteTrigger 0}}
