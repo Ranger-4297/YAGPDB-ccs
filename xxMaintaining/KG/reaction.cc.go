@@ -6,6 +6,8 @@
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
+
+	Made with love, support me using https://ko-fi.com/rhykerwells
 */}}
 
 
@@ -43,21 +45,56 @@
 {{end}}
 {{$language = (dbGet 0 "languageDB").Value.Get $language}}
 {{if eq .Channel.ID $languageChannel}}
+	{{if $cd := dbGet .User.ID "languageCooldownTime"}}
+		{{if $cd := dbGet .User.ID "languageCooldown"}}
+			{{$m := sendMessageNoEscapeRetID $languageChannel (print (reReplace `<@!>` (reReplace `<T>` ($language.Get 23) (print "<t:" $cd.ExpiresAt.Unix ":R>")) .User.Mention))}}
+			{{deleteMessage $languageChannel $m 60}}
+			{{return}}
+		{{end}}
+		{{$x := dbIncr .User.ID "languageReactionCount" 1}}
+		{{if eq (toInt (dbGet .User.ID "languageReactionCount").Value) 3}}
+			{{dbDel .User.ID "languageReactionCount"}}
+			{{dbSetExpire .User.ID "languageCooldown" true 900}}
+		{{end}}
+	{{else}}
+		{{dbSet .User.ID "languageReactionCount" 1}}
+		{{dbSetExpire .User.ID "languageCooldownTime" true 600}}
+	{{end}}
 	{{addRoleID $enrollingRole}}
 	{{sleep 1}}
 	{{$gm := sendMessageNoEscapeRetID $guideChannel (print (reReplace "<@!>" (reReplace `<#L>` (reReplace `<#S>` ($language.Get 20) (printf "<#%d>" $serverChannel)) (printf "<#%d>" 1187971295397281862)) .User.Mention))}}
 	{{addMessageReactions $guideChannel $gm "✅"}}
-	{{dbSetExpire .User.ID "Rrcooldown" true 60}}
 	{{$m := sendMessageNoEscapeRetID $guideChannel (print (reReplace `<@!>` ($language.Get 15) .User.Mention))}}
 	{{deleteMessage $guideChannel $m 60}}
 {{else if eq .Channel.ID $guideChannel}}
-	{{dbSetExpire .User.ID "Rrcooldown2" true 60}}
+	{{if $cd := dbGet .User.ID "guideCooldownTime"}}
+		{{if $cd := dbGet .User.ID "guideCooldown"}}
+			{{$m := sendMessageNoEscapeRetID $guideChannel (print (reReplace `<@!>` (reReplace `<T>` ($language.Get 23) (print "<t:" $cd.ExpiresAt.Unix ":R>")) .User.Mention))}}
+			{{deleteMessage $guideChannel $m 60}}
+			{{return}}
+		{{end}}
+		{{$x := dbIncr .User.ID "guideReactionCount" 1}}
+		{{if eq (toInt (dbGet .User.ID "guideReactionCount").Value) 3}}
+			{{dbDel .User.ID "guideReactionCount"}}
+			{{dbSetExpire .User.ID "guideCooldown" true 900}}
+		{{end}}
+	{{else}}
+		{{dbSet .User.ID "guideReactionCount" 1}}
+		{{dbSetExpire .User.ID "guideCooldownTime" true 600}}
+	{{end}}
 	{{addRoleID $onboardingRole}}
 	{{$m := sendMessageNoEscapeRetID $guideChannel (print (reReplace `<#>` (reReplace `<@!>` ($language.Get 14) .User.Mention) (printf "<#%d>" $serverChannel)))}}
 	{{deleteMessage $guideChannel $m 60}}
 	{{$m2 := sendMessageNoEscapeRetID $serverChannel (print (reReplace `<@!>` ($language.Get 16) .User.Mention))}}
 	{{deleteMessage $serverChannel $m2 60}}
 {{else if eq .Channel.ID $rankChannel}}
+	{{if $cd := dbGet .User.ID "rankCooldownTime"}}
+		{{$m := sendMessageNoEscapeRetID $rankChannel (print (reReplace `<@!>` (reReplace `<T>` ($language.Get 23) (print "<t:" $cd.ExpiresAt.Unix ":R>")) .User.Mention))}}
+		{{deleteMessage $rankChannel $m 5}}
+		{{return}}
+	{{else}}
+		{{dbSetExpire .User.ID "rankCooldownTime" true 5}}
+	{{end}}
 	{{$rankedRole := ""}}
 	{{with .Reaction.Emoji.Name}}
 		{{if eq . "1️⃣"}}
@@ -74,7 +111,7 @@
 	{{end}}
 	{{$rankRoles := cslice $r1Role $r2Role $r3Role $r4Role $r5Role}}
 	{{range $rankRoles}}
-		{{if in $.Member.Roles .}}
+		{{if in (getMember $.User.ID).Roles .}}
 			{{removeRoleID .}}
 		{{end}}
 	{{end}}
@@ -83,21 +120,38 @@
 	{{if $cd := dbGet .User.ID "Rrcooldown3"}}
 		{{return}}
 	{{end}}
-	{{dbSetExpire .User.ID "Rrcooldown3" true 3}}
 	{{$m := sendMessageNoEscapeRetID $rankChannel (print (reReplace `<#>` (reReplace `<@!>` ($language.Get 19) .User.Mention) (printf "<#%d>" $rulesChannel)))}}
 	{{deleteMessage $rankChannel $m 60}}
 	{{$m2 := sendMessageNoEscapeRetID $rulesChannel (print (reReplace `<@!>` ($language.Get 21) .User.Mention))}}
 	{{addMessageReactions $rulesChannel $m2 "✅"}}
 {{else if eq .Channel.ID $rulesChannel}}
+	{{if $cd := dbGet .User.ID "rulesCooldownTime"}}
+		{{if $cd := dbGet .User.ID "rulesCooldown"}}
+			{{$m := sendMessageNoEscapeRetID $rulesChannel (print (reReplace `<@!>` (reReplace `<T>` ($language.Get 23) (print "<t:" $cd.ExpiresAt.Unix ":R>")) .User.Mention))}}
+			{{deleteMessage $rulesChannel $m}}
+			{{return}}
+		{{end}}
+		{{$x := dbIncr .User.ID "rulesReactionCount" 1}}
+		{{if eq (toInt (dbGet .User.ID "rulesReactionCount").Value) 2}}
+			{{dbDel .User.ID "rulesReactionCount"}}
+			{{dbSetExpire .User.ID "rulesCooldown" true 900}}
+		{{end}}
+	{{else}}
+		{{dbSet .User.ID "rulesReactionCount" 1}}
+		{{dbSetExpire .User.ID "rulesCooldownTime" true 600}}
+	{{end}}
 	{{addRoleID $verifyRole}}
 	{{range (cslice $verifyingRole $serverRole $allianceRole $nameRole $enrollingRole $onboardingRole $rankRole)}}
 		{{if (hasRoleID .)}}
 			{{removeRoleID .}}
 		{{end}}
 	{{end}}
-	{{if $cd := dbGet .User.ID "Rrcooldown4"}}
-		{{return}}
+	{{$roleMap := dict 1191468021676523640 1191468021676523640 1187973833257390140 1191153131237683240 1189306777494368306 1191468395435135117 1191889113335480413 1191889229014388809 1189336979406589952 1191468814727118868 1191889805676650606 1191889843349893120 1189258793230536766 1191468603111911464 1189258827930009640 1191468616290402324 1191889900254015598 1191889903521374368 1189314049129861220 1191468620350509156 1191890501301977149 1191890505290756116 1191890508969152572 1191890512056164475}}
+	{{range $old, $new := $roleMap}}
+		{{- if (hasRoleID $old)}}
+			{{- removeRoleID $old}}
+			{{- addRoleID $new}}
+		{{- end -}}
 	{{end}}
-	{{dbSetExpire .User.ID "Rrcooldown5" true 60}}
 	{{sendMessageNoEscape $publicChat (print (reReplace `<@!>` ($language.Get 18) .User.Mention))}}
 {{end}}
