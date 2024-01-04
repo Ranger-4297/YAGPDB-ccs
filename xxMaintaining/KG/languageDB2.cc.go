@@ -20,7 +20,7 @@
 	17 "أخيراً!! <@!> أنت هنا!! الخطوة الأخيرة إلى الجانب الآخر!! <5/5>"
 	18 "ها ها ها ها! لقد فعلتها! <@!> مرحبًا بك في الجانب الآخر!"
 	19 "أحسنت! <@!> استعد الآن للخطوة الأخيرة⁠ <#> <5/5>"
-	20 "مرحبا هناك أيها المحارب! 🤺\n\n**شكرًا لك على الانضمام، يرجى المتابعة للانضمام والتحقق <@!>.** ✅\n\n- سيتم إرشادك الآن برموز <@!765316548516380732> للانضمام والتحقق من خلال الخطوات التالية:\n 1 - 🚩 علامة الخادم: اكتب رقم الخادم الخاص بك.\n 2 - 🏰 علامة التحالف: اكتب علامة التحالف الخاصة بك.\n 3 - 🎮 اسم اللعبة : اكتب اسم اللعبة الخاص بك.\n 4 - 🌟 تصنيف التحالف: اختر تصنيف التحالف الخاص بك.\n 5 - 📃 قواعد الديسكورد: اقرأ وتحقق.\n\n> - سيستغرق ذلك أقل من دقيقة، برجاء اتباع تعليمات البوت.\n\n⚠️ يمكنك فقط تحديد **لغة واحدة**، إذا قمت بتحديد لغتين، فسوف يستجيب لك الروبوت باللغة الأخيرة المحددة، للتعديل والإصلاح، ارجع إلى <#L> ⚠️\n\n> 💥 **تلميح: تم تخصيص هذه الرسالة بناءً على اللغة التي حددتها آخر مرة** 💥\n\n### **نحن في انتظاركم على الجانب الآخر!** 🌀\n\n### **تفاعل باستخدام ✅ للمتابعة والبدء.**\n## 👉 <#S>"
+	20 "### مرحبًا بك <@!> في KG World - WOR 🌀\n> يرجى اتباع خطوات التحقق الخمس، المشفرة بواسطة <@!765316548516380732>\n> - سيستغرق هذا أقل من دقيقة.\n> - للتغيير اللغة 👉 <#L>\n\n~ *الجانب الآخر في انتظارك* 💫\n### **👇 انقر على ✅ للبدء.**"
 )
 "korean" (dict
 	1 "얼라이언스가 없나요? \"skip\" 를 입력하세요."
@@ -42,7 +42,7 @@
 	17 "마지막으로!! <@!> 여기 계시네요!! 반대편으로 가는 마지막 단계!! <5/5>"
 	18 "하하하! 네가 해냈어! <@!> 반대편에 오신 것을 환영합니다!"
 	19 "잘하셨어요! <@!>님은 이제 마지막 단계를 준비하세요⁠ <#> <5/5>"
-	20 "안녕하세요 용사님! 🤺\n\n**<@!> 가입해 주셔서 감사합니다. 온보딩 및 인증을 진행하세요.** ✅\n\n- 이제 <@!765316548516380732> 코딩에 대한 안내를 받아 다음 단계를 통해 온보딩 및 인증을\n받을 수 있습니다.\n 1 - 🚩 서버 태그 : 서버 번호를 입력하세요.\n 2 - 🏰 동맹 태그 : 동맹 태그를 입력하세요.\n 3 - 🎮 게임 이름 : 게임 이름을 입력하세요.\n 4 - 🌟 연맹 순위 : 연맹 순위를 선택하세요.\n 5 - 📃 불일치 규칙: 읽고 확인하세요.\n > - 이 과정은 1분도 채 걸리지 않습니다. 봇의 지시를 따라주세요.\n\n⚠️**한 가지 언어**만 선택할 수 있습니다. 두 가지 언어를 선택한 경우 봇은 마지막으로 선택한 언어로 응답합니다. 조정하고 수정하려면 <#L>로 돌아가세요 ⚠️\n\n> 품 **힌트: 이 메시지는 마지막으로 선택한 언어에 따라 맞춤설정되었습니다** 품\n\n### **저편에서 여러분을 기다리고 있습니다!** 🌀\n\n### **계속 진행하려면 ✅로 반응하고 시작하세요.**\n## 👉 <#S>"
+	20 "### KG World에 <@!> 오신 것을 환영합니다 - WOR 🌀\n> <@!765316548516380732>로 코딩된 5가지 확인 단계를 따르십시오.\n> - 이 작업은 1분도 채 걸리지 않습니다.\n> - 변경하려면 언어 👉 <#L>\n\n~ *다른 쪽이 당신을 기다립니다* 🌟\n### **👇 시작하려면 ✅를 클릭하세요.**"
 )
 "german" (dict
 	1 "Kein Bündnis? Geben Sie \"skip\" ein"
@@ -64,7 +64,7 @@
 	17 "Endlich!! <@!> Du bist hier!! Letzter Schritt auf die andere Seite!! <5/5>"
 	18 "Hahaha! Du hast es geschafft! <@!> Willkommen auf der anderen Seite!"
 	19 "Gut gemacht! <@!> Machen Sie sich jetzt bereit für den letzten Schritt⁠ <#> <5/5>"
-	20 "Hallo Krieger! 🤺\n\n**<@!> Vielen Dank für Ihre Teilnahme. Bitte melden Sie sich an und verifizieren Sie sich.** ✅\n\n- Sie werden nun mit den Codierungen von <@!765316548516380732> zum Onboarding und zur Verifizierung durch die folgenden Schritte geführt:\n 1 - 🚩 Server-Tag: Geben Sie Ihre Servernummer ein.\n 2 - 🏰 Allianz-Tag: Geben Sie Ihr Allianz-Tag ein.\n 3 - 🎮 Spielname: Geben Sie Ihren Spielnamen ein.\n 4 - 🌟 Allianzrang: Wählen Sie Ihren Allianzrang.\n 5 – 📃 Discord-Regeln: Lesen und überprüfen.\n\n> - Dies dauert weniger als eine Minute. Bitte folgen Sie den Anweisungen des Bots.\n\n⚠️Sie können nur **EINE Sprache** auswählen. Wenn Sie zwei Sprachen ausgewählt haben, antwortet Ihnen der Bot mit der zuletzt ausgewählten Sprache. Zum Anpassen und Korrigieren gehen Sie zurück zu <#L> ⚠️\n\n> 💥 **TIPP: Diese Nachricht wird basierend auf der zuletzt ausgewählten Sprache angepasst** 💥\n\n### **Wir warten auf der anderen Seite auf dich!** 🌀\n\n### **Reagieren Sie mit einem ✅, um fortzufahren und loszulegen.**\n## 👉 <#S>"
+	20 "### Willkommen <@!> bei KG World – WOR 🌀\n> Bitte folgen Sie den 5 Verifizierungsschritten, codiert durch <@!765316548516380732>\n> – Dies dauert weniger als eine Minute.\n> – Zum Ändern Sprache 👉 <#L>\n\n~ *Die andere Seite erwartet Sie* 💫\n### **👇 Klicken Sie auf ✅, um loszulegen.**"
 )
 "vietnamese" (dict
 	1 "Không có liên minh? Gõ \"skip\""
@@ -86,7 +86,7 @@
 	17 "Cuối cùng!! <@!> Bạn đang ở đây!! Bước cuối cùng sang phía bên kia!! <5/5>"
 	18 "Hahaha! Bạn đã thực hiện nó! <@!> Chào mừng bạn đến với phía bên kia!"
 	19 "Làm tốt! <@!> bây giờ hãy sẵn sàng cho bước cuối cùng⁠ <#> <5/5>"
-	20 "Xin chào chiến binh! 🤺\n\n**<@!> Cảm ơn bạn đã tham gia, vui lòng tiếp tục tham gia và xác minh.** ✅\n\n- Bây giờ, bạn sẽ được hướng dẫn cách mã hóa <@!765316548516380732> để tham gia và xác minh thông qua các bước sau:\n 1 - 🚩 Thẻ máy chủ : Nhập số máy chủ của bạn.\n 2 - 🏰 Thẻ liên minh : Nhập Thẻ liên minh của bạn.\n 3 - 🎮 Tên trò chơi: Nhập tên trò chơi của bạn.\n 4 - 🌟 Xếp hạng Liên minh : Chọn Xếp hạng Liên minh của bạn.\n 5 - 📃 Quy tắc bất hòa: Đọc và xác minh.\n\n> - Quá trình này sẽ mất chưa đầy một phút, vui lòng làm theo hướng dẫn của bot.\n\n⚠️Bạn chỉ có thể chọn **MỘT Ngôn ngữ**, nếu bạn chọn 2 ngôn ngữ, bot sẽ phản hồi bạn bằng ngôn ngữ được chọn gần đây nhất, để điều chỉnh và sửa lỗi, hãy quay lại <#L> ⚠️\n\n> 🔥 **GỢI Ý: Thông báo này được tùy chỉnh dựa trên ngôn ngữ bạn đã chọn gần đây nhất** ✔️\n\n### **Chúng tôi đang đợi bạn ở phía bên kia!** 🌀\n\n### **Phản ứng bằng ✅ để tiếp tục và bắt đầu.**\n## 👉 <#S>"
+	20 "### Chào mừng <@!> đến với KG World - WOR 🌀\n> Vui lòng làm theo 5 bước xác minh, được mã hóa bởi <@!765316548516380732>\n> - Quá trình này sẽ mất chưa đầy một phút.\n> - Để thay đổi ngôn ngữ 👉 <#L>\n\n~ *Phía bên kia đang chờ bạn* 💫\n### **👇 Nhấp vào ✅ để bắt đầu.**"
 )
 "japanese" (dict
 	1 "同盟はありませんか？ \"skip\" ップ」と入力してください"
@@ -108,7 +108,7 @@
 	17 "ついに！！ <@!> ここにいます!! 向こう側への最終段階!! <5/5>"
 	18 "ははは！ やった！ <@!> 向こう側へようこそ!"
 	19 "よくやった！ <@!> は最終ステップの準備をしてください⁠ <#> <5/5>"
-	20 "こんにちは、戦士です！ 🤺\n\n**<@!> ご参加いただきありがとうございます。引き続き登録と認証を行ってください。** ✅\n\n- <@!765316548516380732> のコーディングのガイドが表示されるので、次の手順に従ってオンボーディングおよび検証を行います。\n 1 - 🚩 サーバータグ : サーバー番号を入力します。\n 2 - 🏰 アライアンスタグ : アライアンスタグを入力します。\n 3 - 🎮 ゲーム名 : ゲーム名を入力します。\n 4 - 🌟 同盟ランク: 同盟ランクを選択します。\n 5 - 📃 Discord ルール : 読んで確認してください。\n\n> - これには 1 分もかかりません。ボットの指示に従ってください。\n\n⚠️**1 つの言語** のみを選択できます。2 つの言語を選択した場合、ボットは最後に選択した言語で応答します。調整して修正するには、<#L> に戻ってください ⚠️\n\n> 💥 **ヒント: このメッセージは、最後に選択した言語に基づいてカスタマイズされます** 💥\n\n### **向こう側でお待ちしています!** 🌀\n\n### **続行して開始するには、「✅」をクリックしてください。**\n## 👉 <#S>"
+	20 "### <@!> KG World へようこそ - WOR 🌀\n> <@!765316548516380732> でコード化された 5 つの確認手順に従ってください。\n> - これには 1 分もかかりません。\n> - 言語を変更するには 👉 <# L>\n\n~ *反対側があなたを待っています* 💫\n### **👇 ✅ をクリックして開始してください。**"
 )
 }}
 {{range $k, $v := $languages}}

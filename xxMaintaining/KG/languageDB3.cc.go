@@ -20,7 +20,7 @@
 	17 "Nihayet!! <@!> Buradasınız!! Diğer tarafa son adım!! <5/5>"
 	18 "Hahaha! Başardın! <@!> Diğer tarafa hoş geldiniz!"
 	19 "Tebrikler! <@!> şimdi son adıma hazırlanın⁠ <#> <5/5>"
-	20 "Merhaba savaşçı! 🤺\n\n**<@!> Katıldığınız için teşekkür ederiz, lütfen katılmaya ve doğrulamaya devam edin.** ✅\n\n- Artık aşağıdaki adımlarla katılmanız ve doğrulamanız için <@!765316548516380732> kodlamalarına yönlendirileceksiniz:\n 1 - 🚩 Sunucu Etiketi : Sunucu numaranızı yazın.\n 2 - 🏰 İttifak Etiketi : İttifak Etiketinizi yazın.\n 3 - 🎮 Oyun Adı : Oyun Adınızı yazın.\n 4 - 🌟 İttifak Sıralaması : İttifak Sıralamanızı seçin.\n 5 - 📃 Discord Kuralları : Okuyun ve Doğrulayın.\n\n> - Bu bir dakikadan az sürecektir, lütfen botun talimatlarını izleyin.\n\n⚠️Yalnızca **BİR Dil** seçebilirsiniz, iki dil seçtiyseniz bot size en son seçilen dille yanıt verecektir, ayarlamak ve düzeltmek için <#L>'ye geri dönün ⚠️\n\n> 💥 **İPUCU: Bu mesaj en son seçtiğiniz dile göre özelleştirilmiştir** 💥\n\n### **Diğer tarafta sizi bekliyoruz!** 🌀\n\n### **Devam etmek ve başlamak için ✅ ile tepki verin.**\n## 👉 <#S>"
+	20 "### KG World - WOR'a <@!> hoş geldiniz 🌀\n> Lütfen <@!765316548516380732> tarafından kodlanan 5 Doğrulama Adımını izleyin\n> - Bu bir dakikadan az sürecektir.\n> - Değiştirmek için dil 👉 <#L>\n\n~ *Diğer taraf sizi bekliyor* 💫\n### **👇 Başlamak için ✅'a tıklayın.**"
 )
 "portugese" (dict
 	1 "Sem aliança? Digite \"skip\""
@@ -42,7 +42,7 @@
 	17 "Finalmente!! <@!> Você está aqui!! Passo final para o outro lado!! <5/5>"
 	18 "Hahaha! Você conseguiu! <@!> Bem-vindo ao outro lado!"
 	19 "Bom trabalho! <@!> agora prepare-se para a etapa final⁠ <#> <5/5>"
-	20 "Olá guerreiro! 🤺\n\n**<@!> Obrigado por participar, prossiga para ser integrado e verificado.** ✅\n\n- Agora você será guiado pelas codificações de <@!765316548516380732> para ser integrado e verificado através das seguintes etapas:\n 1 - 🚩 Tag do servidor: Digite o número do seu servidor.\n 2 - 🏰 Tag da Aliança: Digite sua Tag da Aliança.\n 3 - 🎮 Nome do jogo: Digite o nome do jogo.\n 4 - 🌟 Classificação da Aliança: Selecione sua Classificação da Aliança.\n 5 - 📃 Regras do Discord: Leia e verifique.\n\n> - Isso levará menos de um minuto, siga as instruções do bot.\n\n⚠️Você só pode selecionar **UM Idioma**, se você selecionou dois idiomas, o bot responderá com o último idioma selecionado, para ajustar e corrigir, volte para <#L> ⚠️\n\n> 💥 **DICA: Esta mensagem é personalizada com base no idioma que você selecionou pela última vez** 💥\n\n### **Estamos esperando por você do outro lado!** 🌀\n\n### **Reaja com ✅ para prosseguir e começar.**\n## 👉 <#S>"
+	20 "### Bem-vindo <@!> ao KG World - WOR 🌀\n> Siga as 5 etapas de verificação, codificadas por <@!765316548516380732>\n> - Isso levará menos de um minuto.\n> - Para alterar idioma 👉 <#L>\n\n~ *O outro lado espera por você* 💫\n### **👇 Clique em ✅ para começar.**"
 )
 "malaysian" (dict
 	1 "Tiada pakatan? Taip \"skip\""

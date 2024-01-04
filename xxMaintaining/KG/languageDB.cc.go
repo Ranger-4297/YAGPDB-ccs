@@ -19,7 +19,7 @@
 	17 "Finally!! <@!> You are here!! Final step to the other side!! <5/5>"
 	18 "Hahaha! You made it! <@!> Welcome to the other side!"
 	19 "Well done! <@!> now get ready for the final step⁠ <#> <5/5>"
-	20 "Hello there warrior! 🤺 \n\n**<@!> Thank you for joining, please proceed to get onboarded and verified.**  ✅\n\n- You will now be guided with the codings of <@!765316548516380732> to get onboarded and verified through the following steps:\n 1 - 🚩 Server Tag : Type your server number.\n 2 - 🏰 Alliance Tag : Type your Alliance Tag.\n 3 - 🎮 Game Name : Type your Game Name.\n 4 - 🌟 Alliance Rank : Select your Alliance Rank.\n 5 - 📃 Discord Rules : Read and Verify.\n\n> - This will take less than a minute, please follow the instructions of the bot. \n\n⚠️You can only select **ONE Language**, if you selected two languages, the bot will respond to you with the last selected language, to adjust and fix, go back to <#L> ⚠️ \n\n> 💥 **HINT: This message is customised based on the language you last selected** 💥\n\n### **We are waiting for you on the other side!** 🌀 \n\n### **React with a ✅  to proceed and get started.**\n## 👉 <#S>"
+	20 "### Welcome <@!> to KG World - WOR  🌀\n> Please follow the 5 Verification Steps, coded by <@!765316548516380732>\n> - This will take less than a minute.\n> - To change language 👉 <#L>\n\n~ *The other side awaits you* 💫\n### **👇 Click  ✅  to get started.**"
 )
 "spanish" (dict
 	1 "¿Sin alianza? Escribe \"skip\""
@@ -41,7 +41,7 @@
 	17 "¡¡Finalmente!! <@!> ¡¡Estás aquí!! ¡¡Último paso al otro lado!! <5/5>"
 	18 "¡Jajaja! ¡Lo hiciste! <@!> ¡Bienvenido al otro lado!"
 	19 "¡Bien hecho! <@!> ahora prepárate para el paso final⁠ <#> <5/5>"
-	20 "¡Hola guerrero! 🤺 \n\n**<@!> Gracias por unirte, continúa con la incorporación y la verificación.** ✅\n\n- Ahora se le guiará con las codificaciones de <@!765316548516380732> para incorporarse y verificarse mediante los siguientes pasos:\n 1 - 🚩 Etiqueta de servidor: escriba su número de servidor.\n 2 - 🏰 Etiqueta de Alianza: Escribe tu Etiqueta de Alianza.\n 3 - 🎮 Nombre del juego: escribe el nombre del juego.\n 4 - 🌟 Rango de alianza: seleccione su rango de alianza.\n 5 - 📃 Reglas de Discord: Leer y verificar.\n\n> - Esto tomará menos de un minuto, siga las instrucciones del bot.\n\n⚠️Solo puedes seleccionar **UN Idioma**, si seleccionaste dos idiomas, el bot te responderá con el último idioma seleccionado, para ajustar y arreglar regresa a <#L> ⚠️\n\n> 💥 **SUGERENCIA: Este mensaje se personaliza según el último idioma que seleccionó** 💥\n\n### **¡Te esperamos del otro lado!** 🌀\n\n### **Reacciona con un ✅ para continuar y comenzar.**\n## 👉 <#S>"
+	20 "### Bienvenido <@!> a KG World - WOR 🌀\n> Siga los 5 pasos de verificación, codificados por <@!765316548516380732>\n> - Esto tomará menos de un minuto.\n> - Para cambiar idioma 👉 <#L>\n\n~ *El otro lado te espera* 💫\n### **👇 Haz clic en ✅ para comenzar.**"
 )
 "french" (dict
 	1 "Pas d'alliance ? Tapez \"skip\""
@@ -63,7 +63,7 @@
 	17 "Enfin!! <@!> Vous êtes ici !! Dernière étape vers l'autre côté !! <5/5>"
 	18 "Hahaha! Tu l'as fait! <@!> Bienvenue de l'autre côté !"
 	19 "Bien joué! <@!> préparez-vous maintenant pour la dernière étape⁠ <#> <5/5>"
-	20 "Bonjour guerrier ! 🤺\n\n**<@!> Merci de votre participation, veuillez procéder pour vous inscrire et vérifier.** ✅\n\n- Vous serez maintenant guidé avec les codages de <@!765316548516380732> pour être intégré et vérifié à travers les étapes suivantes :\n 1 - 🚩 Server Tag : Saisissez votre numéro de serveur.\n 2 - 🏰 Tag Alliance : Tapez votre Tag Alliance.\n 3 - 🎮 Nom du jeu : Tapez votre nom de jeu.\n 4 - 🌟 Rang Alliance : Sélectionnez votre Rang Alliance.\n 5 - 📃 Règles Discord : Lisez et vérifiez.\n\n> - Cela prendra moins d'une minute, veuillez suivre les instructions du bot.\n\n⚠️Vous ne pouvez sélectionner **UNE langue**, si vous avez sélectionné deux langues, le bot vous répondra avec la dernière langue sélectionnée, pour ajuster et corriger, revenez à <#L> ⚠️\n\n> 💥 **ASTUCE : Ce message est personnalisé en fonction de la langue que vous avez sélectionnée en dernier** 💥\n\n### **On vous attend de l'autre côté !** 🌀\n\n### **Réagissez avec un ✅ pour continuer et commencer.**\n## 👉 <#S>"
+	20 "### Bienvenue <@!> dans KG World - WOR 🌀\n> Veuillez suivre les 5 étapes de vérification, codées par <@!765316548516380732>\n> - Cela prendra moins d'une minute.\n> - Pour modifier langue 👉 <#L>\n\n~ *L'autre côté vous attend* 💫\n### **👇 Cliquez sur ✅ pour commencer.**"
 )
 "russian" (dict
 	1 "Нет союза? Напишите \"skip\""
@@ -85,7 +85,7 @@
 	17 "Окончательно!! <@!> Ты здесь!! Последний шаг на другую сторону!! <5/5>"
 	18 "Ха-ха-ха! Ты сделал это! <@!> Добро пожаловать на другую сторону"
 	19 "Отличная работа! <@!> теперь приготовьтесь к последнему шагу⁠ <#> <5/5>"
-	20 "Привет, воин! 🤺\n\n**<@!> Спасибо, что присоединились, пожалуйста, приступайте к регистрации и проверке.** ✅\n\n- Теперь вам будут предложены коды <@!765316548516380732> для регистрации и проверки, выполнив следующие шаги:\n 1 — 🚩 Тег сервера: введите номер своего сервера.\n 2 — 🏰 Тег альянса: введите тег вашего альянса.\n 3 — 🎮 Название игры: введите название игры.\n 4 — 🌟 Ранг Альянса: выберите свой ранг Альянса.\n 5 — 📃 Правила Discord: прочитайте и проверьте.\n\n> - Это займет меньше минуты, следуйте инструкциям бота.\n\n⚠️Вы можете выбрать только **ОДИН язык**. Если вы выбрали два языка, бот ответит вам на последнем выбранном языке. Для настройки и исправления вернитесь к <#L> ⚠️\n\n> 💥 **СОВЕТ: это сообщение настроено на основе последнего выбранного вами языка** 💥\n\n### **Мы ждём тебя на той стороне!** 🌀\n\n### **Отреагируйте, нажав ✅, чтобы продолжить и начать работу.**\n## 👉 <#S>"
+	20 "### Добро пожаловать <@!> в KG World - WOR 🌀\n> Пожалуйста, выполните 5 шагов проверки под кодом <@!765316548516380732>\n> - Это займет меньше минуты.\n> - Чтобы изменить язык 👉 <#L>\n\n~ *Вас ждет другая сторона* 💫\n### **👇 Нажмите ✅, чтобы начать.**"
 )
 "chinese" (dict
 	1 "没有联盟? 输入 \"skip\""
@@ -107,7 +107,7 @@
 	17 "最后！! <@!> 你在这里！！最后一步到另一边！ <5/5>"
 	18 "哈哈哈! 你做到了！ <@!> 欢迎来到另一边！"
 	19 "做得好! <@!> 现在准备好最后一步⁠ <#> <5/5>"
-	20 "你好，战士！ 🤺\n\n**<@!> 感谢您的加入，请继续加入并验证。** ✅\n\n- 现在将引导您使用 <@!765316548516380732> 的编码进行注册并通过以下步骤进行验证：\n 1 - 🚩 服务器标签：输入您的服务器编号。\n 2 - 🏰 联盟标签：输入您的联盟标签。\n 3 - 🎮 游戏名称：输入您的游戏名称。\n 4 - 🌟 联盟排名：选择您的联盟排名。\n 5 - 📃 不和谐规则：阅读并验证。\n\n> - 这将需要不到一分钟的时间，请按照机器人的说明进行操作。\n\n⚠️您只能选择**一种语言**，如果您选择了两种语言，机器人会用最后选择的语言回复您，要调整和修复，请返回<#L> ⚠️\n\n> 💥 **提示：此消息是根据您上次选择的语言定制的** 💥\n\n### **我们在另一边等你！** 🌀\n\n### **用 ✅ 进行反应以继续并开始。**\n## 👉 <#S>"
+	20 "### 欢迎 <@!> 来到 KG World - WOR 🌀\n> 请按照 5 个验证步骤进行操作，编码为 <@!765316548516380732>\n> - 这将需要不到一分钟的时间。\n> - 要更改 语言 👉 <#L>\n\n~ *另一边在等你* 💫\n### **👇 点击 ✅ 开始。**"
 )
 }}
 {{dbSet 0 "languageDB" $languages}}
