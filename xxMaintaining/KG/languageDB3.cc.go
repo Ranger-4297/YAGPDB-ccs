@@ -1,4 +1,4 @@
-{{$languageDB := (dbGet 0 "languageDB").Value}}
+1191890501301977149{{$languageDB := (dbGet 0 "languageDB").Value}}
 {{$languages := sdict
 "turkish" (dict
 	1 "İttifak yok mu? \"skip\" yazın"
@@ -22,6 +22,8 @@
 	19 "Tebrikler! <@!> şimdi son adıma hazırlanın⁠ <#> <5/5>"
 	20 "### KG World - WOR'a <@!> hoş geldiniz 🌀\n> Lütfen <@!765316548516380732> tarafından kodlanan 5 Doğrulama Adımını izleyin\n> - Bu bir dakikadan az sürecektir.\n> - Değiştirmek için dil 👉 <#L>\n\n~ *Diğer taraf sizi bekliyor* 💫\n### **👇 Başlamak için ✅'a tıklayın.**"
 	21 "**<@!> Este é o WOR, um KG World Server privado.**\n - Respeitamos a concorrência.\n - Damos as boas-vindas a todos.\n - Seja respeitoso.\n - Mais importante ainda, vamos nos divertir.\n### **Estamos esperando por você do outro lado** 🌀\n\n### **Reaja com um ✅ para prosseguir.**"
+	22 "<@!> Mevcut İttifak Sıralamanızı seçin.\n\n### 👉 <#>"
+	23 "<@!> Bu reaksiyon için bir bekleme süresine tabi tutuldunuz.\nBekleme süresi **<T>** ile sona eriyor"
 )
 "portugese" (dict
 	1 "Sem aliança? Digite \"skip\""
@@ -45,6 +47,8 @@
 	19 "Bom trabalho! <@!> agora prepare-se para a etapa final⁠ <#> <5/5>"
 	20 "### Bem-vindo <@!> ao KG World - WOR 🌀\n> Siga as 5 etapas de verificação, codificadas por <@!765316548516380732>\n> - Isso levará menos de um minuto.\n> - Para alterar idioma 👉 <#L>\n\n~ *O outro lado espera por você* 💫\n### **👇 Clique em ✅ para começar.**"
 	21 "**<@!> Este é o WOR, um KG World Server privado.**\n - Respeitamos a concorrência.\n - Damos as boas-vindas a todos.\n - Seja respeitoso.\n - Mais importante ainda, vamos nos divertir.\n### **Estamos esperando por você do outro lado** 🌀\n\n### **Reaja com um ✅ para prosseguir.**"
+	22 "<@!> Selecione sua classificação de aliança atual.\n\n### 👉 <#>"
+	23 "<@!> Você foi colocado em um tempo de espera para esta reação.\nO tempo de espera termina em **<T>**"
 )
 "malaysian" (dict
 	1 "Tiada pakatan? Taip \"skip\""

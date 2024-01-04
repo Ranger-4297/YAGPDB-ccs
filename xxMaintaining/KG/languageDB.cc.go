@@ -22,6 +22,7 @@
 	20 "### Welcome <@!> to KG World - WOR  🌀\n> Please follow the 5 Verification Steps, coded by <@!765316548516380732>\n> - This will take less than a minute.\n> - To change language 👉 <#L>\n\n~ *The other side awaits you* 💫\n### **👇 Click  ✅  to get started.**"
 	21 "**<@!> This is WOR, a private KG World Server.**\n - We respect competition.\n - We welcome everyone.\n - Stay respectful.\n - Most importantly, let's have fun.\n### **We are waiting for you on the other side** 🌀\n\n### **React with a ✅  to proceed.**"
 	22 "<@!> Select your current Alliance Rank.\n\n### 👉 <#>"
+	23 "<@!> You have been placed on a cooldown for this reaction.\nCooldown ends in **<T>**"
 )
 "spanish" (dict
 	1 "¿Sin alianza? Escribe \"skip\""
@@ -45,6 +46,8 @@
 	19 "¡Bien hecho! <@!> ahora prepárate para el paso final⁠ <#> <5/5>"
 	20 "### Bienvenido <@!> a KG World - WOR 🌀\n> Siga los 5 pasos de verificación, codificados por <@!765316548516380732>\n> - Esto tomará menos de un minuto.\n> - Para cambiar idioma 👉 <#L>\n\n~ *El otro lado te espera* 💫\n### **👇 Haz clic en ✅ para comenzar.**"
 	21 "**<@!> Este es WOR, un servidor privado de KG World.**\n - Respetamos la competencia.\n - Damos la bienvenida a todos.\n - Sea respetuoso.\n - Lo más importante es que nos divirtamos.\n### **Te esperamos del otro lado** 🌀\n\n### **Reacciona con un ✅ para continuar.**"
+	22 "<@!> Seleccione su rango de alianza actual.\n\n### 👉 <#>"
+	23 "<@!> Te han puesto en tiempo de reutilización para esta reacción.\nEl tiempo de reutilización termina en **<T>**"
 )
 "french" (dict
 	1 "Pas d'alliance ? Tapez \"skip\""
@@ -68,6 +71,8 @@
 	19 "Bien joué! <@!> préparez-vous maintenant pour la dernière étape⁠ <#> <5/5>"
 	20 "### Bienvenue <@!> dans KG World - WOR 🌀\n> Veuillez suivre les 5 étapes de vérification, codées par <@!765316548516380732>\n> - Cela prendra moins d'une minute.\n> - Pour modifier langue 👉 <#L>\n\n~ *L'autre côté vous attend* 💫\n### **👇 Cliquez sur ✅ pour commencer.**"
 	21 "**<@!> Voici WOR, un serveur mondial privé de KG.**\n - Nous respectons la concurrence.\n - Nous souhaitons la bienvenue à tout le monde.\n - Restez respectueux.\n - Et surtout, amusons-nous.\n### **On vous attend de l'autre côté** 🌀\n\n### **Réagissez avec un ✅ pour continuer.**"
+	22 "<@!> Sélectionnez votre rang d'alliance actuel.\n\n### 👉 <#>"
+	23 "<@!> Vous avez été placé en temps de recharge pour cette réaction.\nLe temps de recharge se termine dans **<T>**"
 )
 "russian" (dict
 	1 "Нет союза? Напишите \"skip\""
@@ -91,6 +96,8 @@
 	19 "Отличная работа! <@!> теперь приготовьтесь к последнему шагу⁠ <#> <5/5>"
 	20 "### Добро пожаловать <@!> в KG World - WOR 🌀\n> Пожалуйста, выполните 5 шагов проверки под кодом <@!765316548516380732>\n> - Это займет меньше минуты.\n> - Чтобы изменить язык 👉 <#L>\n\n~ *Вас ждет другая сторона* 💫\n### **👇 Нажмите ✅, чтобы начать.**"
 	21 "**<@!> Это WOR, частный мировой сервер KG.**\n - Мы уважаем конкуренцию.\n - Мы приветствуем всех.\n - Сохраняйте уважение.\n - Самое главное, давайте веселиться.\n### **Мы ждём вас на другой стороне** 🌀\n\n### **Чтобы продолжить, нажмите ✅.**"
+	22 "<@!> Выберите свой текущий ранг Альянса.\n\n### 👉 <#>"
+	23 "<@!> Для этой реакции у вас установлен период восстановления.\nВремя восстановления заканчивается через **<T>**"
 )
 "chinese" (dict
 	1 "没有联盟? 输入 \"skip\""
@@ -114,6 +121,8 @@
 	19 "做得好! <@!> 现在准备好最后一步⁠ <#> <5/5>"
 	20 "### 欢迎 <@!> 来到 KG World - WOR 🌀\n> 请按照 5 个验证步骤进行操作，编码为 <@!765316548516380732>\n> - 这将需要不到一分钟的时间。\n> - 要更改 语言 👉 <#L>\n\n~ *另一边在等你* 💫\n### **👇 点击 ✅ 开始。**"
 	21 "**<@!> 这是 WOR，一个私人 KG World 服务器。**\n - 我们尊重竞争。\n - 我们欢迎所有人。\n - 保持尊重。\n - 最重要的是，让我们玩得开心。\n### **我们在另一边等你** 🌀\n\n### **按下 ✅ 即可继续。**"
+	22 "<@!> 选择您当前的联盟排名。\n\n### 👉 <#>"
+	23 "<@!> 您已被置于此反应的冷却时间。\n冷却时间以 **<T>** 结束"
 )
 }}
 {{dbSet 0 "languageDB" $languages}}
