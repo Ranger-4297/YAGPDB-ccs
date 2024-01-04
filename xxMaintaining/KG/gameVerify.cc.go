@@ -6,6 +6,8 @@
 
 	©️ Ranger 2020-Present
 	GNU, GPLV3 License
+
+	Made with love, support me using https://ko-fi.com/rhykerwells
 */}}
 
 
