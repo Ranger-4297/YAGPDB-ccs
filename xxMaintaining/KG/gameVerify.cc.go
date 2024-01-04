@@ -17,6 +17,7 @@
 {{$nameChannel := 1185350063417983067}}			{{/* channelID of the **name** channel */}}
 {{$nameRole := 1185703261613863013}}			{{/* roleID of the **name** role */}}
 {{$rankChannel := 1185723603086491648}}			{{/* channelID of the **rank** channel */}}
+{{$rulesChannel := 1185730875644706826}}        {{/* channelID of RULES channel */}}
 {{/* Configuration values end */}}
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
@@ -108,8 +109,8 @@
 		{{$name := .Message.Content}}
 		{{if ge (len $name) 3}}
 			{{try}}
-				{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\])` .Member.Nick)}}
-					{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 $2 %s" $name))}}
+				{{if (reFind `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\])` .Member.Nick)}}
+					{{editNickname (reReplace `^(\[[\d]{3,4}\]) (\[[a-zA-Z\d]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 $2 %s" $name))}}
 				{{else}}
 					{{editNickname (reReplace `^(\[[\d]{3,4}\]) (.{3,})$` .Member.Nick (printf "$1 %s" $name))}}
 				{{end}}
@@ -135,8 +136,8 @@
 			{{addRoleID $nameRole}}
 			{{$m := sendMessageNoEscapeRetID nil (complexMessage "reply" .Message.ID "content" (print (reReplace `<#>` (reReplace `<@!>` ($language.Get 6) .User.Mention) (printf "<#%d>" $rankChannel))))}}
 			{{deleteMessage nil $m 60}}
-			{{$m2 := sendMessageNoEscapeRetID $rankChannel (print (reReplace `<@!>` ($language.Get 7) .User.Mention))}}
-			{{deleteMessage $rankChannel $m2 60}}
+			{{$m2 := sendMessageNoEscapeRetID $rankChannel (print (reReplace `<#>` (reReplace `<@!>` ($language.Get 22) .User.Mention) (printf "<#%d>" $rulesChannel)))}}
+			{{addMessageReactions $rankChannel $m2 "5️⃣" "4️⃣" "3️⃣" "2️⃣" "1️⃣"}}
 		{{else}}
 			{{deleteTrigger 0}}
 			{{$m := sendMessageRetID nil ($language.Get 13)}}
