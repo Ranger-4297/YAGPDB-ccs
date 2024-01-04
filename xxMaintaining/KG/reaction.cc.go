@@ -10,6 +10,7 @@
 
 
 {{/* Configuration values start */}}
+{{$verifyingRole := 1191469975416864818}}		{{/* roleID of SERVERJOIN role */}}
 {{$enrollingRole := 1190603830065373224}}		{{/* roleID of ENROLLING role */}}
 {{$onboardingRole := 1189413709454520360}}		{{/* roleID of onboarding role */}}
 {{$serverRole := 1185703179254505582}}			{{/* roleID of SERVER role */}}
@@ -22,7 +23,7 @@
 {{$serverChannel := 1185342810312945804}}		{{/* channelID of SERVER channel*/}}
 {{$rankChannel := 1185723603086491648}}			{{/* channelID of RANK channel */}}
 {{$rulesChannel := 1185730875644706826}}        {{/* channelID of RULES channel */}}
-{{$publicChat := 1190146250125877288}}			{{/* channelID of PUBLIC CHAT channel*/}}
+{{$publicChat := 1191231631726493706}}			{{/* channelID of PUBLIC CHAT channel*/}}
 {{/* Configuration values end */}}
 
 {{/* response */}}
@@ -63,7 +64,7 @@
 	{{deleteMessage $rulesChannel $m2 60}}
 {{else if eq .Channel.ID $rulesChannel}}
 	{{addRoleID $verifyRole}}
-	{{range (cslice $serverRole $allianceRole $nameRole $enrollingRole $onboardingRole $rankRole)}}
+	{{range (cslice $verifyingRole $serverRole $allianceRole $nameRole $enrollingRole $onboardingRole $rankRole)}}
 		{{if (hasRoleID .)}}
 			{{removeRoleID .}}
 		{{end}}
