@@ -5,7 +5,6 @@
     Trigger Type: `Command`
     Trigger: `bannedwords`
 
-No license
 */}}
 
 
