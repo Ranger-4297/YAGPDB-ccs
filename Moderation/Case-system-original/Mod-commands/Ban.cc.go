@@ -4,7 +4,7 @@
 
     **Tools & Util > Moderation > Ban > Ban DM**
 
-    ©️ Ranger 2020-Present
+    ©️ RhykerWells 2020-Present
     GNU, GPLV3 License
     Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}

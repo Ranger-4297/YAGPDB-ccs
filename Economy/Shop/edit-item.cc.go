@@ -4,7 +4,7 @@
 	Trigger Type: `Regex`
 	Trigger: `\A(-|<@!?204255221017214977>\s*)((edit|modify)-?item)(\s+|\z)`
 
-    ©️ Ranger 2020-Present
+    ©️ RhykerWells 2020-Present
     GNU, GPLV3 License
     Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
