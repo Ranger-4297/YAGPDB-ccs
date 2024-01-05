@@ -1,3 +1,15 @@
+{{/*
+		Made by ranger_4297 (765316548516380732)
+
+	Trigger Type: `Command`
+	Trigger: `ldb`
+
+	©️ Ranger 2020-Present
+	GNU, GPLV3 License
+
+	Made with love, support me using https://ko-fi.com/rhykerwells
+*/}}
+
 {{$languages := sdict
 "english" (dict
 	1 "No alliance? Type \"skip\""

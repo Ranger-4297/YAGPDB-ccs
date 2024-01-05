@@ -1,4 +1,16 @@
-1191890501301977149{{$languageDB := (dbGet 0 "languageDB").Value}}
+{{/*
+		Made by ranger_4297 (765316548516380732)
+
+	Trigger Type: `Command`
+	Trigger: `ldb3`
+
+	©️ Ranger 2020-Present
+	GNU, GPLV3 License
+
+	Made with love, support me using https://ko-fi.com/rhykerwells
+*/}}
+
+{{$languageDB := (dbGet 0 "languageDB").Value}}
 {{$languages := sdict
 "turkish" (dict
 	1 "İttifak yok mu? \"skip\" yazın"
@@ -49,96 +61,6 @@
 	21 "**<@!> Este é o WOR, um KG World Server privado.**\n - Respeitamos a concorrência.\n - Damos as boas-vindas a todos.\n - Seja respeitoso.\n - Mais importante ainda, vamos nos divertir.\n### **Estamos esperando por você do outro lado** 🌀\n\n### **Reaja com um ✅ para prosseguir.**"
 	22 "<@!> Selecione sua classificação de aliança atual.\n\n### 👉 <#>"
 	23 "<@!> Você foi colocado em um tempo de espera para esta reação.\nO tempo de espera termina em **<T>**"
-)
-"malaysian" (dict
-	1 "Tiada pakatan? Taip \"skip\""
-	2 "Hebat! <@!> Anda baru sahaja menerima Teg Pelayan anda! Sekarang teruskan ke <#> <1/5>"
-	3 "<@!> Masukkan teg pakatan anda di sini <2/5>"
-	4 "Ini hebat! <@!> anda kini mempunyai Teg Perikatan! Teruskan dan teruskan ke <#> <2/5>"
-	5 "<@!> taip Nama Permainan Watak anda di sini! <3/5>"
-	6 "Sempurna! <@!> anda telah mengemas kini nama paparan anda kepada Nama Permainan Watak anda! Dua langkah lagi, teruskan ke <#> <3/5>"
-	7 "<@!> pilih pangkat pakatan dalam permainan anda <4/5>"
-	8 "Tidak boleh menambah reaksi kepada pengguna yang telah menyekat bot. Nama samaran dikemas kini"
-	9 "Sila masukkan teg 3-4 digit"
-	10 "Sila masukkan teg angka"
-	11 "Sila masukkan teg pakatan 3-4 aksara"
-	12 "Tolong jangan gunakan aksara khas"
-	13 "Sila masukkan nama pengguna 3-15 aksara"
-)
-"filipino" (dict
-	1 "Walang alyansa? I-type ang \"skip\""
-	2 "Galing! <@!> Natanggap mo lang ang iyong Server Tag! Ngayon magpatuloy sa <#> <1/5>"
-	3 "<@!> Ilagay ang iyong alliance tag dito <2/5>"
-	4 "Ito ay cool! <@!> mayroon ka na ngayong Alliance Tag! Magpatuloy at magpatuloy sa <#> <2/5>"
-	5 "<@!> i-type ang iyong Character Game Name dito! <3/5>"
-	6 "Perpekto! <@!> na-update mo ang iyong display name sa iyong Character Game Name! Dalawa pang hakbang, magpatuloy sa <#> <3/5>"
-	7 "<@!> piliin ang iyong in-game alliance rank <4/5>"
-	8 "Hindi makapagdagdag ng reaksyon sa user na nag-block ng bot. Na-update ang palayaw"
-	9 "Mangyaring maglagay ng 3-4 na digit na tag"
-	10 "Mangyaring maglagay ng numeric na tag"
-	11 "Mangyaring maglagay ng 3-4 na character na alliance tag"
-	12 "Mangyaring huwag gumamit ng mga espesyal na character"
-	13 "Mangyaring maglagay ng 3-15 character na username"
-)
-"ukranian" (dict
-	1 "Немає альянсу? Введіть \"skip\""
-	2 "Чудово! <@!> Ви щойно отримали тег сервера! Тепер перейдіть до <#> <1/5>"
-	3 "<@!> Введіть свій тег альянсу тут <2/5>"
-	4 "Це круто! <@!> тепер у вас є тег Альянсу! Продовжте та перейдіть до <#> <2/5>"
-	5 "- <@!> введіть тут своє ім'я гри персонажа! <3/5>"
-	6 "Ідеально! <@!> ви оновили своє відображуване ім’я на ім’я гри персонажів! Ще два кроки, перейдіть до <#> <3/5>"
-	7 "<@!> виберіть ранг вашого альянсу в грі <4/5>"
-	8 "Неможливо додати реакцію на користувача, який заблокував бота. Псевдонім оновлено"
-	9 "Будь ласка, введіть тег із 3-4 цифр"
-	10 "Будь ласка, введіть числовий тег"
-	11 "Будь ласка, введіть тег альянсу з 3-4 символів"
-	12 "Будь ласка, не використовуйте спеціальні символи"
-	13 "Будь ласка, введіть ім'я користувача з 3-15 символів"
-)
-"indonesian" (dict
-	1 "Tidak ada aliansi? Ketik \"skip\""
-	2 "Luar biasa! <@!> Anda baru saja menerima Tag Server Anda! Sekarang lanjutkan ke <#> <1/5>"
-	3 "<@!> Masukkan tag aliansi Anda di sini <2/5>"
-	4 "Ini keren! <@!> Anda sekarang memiliki Tag Aliansi! Lanjutkan dan lanjutkan ke <#> <2/5>"
-	5 "<@!> ketik Nama Karakter Game Anda di sini! <3/5>"    
-	6 "Sempurna! <@!> Anda telah memperbarui nama tampilan Anda menjadi Nama Permainan Karakter Anda! Dua langkah lagi, lanjutkan ke <#> <3/5>"
-	7 "<@!> pilih peringkat aliansi dalam game Anda. <4/5>"    
-	8 "Tidak dapat menambahkan reaksi kepada pengguna yang telah memblokir bot. Nama panggilan diperbarui"
-	9 "Silakan masukan tag 3-4 digit"
-	10 "Silakan masukkan tag numerik"
-	11 "Silakan masukkan tag aliansi 3-4 karakter"
-	12 "Tolong jangan gunakan karakter khusus"
-	13 "Silakan masukan nama pengguna 3-15 karakter"    
-)
-"greek" (dict
-	1 "Δεν υπάρχει συμμαχία; Πληκτρολογήστε \"skip\""
-	2 "Φοβερό! <@!> Μόλις λάβατε την ετικέτα διακομιστή σας! Τώρα προχωρήστε στο <#> <1/5>"
-	3 "<@!> Εισαγάγετε την ετικέτα συμμαχίας σας εδώ <2/5>"    
-	4 "Αυτό είναι ωραίο! <@!> έχετε τώρα Ετικέτα Συμμαχίας! Συνεχίστε και προχωρήστε στο <#> <2/5>"
-	5 "<@!> πληκτρολογήστε το όνομα του παιχνιδιού χαρακτήρων εδώ! <3/5>"	
-	6 "Τέλειος! <@!> έχετε ενημερώσει το εμφανιζόμενο όνομά σας στο όνομα του παιχνιδιού χαρακτήρων! Δύο ακόμη βήματα, προχωρήστε στο <#> <3/5>"
-	7 "<@!> επιλέξτε την κατάταξη συμμαχίας στο παιχνίδι <4/5>"	
-	8 "Δεν είναι δυνατή η προσθήκη αντίδρασης σε χρήστη που έχει αποκλείσει το bot. Το ψευδώνυμο ενημερώθηκε"
-	9 "Εισαγάγετε μια ετικέτα 3-4 ψηφίων"
-	10 "Εισαγάγετε μια αριθμητική ετικέτα"
-	11 "Εισαγάγετε μια ετικέτα συμμαχίας 3-4 χαρακτήρων"
-	12 "Μην χρησιμοποιείτε ειδικούς χαρακτήρες"
-	13 "Εισαγάγετε ένα όνομα χρήστη 3-15 χαρακτήρων"
-)
-"dutch" (dict
-	1 "Geen alliantie? Typ \"skip\""
-	2 "Geweldig! <@!> U heeft zojuist uw servertag ontvangen! Ga nu verder naar <#> <1/5>"
-	3 "<@!> Voer hier uw alliantietag in <2/5>"
-	4 "Dit is cool! <@!> je hebt nu een alliantietag! Ga verder en ga naar <#> <2/5>"
-	5 "<@!> typ hier de naam van je personagespel! <3/5>"	
-	6 "Perfect! <@!> je hebt je weergavenaam bijgewerkt naar je personagespelnaam! Nog twee stappen, ga verder naar <#> <3/5>"
-	7 "<@!> selecteer je in-game alliantierang <4/5>"	
-	8 "Kan geen reactie toevoegen aan de gebruiker die de bot heeft geblokkeerd. Bijnaam bijgewerkt"
-	9 "Voer een tag van 3 tot 4 cijfers in"
-	10 "Voer een numerieke tag in"
-	11 "Voer een alliantietag van 3 tot 4 tekens in"
-	12 "Gebruik geen speciale tekens"
-	13 "Voer een gebruikersnaam van 3-15 tekens in"	
 )
 }}
 {{range $k, $v := $languages}}
