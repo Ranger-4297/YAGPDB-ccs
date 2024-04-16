@@ -1,1 +1,0 @@
-These CCs are those that I maintain or have made for others
