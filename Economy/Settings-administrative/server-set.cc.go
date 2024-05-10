@@ -38,6 +38,7 @@
 				{{dbSet 0 "russianRoulette" sdict}}
 				{{dbSet 0 "bank" sdict}}
 				{{dbSet 0 "roulette" (sdict "game" sdict "storage" sdict)}}
+				{{dbSet 0 "accounts"}}
 			{{else}}
 				{{with (dbGet 0 "EconomySettings")}}
 					{{$a := sdict .Value}}
