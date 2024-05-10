@@ -128,11 +128,11 @@
 			{{else}}
 				{{cancelScheduledUniqueCC $.CCID "r-game"}}
 				{{$winners := sdict}}
-				{{$land := randInt 37}}
+				{{$land := randInt 37 | str}}
 				{{range $k, $v := $game}}
 					{{$pay := 0}}
 					{{range $v.bets}}
-						{{if eq (toInt .space) $land}}
+						{{if eq .space $land}}
 							{{$pay = add (mult .bet 35) $pay}}
 						{{else if (or (and (eq (str .space) "1-12") (in $d1 $land)) (and (eq (str .space) "13-24") (in $d2 $land)) (and (eq (str .space) "25-36") (in $d3 $land)) (and (eq (str .space) "1st") (in $c1 $land)) (and (eq (str .space) "2nd") (in $c2 $land)) (and (eq (str .space) "3rd") (in $c3 $land)))}}
 							{{$pay = add (mult .bet 3) $pay}}
