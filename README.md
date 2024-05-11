@@ -34,8 +34,9 @@
 
 ## Welcome message
 Welcome to my YAGPDB CC repository! 
-This repository includes custom commands that I have made or that I am making 
-As you can see, a lot of effort has gone into these 
+This repository hosts the largest made economy system for the YAGPDB.xyz custom command system.
+The economy system has been worked on for the past 2-3 years and has taken a lot of work to get it to the current state.
+As you can see, a lot of effort has gone into these regardless as to if they are used, they are still incredibly fun to make
 I appreciate every fork and star and those who use my commands!
 
 
