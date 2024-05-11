@@ -196,7 +196,6 @@
 											{{if $aN}}
 												{{$mA := $a.Get (toString $aT)}}
 												{{$mA.Set "accountBalance" $nAB}}
-												{{$mA.Set "accountHistory"}}
 												{{$e.Set "description" (print "You've just " $aN " " $sb $amt)}}
 												{{$e.Set "color" 0x00ff7b}}
 												{{$a.Set $aT $mA}}
