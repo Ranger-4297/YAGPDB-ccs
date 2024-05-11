@@ -13,6 +13,8 @@
 
 {{/* Initiates variBles */}}
 {{$uID := .User.ID}}
+{{$oA := "\nAvailable options are `create`, `set`, `list`, `balance`, `withdraw`, `deposit`"}}
+{{$oB := "\nAvailable options are `withdrawlimit`, `whitelist`"}}
 
 {{/* Accounts */}}
 
@@ -21,8 +23,6 @@
 {{$e.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
 {{$e.Set "timestamp" currentTime}}
 {{$e.Set "color" 0xFF0000}}
-{{$oA := "\nAvailable options are `create`, `set`, `list`, `balance`, `withdraw`, `deposit`"}}
-{{$oB := "\nAvailable options are `withdrawlimit`, `whitelist`"}}
 {{with dbGet 0 "EconomySettings"}}
 	{{$sb := (sdict .Value).symbol}}
 	{{with $.CmdArgs}}
