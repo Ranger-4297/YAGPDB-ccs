@@ -12,7 +12,7 @@
 <img alt="GitHub" src="https://img.shields.io/github/license/Ranger-4297/YAGPDB-CCs">
 <img alt="GitHub issues" src="https://img.shields.io/github/issues/Ranger-4297/YAGPDB-CCs">
 <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/Ranger-4297/YAGPDB-CCs">
-<img alt="GitHub commits since latest release (by SemVer including pre-releases)" src="https://img.shields.io/github/commits-since/Ranger-4297/YAGPDB-CCs/V8.2">
+<img alt="GitHub commits since latest release (by SemVer including pre-releases)" src="https://img.shields.io/github/commits-since/Ranger-4297/YAGPDB-CCs/V8.5">
 </div>
 
 <hr />
