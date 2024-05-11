@@ -12,7 +12,7 @@
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variBles */}}
-{{$uID := .User.ID}}
+{{$uID := str .User.ID}}
 {{$oA := "\nAvailable options are `create`, `set`, `list`, `balance`, `withdraw`, `deposit`"}}
 {{$oB := "\nAvailable options are `withdrawlimit`, `whitelist`"}}
 
@@ -35,8 +35,8 @@
 					{{- $cAs = $cAs.Append $k -}}
 				{{end}}
 				{{if eq $o "create"}}
-					{{if not ($a.Get (toString $uID))}}
-						{{$a.Set (toString $uID) (sdict "accountSettings" (sdict "whitelistedUsers" (cslice) "withdrawLimit" 500) "accountBalance" 500)}}
+					{{if not ($a.Get $uID)}}
+						{{$a.Set $uID (sdict "accountSettings" (sdict "whitelistedUsers" (cslice) "withdrawLimit" 500) "accountBalance" 500)}}
 						{{dbSet 0 "accounts" $a}}
 						{{$e.Set "description" (print "Account created")}}
 						{{$e.Set "color" 0x00ff7b}}
@@ -44,8 +44,8 @@
 						{{$e.Set "description" (print "You already have an account")}}
 					{{end}}
 				{{else if eq $o "delete"}}
-					{{if ($a.Get (toString $uID))}}
-						{{$a.Del (toString $uID)}}
+					{{if ($a.Get $uID)}}
+						{{$a.Del $uID}}
 						{{dbSet 0 "accounts" $a}}
 						{{$e.Set "description" (print "Account deleted")}}
 						{{$e.Set "color" 0x00ff7b}}
@@ -54,7 +54,7 @@
 					{{end}}
 				{{else if eq $o "set"}}
 					{{$ct := false}}
-					{{if $a.Get (toString $uID)}}
+					{{if $a.Get $uID}}
 						{{if gt (len $.CmdArgs) 1}}
 							{{$o = (lower (toString (index $.CmdArgs 1)))}}
 							{{$cA := sdict}}
@@ -63,17 +63,17 @@
 								{{if gt (len $.CmdArgs) 2}}
 									{{if eq (index $.CmdArgs 2) "reset"}}
 										{{$ct = true}}
-										{{$cA = $a.Get (toString $uID)}}
+										{{$cA = $a.Get $uID}}
 										{{$aS = $cA.Get "accountSettings"}}
 										{{$aS.Set "whitelistedUsers" cslice}}
 										{{$cA.Set "accountSettings" $aS}}
-										{{$a.Set (toString $uID) $cA}}
+										{{$a.Set $uID $cA}}
 										{{$e.Set "description" (print "Whitelist reset")}}
 									{{else}}
 										{{$ID := (joinStr " " (slice $.CmdArgs 2))}}
 										{{$nW := cslice}}
 										{{range (reFindAll `\d{17,19}` $ID)}}
-											{{- if not (eq (toInt .) $uID) -}}
+											{{- if not (eq (toInt .) (toInt $uID)) -}}
 												{{- $nW = $nW.Append .}}
 											{{else}}
 												{{$e.Set "description" (print "You cannot add yourself to the whitelist")}}
@@ -81,12 +81,12 @@
 										{{- end}}
 										{{if $nW}}
 											{{$ct = true}}
-											{{$cA = $a.Get (toString $uID)}}
+											{{$cA = $a.Get $uID}}
 											{{$aS = $cA.Get "accountSettings"}}
 											{{$aW := $aS.Get "whitelistedUsers"}}
 											{{$aS.Set "whitelistedUsers" ($aW.AppendSlice $nW)}}
 											{{$cA.Set "accountSettings" $aS}}
-											{{$a.Set (toString $uID) $cA}}
+											{{$a.Set $uID $cA}}
 											{{$e.Set "description" (print "User(s) now added to whitelist")}}
 										{{else}}
 											{{$e.Set "description" (print "No user(s) provided")}}
@@ -99,12 +99,12 @@
 								{{if gt (len $.CmdArgs) 2}}
 									{{if (ge (toInt (index $.CmdArgs 2)) 0)}}
 										{{$ct = true}}
-										{{$cA = $a.Get (toString $uID)}}
+										{{$cA = $a.Get $uID}}
 										{{$aS = $cA.Get "accountSettings"}}
 										{{$aS.Set "withdrawLimit" (index $.CmdArgs 2)}}
 										{{$e.Set "description" (print "New withdraw limit added")}}
 										{{$cA.Set "accountSettings" $aS}}
-										{{$a.Set (toString $uID) $cA}}
+										{{$a.Set $uID $cA}}
 									{{else}}
 										{{$e.Set "description" (print "Invalid amount provided")}}
 									{{end}}
@@ -126,12 +126,12 @@
 					{{end}}
 				{{else if eq $o "list"}}
 					{{$aL := cslice}}
-					{{if $a.Get (toString $uID)}}
+					{{if $a.Get $uID}}
 						{{$aL = $aL.Append $uID}}
 					{{end}}
 					{{range $cAs}}
 						{{range (($a.Get .).accountSettings).whitelistedUsers}}
-							{{- if in . (toString $uID) -}}
+							{{- if in . $uID -}}
 								{{- $aL = $aL.Append . -}}
 							{{end}}
 						{{end}}
@@ -152,22 +152,22 @@
 						{{if (toInt $aT)}}
 							{{if in $cAs (toString $aT)}}
 								{{$ct := false}}
-								{{if $a.Get (toString $uID)}}
+								{{if $a.Get $uID}}
 									{{- $ct = true -}}
 								{{end}}
 								{{range (($a.Get (toString $aT)).accountSettings).whitelistedUsers}}
-									{{- if in . (toString $uID) -}}
+									{{- if in . $uID -}}
 										{{- $ct = true -}}
 									{{end}}
 								{{end}}
-								{{$aB := ($a.Get (toString $aT)).accountBalance}}
+								{{$aB := toInt ($a.Get (toString $aT)).accountBalance}}
 								{{if and ((reFind `bal(ance)?` $o)) $ct}}
 									{{$e.Set "description" (print "The account `" $aT "` has a balance of " $sb (humanizeThousands $aB))}}
 									{{$e.Set "color" 0x00ff7b}}
 								{{else if and ((reFind `with(draw)?|dep(osit)?` $o)) $ct}}
 									{{if gt (len $.CmdArgs) 2}}
 										{{$amt := (index $.CmdArgs 2)}}
-										{{$lm := (toInt ($a.Get (toString $aT)).accountSettings.withdrawLimit)}}
+										{{$lm := ($a.Get (toString $aT)).accountSettings.withdrawLimit}}
 										{{if gt (toInt $amt) 0}}
 											{{$amt = toInt $amt}}
 											{{$c := or (dbGet $uID "cash").Value 0 | toInt}}
@@ -176,7 +176,7 @@
 											{{$aR := ""}}
 											{{if eq $o "with" "withdraw"}}
 												{{$aR = "the account has"}}
-												{{if and (gt $amt 0) (le $amt (toInt $aB))}}
+												{{if and (gt $amt 0) (le $amt $aB)}}
 													{{if le $amt $lm}}
 														{{$aN = "withdrawn"}}
 														{{$nAB = sub $aB $amt}}
@@ -196,6 +196,7 @@
 											{{if $aN}}
 												{{$mA := $a.Get (toString $aT)}}
 												{{$mA.Set "accountBalance" $nAB}}
+												{{$mA.Set "accountHistory"}}
 												{{$e.Set "description" (print "You've just " $aN " " $sb $amt)}}
 												{{$e.Set "color" 0x00ff7b}}
 												{{$a.Set $aT $mA}}
