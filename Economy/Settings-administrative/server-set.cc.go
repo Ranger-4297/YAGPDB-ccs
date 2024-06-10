@@ -13,156 +13,127 @@
 {{/* Only edit below if you know what you're doing (: rawr */}}
 
 {{/* Initiates variables */}}
-{{$sC := 0x00ff7b}}
+{{$successColor := 0x00ff7b}}
+{{$errorColor := 0xFF0000}}
 
 {{/* server set */}}
 
 {{/* Response */}}
-{{$msg := sdict}}
-{{$msg.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$msg.Set "timestamp" currentTime}}
-{{$msg.Set "color" 0xFF0000}}
-{{$db := (dbGet 0 "EconomySettings").Value}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
-{{if or (in $perms "Administrator") (in $perms "ManageServer")}}
-	{{$syntax := (print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`, `responses`\nTo set it with the default settings `" $.Cmd " default`")}}
-	{{with .CmdArgs}}
-		{{if index $.CmdArgs 0}}
-			{{$setting := (index $.CmdArgs 0) | lower}}
-			{{$unable := (print "You're unable to set `" $setting "` to this value, check that you used a valid number above 1")}}
-			{{if eq $setting "default"}}
-				{{$msg.Set "description" (print "Set the `EconomySettings` to default values")}}
-				{{$msg.Set "color" $sC}}
-				{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "betMax" 5000 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600 "enable-responses" false "responses" (sdict "work" cslice "crime" cslice))}}
-				{{dbSet 0 "store" (sdict "items" sdict)}}
-				{{dbSet 0 "russianRoulette" sdict}}
-				{{dbSet 0 "bank" sdict}}
-				{{dbSet 0 "roulette" (sdict "game" sdict "storage" sdict)}}
-				{{dbSet 0 "accounts"}}
-			{{else}}
-				{{with (dbGet 0 "EconomySettings")}}
-					{{$a := sdict .Value}}
-					{{$symbol := $a.symbol}}
-					{{$nv := (print "No or invalid `value` argument passed.")}}
-					{{if eq $setting "min" "max" "betmax"}}
-						{{$smax := $a.max}}
-						{{$smin := $a.min}}
-						{{if gt (len $.CmdArgs) 1}}
-							{{$val := (index $.CmdArgs 1)}}
-							{{$ct := false}}
-							{{$desc := ""}}
-							{{if toInt $val}}
-								{{if gt (toInt $val) 0}}
-									{{if and (eq $setting "max") (lt (toInt $val) (toInt $smin))}}
-										{{$desc = (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" (humanizeThousands $smin) "`")}}
-									{{else if and (eq $setting "min") (gt (toInt $val) (toInt $smax))}}
-										{{$desc = (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" (humanizeThousands $smax) "`")}}
-									{{else}}
-										{{$ct = true}}
-									{{end}}
-								{{else}}
-									{{$desc = $unable}}
-								{{end}}
-							{{else if and (eq $setting "betmax") (eq (toInt $val) 0)}}
-								{{$ct = true}}
-							{{else}}
-								{{$desc = $unable}}
-							{{end}}
-							{{if $ct}}
-								{{$msg.Set "description" (print "You set `" $setting "` to " $symbol $val)}}
-								{{$msg.Set "color" $sC}}
-								{{if eq $setting "betmax"}}
-									{{$setting = "betMax"}}
-								{{end}}
-								{{$db.Set $setting $val}}
-								{{dbSet 0 "EconomySettings" $db}}
-							{{else}}
-								{{$msg.Set "description" $desc}}
-							{{end}}
-						{{else}}
-							{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
-						{{end}}
-					{{else if eq $setting "startbalance"}}
-						{{$oldStartBalance := $a.startBalance}}
-						{{if gt (len $.CmdArgs) 1}}
-							{{$startBalance := (index $.CmdArgs 1)}}
-							{{if (toInt $startBalance)}}
-								{{if gt (toInt $startBalance) 0}}
-								{{$msg.Set "description" (print "You set `" $setting "` to " $symbol (humanizeThousands $startBalance) " from " (humanizeThousands $oldStartBalance))}}
-								{{$msg.Set "color" $sC}}
-								{{$db.Set "startBalance" $startBalance}}
-								{{dbSet 0 "EconomySettings" $db}}
-								{{else}}
-									{{$msg.Set "description" $unable}}
-								{{end}}
-							{{else}}
-								{{$msg.Set "description" $unable}}
-							{{end}}
-						{{else}}
-							{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Int>`")}}
-						{{end}}
-					{{else if eq $setting "symbol"}}
-						{{if gt (len $.CmdArgs) 1}}
-							{{$symbol = (index $.CmdArgs 1)}}
-							{{$msg.Set "description" (print "You set the server currency symbol to " $symbol)}}
-							{{$msg.Set "color" $sC}}
-							{{$db.Set "symbol" $symbol}}
-							{{dbSet 0 "EconomySettings" $db}}
-						{{else}}
-							{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value>`")}}
-						{{end}}
-					{{else if eq $setting "responses"}}
-						{{if gt (len $.CmdArgs) 1}}
-							{{$value := (index $.CmdArgs 1) | lower}}
-							{{if eq $value "yes" "enable" "enabled" "no" "disable" "disabled"}}
-								{{$status := ""}}
-								{{if eq $value "yes" "enable" "enabled"}}
-									{{$status = "enabled"}}
-									{{$value = true}}
-								{{else}}
-									{{$status = "disabled"}}
-									{{$value = false}}
-								{{end}}
-								{{$msg.Set "description" (print "You " $status " custom responses")}}
-								{{$msg.Set "color" $sC}}
-								{{$db.Set "enable-responses" $value}}
-								{{dbSet 0 "EconomySettings" $db}}
-							{{else}}
-								{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value>`")}}
-							{{end}}
-						{{else}}
-							{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value>`")}}
-						{{end}}
-					{{else if eq $setting "workcd" "crimecd" "robcd" "incomecd"}}
-						{{$cdType := reReplace "cd" $setting ""}}
-						{{if gt (len $.CmdArgs) 1}}
-							{{$dr := (index $.CmdArgs 1)}}
-							{{if toDuration $dr}}
-								{{$dr = toDuration $dr}}
-								{{$msg.Set "description" (print "Sucessfully set the `" $cdType "Cooldown` to `" (humanizeDurationSeconds $dr) "`")}}
-								{{$msg.Set "color" $sC}}
-								{{$dr = $dr.Seconds}}
-								{{$crCD := (print $cdType "Cooldown")}}
-								{{$db.Set $crCD $dr}}
-								{{dbSet 0 "EconomySettings" $db}}
-							{{else}}
-								{{$msg.Set "description" $unable}}
-							{{end}}
-						{{else}}
-							{{$msg.Set "description" (print $nv "\nSyntax is: `" $.Cmd " " $setting " <Value:Duration>`")}}
-						{{end}}
-					{{else}}
-						{{$msg.Set "description" (print "No valid setting argument passed.\nSyntax is: `" $.Cmd " <Setting> <Value/>`" $syntax)}}
-					{{end}}
-				{{else}}
-					{{$msg.Set "description" (print "No database found.\nPlease set it up with the default values using `" $.Cmd " default`")}}
-				{{end}}
-			{{end}}
-		{{end}}
-	{{else}}
-		{{$msg.Set "description" (print "No setting argument passed.\nSyntax is: `" $.Cmd " <Setting> <Value>`" $syntax)}}
-	{{end}}
-{{else}}
-	{{$msg.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
+{{if not (or (in $perms "Administrator") (in $perms "ManageServer"))}}
+	{{$embed.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
-{{sendMessage nil (cembed $msg)}}
+{{$settings := (print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`, `responses`\nTo set it with the default settings `" .Cmd " default`")}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `Setting` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$setting := index .CmdArgs 0 | lower}}
+{{if eq $setting "default"}}
+	{{$embed.Set "description" (print "Set the `EconomySettings` to default values")}}
+	{{$embed.Set "color" $successColor}}
+	{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "betMax" 5000 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600 "enable-responses" false "responses" (sdict "work" cslice "crime" cslice))}}
+	{{dbSet 0 "store" (sdict "items" sdict)}}
+	{{dbSet 0 "russianRoulette" sdict}}
+	{{dbSet 0 "bank" sdict}}
+	{{dbSet 0 "roulette" (sdict "game" sdict "storage" sdict)}}
+	{{dbSet 0 "accounts" sdict}}
+{{else}}
+	{{if not (reFind `(work|crime|rob|income)cd|m(in|ax)|s(ymbol|tartBalance)|responses|betMax` $setting)}}
+		{{$embed.Set "description" (print "Invalid `Setting` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+	{{if not $economySettings}}
+		{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$symbol := $economySettings.symbol}}
+	{{if eq $setting "min" "max" "betmax" "startbalance"}}
+		{{$max := $economySettings.max}}
+		{{$min := $economySettings.min}}
+		{{if lt (len .CmdArgs) 2}}
+			{{$embed.Set "description" (print "No `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$val := index .CmdArgs 1}}
+		{{if and (not ($val := toInt $val)) (lt $val 1) }}
+			{{$embed.Set "description" (print "Invalid `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{if and (eq $setting "max") (lt (toInt $val) (toInt $min))}}
+			{{$embed.Set "description" (print "You cannot set `" $setting "` to a value below `min`\n`min` is set to `" (humanizeThousands $min) "`")}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{else if and (eq $setting "min") (gt (toInt $val) (toInt $max))}}
+			{{$embed.Set "description" (print "You cannot set `" $setting "` to a value above `max`\n`max` is set to `" (humanizeThousands $max) "`")}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$embed.Set "description" (print "You set `" $setting "` to " $symbol (humanizeThousands $val))}}
+		{{$embed.Set "color" $successColor}}
+		{{if eq $setting "betmax"}}{{$setting = "betMax"}}{{else if eq $setting "startbalance"}}{{$setting = "startBalance"}}{{end}}
+		{{$economySettings.Set $setting $val}}
+		{{dbSet 0 "EconomySettings" $economySettings}}
+	{{else if eq $setting "symbol"}}
+		{{if lt (len .CmdArgs) 2}}
+			{{$embed.Set "description" (print "No `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$symbol = index .CmdArgs 1}}
+		{{$embed.Set "description" (print "You set the server currency symbol to " $symbol)}}
+		{{$embed.Set "color" $successColor}}
+		{{$economySettings.Set "symbol" $symbol}}
+		{{dbSet 0 "EconomySettings" $economySettings}}
+	{{else if eq $setting "responses"}}
+		{{if lt (len .CmdArgs) 2}}
+			{{$embed.Set "description" (print "No `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$value := (index .CmdArgs 1) | lower}}
+		{{if not (eq $value "yes" "enable" "enabled" "no" "disable" "disabled")}}
+			{{$embed.Set "description" (print "Invalid `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$status := "enabled"}}{{$value = true}}
+		{{if not (eq $value "yes" "enable" "enabled")}}
+			{{$status = "disabled"}}
+			{{$value = false}}
+		{{end}}
+		{{$embed.Set "description" (print "You " $status " custom responses")}}
+		{{$embed.Set "color" $successColor}}
+		{{$economySettings.Set "enable-responses" $value}}
+		{{dbSet 0 "EconomySettings" $economySettings}}
+	{{else if eq $setting "workcd" "crimecd" "robcd" "incomecd"}}
+		{{$cdType := reReplace "cd" $setting ""}}
+		{{if lt (len .CmdArgs) 2}}
+			{{$embed.Set "description" (print "No `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$duration := (index .CmdArgs 1)}}
+		{{if not ($duration = toDuration $duration)}}
+			{{$embed.Set "description" (print "Invalid `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$embed.Set "description" (print "Sucessfully set the `" $cdType "Cooldown` to `" (humanizeDurationSeconds $duration) "`")}}
+		{{$embed.Set "color" $successColor}}
+		{{$duration = $duration.Seconds}}
+		{{$crCD := (print $cdType "Cooldown")}}
+		{{$economySettings.Set $crCD $duration}}
+		{{dbSet 0 "EconomySettings" $economySettings}}
+	{{end}}
+{{end}}
+{{sendMessage nil (cembed $embed)}}

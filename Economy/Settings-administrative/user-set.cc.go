@@ -21,53 +21,54 @@
 {{/* user Set */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
 {{$econData := or (dbGet $userID "userEconData").Value (sdict "settings" sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
-{{with (dbGet 0 "EconomySettings")}}
-	{{with $.CmdArgs}}
-		{{if index $.CmdArgs 0}}
-			{{$setting := (index $.CmdArgs 0) | lower}}
-			{{$settings := or $econData.settings (sdict "balance" "yes" "trading" "yes" "inventory" "yes" "leaderboard" "yes")}}
-			{{if eq $setting "default"}}
-				{{$embed.Set "description" (print "Set your account to default values")}}
-				{{$embed.Set "color" $successColor}}
-				{{$econData.Set "settings" $settings}}
-			{{else if eq $setting "inventory" "leaderboard" "trading" "balance"}}
-				{{if gt (len $.CmdArgs) 1}}
-					{{$value := (index $.CmdArgs 1)}}
-					{{if eq $value "yes" "no"}}
-						{{$settings.Set $setting $value}}
-						{{$econData.Set "settings" $settings}}
-						{{$embed.Set "description" (print "`" $setting "` set to `" $value "`")}}
-						{{$embed.Set "color" $successColor}}
-					{{else}}
-						{{$embed.Set "description" (print "Invalid value argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:Yes/No>`")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "No value argument passed.\nSyntax is: `" $.Cmd " " $setting " <Value:Yes/No>`")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{else if eq $setting "view"}}
-				{{$lb := $settings.leaderboard}}
-				{{$trading := $settings.trading}}
-				{{$inventory := $settings.inventory}}
-				{{$embed.Set "description" (print "Your user settings can be found below:\n\n**Leaderboard:** `" $lb "`\n**Trading:** `" $trading "`\n**Inventory:** `" $inventory "`")}}
-				{{$embed.Set "color" $successColor}}
-			{{else}}
-				{{$embed.Set "description" (print "Invalid setting argument passed.\nSyntax is: `" $.Cmd " <Setting> <Value:Yes/No>`")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
-			{{dbSet $userID "userEconData" $econData}}
-		{{end}}
-	{{else}}
-		{{$embed.Set "description" (print "No setting argument passed.\nSyntax is: `" $.Cmd " <Setting> <Value:Yes/No>`")}}
-		{{$embed.Set "color" $errorColor}}
-	{{end}}
-{{else}}
-	{{$embed.Set "description" (print "No economy database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-	{{$embed.Set "color" $errorColor}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
+{{$settings := (print "\nAvailable settings: `balance`, `trading`, `inventory`, `leaderboard`\nTo set it with the default settings `" .Cmd " default`")}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `Setting` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value:Yes/No>`" $settings)}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$setting := index .CmdArgs 0 | lower}}
+{{if eq $setting "default"}}
+	{{$embed.Set "description" (print "Set your account to default values")}}
+	{{$embed.Set "color" $successColor}}
+	{{$econData.Set "settings" (sdict "balance" "yes" "trading" "yes" "inventory" "yes" "leaderboard" "yes")}}
+{{else}}
+	{{if not (eq $setting "inventory" "leaderboard" "trading" "balance" "view")}}
+		{{$embed.Set "description" (print "Invalid `Setting` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value:Yes/No>`" $settings)}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{if not (eq $setting "view")}}
+		{{if lt (len .CmdArgs) 2}}
+			{{$embed.Set "description" (print "No `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value:Yes/No>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$value := index .CmdArgs 1 | lower}}
+		{{if not (eq $value "yes" "no")}}
+			{{$embed.Set "description" (print "Invalid `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value:Yes/No>`" $settings)}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$econData.settings.Set $setting $value}}
+		{{$embed.Set "description" (print "`" $setting "` set to `" $value "`")}}
+		{{$embed.Set "color" $successColor}}
+	{{else}}
+		{{$lb := or $econData.settings.leaderboard "yes"}}
+		{{$cash := or $econData.settings.balance "yes"}}
+		{{$trading := or $econData.settings.trading "yes"}}
+		{{$inventory := or $econData.settings.inventory "yes"}}
+		{{$embed.Set "description" (print "Your user settings can be found below:\n\n**Leaderboard:** `" $lb "`\n**Balance:** `" $cash "`\n**Trading:** `" $trading "`\n**Inventory:** `" $inventory "`")}}
+		{{$embed.Set "color" $successColor}}
+	{{end}}
+{{end}}
+{{dbSet $userID "userEconData" $econData}}
 {{sendMessage nil (cembed $embed)}}
