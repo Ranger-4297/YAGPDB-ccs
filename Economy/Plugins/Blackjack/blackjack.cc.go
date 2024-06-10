@@ -39,7 +39,7 @@
 		{{- end -}}
 	{{end}}
 	{{if $embed.Author}}
-		{{$embed.Author.Set "Icon_URL" $embed.Author.IconURL}}
+		{{$embed.Author.Set "Icon_URL" (.User.AvatarURL "1024")}}
 	{{end}}
 	{{$embed.Set "description" (print "Loss: " $symbol $data.bet)}}
     {{$embed.Set "color" $errorColor}}
