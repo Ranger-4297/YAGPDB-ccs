@@ -32,14 +32,14 @@
 {{$betMax := $economySettings.betMax | toInt}}
 {{$incomeCooldown := $economySettings.incomeCooldown | toInt}}
 {{if not .CmdArgs}}
-    {{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+    {{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
 	{{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}
 {{$bal := toInt (dbGet $userID "cash").Value}}
 {{$bet := index .CmdArgs 0 | str | lower}}
 {{if not (or (toInt $bet) (eq $bet "all" "max"))}}
-    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
     {{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}
@@ -49,7 +49,7 @@
 	{{$bet = $betMax}}
 {{end}}
 {{if le ($bet = toInt $bet) 0}}
-    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
     {{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}
@@ -63,13 +63,13 @@
     {{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}
-{{$side := index .CmdArgs 1 | str | lower}}
-{{if not $side}}
-	{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
+{{if not (gt (len .CmdArgs) 1)}}
+	{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
 	{{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}
-{{if not (`\A(t(ails?)?|h(eads?)?)(\s+|\z)` $side)}}
+{{$side := index .CmdArgs 1 | str | lower}}
+{{if not (reFind `\A(t(ails?)?|h(eads?)?)(\s+|\z)` $side)}}
 	{{$embed.Set "description" (print "Invalid `Side` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Side:Heads/Tails>`")}}
 	{{sendMessage nil (cembed $embed)}}
     {{return}}
@@ -85,7 +85,7 @@
     {{return}}
 {{end}}
 {{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
-{{if and ($int := randInt 1 3) eq $int 1}}
+{{if and ($int := randInt 1 3) (eq $int 1)}}
 	{{$bal = add $bal $bet}}
 	{{$embed.Set "description" (print "You flipped " $side " and won " $symbol (humanizeThousands $bet))}}
 	{{$embed.Set "color" $successColor}}
