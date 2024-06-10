@@ -95,3 +95,4 @@
 {{dbSet $userID "cash" $bal}}
 {{dbSet $userID "userEconData" $econData}}
 {{dbSetExpire $userID "cockFightCooldown" "cooldown" $incomeCooldown}}
+{{sendMessage nil (cembed $embed)}}
