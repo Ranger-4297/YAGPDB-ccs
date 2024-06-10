@@ -21,91 +21,77 @@
 {{/* Cock fight */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
-{{with dbGet 0 "EconomySettings"}}
-	{{$a := sdict .Value}}
-	{{$symbol := $a.symbol}}
-	{{$betMax := $a.betMax | toInt}}
-	{{$incomeCooldown := $a.incomeCooldown | toInt}}
-	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
-	{{$econData := or (dbGet $userID "userEconData").Value (sdict "settings" sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0) "cfWinChance" 50)}}
-	{{$cfWC := or ($econData.Get "cfWinChance") 50}}
-	{{with $.CmdArgs}}
-		{{$bet := (index . 0)}}
-		{{$continue := false}}
-		{{if eq ($bet | toString) "all"}}
-			{{$bet = $bal}}
-		{{else if and $betMax (eq (toString $bet) "max")}}
-			{{$bet = $betMax}}
-		{{end}}
-		{{if $bet = (toInt $bet)}}
-			{{if gt $bet 0}}
-				{{if le $bet $bal}}
-					{{$continue = true}}
-				{{else}}
-					{{$embed.Set "description" (print "You can't bet more than you have!")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
-		{{else}}
-			{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
-			{{$embed.Set "color" $errorColor}}
-		{{end}}
-		{{if $continue}}
-			{{if $betMax}}
-				{{if le $bet $betMax}}
-					{{$continue = true}}
-				{{else}}
-					{{$continue = false}}
-					{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{end}}
-			{{if $continue}}
-				{{$inventory := $econData.inventory}}
-				{{if $inventory.Get "chicken"}}
-					{{if not ($cooldown := dbGet $userID "cockFightCooldown")}}
-						{{dbSetExpire $userID "cockFightCooldown" "cooldown" $incomeCooldown}}
-						{{$chance := randInt 1 101}}
-						{{if le $chance $cfWC}}
-							{{if not (eq $cfWC 70)}}
-								{{$cfWC = $cfWC | add 1}}
-							{{end}}
-							{{$bal = add $bal $bet}}
-							{{$embed.Set "description" (print "Your chicken won the fight and got you " $symbol $bet "!\nPlay again with `" $.Cmd " <Bet:Amount>`")}}
-							{{$embed.Set "color" $successColor}}
-						{{else}}
-							{{$cfWC = 50}}
-							{{$embed.Set "description" (print "Your chicken lost the fight, " $symbol $bet " and died :(\nBuy a new one to play again!")}}
-							{{$embed.Set "color" $errorColor}}
-							{{$bal = sub $bal $bet}}
-							{{$inventory.Del "chicken"}}
-							{{$econData.Set "inventory" $inventory}}
-						{{end}}
-					{{else}}
-						{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "You can't bet without a chicken! Buy one from the shop with `" $prefix "buy-item chicken`")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{end}}
-		{{end}}
-	{{else}}
-		{{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount>`")}}
-		{{$embed.Set "color" $errorColor}}
-	{{end}}
-	{{dbSet $userID "cash" $bal}}
-	{{$econData.Set "cfWinChance" $cfWC}}
-	{{dbSet $userID "userEconData" $econData}}
-{{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-	{{$embed.Set "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
-{{sendMessage nil (cembed $embed)}}
+{{$symbol := $economySettings.symbol}}
+{{$betMax := $economySettings.betMax | toInt}}
+{{$incomeCooldown := $economySettings.incomeCooldown | toInt}}
+{{if not .CmdArgs}}
+    {{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{$bal := toInt (dbGet $userID "cash").Value}}
+{{$bet := index .CmdArgs 0 | str | lower}}
+{{if not (or (toInt $bet) (eq $bet "all" "max"))}}
+    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+    {{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if eq $bet "all"}}
+	{{$bet = $bal}}
+{{else if eq $bet "max"}}
+	{{$bet = $betMax}}
+{{end}}
+{{if le ($bet = toInt $bet) 0}}
+    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+    {{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if gt $bet $bal}}
+    {{$embed.Set "description" (print "You can't bet more than you have!")}}
+    {{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if gt $bet $betMax}}
+    {{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+    {{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{$econData := or (dbGet $userID "userEconData").Value (sdict "settings" sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0) "cfWinChance" 50)}}
+{{$inventory := $econData.inventory}}
+{{if not ($inventory.Get "chicken")}}
+	{{$embed.Set "description" (print "You can't bet without a chicken! Buy one from the shop with `" $prefix "buy-item chicken`")}}
+	{{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if ($cooldown := dbGet $userID "cockFightCooldown")}}
+	{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+	{{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{$cfWC := or ($econData.Get "cfWinChance") 50}}
+{{$chance := randInt 1 101}}
+{{if le $chance $cfWC}}
+	{{if not (eq $cfWC 70)}}
+		{{$cfWC = $cfWC | add 1}}
+	{{end}}
+	{{$bal = add $bal $bet}}
+	{{$embed.Set "description" (print "Your chicken won the fight and got you " $symbol $bet "!\nPlay again with `" $.Cmd " <Bet:Amount>`")}}
+	{{$embed.Set "color" $successColor}}
+{{else}}
+	{{$cfWC = 50}}
+	{{$embed.Set "description" (print "Your chicken lost the fight, " $symbol $bet " and died :(\nBuy a new one to play again!")}}
+	{{$bal = sub $bal $bet}}
+	{{$inventory.Del "chicken"}}
+	{{$econData.Set "inventory" $inventory}}
+{{end}}
+{{$econData.Set "cfWinChance" $cfWC}}
+{{dbSet $userID "cash" $bal}}
+{{dbSet $userID "userEconData" $econData}}
+{{dbSetExpire $userID "cockFightCooldown" "cooldown" $incomeCooldown}}
