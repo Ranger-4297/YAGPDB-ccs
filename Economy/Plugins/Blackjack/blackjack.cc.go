@@ -147,7 +147,7 @@
     {{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $cardSelection.player.cardPrint "\nValue: Blackjack") "inline" true) (sdict "name" "Dealers hand" "value" (print $cardSelection.dealer.cardPrintReal "\nValue: " $dealerValue) "inline" true))}}
     {{sendMessage nil (cembed $embed)}}
     {{dbSet $userID "cash" $bal}}
-    {{return}}a
+    {{return}}
 {{else}}
     {{$desc := print "`hit` - take another card\n`stand` - end your turn"}}
     {{$components = cslice (cbutton "label" "Hit" "custom_id" "bj_hit" "style" "primary") (cbutton "label" "Stand" "custom_id" "bj_stand" "style" "success")}}
