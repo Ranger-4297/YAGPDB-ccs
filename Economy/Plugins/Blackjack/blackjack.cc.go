@@ -131,7 +131,7 @@
 {{$cardOne := index (split (index $cardSelection.player.cards 0) "") 0}}
 {{$cardTwo := index (split (index $cardSelection.player.cards 1) "") 0}}
 {{$components := cslice}}
-{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" $cardSelection.player.cardPrint "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "Dealers hand" "value" $cardSelection.dealer.cardPrint "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " $cardSelection.player.cardValue ) "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " $cardSelection.dealer.cardValue ) "inline" true))}}
+{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $cardSelection.player.cardPrint "\nValue: " $cardSelection.player.cardValue) "inline" true) (sdict "name" "Dealers hand" "value" (print $cardSelection.dealer.cardPrint "\nValue: " $cardSelection.dealer.cardValue) "inline" true))}}
 {{$dealerValue := $cardSelection.dealer.cardValueReal}}
 {{if eq $cardSelection.player.cardValue 21}}
     {{if eq $dealerValue 21}}
@@ -144,7 +144,7 @@
         {{$embed.Set "color" $successColor}}
         {{$bal = add $bal (mult $bet 2.5)}}
     {{end}}
-    {{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" $cardSelection.player.cardPrint "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "Dealers hand" "value" $cardSelection.dealer.cardPrintReal "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: Blackjack") "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " $dealerValue ) "inline" true))}}
+    {{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $cardSelection.player.cardPrint "\nValue: Blackjack") "inline" true) (sdict "name" "Dealers hand" "value" (print $cardSelection.dealer.cardPrintReal "\nValue: " $dealerValue) "inline" true))}}
     {{sendMessage nil (cembed $embed)}}
     {{dbSet $userID "cash" $bal}}
     {{return}}a

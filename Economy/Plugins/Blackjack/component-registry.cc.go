@@ -59,8 +59,7 @@
 	{{$embed := structToSdict (index (getMessage nil .data.embed).Embeds 0)}}{{range $k, $v := $embed}}{{- if eq (kindOf $v true) "struct"}}{{- $embed.Set $k (structToSdict $v)}}{{- end -}}{{end}}
 	{{$playerPrintCards := joinStr " " .data.player.cardPrint}}{{$playerValue := .data.player.cardValue}}
 	{{$dealerPrintCards := joinStr " " .data.dealer.cardPrint}}{{$dealerValue := .data.dealer.cardValue}}
-	{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" $playerPrintCards "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "Dealers hand" "value" $dealerPrintCards "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " $playerValue) "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " (reReplace `21` (str $dealerValue) "Blackjack")) "inline" true))}}
-	{{if or (and (lt $playerValue 21) (gt $dealerValue $playerValue) (lt $dealerValue 22))}}
+	{{if or (and (eq (len .data.dealer.cards) 3) (eq $dealerValue 21)) (and (lt $playerValue 21) (gt $dealerValue $playerValue) (lt $dealerValue 22))}}
 		{{$embed.Set "description" (print "Result: Loss -" .symbol .data.bet)}}
 		{{$embed.Set "color" 0xFF0000}}
 	{{else if gt $playerValue 21}}
@@ -74,6 +73,7 @@
 		{{$embed.Set "color" 0xA25D2D}}
 		{{dbSet .data.user "cash" (add .bal .data.bet)}}
 	{{end}}
+	{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $playerPrintCards "\nValue: " $playerValue) "inline" true) (sdict "name" "Dealers hand" "value" (print $dealerPrintCards "\nValue: " (reReplace `21` (str $dealerValue) "Blackjack")) "inline" true))}}
 	{{updateMessage (complexMessageEdit "embed" (cembed $embed))}}
 	{{cancelScheduledUniqueCC .data.ccID "cancel"}}{{dbDel .data.user "bj"}}
 	{{return}}
@@ -82,15 +82,15 @@
 	{{$hit := execTemplate "hit" (sdict "data" $data "user" "player")}}
 	{{$player := $data.player}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$player = $hit}}{{$data.Set "player" $player}}
 	{{$playerPrintCards := joinStr " " $data.player.cardPrint}}
-	{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" $playerPrintCards "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "Dealers hand" "value" $data.dealer.cardPrint "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " $data.player.cardValue) "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " $data.dealer.cardValue ) "inline" true))}}
+	{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $playerPrintCards "\nValue: " $data.player.cardValue) "inline" true) (sdict "name" "Dealers hand" "value" (print $data.dealer.cardPrint "\nValue: " $data.dealer.cardValue) "inline" true))}}
 	{{if eq $hit.cardValue 21}}
 		{{$dealer := $data.dealer}}
 		{{$value := $dealer.cardValue | toInt}}
 		{{$data.dealer.Set "cardValue" $data.dealer.cardValueReal}}{{$data.dealer.Del "cardValueReal"}}{{$data.dealer.Set "cardPrint" $data.dealer.cardPrintReal}}{{$data.dealer.Del "cardPrintReal"}}
-		{{while lt $value 17}}{{$hit = execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = add $value $hit.cardValue}}{{end}}
+		{{while le $value 17}}{{$hit = execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = add $value $hit.cardValue}}{{end}}
 		{{$dealerPrintCards := joinStr " " $data.dealer.cardPrint}}
 		{{$embed.Set "description" (print "Result: Win " $symbol $data.bet)}}
-		{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" $playerPrintCards "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "Dealers hand" "value" $dealerPrintCards "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " $data.player.cardValue) "inline" true) (sdict "name" "⠀⠀" "value" "⠀⠀" "inline" true) (sdict "name" "⠀⠀" "value" (print "Value: " $data.dealer.cardValue ) "inline" true))}}
+		{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $playerPrintCards "\nValue: " $data.player.cardValue) "inline" true) (sdict "name" "Dealers hand" "value" (print $dealerPrintCards "\nValue: " $data.dealer.cardValue) "inline" true))}}
 		{{updateMessage (complexMessageEdit "embed" (cembed $embed))}}
 		{{cancelScheduledUniqueCC $data.ccID "cancel"}}{{dbDel $userID "bj"}}{{dbSet $data.user "cash" (add .bal (mult .data.bet 2))}}
 		{{return}}
@@ -108,7 +108,7 @@
 	{{$data.dealer.Set "cardValue" $data.dealer.cardValueReal}}{{$data.dealer.Del "cardValueReal"}}{{$data.dealer.Set "cardPrint" $data.dealer.cardPrintReal}}{{$data.dealer.Del "cardPrintReal"}}
 	{{$dealer := $data.dealer}}
 	{{$value := $dealer.cardValue | toInt}}
-	{{while lt $value 17}}{{$hit := execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = add $value $hit.cardValue}}{{end}}
+	{{while le $value 17}}{{$hit := execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = add $value $hit.cardValue}}{{end}}
 	{{template "standCondition" (sdict "data" $data "symbol" $symbol "bal" $bal)}}
 {{else if eq .StrippedID "double"}}
 	{{$data.Set "bet" (mult $data.bet 2)}}
