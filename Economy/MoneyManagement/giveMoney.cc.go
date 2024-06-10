@@ -21,62 +21,54 @@
 {{/* Give money */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
-{{with (dbGet 0 "EconomySettings")}}
-	{{$a := sdict .Value}}
-	{{$symbol := $a.symbol}}
-	{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
-	{{with $.CmdArgs}}
-		{{if index . 0}}
-			{{if index . 0 | getMember}}
-				{{$user := getMember (index . 0)}}
-				{{$receivingUser := $user.User.ID}}
-				{{if eq $receivingUser $.User.ID}}
-					{{$embed.Set "description" (print "You cannot give money to yourself.")}}
-					{{$embed.Set "color" $errorColor}}
-				{{else}}
-					{{if gt (len $.CmdArgs) 1}}
-						{{$amount := (index $.CmdArgs 1)}}
-						{{if (toInt $amount)}}
-							{{if gt (toInt $amount) 0}}
-								{{$rCash := or (dbGet $receivingUser "cash").Value 0 | toInt}}
-								{{if gt (toInt $amount) (toInt $cash)}}
-									{{$embed.Set "description" (print "You cannot give more than you have.")}}
-									{{$embed.Set "color" $errorColor}}
-								{{else}}
-									{{$rCash = add $rCash $amount}}
-									{{$cash = sub $cash $amount}}
-									{{$embed.Set "description" (print "You gave " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">\nThey now have " $symbol (humanizeThousands $rCash) " in cash!")}}
-									{{$embed.Set "color" $successColor}}
-								{{end}}
-								{{dbSet $receivingUser "cash" $rCash}}
-							{{else}}
-								{{$embed.Set "description" (print "You're unable to give this value, check that you used a valid number above 1")}}
-								{{$embed.Set "color" $errorColor}}
-							{{end}}
-						{{else}}
-							{{$embed.Set "description" (print "Invalid `Amount` argument passed.\nCheck that you used a valid number above 1")}}
-							{{$embed.Set "color" $errorColor}}
-						{{end}}
-					{{else}}
-						{{$embed.Set "description" (print "No `Amount` argument passed.\nSyntax is: `" $.Cmd " <Member:Mention/ID> <Amount:Amount>`")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
-				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "Invalid `user` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Amount:Amount>`")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
-		{{end}}
-	{{else}}
-		{{$embed.Set "description" (print "No `User` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Amount:Amount>`")}}
-		{{$embed.Set "color" $errorColor}}
-	{{end}}
-	{{dbSet $userID "cash" $cash}}
-{{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-	{{$embed.Set "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
+{{$symbol := $economySettings.symbol}}
+{{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `User` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$user := index .CmdArgs 0}}
+{{if not (getMember $user)}}
+	{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$receivingUser := (getMember $user).User.ID}}
+{{if eq $receivingUser $userID}}
+	{{$embed.Set "description" (print "You can't rob yourself.")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if not (gt (len .CmdArgs) 1)}}
+	{{$embed.Set "description" (print "No `Amount` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$amount := index .CmdArgs 1}}
+{{if not (or (toInt $amount) (eq $amount "all"))}}
+	{{$embed.Set "description" (print "Invalid `Amount` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if eq $amount "all"}}{{$amount = $cash}}{{else}}{{$amount = toInt $amount}}{{end}}
+{{if gt $amount $cash}}
+	{{$embed.Set "description" (print "You're unable to give more than you have on hand.\nYou currently have " $symbol (humanizeThousands $cash) " on you.")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}	
+{{$embed.Set "description" (print "You gave " $symbol (humanizeThousands $amount) " to <@!" $receivingUser ">\nYou now have " $symbol (humanizeThousands $cash) " in cash!")}}
+{{$embed.Set "color" $successColor}}
+{{$receivingCash := or (dbGet $receivingUser "cash").Value 0 | toInt}}
+{{$receivingCash = add $receivingCash $amount}}
+{{$cash = sub $cash $amount}}
+{{dbSet $receivingUser "cash" $receivingCash}}
+{{dbSet $userID "cash" $cash}}
 {{sendMessage nil (cembed $embed)}}

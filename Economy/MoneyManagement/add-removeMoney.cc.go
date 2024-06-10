@@ -20,87 +20,75 @@
 {{/* Add, remove money */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
-{{if or (in $perms "Administrator") (in $perms "ManageServer")}}
-	{{with (dbGet 0 "EconomySettings")}}
-		{{$a := sdict .Value}}
-		{{$symbol := $a.symbol}}
-		{{with $.CmdArgs}}
-			{{if index . 0}}
-				{{if index . 0 | getMember}}
-					{{$user := getMember (index . 0)}}
-					{{$user = $user.User.ID}}
-					{{if gt (len $.CmdArgs) 1}}
-						{{$moneyDestination := (lower (index . 1))}}
-						{{if eq $moneyDestination "cash" "bank"}}
-							{{$bankDB := or (dbGet 0 "bank").Value sdict}}
-							{{$bankUser := or ($bankDB.Get (toString $user)) 0 | toInt}}
-							{{$cash := or (dbGet $user "cash").Value 0 | toInt}}
-							{{$balance := ""}}
-							{{if eq $moneyDestination "bank"}}
-								{{$balance = $bankUser}}
-							{{else}}
-								{{$balance = $cash}}
-							{{end}}
-							{{if gt (len $.CmdArgs) 2}}
-								{{$amount := (index $.CmdArgs 2)}}
-								{{if (toInt $amount)}}
-									{{if gt (toInt $amount) 0}}
-										{{$opt := ""}}
-										{{if (reFind `remove-?money|dec(rease)?-?money` $.Cmd)}}
-											{{$opt = "removed"}}
-											{{$balance = $amount | sub $balance}}
-										{{else if (reFind `add-?money|inc(crease)?-?money` $.Cmd)}}
-											{{$opt = "added"}}
-											{{$balance = $balance | add $amount}}
-										{{end}}
-										{{$embed.Set "description" (print "You " $opt " " $symbol (humanizeThousands $amount) " to <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $balance) " in their " $moneyDestination "!")}}
-										{{$embed.Set "color" $successColor}}
-										{{if eq $moneyDestination "bank"}}
-											{{$bankDB.Set (toString $user) $balance}}
-										{{else}}
-											{{$cash = $balance}}
-										{{end}}
-									{{else}}
-										{{$embed.Set "description" (print "You're unable to select this value, check that you used a valid number above 1")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else}}
-									{{$embed.Set "description" (print "You're unable to select this value, check that you used a valid number above 1")}}
-									{{$embed.Set "color" $errorColor}}
-								{{end}}
-							{{else}}
-								{{$embed.Set "description" (print "No `Amount` argument passed.\nSyntax is: `" $.Cmd " <Member:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
-								{{$embed.Set "color" $errorColor}}
-							{{end}}
-							{{dbSet 0 "bank" $bankDB}}
-							{{dbSet $user "cash" $cash}}
-						{{else}}
-							{{$embed.Set "description" (print "Invalid `Destination` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
-							{{$embed.Set "color" $errorColor}}
-						{{end}}
-					{{else}}
-						{{$embed.Set "description" (print "No `Destination` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{end}}
-		{{else}}
-			{{$embed.Set "description" (print "No `User` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
-			{{$embed.Set "color" $errorColor}}
-		{{end}}
-	{{else}}
-		{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-		{{$embed.Set "color" $errorColor}}
-	{{end}}
-{{else}}
+{{if not (or (in $perms "Administrator") (in $perms "ManageServer"))}}
 	{{$embed.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
-	{{$embed.Set "color" $errorColor}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$symbol := $economySettings.symbol}}
+{{$bankDB := or (dbGet 0 "bank").Value sdict}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$user := index .CmdArgs 0}}
+{{if not (getMember $user)}}
+	{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$user = (getMember $user).User.ID}}
+{{if not (gt (len .CmdArgs) 1)}}
+	{{$embed.Set "description" (print "No `Destination` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$moneyDestination := index .CmdArgs 1 | lower}}
+{{if not (eq $moneyDestination "cash" "bank")}}
+	{{$embed.Set "description" (print "Invalid `Destination` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if not (gt (len .CmdArgs) 2)}}
+	{{$embed.Set "description" (print "No `Amount` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$amount := index .CmdArgs 2}}
+{{if and (not (toInt $amount)) (lt (toInt $amount) 1)}}
+	{{$embed.Set "description" (print "Invalid `Amount` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$amount = toInt $amount}}
+{{$opt := ""}}
+{{$balance := ""}}
+{{$bankUser := or ($bankDB.Get (str $user)) 0 | toInt}}
+{{$cash := or (dbGet $user "cash").Value 0 | toInt}}
+{{if eq $moneyDestination "bank"}}{{$balance = $bankUser}}{{else}}{{$balance = $cash}}{{end}}
+{{if (reFind `remove-?money|dec(rease)?-?money` .Cmd)}}
+	{{$opt = "removed"}}
+	{{$balance = $amount | sub $balance}}
+{{else if (reFind `add-?money|inc(crease)?-?money` .Cmd)}}
+	{{$opt = "added"}}
+	{{$balance = $balance | add $amount}}
+{{end}}
+{{$embed.Set "description" (print "You " $opt " " $symbol (humanizeThousands $amount) " to <@!" $user ">'s " $moneyDestination "\nThey now have " $symbol (humanizeThousands $balance) " in their " $moneyDestination "!")}}
+{{$embed.Set "color" $successColor}}
+{{if eq $moneyDestination "bank"}}
+	{{$bankDB.Set (toString $user) $balance}}
+{{else}}
+	{{$cash = $balance}}
+{{end}}
+{{dbSet 0 "bank" $bankDB}}
+{{dbSet $user "cash" $cash}}
 {{sendMessage nil (cembed $embed)}}
