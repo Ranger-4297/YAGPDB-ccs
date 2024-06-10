@@ -65,7 +65,7 @@
     {{return}}
 {{end}}
 {{if eq $bet "all"}}{{$bet = $bal}}{{else if eq $bet "max"}}{{$bet = $betMax}}{{end}}
-{{if lt ($bet = toInt $bet) 0}}
+{{if le ($bet = toInt $bet) 0}}
     {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
     {{sendMessage nil (cembed $embed)}}
     {{return}}
