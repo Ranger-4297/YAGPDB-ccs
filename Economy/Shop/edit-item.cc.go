@@ -16,197 +16,177 @@
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
+{{$ex := or (and (reFind "a_" .Guild.Icon) "gif") "png"}}
+{{$icon := print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $ex "?size=1024"}}
 
 {{/* edits item */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" (print .Guild.Name " Store") "icon_url" $icon) "timestamp" currentTime "color" $errorColor}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
-{{if or (in $perms "Administrator") (in $perms "ManageServer")}}
-	{{with (dbGet 0 "EconomySettings")}}
-		{{$a := sdict .Value}}
-		{{$symbol := $a.symbol}}
-		{{with (dbGet 0 "store")}}
-			{{$store := sdict .Value}}
-			{{$items := sdict}}
-			{{$value := ""}}
-			{{if ($store.Get "items")}}
-				{{$items = $store.Get "items"}}
-				{{with $.CmdArgs}}
-					{{$name := (index . 0)}}
-					{{if $items.Get $name}}
-						{{$options := cslice "description" "role" "name" "price" "quantity" "expiry"}}
-						{{if gt (len $.CmdArgs) 1}}
-							{{$option := (index . 1) | lower}}
-							{{if in $options $option}}
-								{{$cont := 0}}
-								{{if eq $option "name"}}
-									{{if gt (len $.CmdArgs) 2}}
-										{{$value = (index . 2)}}
-										{{$items.Set $value (($store.Get "items").Get $name)}}
-										{{$items.Del $name}}
-										{{$store.Set "items" $items}}
-										{{dbSet 0 "store" $store}}
-										{{$cont = 1}}
-									{{else}}
-										{{$embed.Set "description" (print "No name argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else if eq $option "quantity"}}
-									{{if gt (len $.CmdArgs) 2}}
-										{{if toInt (index . 2)}}
-											{{if ge (toInt (index . 2)) 1}}
-												{{$value = (index . 2)}}
-												{{$cont = 1}}
-											{{else}}
-												{{$value = "inf"}}
-												{{$cont = 1}}
-											{{end}}
-											{{if $cont}}
-												{{$item := $items.Get $name}}
-												{{$item.Set "quantity" $value}}
-												{{$items.Set $name $item}}
-												{{$store.Set "items" $items}}
-												{{dbSet 0 "store" $store}}
-											{{end}}
-										{{else}}
-											{{if eq (lower (index . 2)) "infinite" "infinity" "inf"}}
-												{{$value = "inf"}}
-												{{$item := $items.Get $name}}
-												{{$item.Set "quantity" $value}}
-												{{$items.Set $name $item}}
-												{{$store.Set "items" $items}}
-												{{dbSet 0 "store" $store}}
-												{{$cont = 1}}
-											{{else}}
-												{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Quantity:Int/Infinity>`")}}
-												{{$embed.Set "color" $errorColor}}
-											{{end}}
-										{{end}}
-										{{if toInt $value}}
-											{{$value = humanizeThousands $value}}
-										{{end}}
-									{{else}}
-										{{$embed.Set "description" (print "No quantity argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Quantity:Int/Infinity>`")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else if eq $option "price"}}
-									{{if gt (len $.CmdArgs) 2}}
-										{{if toInt (index . 2)}}
-											{{$value = (toInt (index . 2))}}
-											{{$item := $items.Get $name}}
-											{{$item.Set "price" $value}}
-											{{$items.Set $name $item}}
-											{{$store.Set "items" $items}}
-											{{dbSet 0 "store" $store}}
-											{{$cont = 1}}
-											{{$value = humanizeThousands (toInt (index . 2))}}
-										{{else}}
-											{{$embed.Set "description" (print "Invalid price argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Price:Int>`")}}
-											{{$embed.Set "color" $errorColor}}
-										{{end}}
-									{{else}}
-										{{$embed.Set "description" (print "No price argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Price:Int>`")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else if eq $option "description" "replymsg"}}
-									{{if gt (len $.CmdArgs) 2}}
-										{{$value = (joinStr " " (slice $.CmdArgs 2))}}
-										{{$item := $items.Get $name}}
-										{{if eq $option "description"}}
-											{{$option = "desc"}}
-										{{else}}
-											{{$option = "replyMsg"}}
-										{{end}}
-										{{$item.Set $option $value}}
-										{{$items.Set $name $item}}
-										{{$store.Set "items" $items}}
-										{{dbSet 0 "store" $store}}
-										{{$cont = 1}}
-									{{else}}
-										{{$embed.Set "description" (print "No description argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Description>`")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else if eq $option "role"}}
-									{{if gt (len $.CmdArgs) 2}}
-										{{$role := (index . 2)}}
-										{{if $.Guild.GetRole (toInt64 $role)}}
-											{{$value = print $role}}
-											{{$item := $items.Get $name}}
-											{{$item.Set "role-given" $value}}
-											{{$items.Set $name $item}}
-											{{$store.Set "items" $items}}
-											{{dbSet 0 "store" $store}}
-											{{$value = print "<@&" $role ">"}}
-											{{$cont = 1}}
-										{{else}}
-											{{$embed.Set "description" (print "Invalid role argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Role:ID>`")}}
-											{{$embed.Set "color" $errorColor}}
-										{{end}}
-									{{else}}
-										{{$embed.Set "description" (print "No role argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Role:ID>`")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else if eq $option "expiry"}}
-									{{if gt (len $.CmdArgs) 2}}
-										{{$value = (index . 2)}}
-										{{if or (toDuration $value) (eq (lower $value) "none" "remove")}}
-											{{if (toDuration $value)}}
-												{{$value = (toDuration $value).Seconds}}
-											{{else}}
-												{{$value = "none"}}
-											{{end}}
-											{{$item := $items.Get $name}}
-											{{$item.Set "expiry" $value}}
-											{{$items.Set $name $item}}
-											{{$store.Set "items" $items}}
-											{{dbSet 0 "store" $store}}
-											{{if (toDuration $value)}}
-												{{$value = humanizeDurationSeconds (mult $value $.TimeSecond)}}
-											{{end}}
-											{{$cont = 1}}
-										{{else}}
-											{{$embed.Set "description" (print "Invalid duration argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Duration>`")}}
-											{{$embed.Set "color" $errorColor}}
-										{{end}}
-									{{else}}
-										{{$embed.Set "description" (print "No duration argument provided :(\nSyntax is `" $.Cmd " " $name " " $option " <Duration>`")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{end}}
-								{{if $cont}}
-									{{$embed.Set "description" (print $name "'s `" $option "` has been changed to " $value)}}
-									{{$embed.Set "color" $successColor}}
-								{{end}}
-							{{else}}
-								{{$embed.Set "description" (print "Invalid option argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nAvailable options are: `name`, `description`, `price`, `quantity`, `expiry` and `role``")}}
-								{{$embed.Set "color" $errorColor}}
-							{{end}}
-						{{else}}
-							{{$embed.Set "description" (print "No option argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nAvailable options are: `name`, `description`, `price`, `quantity`, `expiry` and `role`")}}
-							{{$embed.Set "color" $errorColor}}
-						{{end}}
-					{{else}}
-						{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nUse `" $prefix "shop` to view the items!")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "No item argument provided.\nSyntax is `" $.Cmd " <Name> <Option:String> <Value>`\nUse `" $prefix "shop` to view the items!")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "There are no items :(\nAdd some items with `" $prefix "create-item <Name> <Price:Int> <Quantity:Int> <Description:String>`")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
-		{{end}}
-	{{else}}
-			{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-			{{$embed.Set "color" $errorColor}}
-	{{end}}
-{{else}}
+{{if not (or (in $perms "Administrator") (in $perms "ManageServer"))}}
 	{{$embed.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
-	{{$embed.Set "color" $errorColor}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$symbol := $economySettings.symbol}}
+{{$store := (dbGet 0 "store").Value}}
+{{$items := $store.items}}
+{{if not $items}}
+	{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `Item` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`\nUse `" $prefix "shop` to view the items!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$name := index .CmdArgs 0}}
+{{if not ($items.Get $name)}}
+	{{$embed.Set "description" (print "This item doesn't exist\nUse `" $prefix "shop` to view the items!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$options := cslice "name" "quantity" "price" "description" "replymsg" "role" "expiry"}}
+{{if not (gt (len .CmdArgs) 1)}}
+	{{$embed.Set "description" (print "No `Option` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`\nAvailable options are: `" (joinStr "`, `" $options) "`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$option := index .CmdArgs 1 | lower}}
+{{if not (in $options $option)}}
+	{{$embed.Set "description" (print "Invalid `Option` argument provided\nSyntax is `" .Cmd " <Name> <Option:String> <Value>`\nAvailable options are: `name`, `description`, `price`, `quantity`, `expiry` and `role``")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$value := ""}}
+{{if eq $option "name"}}
+	{{if not (gt (len .CmdArgs) 2)}}
+		{{$embed.Set "description" (print "No `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$value = index .CmdArgs 2}}
+	{{$items.Set $value (($store.Get "items").Get $name)}}
+	{{$items.Del $name}}
+	{{$store.Set "items" $items}}
+	{{dbSet 0 "store" $store}}
+{{else if eq $option "quantity"}}
+	{{if not (gt (len .CmdArgs) 2)}}
+		{{$embed.Set "description" (print "No `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$value = index .CmdArgs 2}}
+	{{if not (or (ge (toInt $value) 1) (eq (lower $value) "infinite" "infinity" "inf"))}}
+		{{$embed.Set "description" (print "Invalid `Value` argument provided\nSyntax is `" .Cmd " " $name " " $option " <Quantity:Int/Infinity>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{if not ($value = toInt $value)}}
+		{{$value = 0}}
+	{{end}}
+	{{$item := $items.Get $name}}
+	{{$item.Set "quantity" $value}}
+	{{$items.Set $name $item}}
+	{{$store.Set "items" $items}}
+	{{if toInt $value}}
+		{{$value = humanizeThousands $value}}
+	{{else}}
+		{{$value := "Infinite"}}
+	{{end}}
+	{{dbSet 0 "store" $store}}
+{{else if eq $option "price"}}
+	{{if not (gt (len .CmdArgs) 2)}}
+		{{$embed.Set "description" (print "No `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$value = index .CmdArgs 2 | toInt}}
+	{{if not (and $value (gt $value 0))}}
+		{{$embed.Set "description" (print "Invalid `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$item := $items.Get $name}}
+	{{$item.Set "price" $value}}
+	{{$items.Set $name $item}}
+	{{$store.Set "items" $items}}
+	{{$value = (print $symbol (humanizeThousands $value))}}
+	{{dbSet 0 "store" $store}}
+{{else if eq $option "description" "replymsg"}}
+	{{if not (gt (len .CmdArgs) 2)}}
+		{{$embed.Set "description" (print "No `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$value = joinStr " " (slice .CmdArgs 2)}}
+	{{$item := $items.Get $name}}
+	{{if eq $option "description"}}
+		{{$option = "desc"}}
+	{{else}}
+		{{$option = "replyMsg"}}
+	{{end}}
+	{{$item.Set $option $value}}
+	{{$items.Set $name $item}}
+	{{$store.Set "items" $items}}
+	{{dbSet 0 "store" $store}}
+	{{$value = (print "\"" $value "\"")}}
+{{else if eq $option "role"}}
+	{{if not (gt (len .CmdArgs) 2)}}
+		{{$embed.Set "description" (print "No `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$role := index .CmdArgs 2}}
+	{{if not (or (getRole $role) (eq (lower $role) "none"))}}
+		{{$embed.Set "description" (print "Invalid `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$value = getRole $role}}
+	{{if not $value}}
+		{{$value = 0}}
+	{{else}}
+		{{$value = $value.ID}}
+	{{end}}
+	{{$item := $items.Get $name}}
+	{{$item.Set "role-given" $value}}
+	{{$items.Set $name $item}}
+	{{$store.Set "items" $items}}
+	{{$value = print "<@&" $value ">"}}
+	{{dbSet 0 "store" $store}}
+{{else if eq $option "expiry"}}
+	{{if not (gt (len .CmdArgs) 2)}}
+		{{$embed.Set "description" (print "No `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$value = index .CmdArgs 2}}
+	{{if not (or (toDuration $value) (eq (lower $value) "none" "remove"))}}
+		{{$embed.Set "description" (print "Invalid `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$eV := "Never"}}
+	{{$value = toInt (toDuration $value).Seconds}}
+	{{if $value}}
+		{{$eV = humanizeDurationSeconds (mult $value .TimeSecond)}}
+	{{end}}
+	{{$item := $items.Get $name}}
+	{{$item.Set "expiry" $value}}
+	{{$items.Set $name $item}}
+	{{$store.Set "items" $items}}
+	{{dbSet 0 "store" $store}}
+	{{$value = $eV}}
+{{end}}
+{{$embed.Set "color" $successColor}}
+{{$embed.Set "description" (print $name "'s `" $option "` has been changed to " $value)}}
 {{sendMessage nil (cembed $embed)}}
