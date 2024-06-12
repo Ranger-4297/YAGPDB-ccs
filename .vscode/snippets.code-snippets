@@ -1,58 +1,70 @@
 {
-	"CC": {
-		"prefix": "cc",
+	"YAGPDBCC template": {
+		"isFileTemplate": true,  // auto-runs on file creation
+		"scope": "yagpdbcc",
+		"prefix": "yagTemplate",
 		"body": [
 			"{{/*",
-			"        Made by ranger_4297 (765316548516380732)",
+			"\tMade by ranger_4297 (765316548516380732)",
 			"",
-			"    Trigger Type: `Regex`",
-			"    Trigger: `\\A(-|<@!?204255221017214977>\\s*)($1)(\\s+|\\z)`",
+			"\tTrigger Type: `Regex`",
+			"\tTrigger: `\\A(-|<@!?204255221017214977>\\s*)()(\\s+|\\z)`",
 			"",
-			"    ©️ RhykerWells 2020-Present",
-			"    GNU, GPLV3 License",
-			"    Repository: https://github.com/Ranger-4297/YAGPDB-ccs",
+			"\t©️ RhykerWells 2020-Present",
+			"\tGNU, GPLV3 License",
+			"\tRepository: https://github.com/Ranger-4297/YAGPDB-ccs",
 			"*/}}",
 			"",
 			"",
 			"{{/* Only edit below if you know what you're doing (: rawr */}}",
 			"",
 			"{{/* Initiates variables */}}",
-			"$2",
+			"{{\\$userID := .User.ID}}",
+			"{{\\$successColor := 0x00ff7b}}",
+			"{{\\$errorColor := 0xFF0000}}",
+			"{{\\$prefix := .ServerPrefix}}",
 			"",
-			"{{/* $3 */}}",
+			"{{/*  */}}",
 			"",
-			"{{/* Response */}}"
+			"{{/* Response */}}",
+			"{{\\$embed := sdict \"author\" (sdict \"name\" .User.Username \"icon_url\" (.User.AvatarURL \"1024\")) \"timestamp\" currentTime \"color\" \\$errorColor}}",
+			"{{\\$economySettings := (dbGet 0 \"EconomySettings\").Value}}",
+			"{{if not \\$economySettings}}",
+			"\t{{\\$embed.Set \"description\" (print \"No `Settings` database found.\\nPlease set it up with the default values using `\" .ServerPrefix \"server-set default`\")}}",
+			"\t{{sendMessage nil (cembed \\$embed)}}",
+			"\t{{return}}",
+			"{{end}}",
+			"{{\\$symbol := \\$economySettings.symbol}}",
+			""
 		],
+		"description": "Initialises command"
 	},
-	"Economy variables": {
-		"prefix": "evar",
+	"Embed Setup" : {
+		"prefix": "embedSetup",
 		"body": [
-			"{{$$userID := .User.ID}}",
-			"{{$$successColor := 0x00ff7b}}",
-			"{{$$errorColor := 0xFF0000}}",
-			"{{$$prefix := .ServerPrefix}}"
+		"{{\\$embed := sdict \"author\" (sdict \"name\" .User.Username \"icon_url\" (.User.AvatarURL \"1024\")) \"timestamp\" currentTime \"color\" \\$errorColor}}"
 		]
 	},
-	"Economy settings": {
-		"prefix": "ecoset",
+	"EconomySettings Setup" : {
+		"prefix": "ecoSetup",
 		"body": [
-			"{{with dbGet 0 \"EconomySettings\"}}",
-			"    {{$$a := sdict .Value}}",
-			"    $1",
-			"{{else}}",
-			"    {{$$embed.Set \"description\" (print \"No `Settings` database found.\\nPlease set it up with the default values using `\" $$prefix \"server-set default`\")}}",
-			"    {{$$embed.Set \"color\" $$errorColor}}",
-			"{{end}}"
+			"{{\\$economySettings := (dbGet 0 \"EconomySettings\").Value}}",
+			"{{if not \\$economySettings}}",
+			"\t{{\\$embed.Set \"description\" (print \"No `Settings` database found.\\nPlease set it up with the default values using `\" .ServerPrefix \"server-set default`\")}}",
+			"\t{{sendMessage nil (cembed \\$embed)}}",
+			"\t{{return}}",
+			"{{end}}",
+			"{{\\$symbol := \\$economySettings.symbol}}"
 		]
 	},
-	"Embed": {
-		"prefix": "Embed",
+	"CmdArgs Setup" : {
+		"prefix": "argsSetup",
 		"body": [
-			"{{$$embed := sdict}}",
-			"{{$$embed.Set \"author\" (sdict \"name\" $.User.Username \"icon_url\" ($.User.AvatarURL \"1024\"))}}",
-			"{{$$embed.Set \"timestamp\" currentTime}}",
-			"$1",
-			"{{sendMessage nil (cembed $$embed)}}"
+		"{{if not .CmdArgs}}",
+		"\t{{\\$embed.Set \"description\" (print \"No `User` argument provided.\\nSyntax is `\" .Cmd \" $1 `\")}}",
+		"\t{{sendMessage nil (cembed \\$embed)}}",
+		"\t{{return}}",
+		"{{end}}"
 		]
-	}
+	},
 }
