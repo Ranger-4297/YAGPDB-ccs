@@ -80,7 +80,6 @@
 	{{$embed.Set "description" (print "This page is empty")}}
 {{end}}
 {{if or (eq .User.ID $user.ID) (eq $invStatus "yes")}}
-	{{$embed.Set "description" (print "This users inventory is empty :(\nThey should get some items from the shop!")}}
 	{{if $inventory}}
 		{{$embed.Set "title" (print "Inventory")}}
 		{{$embed.Set "fields" $field}}
