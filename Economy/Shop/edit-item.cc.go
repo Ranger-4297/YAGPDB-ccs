@@ -146,7 +146,7 @@
 		{{return}}
 	{{end}}
 	{{$role := index .CmdArgs 2}}
-	{{if not (or (getRole $role) (eq (lower $role) "none"))}}
+	{{if not (or (getRole $role) (eq (lower $role) "none" "remove"))}}
 		{{$embed.Set "description" (print "Invalid `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
@@ -158,12 +158,16 @@
 		{{$value = $value.ID}}
 	{{end}}
 	{{$item := $items.Get $name}}
-	{{$item.Set "role-given" $value}}
+	{{$item.Set "role" $value}}
 	{{$items.Set $name $item}}
 	{{$store.Set "items" $items}}
-	{{$value = print "<@&" $value ">"}}
 	{{dbSet 0 "store" $store}}
-{{else if eq $option "expiry"}}
+	{{if not $value}}
+		{{$value = "None"}}
+	{{else}}
+		{{$value = print "<@&" $value ">"}}
+	{{end}}
+	{{else if eq $option "expiry"}}
 	{{if not (gt (len .CmdArgs) 2)}}
 		{{$embed.Set "description" (print "No `Value` argument provided\nSyntax is `" .Cmd " <Item:Name> <Option> <Value>`")}}
 		{{sendMessage nil (cembed $embed)}}

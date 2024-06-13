@@ -52,11 +52,9 @@
 {{else}}
 	{{$qty = humanizeThousands $qty}}
 {{end}}
-{{$role := $item.Get "role-given"}}
-{{if $role}}
-	{{$role = print "<@&" $role ">"}}
-{{else}}
-	{{$role = "None"}}
+{{$role := "None"}}
+{{if $item.role}}
+	{{$role = print "<@&" $item.role ">"}}
 {{end}}
 {{$reply := $item.replyMsg}}
 {{$exp := $item.expiry}}

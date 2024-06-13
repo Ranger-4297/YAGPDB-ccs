@@ -165,14 +165,16 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 			{{scheduleUniqueCC .CCID nil 120 1 3}}
 			{{return}}
 		{{end}}
-		{{if reFind `skip` $role}}
+		{{if eq (lower $role) "skip"}}
 			{{$role = 0}}
+		{{else}}
+			{{$role = getRole $role}}
 		{{end}}
 		{{$item := $createItem.item}}
-		{{$item.data.Set "role" $role}}
+		{{$item.data.Set "role" $role.ID}}
 		{{dbSet 0 "createItem" $createItem}}
 		{{if $role}}
-			{{$role = print "<@&" $role ">"}}
+			{{$role = $role.Mention}}
 		{{else}}
 			{{$role = "none"}}
 		{{end}}
