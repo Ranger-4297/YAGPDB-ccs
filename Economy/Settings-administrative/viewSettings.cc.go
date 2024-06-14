@@ -40,10 +40,10 @@
 {{$max := (humanizeThousands $economySettings.max)}}
 {{$betMax := (humanizeThousands $economySettings.betMax)}}
 {{$symbol := $economySettings.symbol}}
-{{$incomeCooldown := humanizeDurationSeconds (mult $.TimeSecond $economySettings.incomeCooldown | toDuration)}}
-{{$workCooldown := humanizeDurationSeconds (mult $.TimeSecond $economySettings.workCooldown | toDuration)}}
-{{$crimeCooldown := humanizeDurationSeconds (mult $.TimeSecond $economySettings.crimeCooldown | toDuration)}}
-{{$robCooldown := humanizeDurationSeconds (mult $.TimeSecond $economySettings.robCooldown | toDuration)}}
+{{$incomeCooldown := humanizeDurationSeconds (mult TimeSecond $economySettings.incomeCooldown | toDuration)}}
+{{$workCooldown := humanizeDurationSeconds (mult TimeSecond $economySettings.workCooldown | toDuration)}}
+{{$crimeCooldown := humanizeDurationSeconds (mult TimeSecond $economySettings.crimeCooldown | toDuration)}}
+{{$robCooldown := humanizeDurationSeconds (mult TimeSecond $economySettings.robCooldown | toDuration)}}
 {{$startBalance := (humanizeThousands $economySettings.startBalance)}}
 {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
 	{{$symbol = $symbol}}

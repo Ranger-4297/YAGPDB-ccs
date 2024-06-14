@@ -39,7 +39,7 @@
 {{$streaks := $userData.streaks}}
 {{$streak := or $userData.streak 0}}
 {{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
-{{if (reFind `daily` $.Cmd)}}
+{{if (reFind `daily` Cmd)}}
 	{{if $cd := dbGet $userID "dCooldown"}}
 		{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
 		{{sendMessage nil (cembed $embed)}}
@@ -61,7 +61,7 @@
 	{{$cash = add $cash $daily}}
 	{{dbSetExpire $userID "dCooldown" "cooldown" 86400}}
 	{{dbSetExpire $userID "dGraceCooldown" "cooldown" 129600}}
-{{else if (reFind `weekly` $.Cmd)}}
+{{else if (reFind `weekly` Cmd)}}
 	{{if $cd := dbGet $userID "wCooldown"}}
 		{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
 		{{sendMessage nil (cembed $embed)}}
@@ -83,7 +83,7 @@
 	{{$embed.Set "color" $successColor}}
 	{{$cash = add $cash $weekly}}
 	{{dbSetExpire $userID "wGraceCooldown" "cooldown" 691200}}
-{{else if (reFind `monthly` $.Cmd)}}
+{{else if (reFind `monthly` Cmd)}}
 	{{if $cd := dbGet $userID "mCooldown"}}
 		{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cd.ExpiresAt.Sub currentTime)))}}
 		{{sendMessage nil (cembed $embed)}}

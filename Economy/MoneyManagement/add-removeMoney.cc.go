@@ -20,7 +20,7 @@
 {{/* Add, remove money */}}
 
 {{/* Response */}}
-{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" User.Username "icon_url" (User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if not (or (in $perms "Administrator") (in $perms "ManageServer"))}}
 	{{$embed.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}

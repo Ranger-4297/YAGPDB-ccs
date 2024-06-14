@@ -89,14 +89,14 @@
 		{{return}}
 	{{end}}
 	{{if $bet = toInt $bet}}
-		{{$embed.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" $.Cmd " " $bet "` (1/6)\nTo start this game use the command `" $.Cmd " start`")}}
+		{{$embed.Set "description" (print "A new game of Russian roulette has been started!\n\nTo join use the command `" Cmd " " $bet "` (1/6)\nTo start this game use the command `" Cmd " start`")}}
 		{{$embed.Set "color" $successColor}}
 		{{sendMessage nil (cembed $embed)}}
 		{{$bal = sub $bal $bet}}
 		{{dbSet $userID "cash" $bal}}
 		{{$russianRoulette.Set "game" (sdict "cost" $bet "players" (cslice $userID) "owner" $userID)}}
 		{{dbSet 0 "russianRoulette" $russianRoulette}}
-		{{scheduleUniqueCC $.CCID nil 300 "rr-game" "cancel"}}
+		{{scheduleUniqueCC CCID nil 300 "rr-game" "cancel"}}
 		{{return}}
 	{{else}}
 		{{$storageDB := $russianRoulette.storage}}
@@ -148,7 +148,7 @@
 		{{end}}
 		{{cancelScheduledUniqueCC .CCID "rr-game"}}
 		{{if not (gt (len $players) 1)}}
-			{{$embed.Set "description" (print "Not enough players to start the match :(\nStart a new one with `" $.Cmd " <bet>`")}}
+			{{$embed.Set "description" (print "Not enough players to start the match :(\nStart a new one with `" Cmd " <bet>`")}}
 			{{sendMessage nil (cembed $embed)}}
 			{{dbSet 0 "russianRoulette" sdict}}
 			{{return}}

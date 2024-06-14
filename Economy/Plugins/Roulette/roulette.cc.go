@@ -103,14 +103,14 @@
 	{{return}}
 {{end}}
 {{if not .CmdArgs }}
-	{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" $.Cmd " <Space> <Bet:Amount>`")}}
+	{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" Cmd " <Space> <Bet:Amount>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
 {{$side := index .CmdArgs 0}}
 {{if or (in $numbers (toInt $side)) (eq (str $side) "1-12") (eq (str $side) "13-24") (eq (str $side) "25-36") (eq (lower (str $side)) "even") (eq (lower (str $side)) "odd") (eq (lower (str $side)) "red") (eq (lower (str $side)) "black") (eq (lower (str $side)) "1st") (eq (lower (str $side)) "2nd") (eq (lower (str $side)) "3rd") (eq (str $side) "1-18") (eq (str $side) "19-36")}}
 	{{if lt (len .CmdArgs 2)}}
-		{{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Space>`")}}
+		{{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Space>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
@@ -140,7 +140,7 @@
 		{{.bets.Set .betNo (sdict "bet" $bet "space" $side)}}
 	{{else}}
 		{{if not $game}}
-			{{scheduleUniqueCC $.CCID nil 30 "r-game" "start"}}
+			{{scheduleUniqueCC CCID nil 30 "r-game" "start"}}
 			{{$embed.Set "footer" (sdict "text" (print "The game will start in 30s"))}}
 		{{end}}
 		{{$game.Set (toString $userID) (sdict "betNo" 1 "bets" (dict 1 (sdict "bet" $bet "space" $side)))}}
@@ -168,7 +168,7 @@
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
 {{else}}
-	{{$embed.Set "description" (print "Invalid `Space` argument provided.\nSyntax is `" $.Cmd " <Space> <Bet:Amount>`")}}
+	{{$embed.Set "description" (print "Invalid `Space` argument provided.\nSyntax is `" Cmd " <Space> <Bet:Amount>`")}}
 	{{$embed.Set "color" $errorColor}}
 {{end}}
 {{dbSet $userID "cash" $bal}}

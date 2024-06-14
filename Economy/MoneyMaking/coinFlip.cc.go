@@ -21,7 +21,7 @@
 {{/* Flip */}}
 
 {{/* Response */}}
-{{$embed := sdict "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" User.Username "icon_url" (User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
 {{$economySettings := (dbGet 0 "EconomySettings").Value}}
 {{if not $economySettings}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
@@ -64,13 +64,13 @@
     {{return}}
 {{end}}
 {{if not (gt (len .CmdArgs) 1)}}
-	{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
+	{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
 	{{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}
 {{$side := index .CmdArgs 1 | str | lower}}
 {{if not (reFind `\A(t(ails?)?|h(eads?)?)(\s+|\z)` $side)}}
-	{{$embed.Set "description" (print "Invalid `Side` argument provided.\nSyntax is `" $.Cmd " <Bet:Amount> <Side:Heads/Tails>`")}}
+	{{$embed.Set "description" (print "Invalid `Side` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Side:Heads/Tails>`")}}
 	{{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}
