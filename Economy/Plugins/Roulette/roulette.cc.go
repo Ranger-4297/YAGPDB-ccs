@@ -103,58 +103,22 @@
 	{{return}}
 {{end}}
 {{if not .CmdArgs }}
-	{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" Cmd " <Space> <Bet:Amount>`")}}
+	{{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Space>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$side := index .CmdArgs 0}}
-{{if or (in $numbers (toInt $side)) (eq (str $side) "1-12") (eq (str $side) "13-24") (eq (str $side) "25-36") (eq (lower (str $side)) "even") (eq (lower (str $side)) "odd") (eq (lower (str $side)) "red") (eq (lower (str $side)) "black") (eq (lower (str $side)) "1st") (eq (lower (str $side)) "2nd") (eq (lower (str $side)) "3rd") (eq (str $side) "1-18") (eq (str $side) "19-36")}}
-	{{if lt (len .CmdArgs 2)}}
-		{{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Space>`")}}
-		{{sendMessage nil (cembed $embed)}}
-		{{return}}
-	{{end}}
-	{{$bet := index .CmdArgs 1 | str | lower}}
-	{{if eq $bet "all"}}
-		{{$bet = $bal}}
-	{{else if eq $bet "max"}}
-		{{$bet = $betMax}}
-	{{end}}
-	{{if le ($bet = toInt $bet) 0}}
-		{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
-		{{sendMessage nil (cembed $embed)}}
-		{{return}}
-	{{end}}
-	{{if gt $bet $bal}}
-		{{$embed.Set "description" (print "You can't bet more than you have!")}}
-		{{sendMessage nil (cembed $embed)}}
-		{{return}}
-	{{end}}
-	{{if gt $bet $betMax}}
-		{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-		{{sendMessage nil (cembed $embed)}}
-		{{return}}
-	{{end}}
-	{{with $game.Get (toString $userID)}}
-		{{.Set "betNo" (add .betNo 1)}}
-		{{.bets.Set .betNo (sdict "bet" $bet "space" $side)}}
-	{{else}}
-		{{if not $game}}
-			{{scheduleUniqueCC CCID nil 30 "r-game" "start"}}
-			{{$embed.Set "footer" (sdict "text" (print "The game will start in 30s"))}}
-		{{end}}
-		{{$game.Set (toString $userID) (sdict "betNo" 1 "bets" (dict 1 (sdict "bet" $bet "space" $side)))}}
-		{{$bal = sub $bal $bet}}
-		{{$roulette.Set "game" $game}}
-	{{end}}
-	{{$embed.Set "description" (print "You placed a bet of " $symbol $bet " on " $side "!")}}
-	{{$embed.Set "color" $successColor}}
-	{{dbSet 0 "roulette" $roulette}}
-{{else if eq $side "info"}}
+{{$bet := index .CmdArgs 0 | str | lower}}
+{{if eq $bet "all"}}
+	{{$bet = $bal}}
+{{else if eq $bet "max"}}
+	{{$bet = $betMax}}
+{{else if eq $space "info"}}
 	{{$embed.Set "description" (print "**Payout:**\n[x35] Single number\n[x3] Dozens (1-12, 13-24, 25-36)\n[x3] Columns (1st, 2nd, 3rd)\n[x2] Halves (1-18, 19-36)\n[x2] Odd/Even\n[2x] Colours (red, black)")}}
 	{{$embed.Set "image" (sdict "url" "https://raw.githubusercontent.com/Ranger-4297/YAGPDB-ccs/main/Economy/Plugins/Roulette/roulette-board.png")}}
 	{{$embed.Set "color" $successColor}}
-{{else if eq $side "collect"}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{else if eq $space "collect"}}
 	{{$storageDB := $roulette.storage}}
 	{{$pay := $storageDB.Get (toString $userID)}}
 	{{if $pay}}
@@ -163,13 +127,54 @@
 		{{$storageDB.Del (toString $userID )}}
 		{{dbSet 0 "roulette" (sdict "storage" $storageDB)}}
 		{{$bal = add $bal $pay}}
+		{{dbSet $userID "cash" $bal}}
 	{{else}}
 		{{$embed.Set "description" (print "You had no winning to collect!")}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
-{{else}}
-	{{$embed.Set "description" (print "Invalid `Space` argument provided.\nSyntax is `" Cmd " <Space> <Bet:Amount>`")}}
-	{{$embed.Set "color" $errorColor}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
+{{if le ($bet = toInt $bet) 0}}
+	{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Space>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if gt $bet $bal}}
+	{{$embed.Set "description" (print "You can't bet more than you have!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if gt $bet $betMax}}
+	{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if lt (len .CmdArgs 2)}}
+	{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Space>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$space := index .CmdArgs 0}}
+{{if not (or (in $numbers (toInt $space)) (eq (str $space) "1-12") (eq (str $space) "13-24") (eq (str $space) "25-36") (eq (lower (str $space)) "even") (eq (lower (str $space)) "odd") (eq (lower (str $space)) "red") (eq (lower (str $space)) "black") (eq (lower (str $space)) "1st") (eq (lower (str $space)) "2nd") (eq (lower (str $space)) "3rd") (eq (str $space) "1-18") (eq (str $space) "19-36"))}}
+	{{$embed.Set "description" (print "Invalid `Space` argument provided.\nSyntax is `" Cmd " <Space> <Bet:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{with $game.Get (toString $userID)}}
+	{{.Set "betNo" (add .betNo 1)}}
+	{{.bets.Set .betNo (sdict "bet" $bet "space" $space)}}
+{{else}}
+	{{if not $game}}
+		{{scheduleUniqueCC .CCID nil 30 "r-game" "start"}}
+		{{$embed.Set "footer" (sdict "text" (print "The game will start in 30s"))}}
+	{{end}}
+	{{$game.Set (toString $userID) (sdict "betNo" 1 "bets" (dict 1 (sdict "bet" $bet "space" $space)))}}
+	{{$bal = sub $bal $bet}}
+	{{$roulette.Set "game" $game}}
+{{end}}
+{{$embed.Set "description" (print "You placed a bet of " $symbol $bet " on " $space "!")}}
+{{$embed.Set "color" $successColor}}
+{{dbSet 0 "roulette" $roulette}}
 {{dbSet $userID "cash" $bal}}
 {{sendMessage nil (cembed $embed)}}
