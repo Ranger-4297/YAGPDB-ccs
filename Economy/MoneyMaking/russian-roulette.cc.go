@@ -42,7 +42,6 @@
     {{return}}
 {{end}}
 {{$russianRoulette = $russianRoulette.Value}}
-{{$cost := $russianRoulette.cost}}
 {{$game := $russianRoulette.game}}
 {{$cost := $game.cost}}
 {{$players := $game.players}}
@@ -116,7 +115,6 @@
 		{{end}}
 	{{end}}
 {{else}}
-	{{$rouletteStart := false}}
 	{{$bal := toInt (dbGet $userID "cash").Value}}
 	{{$bet := or (index .CmdArgs 0 | str | lower) .ExecData}}
 	{{if not (or (toInt $bet) (eq $bet "all" "max" "start" "collect"))}}
