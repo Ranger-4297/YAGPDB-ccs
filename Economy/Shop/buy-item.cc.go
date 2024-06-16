@@ -17,165 +17,135 @@
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
+{{$ex := or (and (reFind "a_" .Guild.Icon) "gif") "png"}}
+{{$icon := print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $ex "?size=1024"}}
 
 {{/* Buy item */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
-{{with dbGet 0 "EconomySettings"}}
-	{{$a := sdict .Value}}
-	{{$symbol := $a.symbol}}
-	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
-	{{$userdata := or (dbGet $userID "userEconData").Value (sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
-	{{$inventory := $userdata.inventory}}
-	{{if not $.ExecData}}
-		{{with (dbGet 0 "store")}}
-			{{$shop := sdict .Value}}
-			{{$items := sdict}}
-			{{if ($shop.Get "items")}}
-				{{$items = sdict ($shop.Get "items")}}
-				{{with $.CmdArgs}}
-					{{$name := (index . 0)}}
-					{{if $items.Get $name}}
-						{{$item := $items.Get $name}}
-						{{$price := $item.Get "price"}}
-						{{$shopQuantity := $item.Get "quantity"}}
-						{{$userQuantity := 0}}
-						{{if ($inventory.Get $name)}}
-							{{$invitem := ($inventory.Get $name)}}
-							{{$userQuantity = ($invitem.Get "quantity")}}
-						{{end}}
-						{{$buyQuantity := 1}}
-						{{$cont := false}}
-						{{if gt (len $.CmdArgs) 1}}
-							{{$buyQuantity = (index $.CmdArgs 1)}}
-							{{if toInt $buyQuantity}}
-								{{if ge (toInt $buyQuantity) 1}}
-									{{if le (toInt $buyQuantity) (toInt $shopQuantity)}}
-										{{$cont = true}}
-										{{if toInt $shopQuantity}}
-											{{$shopQuantity = sub $shopQuantity $buyQuantity}}
-										{{end}}
-									{{else}}
-										{{$embed.Set "description" (print "There's not enough of this in the shop to buy that much!")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else}}
-									{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd " " $name " [Quantity:Int/All]`")}}
-									{{$embed.Set "color" $errorColor}}
-								{{end}}
-							{{else}}
-								{{$buyQuantity = lower $buyQuantity}}
-								{{if eq (toString $buyQuantity) "max" "all"}}
-									{{if eq $buyQuantity "max"}}
-										{{$buyQuantity = div (toInt $bal) $price}}
-										{{if toInt $shopQuantity}}
-											{{if gt $buyQuantity $shopQuantity}}
-												{{$buyQuantity = $shopQuantity}}
-											{{end}}
-											{{$shopQuantity = sub $shopQuantity $buyQuantity}}
-										{{end}}
-									{{else}}
-										{{if toInt $shopQuantity}}
-											{{$buyQuantity = $shopQuantity}}
-											{{$shopQuantity = 0}}
-										{{else}}
-											{{$buyQuantity = div (toInt $bal) $price}}
-										{{end}}
-									{{end}}
-									{{if $buyQuantity}}
-										{{$cont = true}}
-									{{else}}
-										{{$embed.Set "description" (print "You don't have enough money to buy this :(")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else}}
-									{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" $.Cmd " " $name " [Quantity:Int/All[`")}}
-									{{$embed.Set "color" $errorColor}}
-								{{end}}
-							{{end}}
-						{{else}}
-							{{if toInt $shopQuantity}}
-								{{$shopQuantity = sub $shopQuantity 1}}
-							{{end}}
-							{{$cont = true}}
-						{{end}}
-						{{if $cont}}
-							{{if not (and (eq $name "chicken") (gt (toInt $buyQuantity) 1))}}
-								{{$price = mult $buyQuantity $price}}
-								{{if ge $bal $price}}
-									{{if not (and $item.ID (eq (toInt $item.ID) (toInt $.User.ID)))}}
-										{{$userQuantity = add $userQuantity $buyQuantity}}
-										{{$bal = sub $bal $price}}
-										{{if not $shopQuantity}}
-											{{$items.Del $name}}
-										{{else}}
-											{{$item.Set "quantity" $shopQuantity}}  
-											{{$items.Set $name $item}}
-										{{end}}
-										{{$exp := $item.expiry}}
-										{{$expires := "never"}}
-										{{if (toDuration $exp)}}
-											{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $exp $.TimeSecond))}}
-											{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
-										{{end}}
-										{{$shop.Set "items" $items}}
-										{{dbSet 0 "store" $shop}}
-										{{if $inventory.Get $name}}
-											{{$item = $inventory.Get $name}}
-											{{$item.Set "quantity" $userQuantity}}
-											{{$inventory.Set $name $item}}
-										{{else}}
-											{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role "replyMsg" $item.replyMsg "expiry" $exp "expires" $expires)}}
-										{{end}}
-										{{$embed.Set "description" (print "You've bought  " (humanizeThousands $buyQuantity) " of " $name " for " $symbol (humanizeThousands $price) "!")}}
-										{{$embed.Set "color" $successColor}}
-										{{if $exp}}
-											{{scheduleUniqueCC $.CCID nil $exp $name (sdict "user" $.User.ID "itemName" $name "expiry" $exp)}}
-										{{end}}
-									{{else}}
-										{{$embed.Set "description" (print "You cannot buy your own item")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else}}
-									{{$embed.Set "description" (print "You don't have enough to buy this :(")}}
-									{{$embed.Set "color" $errorColor}}
-								{{end}}
-							{{else}}
-								{{$embed.Set "description" (print "You can only buy 1 of the item " $name)}}
-								{{$embed.Set "color" $errorColor}}
-							{{end}}
-						{{end}}
-					{{else}}
-						{{$embed.Set "description" (print "This item doesn't exist :( Create it with `" $prefix "create-item " $name "`\n\nTo view all items, run the `" $prefix "shop` command.")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Name> [Quantity:Int/All]`\n\nTo view all items, run the `" $prefix "shop` command.")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "There are no items :(\nAdd some items with `" $prefix "create-item <Name> <Price:Int> <Quantity:Int/Inf> <Description:String>`")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
-		{{end}}
-		{{dbSet $userID "userEconData" $userdata}}
-		{{dbSet $userID "cash" $bal}}
-	{{else}}
-		{{$userData := (dbGet $.ExecData.user "userEconData").Value}}
-		{{$item := $.ExecData.itemName}}
-		{{$inventory := $userData.inventory}}
-		{{if $inventory.Get $item}}
+{{$embed := sdict "author" (sdict "name" (print .Guild.Name " Store")) "timestamp" currentTime "color" $errorColor}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$symbol := $economySettings.symbol}}
+{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
+{{$userdata := or (dbGet $userID "userEconData").Value (sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
+{{$inventory := $userdata.inventory}}
+{{if .ExecData}}
+	{{$userData := (dbGet .ExecData.user "userEconData").Value}}
+	{{$item := .ExecData.itemName}}
+	{{$inventory := $userData.inventory}}
+	{{if $item = ($inventory.Get $item)}}
+		{{if gt $item.quantity 1}}
+			{{$item.Set "quantity" (sub $item.quantity 1)}}
+		{{else}}
 			{{$inventory.Del $item}}
 		{{end}}
-		{{dbSet $.ExecData.user "userEconData" $userData}}
-		{{cancelScheduledUniqueCC $.CCID $.ExecData.itemName}}
-		{{return}}
 	{{end}}
-{{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-	{{$embed.Set "color" $errorColor}}
+	{{dbSet .ExecData.user "userEconData" $userData}}
+	{{return}}
 {{end}}
+{{$store := (dbGet 0 "store").Value}}
+{{$items := $store.items}}
+{{if not $items}}
+	{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `Item` argument provided.\nSyntax is `" .Cmd "  `\nSyntax is `" .Cmd " <Item:Name> [Quantity:Int/All]`\n\nTo view all items, run the `" $prefix "shop` command.")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$name := index .CmdArgs 0}}
+{{if not ($items.Get $name)}}
+	{{$embed.Set "description" (print "This item doesn't exist\nUse `" $prefix "shop` to view the items!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$item := $items.Get $name}}
+{{$price := $item.Get "price"}}
+{{$shopQuantity := $item.Get "quantity"}}
+{{$userQuantity := 0}}
+{{if ($inventory.Get $name)}}
+	{{$invitem := $inventory.Get $name}}
+	{{$userQuantity = ($invitem.Get "quantity")}}
+{{end}}
+{{$buyQuantity := 1}}
+{{if gt (len .CmdArgs) 1}}
+	{{$buyQuantity = index .CmdArgs 1}}
+	{{if $buyQuantity = toInt $buyQuantity}}
+		{{if lt $buyQuantity 1}}
+			{{$embed.Set "description" (print "Invalid `Quantity` argument provided :(\nSyntax is `" .Cmd " <Item:Name> [Quantity:Int/All]`")}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+	{{else if $buyQuantity = lower $buyQuantity}}
+		{{if not (eq (toString $buyQuantity) "max" "all")}}
+			{{$embed.Set "description" (print "Invalid quantity argument provided :(\nSyntax is `" .Cmd " " $name " [Quantity:Int/All/Max]`")}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$option := $buyQuantity}}
+		{{$buyQuantity = div $bal $price}}
+		{{$buyQuantity := (sdict "max" (div $bal $price) "all" $shopQuantity).Get $option}}
+	{{end}}
+{{end}}
+{{if and (eq $name "chicken") (gt (toInt $buyQuantity) 1)}}
+	{{$embed.Set "description" (print "You can only buy 1 " $name)}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if lt $buyQuantity $shopQuantity}}
+	{{$embed.Set "description" (print "There's not enough of this in the shop to buy that much!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$price = mult $buyQuantity $price}}
+{{if lt $bal $price}}
+	{{$embed.Set "description" (print "You don't have enough to buy this")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if (and $item.ID (eq (toInt $item.ID) (toInt .User.ID)))}}
+	{{$embed.Set "description" (print "You cannot buy an item you have listed")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$userQuantity = add $userQuantity $buyQuantity}}
+{{$bal = sub $bal $price}}
+{{if $shopQuantity}}
+	{{$shopQuantity = sub $shopQuantity $buyQuantity}}
+	{{if eq $shopQuantity 0}}
+		{{$items.Del $name}}
+	{{else}}
+		{{$item.Set "quantity" $shopQuantity}}
+		{{$items.Set $name $item}}
+	{{end}}
+{{end}}
+{{$exp := $item.expiry}}
+{{$expires := "never"}}
+{{if $exp}}
+	{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $exp .TimeSecond))}}
+	{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
+{{end}}
+{{$store.Set "items" $items}}
+{{dbSet 0 "store" $store}}
+{{if $inventory.Get $name}}
+	{{$item = $inventory.Get $name}}
+	{{$item.Set "quantity" $userQuantity}}
+	{{$inventory.Set $name $item}}
+{{else}}
+	{{$inventory.Set $name (sdict "desc" $item.desc "quantity" $userQuantity "role" $item.role "replyMsg" $item.replyMsg "expiry" $exp)}}
+{{end}}
+{{$embed.Set "description" (print "You've bought  " (humanizeThousands $buyQuantity) " of " $name " for " $symbol (humanizeThousands $price) "!")}}
+{{$embed.Set "color" $successColor}}
+{{if $exp}}
+	{{execCC .CCID nil $exp (sdict "user" .User.ID "itemName" $name "expiry" $exp)}}
+{{end}}
+{{dbSet $userID "userEconData" $userdata}}
+{{dbSet $userID "cash" $bal}}
 {{sendMessage nil (cembed $embed)}}

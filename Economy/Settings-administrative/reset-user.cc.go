@@ -20,45 +20,36 @@
 {{/* Reset user */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
-{{if or (in $perms "Administrator") (in $perms "ManageServer")}}
-	{{with (dbGet 0 "EconomySettings")}}
-		{{$a := sdict .Value}}
-		{{$symbol := $a.symbol}}
-		{{with $.CmdArgs}}
-            {{if index . 0 | getMember}}
-                {{$user := getMember (index . 0)}}
-				{{$user = $user.User}}
-                {{if (dbGet $user.ID "cash")}}
-                    {{dbDel $user.ID "cash"}}
-                {{end}}
-                {{if (dbGet $user.ID "userEconData")}}
-                    {{dbDel $user.ID "userEconData"}}
-                {{end}}
-                {{$bank := (dbGet 0 "bank").Value.Get (toString $user.ID)}}
-                {{if $bank}}
-                    {{$bankDB := (dbGet 0 "bank").Value}}
-                    {{$bankDB.Del (toString $user.ID)}}
-                {{end}}
-                {{$embed.Set "description" (print "Successfully removed the user from the economy system.")}}
-                {{$embed.Set "color" $successColor}}
-            {{else}}
-                {{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID>`")}}
-                {{$embed.Set "color" $errorColor}}
-            {{end}}
-        {{else}}
-			{{$embed.Set "description" (print "No `User` argument provided.\nSyntax is `" $.Cmd " <User:Mention/ID>`")}}
-			{{$embed.Set "color" $errorColor}}
-		{{end}}
-    {{else}}
-        {{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-        {{$embed.Set "color" $errorColor}}
-    {{end}}
-{{else}}
+{{if not (or (in $perms "Administrator") (in $perms "ManageServer"))}}
 	{{$embed.Set "description" (print "Insufficient permissions.\nTo use this command you need to have either `Administrator` or `ManageServer` permissions")}}
-	{{$embed.Set "color" $errorColor}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$symbol := $economySettings.symbol}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$user := index .CmdArgs 0}}
+{{if not (getMember $user)}}
+	{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$user = (getMember $user).User.ID}}
+{{if (dbGet $user "cash")}}{{dbDel $user "cash"}}{{end}}
+{{if (dbGet $user "userEconData")}}{{dbDel $user "userEconData"}}{{end}}
+{{$bank := (dbGet 0 "bank").Value}}
+{{if $bank}}{{$bank.Del (toString $user)}}{{dbSet 0 "bank" $bank}}{{end}}
+{{$embed.Set "description" (print "Successfully removed the user from the economy system.")}}
+{{$embed.Set "color" $successColor}}
 {{sendMessage nil (cembed $embed)}}

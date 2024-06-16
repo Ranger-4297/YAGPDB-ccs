@@ -21,44 +21,45 @@
 {{/* Use Item */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
-{{with dbGet 0 "EconomySettings"}}
-	{{$userdata := or (dbGet $userID "userEconData").Value (sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
-	{{if $inventory := $userdata.inventory}} 
-		{{with $.CmdArgs}}
-			{{$name := (index . 0)}}
-			{{if $item := $inventory.Get $name}}
-				{{$qty := $item.quantity}}
-				{{$role := $item.role}}
-				{{$nqty := (sub (toInt $qty) 1)}}
-				{{if eq (toInt $nqty) 0}}
-					{{$inventory.Del $name}}
-				{{else}}
-					{{$item.Set "quantity" $nqty}}
-					{{$inventory.Set $name $item}}
-					{{$userdata.Set "inventory" $inventory}}
-				{{end}}
-				{{if $role}}
-					{{addRoleID $role}}
-				{{end}}
-				{{$embed.Set "description" (print $item.replyMsg)}}
-				{{$embed.Set "color" $successColor}}
-			{{else}}
-				{{$embed.Set "description" (print "Invalid item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
-		{{else}}
-			{{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Name>`")}}
-			{{$embed.Set "color" $errorColor}}
-		{{end}}
-	{{else}}
-		{{$embed.Set "description" (print "You have no items in your inventory, purchase some from the shop!")}}
-	{{end}}
-	{{dbSet $userID "userEconData" $userdata}}
-{{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-	{{$embed.Set "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
-{{sendMessage nil (cembed $embed)}}
+{{$symbol := $economySettings.symbol}}
+{{$userdata := or (dbGet $userID "userEconData").Value (sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
+{{$inventory := $userdata.inventory}}
+{{if not $inventory }}
+	{{$embed.Set "description" (print "Your inventory is empty :(\nYou should get some items from the shop!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `Item` argument provided.\nSyntax is `" .Cmd "  <Item:Name>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$name := index . 0}}
+{{if not ($items.Get $name)}}
+	{{$embed.Set "description" (print "This item doesn't exist\nUse `" $prefix "shop` to view the items!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$item := $inventory.Get $name}}
+{{$qty := $item.quantity}}
+{{$role := $item.role}}
+{{$nqty := sub (toInt $qty) 1}}
+{{if eq (toInt $nqty) 0}}
+	{{$inventory.Del $name}}
+{{else}}
+	{{$item.Set "quantity" $nqty}}
+	{{$inventory.Set $name $item}}
+	{{$userdata.Set "inventory" $inventory}}
+{{end}}
+{{if $role}}
+	{{addRoleID $role}}
+{{end}}
+{{dbSet $userID "userEconData" $userdata}}
+{{sendMessage nil $item.replyMsg}}

@@ -38,8 +38,8 @@ To retrieve a users economy data upon rejoining
 {{$shop := (dbGet 0 "store").Value}}
 {{$shop := $shop.items}}
 {{- range $k, $v := $shop -}}
-  {{- if and $v.ID (eq (toInt $v.ID) (toInt $.User.ID)) -}}
-    {{- $shop.Del $k -}}
-  {{- end -}}
+	{{- if and $v.ID (eq (toInt $v.ID) (toInt $.User.ID)) -}}
+		{{- $shop.Del $k -}}
+	{{- end -}}
 {{end}}
 {{dbSet 0 "store" (sdict "items" $shop)}}
