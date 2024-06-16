@@ -72,4 +72,4 @@ If you are searching for more custom commands you will find a lot of them there 
 
 
 ## Bugs and more
-<blockquote>If you find any bugs or issues, feel free to make a PR or raise an issue, alternatively contact me through my <a href="https://discord.gg/bbvzRgQvB7">Testing server</a> or VIA <a href="mailto:a.rhyker@gmail.com">email</a></blockquote>
+<blockquote>If you find any bugs or issues, feel free to make a PR or raise an issue, alternatively contact me through my <a href="https://discord.gg/bbvzRgQvB7">Testing server</a> or VIA <a href="mailto:a.rhykerw@gmail.com">email</a></blockquote>
