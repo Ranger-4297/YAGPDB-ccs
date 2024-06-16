@@ -172,14 +172,14 @@
 				{{- $winners = $winners.Append (userArg .).Mention}}
 			{{- end -}}
 		{{end}}
-		{{$payout := (div $game.cost (len $winners))}}
+		{{$payout := div $game.cost (len $winners)}}
 		{{$fields := cslice}}
 		{{$storageDB := $russianRoulette.storage}}
 		{{if not $storageDB}}
 			{{$storageDB = sdict}}
 		{{end}}
 		{{range $winners}}
-			{{$storageAmt := ($storageDB.Get (toString (userArg .).ID))}}
+			{{$storageAmt := $storageDB.Get (toString (userArg .).ID)}}
 			{{if $storageAmt}}
 				{{$storageAmt = add $storageAmt $payout}}
 			{{else}}

@@ -36,23 +36,23 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$min := (humanizeThousands $economySettings.min)}}
-{{$max := (humanizeThousands $economySettings.max)}}
-{{$betMax := (humanizeThousands $economySettings.betMax)}}
+{{$min := humanizeThousands $economySettings.min}}
+{{$max := humanizeThousands $economySettings.max}}
+{{$betMax := humanizeThousands $economySettings.betMax}}
 {{$symbol := $economySettings.symbol}}
 {{$incomeCooldown := humanizeDurationSeconds (mult TimeSecond $economySettings.incomeCooldown | toDuration)}}
 {{$workCooldown := humanizeDurationSeconds (mult TimeSecond $economySettings.workCooldown | toDuration)}}
 {{$crimeCooldown := humanizeDurationSeconds (mult TimeSecond $economySettings.crimeCooldown | toDuration)}}
 {{$robCooldown := humanizeDurationSeconds (mult TimeSecond $economySettings.robCooldown | toDuration)}}
-{{$startBalance := (humanizeThousands $economySettings.startBalance)}}
+{{$startBalance := humanizeThousands $economySettings.startBalance}}
 {{if (reFind `(<a?:[A-z+]+\:\d{17,19}>)` $symbol)}}
 	{{$symbol = $symbol}}
 {{else}}
 	{{$symbol = (print "`" $symbol "`")}}
 {{end}}
-{{with $.CmdArgs}}
+{{with .CmdArgs}}
 	{{if (reFind `\A(m(ax|in)|s(tartbalance|ymbol)|(income|work|crime|rob)(cd|cooldown)|betmax)(\s+|\z)` ((index . 0) | lower))}}
-		{{$setting := (index . 0) | lower}}
+		{{$setting := index . 0 | lower}}
 		{{$value := ""}}
 		{{if eq $setting "min" }}
 			{{$value = $min}}

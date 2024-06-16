@@ -36,8 +36,8 @@
 	{{return}}
 {{end}}
 {{$info := or (dbGet 0 "store").Value (sdict "items" sdict)}}
-{{$items := ($info.Get "items")}}
-{{$name := (index .CmdArgs 0)}}
+{{$items := $info.Get "items"}}
+{{$name := index .CmdArgs 0}}
 {{if not ($items.Get $name)}}
 	{{$embed.Set "description" (print "This item doesn't exist")}}
 	{{sendMessage nil (cembed $embed)}}

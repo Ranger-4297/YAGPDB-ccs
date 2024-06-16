@@ -71,7 +71,7 @@
 {{$shopQuantity := $item.Get "quantity"}}
 {{$userQuantity := 0}}
 {{if ($inventory.Get $name)}}
-	{{$invitem := ($inventory.Get $name)}}
+	{{$invitem := $inventory.Get $name}}
 	{{$userQuantity = ($invitem.Get "quantity")}}
 {{end}}
 {{$buyQuantity := 1}}

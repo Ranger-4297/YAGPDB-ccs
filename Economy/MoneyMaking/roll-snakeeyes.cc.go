@@ -70,7 +70,7 @@
 		{{return}}
 	{{end}}
 	{{dbSetExpire $userID "rollCooldown" "cooldown" $incomeCooldown}}
-	{{$roll := (randInt 1 101)}}
+	{{$roll := randInt 1 101}}
 	{{$rs := 1}}
 	{{if and (ge $roll 65) (lt $roll 90)}}
 		{{$bal = add $bal $bet}}

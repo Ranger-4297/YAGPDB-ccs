@@ -50,7 +50,7 @@
 {{$item := $inventory.Get $name}}
 {{$qty := $item.quantity}}
 {{$role := $item.role}}
-{{$nqty := (sub (toInt $qty) 1)}}
+{{$nqty := sub (toInt $qty) 1}}
 {{if eq (toInt $nqty) 0}}
 	{{$inventory.Del $name}}
 {{else}}

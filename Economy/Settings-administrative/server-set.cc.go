@@ -26,7 +26,7 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$settings := (print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`, `responses`\nTo set it with the default settings `" .Cmd " default`")}}
+{{$settings := print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`, `responses`\nTo set it with the default settings `" .Cmd " default`"}}
 {{if not .CmdArgs}}
 	{{$embed.Set "description" (print "No `Setting` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
 	{{sendMessage nil (cembed $embed)}}
@@ -100,7 +100,7 @@
 			{{sendMessage nil (cembed $embed)}}
 			{{return}}
 		{{end}}
-		{{$value := (index .CmdArgs 1) | lower}}
+		{{$value := index .CmdArgs 1 | lower}}
 		{{if not (eq $value "yes" "enable" "enabled" "no" "disable" "disabled")}}
 			{{$embed.Set "description" (print "Invalid `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
 			{{sendMessage nil (cembed $embed)}}
@@ -122,7 +122,7 @@
 			{{sendMessage nil (cembed $embed)}}
 			{{return}}
 		{{end}}
-		{{$duration := (index .CmdArgs 1)}}
+		{{$duration := index .CmdArgs 1}}
 		{{if not ($duration = toDuration $duration)}}
 			{{$embed.Set "description" (print "Invalid `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
 			{{sendMessage nil (cembed $embed)}}
@@ -131,7 +131,7 @@
 		{{$embed.Set "description" (print "Sucessfully set the `" $cdType "Cooldown` to `" (humanizeDurationSeconds $duration) "`")}}
 		{{$embed.Set "color" $successColor}}
 		{{$duration = $duration.Seconds}}
-		{{$crCD := (print $cdType "Cooldown")}}
+		{{$crCD := print $cdType "Cooldown"}}
 		{{$economySettings.Set $crCD $duration}}
 		{{dbSet 0 "EconomySettings" $economySettings}}
 	{{end}}

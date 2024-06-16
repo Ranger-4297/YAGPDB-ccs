@@ -29,7 +29,7 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$settings := (print "\nAvailable settings: `balance`, `trading`, `inventory`, `leaderboard`\nTo set it with the default settings `" .Cmd " default`")}}
+{{$settings := print "\nAvailable settings: `balance`, `trading`, `inventory`, `leaderboard`\nTo set it with the default settings `" .Cmd " default`"}}
 {{if not .CmdArgs}}
 	{{$embed.Set "description" (print "No `Setting` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value:Yes/No>`" $settings)}}
 	{{sendMessage nil (cembed $embed)}}

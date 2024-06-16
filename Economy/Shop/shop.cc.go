@@ -41,7 +41,7 @@
 {{range $k,$v := $items}}
 	{{$item := $k}}
 	{{$desc := $v.desc }}
-	{{$price := (print $symbol (humanizeThousands $v.price))}}
+	{{$price := print $symbol (humanizeThousands $v.price)}}
 	{{$qty := ""}}
 	{{if $v.quantity}}
 		{{$qty = $v.quantity}}
@@ -66,8 +66,8 @@
 		{{$page = 1}}
 	{{end}}
 {{end}}
-{{$start := (mult 10 (sub $page 1))}}
-{{$stop := (mult $page 10)}}
+{{$start := mult 10 (sub $page 1)}}
+{{$stop := mult $page 10}}
 {{if ge $stop (len $entry)}}
 	{{$stop = (len $entry)}}
 {{end}}

@@ -38,7 +38,7 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$item := (index .CmdArgs 0)}}
+{{$item := index .CmdArgs 0}}
 {{if not ($inventory.Get $item)}}
 	{{$embed.Set "description" (print "Invalid `Item` argument provided.\nSyntax is `" .Cmd " <Item:Name> <Price:Int> [Quantity:Int/All]`\n\nTo view your items, run `" $prefix "inventory`")}}
 	{{sendMessage nil (cembed $embed)}}
@@ -46,7 +46,7 @@
 {{end}}
 {{$invData := $inventory.Get $item}}
 {{$invQuantity := $invData.quantity}}
-{{$shopItem := (print $item "." .User.Username)}}
+{{$shopItem := print $item "." .User.Username}}
 {{if lt (len .CmdArgs) 2}}
 	{{$embed.Set "description" (print "No `Price` argument provided.\nSyntax is `" .Cmd " <Item:Name> <Price:Int> [Quantity:Int/All]`")}}
 	{{sendMessage nil (cembed $embed)}}

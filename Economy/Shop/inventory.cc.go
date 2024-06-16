@@ -67,8 +67,8 @@
 	{{end}}
 	{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty)) (print "Role given: " $role) (print "Expiry: " $expires)) "inline" false)}}
 {{end}}
-{{$start := (mult 10 (sub $page 1))}}
-{{$stop := (mult $page 10)}}
+{{$start := mult 10 (sub $page 1)}}
+{{$stop := mult $page 10}}
 {{if ge $stop (len $entry)}}
 	{{$stop = (len $entry)}}
 {{end}}

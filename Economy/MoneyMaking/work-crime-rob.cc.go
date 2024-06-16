@@ -46,7 +46,7 @@
 	{{end}}
 	{{dbSetExpire $userID "workCooldown" "cooldown" $workCooldown}}
 	{{$workPay := randInt $min $max}}
-	{{$response := (print "You decided to work today! You got paid a hefty " $symbol (humanizeThousands $workPay))}}
+	{{$response := print "You decided to work today! You got paid a hefty " $symbol (humanizeThousands $workPay)}}
 	{{if and $enabledResponses $responses.work}}
 		{{$response = (reReplace `\(amount\)` (index (shuffle $responses.work) 0) (print $symbol (humanizeThousands $workPay)))}}
 	{{end}}
@@ -60,11 +60,11 @@
 		{{return}}
 	{{end}}
 	{{dbSetExpire $userID "crimeCooldown" "cooldown" $crimeCooldown}}
-	{{$amount := (mult (randInt $min $max) (randInt 1 5))}}
+	{{$amount := mult (randInt $min $max) (randInt 1 5)}}
 	{{$int := randInt 1 3}}
 	{{if eq $int 1}}
 		{{$cash = add $cash $amount}}
-		{{$response := (print "You broke the law for a pretty penny! You made " $symbol (humanizeThousands $amount) " in your crime spree today")}}
+		{{$response := print "You broke the law for a pretty penny! You made " $symbol (humanizeThousands $amount) " in your crime spree today"}}
 		{{if and $enabledResponses $responses.crime}}
 			{{$response = (reReplace `\(amount\)` (index (shuffle $responses.crime) 0) (print $symbol (humanizeThousands $amount)))}}
 		{{end}}
@@ -81,7 +81,7 @@
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
-	{{$victim := (index .CmdArgs 0)}}
+	{{$victim := index .CmdArgs 0}}
 	{{if not (getMember $victim)}}
 		{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID>`")}}
 		{{sendMessage nil (cembed $embed)}}
@@ -101,7 +101,7 @@
 	{{dbSetExpire $userID "robCooldown" "cooldown" $robCooldown}}
 	{{$victimCash := or (dbGet $victim "cash").Value 0 | toInt}}
 	{{if $victimCash}}
-		{{$amount := (randInt $victimCash)}}
+		{{$amount := randInt $victimCash}}
 		{{$embed.Set "description" (print "You robbed " $symbol (humanizeThousands $amount) " from <@!" $victim ">")}}
 		{{$embed.Set "color" $successColor}}
 		{{$victimCash = sub $victimCash $amount}}

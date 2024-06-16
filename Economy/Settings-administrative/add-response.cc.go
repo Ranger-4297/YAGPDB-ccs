@@ -45,7 +45,7 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$type := (index .CmdArgs 0) | lower}}
+{{$type := index .CmdArgs 0 | lower}}
 {{if and (reFind `add-?responses?` .Cmd) (not (eq $type "work" "crime"))}}
 	{{$embed.Set "description" (print "Invalid `type` argument passed.\nSyntax is: `" .Cmd " <Type:Work/Crime> <Reponse>`")}}
 	{{sendMessage nil (cembed $embed)}}
@@ -61,7 +61,7 @@
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
-	{{$response := (joinStr " " (slice .CmdArgs 1))}}
+	{{$response := joinStr " " (slice .CmdArgs 1)}}
 	{{if not (reFind `\(amount\)` $response)}}
 		{{$embed.Set "description" (print "Please include the exact string `(amount)` as a placeholder for where the amount goes.")}}
 		{{sendMessage nil (cembed $embed)}}
