@@ -21,93 +21,78 @@
 {{/* Flip */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
-{{with (dbGet 0 "EconomySettings")}}
-	{{$a := sdict .Value}}
-	{{$symbol := $a.symbol}}
-	{{$betMax := $a.betMax | toInt}}
-	{{$incomeCooldown := $a.incomeCooldown | toInt}}
-	{{$bal := or (dbGet $userID "cash").Value 0 | toInt}}
-	{{with $.CmdArgs}}
-		{{if (index . 0)}}
-			{{$side := (index . 0) | toString | lower}}
-			{{$picker1 := ""}}
-			{{$win := ""}}
-			{{$lose := ""}}
-			{{if (reFind `\A(t(ails?)?|h(eads?)?)(\s+|\z)` (lower $side))}}
-				{{if eq $side "t" "tails" "tail"}}
-					{{$side = "tails"}}
-				{{else if eq $side "h" "heads" "head"}}
-					{{$side = "heads"}}
-				{{end}}
-				{{if gt (len .) 1}}
-					{{$bet := (index . 1)}}
-					{{$continue := false}}
-					{{if eq ($bet | toString) "all"}}
-						{{$bet = $bal}}
-					{{else if and $betMax (eq (toString $bet) "max")}}
-						{{$bet = $betMax}}
-					{{end}}
-					{{if $bet | toInt}}
-						{{$bet = $bet | toInt}}
-						{{if gt $bet 0}}
-							{{if le $bet $bal}}
-								{{$continue = true}}
-							{{else}}
-								{{$embed.Set "description" (print "You can't bet more than you have!")}}
-								{{$embed.Set "color" $errorColor}}
-							{{end}}
-							{{if $betMax}}
-								{{if gt $bet $betMax}}
-									{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-									{{$embed.Set "color" $errorColor}}
-									{{$continue = false}}
-								{{end}}
-							{{end}}
-							{{if $continue}}
-								{{if not ($cooldown := dbGet $userID "coinflipCooldown")}}
-									{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
-									{{$int := randInt 1 3}}
-									{{if eq $int 1}} {{/* Win */}}
-										{{$bal = add $bal $bet}}
-										{{$embed.Set "description" (print "You flipped " $side " and won " $symbol (humanizeThousands $bet))}}
-										{{$embed.Set "color" $successColor}}
-									{{else}} {{/* Lose */}}
-										{{$bal = sub $bal $bet}}
-										{{$embed.Set "description" (print "You flipped " $side " and lost.")}}
-										{{$embed.Set "color" $errorColor}}
-									{{end}}
-								{{else}}
-									{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
-									{{$embed.Set "color" $errorColor}}
-								{{end}}
-							{{end}}
-						{{else}}
-							{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
-							{{$embed.Set "color" $errorColor}}
-						{{end}}
-					{{else}}
-						{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
-						{{$embed.Set "color" $errorColor}}
-					{{end}}
-				{{else}}
-					{{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "Invalid `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
-		{{end}}
-	{{else}}
-		{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" $.Cmd " <Side:Head/Tails> <Bet:Amount>`")}}
-		{{$embed.Set "color" $errorColor}}
-	{{end}}
-	{{dbSet $userID "cash" $bal}}
+{{$embed := sdict "author" (sdict "name" User.Username "icon_url" (User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$symbol := $economySettings.symbol}}
+{{$betMax := $economySettings.betMax | toInt}}
+{{$incomeCooldown := $economySettings.incomeCooldown | toInt}}
+{{if not .CmdArgs}}
+    {{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
+	{{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{$bal := toInt (dbGet $userID "cash").Value}}
+{{$bet := index .CmdArgs 0 | str | lower}}
+{{if not (or (toInt $bet) (eq $bet "all" "max"))}}
+    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
+    {{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if eq $bet "all"}}
+	{{$bet = $bal}}
+{{else if eq $bet "max"}}
+	{{$bet = $betMax}}
+{{end}}
+{{if le ($bet = toInt $bet) 0}}
+    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
+    {{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if gt $bet $bal}}
+    {{$embed.Set "description" (print "You can't bet more than you have!")}}
+    {{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if gt $bet $betMax}}
+    {{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+    {{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if not (gt (len .CmdArgs) 1)}}
+	{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
+	{{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{$side := index .CmdArgs 1 | str | lower}}
+{{if not (reFind `\A(t(ails?)?|h(eads?)?)(\s+|\z)` $side)}}
+	{{$embed.Set "description" (print "Invalid `Side` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Side:Heads/Tails>`")}}
+	{{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{if eq (slice $side 0 1) "t"}}
+	{{$side = "tails"}}
 {{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
+	{{$side = "heads"}}
+{{end}}
+{{if ($cooldown := dbGet $userID "coinflipCooldown")}}
+	{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+	{{sendMessage nil (cembed $embed)}}
+    {{return}}
+{{end}}
+{{dbSetExpire $userID "coinflipCooldown" "cooldown" $incomeCooldown}}
+{{if and ($int := randInt 1 3) (eq $int 1)}}
+	{{$bal = add $bal $bet}}
+	{{$embed.Set "description" (print "You flipped " $side " and won " $symbol (humanizeThousands $bet))}}
+	{{$embed.Set "color" $successColor}}
+{{else}}
+	{{$bal = sub $bal $bet}}
+	{{$embed.Set "description" (print "You flipped " $side " and lost.")}}
 	{{$embed.Set "color" $errorColor}}
 {{end}}
+{{dbSet $userID "cash" $bal}}
 {{sendMessage nil (cembed $embed)}}

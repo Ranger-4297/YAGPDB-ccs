@@ -17,43 +17,41 @@
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix }}
+{{$ex := or (and (reFind "a_" .Guild.Icon) "gif") "png"}}
+{{$icon := print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $ex "?size=1024"}}
 
 {{/* Buy item */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" $.User.Username "icon_url" ($.User.AvatarURL "1024"))}}
-{{$embed.Set "timestamp" currentTime}}
-{{with dbGet 0 "EconomySettings"}}
-	{{$a := sdict .Value}}
-	{{with (dbGet 0 "store")}}
-		{{$info := sdict .Value}}
-		{{$items := sdict}}
-		{{if ($info.Get "items")}}
-			{{$items = sdict ($info.Get "items")}}
-			{{with $.CmdArgs}}
-				{{$name := (index . 0)}}
-				{{if $items.Get $name}}
-                    {{$items.Del $name}}
-					{{$info.Set "items" $items}}
-					{{dbSet 0 "store" $info}}
-					{{$embed.Set "description" (print "Removed " $name " successfully!")}}
-					{{$embed.Set "color" $successColor}}
-				{{else}}
-					{{$embed.Set "description" (print "This item doesn't exist :( Create it with `" $prefix "create-item " $name "`\n\nTo view all items, run the `" $prefix "shop` command.")}}
-					{{$embed.Set "color" $errorColor}}
-				{{end}}
-			{{else}}
-				{{$embed.Set "description" (print "No item argument provided :(\nSyntax is `" $.Cmd " <Name>`\n\nTo view all items, run the `" $prefix "shop` command.")}}
-				{{$embed.Set "color" $errorColor}}
-			{{end}}
-		{{else}}
-			{{$embed.Set "description" (print "There are no items :(\nAdd some items with `" $prefix "create-item`")}}
-			{{$embed.Set "color" $errorColor}}
-		{{end}}
-	{{end}}
-{{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-	{{$embed.Set "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" (print .Guild.Name " Store")) "timestamp" currentTime "color" $errorColor}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
+{{$symbol := $economySettings.symbol}}
+{{$store := (dbGet 0 "store").Value}}
+{{$items := $store.items}}
+{{if not $items}}
+	{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `Item` argument provided.\nSyntax is `" .Cmd " <Name>`\n\nTo view all items, run the `" $prefix "shop` command")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$name := index .CmdArgs 0}}
+{{if not ($items.Get $name)}}
+	{{$embed.Set "description" (print "This item doesn't exist\nUse `" $prefix "shop` to view the items!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$items.Del $name}}
+{{$store.Set "items" $items}}
+{{$embed.Set "description" (print "Removed " $name " successfully!")}}
+{{$embed.Set "color" $successColor}}
+{{dbSet 0 "store" $store}}
 {{sendMessage nil (cembed $embed)}}

@@ -22,48 +22,44 @@
 {{/* Leaderboard */}}
 
 {{/* Response */}}
-{{$embed := sdict}}
-{{$embed.Set "author" (sdict "name" (print .Guild.Name " leaderboard") "icon_url" $icon)}}
-{{$embed.Set "timestamp" currentTime}}
-{{with (dbGet 0 "EconomySettings")}}
-	{{$a := sdict .Value}}
-	{{$symbol := $a.symbol}}
-	{{$page := 1}}
-	{{if $.CmdArgs}}
-		{{if (index $.CmdArgs 0) | toInt}}
-			{{$page = (index $.CmdArgs 0)}}
-		{{end}}
-	{{end}}
-	{{$skip := mult (sub $page 1) 10}}
-	{{$pos := dict 1 "🥇" 2 "🥈" 3 "🥉"}}
-	{{$users := dbTopEntries "cash" 10 $skip}}
-	{{if (len $users)}}
-		{{$rank := $skip}}
-		{{$display := ""}}
-		{{$dRank := $rank}}
-		{{range $users}}
-			{{$leaderboard := or (toString (dbGet .User.ID "userEconData").Value.settings.leaderboard) "yes"}}
-			{{if eq $leaderboard "yes"}}
-				{{$cash := humanizeThousands (toInt .Value)}}
-				{{$rank = add $rank 1}}
-				{{$dRank = $rank}}
-				{{if in (cslice 1 2 3) $rank}}
-					{{- $dRank = $pos.Get $rank -}}
-				{{else}}
-					{{$dRank = print "  " $rank "."}}
-				{{end}}
-				{{$display = (print $display "**" $dRank "** " .User.String  " **•** " $symbol $cash "\n")}}
-			{{end}}
-		{{end}}
-		{{$embed.Set "description" $display}}
-		{{$embed.Set "footer" (sdict "text" (joinStr "" "Page " $page))}}
-		{{$embed.Set "color" $successColor}}
-	{{else}}
-		{{$embed.Set "description" "There were no users on this page"}}
-		{{$embed.Set "color" $errorColor}}
-	{{end}}
-{{else}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
-	{{$embed.Set "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
+{{$symbol := $economySettings.symbol}}
+{{$page := 1}}
+{{with .CmdArgs}}
+	{{if $page = (index . 0) | toInt}}{{end}}
+{{end}}
+{{$rank := mult (sub $page 1) 10}}
+{{$users := dbTopEntries "cash" 10 $rank}}
+{{if not (len $users)}}
+	{{$embed.Set "description" "There were no users on this page"}}
+	{{$embed.Set "color" $errorColor}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$pos := dict 1 "🥇" 2 "🥈" 3 "🥉"}}
+{{$display := ""}}
+{{$dRank := $rank}}
+{{range $users}}
+	{{$leaderboard := or (toString (dbGet .User.ID "userEconData").Value.settings.leaderboard) "yes"}}
+	{{if eq $leaderboard "yes"}}
+		{{$cash := humanizeThousands (toInt .Value)}}
+		{{$rank = add $rank 1}}
+		{{$dRank = $rank}}
+		{{if in (cslice 1 2 3) $rank}}
+			{{- $dRank = $pos.Get $rank -}}
+		{{else}}
+			{{$dRank = print "  " $rank "."}}
+		{{end}}
+		{{$display = (print $display "**" $dRank "** " .User.String  " **•** " $symbol $cash "\n")}}
+	{{end}}
+{{end}}
+{{$embed.Set "description" $display}}
+{{$embed.Set "footer" (sdict "text" (joinStr "" "Page " $page))}}
+{{$embed.Set "color" $successColor}}
 {{sendMessage nil (cembed $embed)}}
