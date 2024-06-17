@@ -36,13 +36,13 @@
 {{$symbol := $economySettings.symbol}}
 {{$bankDB := or (dbGet 0 "bank").Value sdict}}
 {{if not .CmdArgs}}
-	{{$embed.Set "description" (print "No `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{$embed.Set "description" (print "No `User` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
 {{$user := index .CmdArgs 0}}
 {{if not (getMember $user)}}
-	{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
+	{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID> <Destination:Cash/Bank> <Amount:Amount>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}

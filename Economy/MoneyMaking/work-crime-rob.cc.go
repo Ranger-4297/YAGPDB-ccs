@@ -77,13 +77,13 @@
 	{{end}}
 {{else if (reFind `(rob|steal)` $cmd)}}
 	{{if not .CmdArgs}}
-		{{$embed.Set "description" (print "No `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID>`")}}
+		{{$embed.Set "description" (print "No `User` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
 	{{$victim := index .CmdArgs 0}}
 	{{if not (getMember $victim)}}
-		{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntaxt is `" .Cmd " <User:Mention/ID>`")}}
+		{{$embed.Set "description" (print "Invalid `User` argument provided.\nSyntax is `" .Cmd " <User:Mention/ID>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}

@@ -34,7 +34,7 @@
 {{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
 {{if (reFind `dep(osit)?` .Cmd)}}
 	{{if not .CmdArgs}}
-		{{$embed.Set "description" (print "No `Amount` argument provided.\nSyntaxt is `" .Cmd " <Amount:Amount>`")}}
+		{{$embed.Set "description" (print "No `Amount` argument provided.\nSyntax is `" .Cmd " <Amount:Amount>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
@@ -56,7 +56,7 @@
 	{{$bankUser = add $bankUser $amount}}
 {{else if (reFind `with(draw)?` .Cmd)}}
 	{{if not .CmdArgs}}
-		{{$embed.Set "description" (print "No `Amount` argument provided.\nSyntaxt is `" .Cmd " <Amount:Amount>`")}}
+		{{$embed.Set "description" (print "No `Amount` argument provided.\nSyntax is `" .Cmd " <Amount:Amount>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
