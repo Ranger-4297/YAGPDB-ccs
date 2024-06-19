@@ -46,8 +46,9 @@
 	{{sendMessage nil (complexMessage "embed" $embed "reply" .Message.ID)}}
 	{{return}}
 {{end}}
-{{$entry := cslice}}
 {{$display := ""}}
+{{$entry := cslice}}
+{{$fields := cslice}}
 {{range $item, $itemValue := $inventory}}
 	{{$desc := $itemValue.desc}}
 	{{$qty := $itemValue.quantity}}
@@ -63,7 +64,7 @@
 		{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $expiry .TimeSecond))}}
 		{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
 	{{end}}
-	{{$entry = $entry.Append (print "**" $item "**\nDescription: " $desc "\nQuantity: " (humanizeThousands $qty) "\nRole given: " $role "\nExpiry: " $expires)}}
+	{{$entry = $entry.Append (sdict "Name" $item "Value" (print "**\nDescription: " $desc "\nQuantity: " (humanizeThousands $qty) "\nRole given: " $role "\nExpiry: " $expires))}}
 {{end}}
 {{if .CmdArgs}}
 	{{$page = (index .CmdArgs 0) | toInt}}
@@ -80,8 +81,9 @@
 	{{$display = "This page is empty"}}
 {{else}}
 	{{range (seq $start $stop)}}
-		{{$display = (print $display (index $entry .) "\n")}}
+		{{$fields = $fields.Append (index $entry .)}}
 	{{end}}
+	{{$embed.Set "fields" $fields}}
 	{{$embed.Set "color" $successColor}}
 {{end}}
 {{if gt (len $inventory) $stop}}

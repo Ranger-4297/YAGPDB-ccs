@@ -37,6 +37,7 @@
 	{{sendMessage nil (complexMessage "embed" $embed "reply" .Message.ID)}}
 	{{return}}
 {{end}}
+{{$fields := cslice}}
 {{$entry := cslice}}
 {{$display := ""}}
 {{range $item, $itemValue := $items}}
@@ -46,7 +47,7 @@
 	{{else}}
 		{{$qty = "Infinite"}}
 	{{end}}
-	{{$entry = $entry.Append (print "**" $item " - " $symbol (humanizeThousands $itemValue.price) " - " $qty "**\n" $itemValue.desc)}}
+	{{$entry = $entry.Append (sdict "Name" (print $item " - "  $symbol (humanizeThousands $itemValue.price) " - " $qty) "value"  $itemValue.desc "inline" false)}}
 {{end}}
 {{$page := 1}}
 {{if .CmdArgs}}
@@ -64,9 +65,10 @@
 	{{$embed.Set "description" (print "There are no items on this page\nAdd some with `create-item`")}}
 {{else}}
 	{{range (seq $start $stop)}}
-		{{$display = (print $display (index $entry .) "\n")}}
+		{{$fields = $fields.Append (index $entry .)}}
 	{{end}}
-	{{$embed.Set "description" (print "Buy an item with `buy-item <Name> [Quantity:Int]`\nFor more information on an item use `item-store <Name>`.\n\n" $display)}}
+	{{$embed.Set "description" (print "Buy an item with `buy-item <Name> [Quantity:Int]`\nFor more information on an item use `item-store <Name>`.")}}
+	{{$embed.Set "fields" $fields}}
 	{{$embed.Set "color" $successColor}}
 {{end}}
 {{if gt (len $items) $stop}}
