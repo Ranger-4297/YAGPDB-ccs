@@ -21,7 +21,8 @@
 {{/* Server shop */}}
 
 {{/* Response */}}
-{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" (print .User.Username " inventory") "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$buttons := cslice (sdict "label" "previous" "style" "danger" "custom_id" "economy_back" "disabled" true) (sdict "label" "next" "style" "success" "custom_id" "economy_forward" "disabled" true)}}
 {{$economySettings := (dbGet 0 "EconomySettings").Value}}
 {{if not $economySettings}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
@@ -34,53 +35,61 @@
 		{{$user = $newUser}}
 	{{end}}
 {{end}}
-{{$page := "1"}}
-{{if gt (len .CmdArgs) 1}}
-	{{$page = (index .CmdArgs 1) | toInt}}
-	{{if lt $page 1}}
-		{{$page = 1}}
-	{{end}}
-{{end}}
+{{$page := 1}}
+{{$author := sdict "name" (print $user.Username " inventory") "icon_url" ($user.AvatarURL "1024")}}
+{{$embed.Set "author" $author }}
 {{$userdata := or (dbGet $user.ID "userEconData").Value (sdict "inventory" sdict)}}
-{{$invStatus := or $userdata.settings.inventory "yes" | toString}}
 {{$inventory := $userdata.inventory}}
 {{if not $inventory }}
 	{{$embed.Set "description" (print "This users inventory is empty :(\nThey should get some items from the shop!")}}
+	{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
+	{{sendMessage nil (complexMessage "embed" $embed "reply" .Message.ID)}}
+	{{return}}
 {{end}}
-{{$field := cslice}}
 {{$entry := cslice}}
-{{range $k,$v := $inventory}}
-	{{$item := $k}}
-	{{$desc := $v.desc}}
-	{{$qty := $v.quantity}}
-	{{$role := $v.role}}
+{{$display := ""}}
+{{range $item, $itemValue := $inventory}}
+	{{$desc := $itemValue.desc}}
+	{{$qty := $itemValue.quantity}}
+	{{$role := $itemValue.role}}
 	{{if $role}}
 		{{$role = print "<@&" $role ">"}}
 	{{else}}
 		{{$role = "none"}}
 	{{end}}
-	{{$expiry := $v.expiry}}
-	{{$expires := "never"}}
+	{{$expiry := $itemValue.expiry}}
+	{{$expires := "never"}}	
 	{{if $expiry}}
 		{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $expiry .TimeSecond))}}
 		{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
 	{{end}}
-	{{$entry = $entry.Append (sdict "Name" $item "value" (joinStr "\n" (print "Description: " $desc) (print "Quantity: " (humanizeThousands $qty)) (print "Role given: " $role) (print "Expiry: " $expires)) "inline" false)}}
+	{{$entry = $entry.Append (print "**" $item "**\nDescription: " $desc "\nQuantity: " (humanizeThousands $qty) "\nRole given: " $role "\nExpiry: " $expires)}}
+{{end}}
+{{if .CmdArgs}}
+	{{$page = (index .CmdArgs 0) | toInt}}
+	{{if lt $page 1}}
+		{{$page = 1}}
+	{{end}}
 {{end}}
 {{$start := mult 10 (sub $page 1)}}
 {{$stop := mult $page 10}}
 {{if ge $stop (len $entry)}}
 	{{$stop = (len $entry)}}
 {{end}}
-{{if and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry))}}
-	{{range (seq $start $stop)}}
-		{{$field = $field.Append (index $entry .)}}
-	{{end}}
+{{if not (and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry)))}}
+	{{$display = "This page is empty"}}
 {{else}}
-	{{$embed.Set "description" (print "This page is empty")}}
+	{{range (seq $start $stop)}}
+		{{$display = (print $display (index $entry .) "\n")}}
+	{{end}}
+	{{$embed.Set "color" $successColor}}
 {{end}}
-{{$embed.Set "title" (print "Inventory")}}
-{{$embed.Set "fields" $field}}
-{{$embed.Set "color" $successColor}}
+{{if gt (len $inventory) $stop}}
+	{{(index $buttons 1).Set "disabled" false}}
+{{end}}
+{{if ne $page 1}}
+	{{(index $buttons 0).Set "disabled" false}}
+{{end}}
+{{$embed.Set "description" $display}}
 {{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
-{{sendMessage nil (cembed $embed)}}
+{{sendMessage nil (complexMessage "reply" .Message.ID "embed" $embed "buttons" $buttons)}}

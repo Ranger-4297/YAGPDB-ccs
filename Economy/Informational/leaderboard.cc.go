@@ -22,7 +22,8 @@
 {{/* Leaderboard */}}
 
 {{/* Response */}}
-{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime}}
+{{$embed := sdict "author" (sdict "name" (print .Guild.Name " leaderboard") "icon_url" $icon) "timestamp" currentTime "color" $errorColor}}
+{{$buttons := cslice (sdict "label" "previous" "style" "danger" "custom_id" "economy_back" "disabled" true) (sdict "label" "next" "style" "success" "custom_id" "economy_forward" "disabled" true)}}
 {{$economySettings := (dbGet 0 "EconomySettings").Value}}
 {{if not $economySettings}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
@@ -31,19 +32,21 @@
 {{end}}
 {{$symbol := $economySettings.symbol}}
 {{$page := 1}}
-{{with .CmdArgs}}
-	{{if $page = (index . 0) | toInt}}{{end}}
+{{if .CmdArgs}}
+	{{$page = (index .CmdArgs 0) | toInt}}
+	{{if lt $page 1}}
+		{{$page = 1}}
+	{{end}}
 {{end}}
 {{$rank := mult (sub $page 1) 10}}
 {{$users := dbTopEntries "cash" 10 $rank}}
+{{$display := ""}}
 {{if not (len $users)}}
-	{{$embed.Set "description" "There were no users on this page"}}
-	{{$embed.Set "color" $errorColor}}
-	{{sendMessage nil (cembed $embed)}}
-	{{return}}
+	{{$display = "There were no users on this page"}}
+{{else}}
+	{{$embed.Set "color" $successColor}}
 {{end}}
 {{$pos := dict 1 "🥇" 2 "🥈" 3 "🥉"}}
-{{$display := ""}}
 {{$dRank := $rank}}
 {{range $users}}
 	{{$cash := humanizeThousands (toInt .Value)}}
@@ -56,7 +59,12 @@
 	{{end}}
 	{{$display = (print $display "**" $dRank "** " .User.String  " **•** " $symbol $cash "\n")}}
 {{end}}
+{{if gt (dbCount "cash") $rank}}
+	{{(index $buttons 1).Set "disabled" false}}
+{{end}}
+{{if ne $page 1}}
+	{{(index $buttons 0).Set "disabled" false}}
+{{end}}
 {{$embed.Set "description" $display}}
-{{$embed.Set "footer" (sdict "text" (joinStr "" "Page " $page))}}
-{{$embed.Set "color" $successColor}}
-{{sendMessage nil (cembed $embed)}}
+{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
+{{sendMessage nil (complexMessage "reply" .Message.ID "embed" $embed "buttons" $buttons)}}
