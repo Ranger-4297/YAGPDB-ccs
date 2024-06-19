@@ -37,42 +37,33 @@
 {{$bank := or (((dbGet 0 "bank").Value).Get (toString $user.ID)) 0 | toInt}}
 {{$cash := or (dbGet $user.ID "cash").Value 0 | toInt}}
 {{$net := humanizeThousands ($cash | add $bank)}}
-{{$rank := "This user has their rank hidden."}}
-{{$userdata := or (dbGet $user.ID "userEconData").Value (sdict "settings" (sdict "balance" "yes" "inventory" "yes" "leaderboard" "yes" "trading" "yes") "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0))}}
-{{$leaderboard := or $userdata.settings.leaderboard "yes"}}
-{{if eq $leaderboard "yes"}}
-	{{$pos := dict 1 "🥇" 2 "🥈" 3 "🥉"}}
-	{{$rank = dbRank (sdict "pattern" "cash") $user.ID "cash"}}
-	{{if not $rank}}
-		{{$rank = "None"}}
-	{{else}}
-		{{if in (cslice 1 2 3) $rank }}
-			{{$rank = $pos.Get $rank}}
-		{{else}}
-			{{$ord := "th"}}
-			{{$cent := toInt (mod $rank 100)}}
-			{{$dec := toInt (mod $rank 10)}}
-			{{if not (and (ge $cent 10) (le $cent 19))}}
-				{{if eq $dec 1}}{{$ord = "st"}}{{else if eq $dec 2}}{{$ord = "nd"}}{{else if eq $dec 3}}{{$ord = "rd"}}{{end}}
-			{{end}}
-			{{$rank = print $rank $ord "."}}
-		{{end}}
-	{{end}}
-{{end}}
-{{$balStatus := $userdata.settings.balance | toString}}
-{{if or (eq .User.ID $user.ID) (eq $balStatus "yes")}}
-	{{$embed.Set "description" (print $user.Mention "'s balance\nLeaderboard rank: " $rank)}}
-	{{$embed.Set "fields" (cslice (sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true) (sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true) (sdict "name" "Networth" "value" (print $symbol $net) "inline" true))}}
-	{{$embed.Set "color" $successColor}}
-	{{if not (and (eq .User.ID $user.ID) (eq $balStatus "no"))}}
-		{{sendMessage nil (cembed $embed)}}
-		{{return}}
-	{{end}}
-	{{sendDM (cembed $embed)}}
-	{{$embed.Set "description" "Sent this to your DM as your inventory is on private"}}
-	{{$embed.Del "footer"}}
-	{{$embed.Del "fields"}}
-	{{sendMessage nil (cembed $embed)}}
+{{$rank := ""}}
+{{$pos := dict 1 "🥇" 2 "🥈" 3 "🥉"}}
+{{$rank = dbRank (sdict "pattern" "cash") $user.ID "cash"}}
+{{if not $rank}}
+	{{$rank = "None"}}
 {{else}}
-	{{sendMessage nil "This user has their balance on private :("}}
+	{{if in (cslice 1 2 3) $rank }}
+		{{$rank = $pos.Get $rank}}
+	{{else}}
+		{{$ord := "th"}}
+		{{$cent := toInt (mod $rank 100)}}
+		{{$dec := toInt (mod $rank 10)}}
+		{{if not (and (ge $cent 10) (le $cent 19))}}
+			{{if eq $dec 1}}{{$ord = "st"}}{{else if eq $dec 2}}{{$ord = "nd"}}{{else if eq $dec 3}}{{$ord = "rd"}}{{end}}
+		{{end}}
+		{{$rank = print $rank $ord "."}}
+	{{end}}
 {{end}}
+{{$embed.Set "description" (print $user.Mention "'s balance\nLeaderboard rank: " $rank)}}
+{{$embed.Set "fields" (cslice (sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true) (sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true) (sdict "name" "Networth" "value" (print $symbol $net) "inline" true))}}
+{{$embed.Set "color" $successColor}}
+{{if not (and (eq .User.ID $user.ID) (eq $balStatus "no"))}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{sendDM (cembed $embed)}}
+{{$embed.Set "description" "Sent this to your DM as your inventory is on private"}}
+{{$embed.Del "footer"}}
+{{$embed.Del "fields"}}
+{{sendMessage nil (cembed $embed)}}
