@@ -21,7 +21,8 @@
 {{/* Server shop */}}
 
 {{/* Response */}}
-{{$embed := sdict "author" (sdict "name" (print .Guild.Name " Store")) "timestamp" currentTime "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" (print .Guild.Name " shop") "icon_url" $icon) "timestamp" currentTime "color" $errorColor}}
+{{$buttons := cslice (sdict "label" "previous" "style" "danger" "custom_id" "economy_back" "disabled" true) (sdict "label" "next" "style" "success" "custom_id" "economy_forward" "disabled" true)}}
 {{$economySettings := (dbGet 0 "EconomySettings").Value}}
 {{if not $economySettings}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
@@ -32,32 +33,20 @@
 {{$store := (dbGet 0 "store").Value}}
 {{$items := $store.items}}
 {{if not $items}}
-	{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item`")}}
-	{{sendMessage nil (cembed $embed)}}
+	{{$embed.Set "description" (print "The shop is empty\nAdd some items with `" $prefix "create-item`")}}
+	{{sendMessage nil (complexMessage "embed" $embed "reply" .Message.ID)}}
 	{{return}}
 {{end}}
 {{$entry := cslice}}
-{{$field := cslice}}
-{{range $k,$v := $items}}
-	{{$item := $k}}
-	{{$desc := $v.desc }}
-	{{$price := print $symbol (humanizeThousands $v.price)}}
-	{{$qty := ""}}
-	{{if $v.quantity}}
-		{{$qty = $v.quantity}}
-		{{if not (reFind "inf" (lower (toString $qty)))}}
-			{{$qty = toInt $qty | humanizeThousands}}
-		{{else}}
-			{{$qty = "Infinite"}}
-		{{end}}
+{{$display := ""}}
+{{range $item, $itemValue := $items}}
+	{{$qty := $itemValue.quantity}}
+	{{if $qty}}
+		{{$qty = humanizeThousands $qty}}
 	{{else}}
 		{{$qty = "Infinite"}}
 	{{end}}
-	{{if $user := $v.ID}}
-		{{$entry = $entry.Append (sdict "Name" (print $item " - " $price " - " $qty " - " $user ) "value"  $desc "inline" false)}}
-	{{else}}
-		{{$entry = $entry.Append (sdict "Name" (print $item " - " $price " - " $qty) "value"  $desc "inline" false)}}
-	{{end}}
+	{{$entry = $entry.Append (print "**" $item " - " $symbol (humanizeThousands $itemValue.price) " - " $qty "**\n" $itemValue.desc)}}
 {{end}}
 {{$page := 1}}
 {{if .CmdArgs}}
@@ -71,16 +60,20 @@
 {{if ge $stop (len $entry)}}
 	{{$stop = (len $entry)}}
 {{end}}
-{{if and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry))}}
-	{{range (seq $start $stop)}}
-		{{$field = $field.Append (index $entry .)}}
-		{{$embed.Set "description" (print "Buy an item with `buy-item <Name> [Quantity:Int]`\nFor more information on an item use `item-store <Name>`.")}}
-		{{$embed.Set "color" $successColor}}
-	{{end}}
+{{if not (and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry)))}}
+	{{$embed.Set "description" (print "There are no items on this page\nAdd some with `create-item`")}}
 {{else}}
-	{{$embed.Set "description" (print "There are no items on this page\nAdd some with `create-item <Name:Word> <Price:Int> <Quantity:Int> <Description:String>`")}}
-	{{$embed.Set "color" $errorColor}}
+	{{range (seq $start $stop)}}
+		{{$display = (print $display (index $entry .) "\n")}}
+	{{end}}
+	{{$embed.Set "description" (print "Buy an item with `buy-item <Name> [Quantity:Int]`\nFor more information on an item use `item-store <Name>`.\n\n" $display)}}
+	{{$embed.Set "color" $successColor}}
 {{end}}
-{{$embed.Set "fields" $field}}
+{{if gt (len $items) $stop}}
+	{{(index $buttons 1).Set "disabled" false}}
+{{end}}
+{{if ne $page 1}}
+	{{(index $buttons 0).Set "disabled" false}}
+{{end}}
 {{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
-{{sendMessage nil (cembed $embed)}}
+{{sendMessage nil (complexMessage "reply" .Message.ID "embed" $embed "buttons" $buttons)}}
