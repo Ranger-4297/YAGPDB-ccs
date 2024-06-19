@@ -1,4 +1,4 @@
-# Economy CCs V8.8
+# Economy CCs V8.9
 Fully functional economy system for your server!    
 These commands work perfectly on base YAGPDB. Meaning you don't have to worry about database limits.    
 These commands are thoroughly tested before release and are ensured to keep working
