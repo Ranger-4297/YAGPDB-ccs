@@ -79,22 +79,8 @@
 {{else}}
 	{{$embed.Set "description" (print "This page is empty")}}
 {{end}}
-{{if or (eq .User.ID $user.ID) (eq $invStatus "yes")}}
-	{{if $inventory}}
-		{{$embed.Set "title" (print "Inventory")}}
-		{{$embed.Set "fields" $field}}
-		{{$embed.Set "color" $successColor}}
-		{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
-	{{end}}
-	{{if not (and (eq .User.ID $user.ID) (eq $invStatus "no"))}}
-		{{sendMessage nil (cembed $embed)}}
-		{{return}}
-	{{end}}
-	{{sendDM (cembed $embed)}}
-	{{$embed.Set "description" "Sent this to your DM as your inventory is on private"}}
-	{{$embed.Del "footer"}}
-	{{$embed.Del "fields"}}
-	{{sendMessage nil (cembed $embed)}}
-{{else}}
-	{{sendMessage nil "This user has their inventory on private :("}}
-{{end}}
+{{$embed.Set "title" (print "Inventory")}}
+{{$embed.Set "fields" $field}}
+{{$embed.Set "color" $successColor}}
+{{$embed.Set "footer" (sdict "text" (print "Page: " $page))}}
+{{sendMessage nil (cembed $embed)}}

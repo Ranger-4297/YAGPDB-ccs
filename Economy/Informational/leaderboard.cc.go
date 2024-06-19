@@ -46,18 +46,15 @@
 {{$display := ""}}
 {{$dRank := $rank}}
 {{range $users}}
-	{{$leaderboard := or (toString (dbGet .User.ID "userEconData").Value.settings.leaderboard) "yes"}}
-	{{if eq $leaderboard "yes"}}
-		{{$cash := humanizeThousands (toInt .Value)}}
-		{{$rank = add $rank 1}}
-		{{$dRank = $rank}}
-		{{if in (cslice 1 2 3) $rank}}
-			{{- $dRank = $pos.Get $rank -}}
-		{{else}}
-			{{$dRank = print "  " $rank "."}}
-		{{end}}
-		{{$display = (print $display "**" $dRank "** " .User.String  " **•** " $symbol $cash "\n")}}
+	{{$cash := humanizeThousands (toInt .Value)}}
+	{{$rank = add $rank 1}}
+	{{$dRank = $rank}}
+	{{if in (cslice 1 2 3) $rank}}
+		{{- $dRank = $pos.Get $rank -}}
+	{{else}}
+		{{$dRank = print "  " $rank "."}}
 	{{end}}
+	{{$display = (print $display "**" $dRank "** " .User.String  " **•** " $symbol $cash "\n")}}
 {{end}}
 {{$embed.Set "description" $display}}
 {{$embed.Set "footer" (sdict "text" (joinStr "" "Page " $page))}}
