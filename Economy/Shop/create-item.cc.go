@@ -168,10 +168,10 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 		{{if eq (lower $role) "skip"}}
 			{{$role = 0}}
 		{{else}}
-			{{$role = getRole $role}}
+			{{$role = (getRole $role).ID}}
 		{{end}}
 		{{$item := $createItem.item}}
-		{{$item.data.Set "role" $role.ID}}
+		{{$item.data.Set "role" $role}}
 		{{dbSet 0 "createItem" $createItem}}
 		{{if $role}}
 			{{$role = $role.Mention}}
