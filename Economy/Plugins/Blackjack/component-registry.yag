@@ -88,17 +88,10 @@
 		{{$value := $dealer.cardValue | toInt}}
 		{{$data.dealer.Set "cardValue" $data.dealer.cardValueReal}}{{$data.dealer.Del "cardValueReal"}}{{$data.dealer.Set "cardPrint" $data.dealer.cardPrintReal}}{{$data.dealer.Del "cardPrintReal"}}
 		{{while le $value 17}}{{$hit = execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = add $value $hit.cardValue}}{{end}}
-		{{$dealerPrintCards := joinStr " " $data.dealer.cardPrint}}
-		{{$embed.Set "description" (print "Result: Win " $symbol $data.bet)}}
-		{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $playerPrintCards "\nValue: " $data.player.cardValue) "inline" true) (sdict "name" "Dealers hand" "value" (print $dealerPrintCards "\nValue: " $data.dealer.cardValue) "inline" true))}}
-		{{updateMessage (complexMessageEdit "embed" (cembed $embed))}}
-		{{cancelScheduledUniqueCC $data.ccID "cancel"}}{{dbDel $userID "bj"}}{{dbSet $data.user "cash" (add .bal (mult .data.bet 2))}}
+		{{template "standCondition" (sdict "data" $data "symbol" $symbol "bal" $bal)}}
 		{{return}}
 	{{else if gt $hit.cardValue 21}}
-		{{$embed.Set "description" (print "Result: bust -" $symbol $data.bet)}}
-		{{$embed.Set "color" $errorColor}}
-		{{updateMessage (complexMessageEdit "embed" (cembed $embed))}}
-		{{cancelScheduledUniqueCC $data.ccID "cancel"}}{{dbDel $userID "bj"}}
+		{{template "standCondition" (sdict "data" $data "symbol" $symbol "bal" $bal)}}
 		{{return}}
 	{{end}}
 	{{$components := (cslice (cbutton "label" "Hit" "custom_id" "bj_hit" "style" "primary") (cbutton "label" "Stand" "custom_id" "bj_stand" "style" "success") (cbutton "label" "Double Down" "custom_id" "bj_double" "style" "secondary" "disabled" true) (cbutton "label" "Split" "custom_id" "bj_split" "style" "secondary" "disabled" true))}}
