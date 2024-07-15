@@ -33,19 +33,19 @@
 </div>
 
 ## Welcome message
-Welcome to my YAGPDB CC repository! 
-This repository hosts the largest made economy system for the YAGPDB.xyz custom command system.
-The economy system has been worked on for the past 2-3 years and has taken a lot of work to get it to the current state.
-As you can see, a lot of effort has gone into these regardless as to if they are used, they are still incredibly fun to make
+Welcome to my YAGPDB CC repository! <br />
+This repository hosts the largest made economy system for the YAGPDB.xyz custom command system.<br />
+The economy system has been worked on since mid 2021 and has taken a lot of work to get it to the current state.<br />
+As you can see, a lot of effort has gone into these, and regardless as to whether they are used or not; they are still incredibly fun to make.<br />
 I appreciate every fork and star and those who use my commands!
 
 
-If you'd like to help test with commands and be the first to know when new releases will be coming, consider joining the server below<br />
+If you'd like to help test with commands and be the first to know when new releases will be coming, consider joining the server below:<br />
 https://discord.gg/bbvzRgQvB7
 
 ## License
 
-<p>This repository is licensed under the terms of the below license. The GNU, General Public License Version 3</p>
+<p>This repository is licensed under the terms of the following license: The GNU, General Public License Version 3</p>
 
 <a href="https://github.com/Ranger-4297/YAGPDB-ccs/blob/main/LICENSE">Full License</a><br>
 
