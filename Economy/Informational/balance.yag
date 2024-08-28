@@ -58,12 +58,4 @@
 {{$embed.Set "description" (print $user.Mention "'s balance\nLeaderboard rank: " $rank)}}
 {{$embed.Set "fields" (cslice (sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true) (sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true) (sdict "name" "Networth" "value" (print $symbol $net) "inline" true))}}
 {{$embed.Set "color" $successColor}}
-{{if not (and (eq .User.ID $user.ID) (eq $balStatus "no"))}}
-	{{sendMessage nil (cembed $embed)}}
-	{{return}}
-{{end}}
-{{sendDM (cembed $embed)}}
-{{$embed.Set "description" "Sent this to your DM as your inventory is on private"}}
-{{$embed.Del "footer"}}
-{{$embed.Del "fields"}}
 {{sendMessage nil (cembed $embed)}}
