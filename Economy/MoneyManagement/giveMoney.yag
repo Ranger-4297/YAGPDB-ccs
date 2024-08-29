@@ -21,7 +21,7 @@
 {{/* Give money */}}
 
 {{/* Response */}}
-{{$embed := sdict "author" (sdict "name" User.Username "icon_url" (User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime "color" $errorColor}}
 {{$economySettings := (dbGet 0 "EconomySettings").Value}}
 {{if not $economySettings}}
 	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
