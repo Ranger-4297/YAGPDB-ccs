@@ -64,7 +64,7 @@
 		{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $expiry .TimeSecond))}}
 		{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
 	{{end}}
-	{{$entry = $entry.Append (sdict "Name" $item "Value" (print "**\nDescription: " $desc "\nQuantity: " (humanizeThousands $qty) "\nRole given: " $role "\nExpiry: " $expires))}}
+	{{$entry = $entry.Append (sdict "Name" $item "Value" (print "\nDescription: " $desc "\nQuantity: " (humanizeThousands $qty) "\nRole given: " $role "\nExpiry: " $expires))}}
 {{end}}
 {{if .CmdArgs}}
 	{{$page = (index .CmdArgs 0) | toInt}}
