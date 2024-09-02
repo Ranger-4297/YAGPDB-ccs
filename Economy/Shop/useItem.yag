@@ -41,13 +41,13 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$name := index . 0}}
-{{if not ($items.Get $name)}}
+{{$name := index .CmdArgs 0}}
+{{$item := $inventory.Get $name}}
+{{if not $item}}
 	{{$embed.Set "description" (print "This item doesn't exist\nUse `" $prefix "shop` to view the items!")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$item := $inventory.Get $name}}
 {{$qty := $item.quantity}}
 {{$role := $item.role}}
 {{$nqty := sub (toInt $qty) 1}}
