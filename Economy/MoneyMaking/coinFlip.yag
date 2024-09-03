@@ -64,13 +64,13 @@
     {{return}}
 {{end}}
 {{if not (gt (len .CmdArgs) 1)}}
-	{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
+	{{$embed.Set "description" (print "No `Side` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Side:Head/Tails>`")}}
 	{{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}
 {{$side := index .CmdArgs 1 | str | lower}}
 {{if not (reFind `\A(t(ails?)?|h(eads?)?)(\s+|\z)` $side)}}
-	{{$embed.Set "description" (print "Invalid `Side` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Side:Heads/Tails>`")}}
+	{{$embed.Set "description" (print "Invalid `Side` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Side:Heads/Tails>`")}}
 	{{sendMessage nil (cembed $embed)}}
     {{return}}
 {{end}}

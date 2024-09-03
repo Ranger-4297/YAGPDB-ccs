@@ -82,7 +82,7 @@
 		{{$cfWC = $cfWC | add 1}}
 	{{end}}
 	{{$bal = add $bal $bet}}
-	{{$embed.Set "description" (print "Your chicken won the fight and got you " $symbol $bet "!\nPlay again with `" Cmd " <Bet:Amount>`")}}
+	{{$embed.Set "description" (print "Your chicken won the fight and got you " $symbol $bet "!\nPlay again with `" .Cmd " <Bet:Amount>`")}}
 	{{$embed.Set "color" $successColor}}
 {{else}}
 	{{$cfWC = 50}}

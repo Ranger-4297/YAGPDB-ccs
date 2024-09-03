@@ -85,10 +85,10 @@
 		{{$rs = 0}}
 	{{end}}
 	{{if $rs}}
-		{{$embed.Set "description" (print "The roll landed on " $roll " and you and won " $symbol (humanizeThousands $bet) "!")}}
+		{{$embed.Set "description" (print "The roll landed on " $roll " and you won " $symbol (humanizeThousands $bet) "!")}}
 		{{$embed.Set "color" $successColor}}
 	{{else}}
-		{{$embed.Set "description" (print "The roll landed on " $roll " and you and lost " $symbol (humanizeThousands $bet))}}
+		{{$embed.Set "description" (print "The roll landed on " $roll " and you lost " $symbol (humanizeThousands $bet))}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
 {{else if (reFind `snake-?eyes` .Cmd)}}

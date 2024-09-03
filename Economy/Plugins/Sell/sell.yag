@@ -54,7 +54,7 @@
 {{end}}
 {{$price := index .CmdArgs 1}}
 {{if not (and ($price := toInt $price) (gt $price 0))}}
-	{{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" Cmd " <Item:Item name> <Price:Int> [Quantity:Int/All]`")}}
+	{{$embed.Set "description" (print "Invalid `Price` argument provided.\nSyntax is `" .Cmd " <Item:Item name> <Price:Int> [Quantity:Int/All]`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
@@ -63,7 +63,7 @@
 {{if gt (len .CmdArgs) 2}}
 	{{$sellQuantity = index .CmdArgs 2}}
 	{{if or (not (and (toInt $sellQuantity) (gt (toInt $sellQuantity) 0))) (ne (lower $sellQuantity) "all")}}
-		{{$embed.Set "description" (print "Invalid `Quantity` argument provided.\nSyntax is `" Cmd "<Item:Item name> <Price:Int> [Quantity:Int/All]`")}}
+		{{$embed.Set "description" (print "Invalid `Quantity` argument provided.\nSyntax is `" .Cmd "<Item:Item name> <Price:Int> [Quantity:Int/All]`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
