@@ -102,17 +102,18 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{if not .CmdArgs }}
-	{{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Space>`")}}
+{{if not .CmdArgs}}
+	{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" .Cmd " <Space> <Bet:Amount>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$bet := index .CmdArgs 0 | str | lower}}
-{{if eq $bet "all"}}
-	{{$bet = $bal}}
-{{else if eq $bet "max"}}
-	{{$bet = $betMax}}
-{{else if eq $space "info"}}
+{{$space := index .CmdArgs 0}}
+{{if not (or (eq (str $space) "info" "collect") (in $numbers (toInt $space)) (eq (str $space) "1-12") (eq (str $space) "13-24") (eq (str $space) "25-36") (eq (lower (str $space)) "even") (eq (lower (str $space)) "odd") (eq (lower (str $space)) "red") (eq (lower (str $space)) "black") (eq (lower (str $space)) "1st") (eq (lower (str $space)) "2nd") (eq (lower (str $space)) "3rd") (eq (str $space) "1-18") (eq (str $space) "19-36"))}}
+	{{$embed.Set "description" (print "Invalid `Space` argument provided.\nSyntax is `" .Cmd " <Space> <Bet:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if eq $space "info"}}
 	{{$embed.Set "description" (print "**Payout:**\n[x35] Single number\n[x3] Dozens (1-12, 13-24, 25-36)\n[x3] Columns (1st, 2nd, 3rd)\n[x2] Halves (1-18, 19-36)\n[x2] Odd/Even\n[2x] Colours (red, black)")}}
 	{{$embed.Set "image" (sdict "url" "https://raw.githubusercontent.com/Ranger-4297/YAGPDB-ccs/main/Economy/Plugins/Roulette/roulette-board.png")}}
 	{{$embed.Set "color" $successColor}}
@@ -135,8 +136,19 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
+{{if lt (len .CmdArgs) 2}}
+	{{$embed.Set "description" (print "No `Bet` argument provided.\nSyntax is `" .Cmd " <Space> <Bet:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$bet := index .CmdArgs 1 | str | lower}}
+{{if eq $bet "all"}}
+	{{$bet = $bal}}
+{{else if eq $bet "max"}}
+	{{$bet = $betMax}}
+{{end}}
 {{if le ($bet = toInt $bet) 0}}
-	{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount> <Space>`")}}
+	{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Space> <Bet:Amount>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
@@ -147,17 +159,6 @@
 {{end}}
 {{if gt $bet $betMax}}
 	{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-	{{sendMessage nil (cembed $embed)}}
-	{{return}}
-{{end}}
-{{if lt (len .CmdArgs 2)}}
-	{{$embed.Set "description" (print "No `Space` argument provided.\nSyntax is `" Cmd " <Bet:Amount> <Space>`")}}
-	{{sendMessage nil (cembed $embed)}}
-	{{return}}
-{{end}}
-{{$space := index .CmdArgs 0}}
-{{if not (or (in $numbers (toInt $space)) (eq (str $space) "1-12") (eq (str $space) "13-24") (eq (str $space) "25-36") (eq (lower (str $space)) "even") (eq (lower (str $space)) "odd") (eq (lower (str $space)) "red") (eq (lower (str $space)) "black") (eq (lower (str $space)) "1st") (eq (lower (str $space)) "2nd") (eq (lower (str $space)) "3rd") (eq (str $space) "1-18") (eq (str $space) "19-36"))}}
-	{{$embed.Set "description" (print "Invalid `Space` argument provided.\nSyntax is `" Cmd " <Space> <Bet:Amount>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
