@@ -49,7 +49,12 @@
 		{{$embed.Set "description" (print "You're unable to deposit more than you have on hand.\nYou currently have " $symbol (humanizeThousands $cash) " on you.")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
-	{{end}}	
+	{{end}}
+	{{if lt $cash 0}}
+		{{$embed.Set "description" (print "You're unable to deposit your overdraft.")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
 	{{$embed.Set "description" (print "You deposited " $symbol (humanizeThousands $amount) " into your bank!")}}
 	{{$embed.Set "color" $successColor}}
 	{{$cash = sub $cash $amount}}
@@ -66,9 +71,14 @@
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
-	{{if eq $amount "all"}}{{$amount = $cash}}{{else}}{{$amount = toInt $amount}}{{end}}
+	{{if eq $amount "all"}}{{$amount = $bankUser}}{{else}}{{$amount = toInt $amount}}{{end}}
 	{{if gt $amount $bankUser}}
 		{{$embed.Set "description" (print "You're unable to withdraw more than you have in your bank.\nYou currently have " $symbol (humanizeThousands $bankUser) " in your bank.")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{if lt $amount 0}}
+		{{$embed.Set "description" (print "You're unable to withdraw less than nothing.")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
