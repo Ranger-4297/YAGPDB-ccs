@@ -100,7 +100,7 @@
 	{{end}}
 	{{dbSetExpire $userID "robCooldown" "cooldown" $robCooldown}}
 	{{$victimCash := or (dbGet $victim "cash").Value 0 | toInt}}
-	{{if $victimCash}}
+	{{if lt 0 $victimCash}}
 		{{$amount := randInt $victimCash}}
 		{{$embed.Set "description" (print "You robbed " $symbol (humanizeThousands $amount) " from <@!" $victim ">")}}
 		{{$embed.Set "color" $successColor}}
