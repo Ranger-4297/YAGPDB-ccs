@@ -36,11 +36,11 @@
 {{$inventory := $userdata.inventory}}
 {{if .ExecData}}
 	{{$userData := (dbGet .ExecData.user "userEconData").Value}}
-	{{$item := .ExecData.itemName}}
 	{{$inventory := $userData.inventory}}
-	{{if $item = ($inventory.Get $item)}}
-		{{if gt $item.quantity 1}}
-			{{$item.Set "quantity" (sub $item.quantity 1)}}
+	{{$item := .ExecData.itemName}}
+	{{if $inventoryItem := ($inventory.Get $item)}}
+		{{if gt $inventoryItem.quantity 1}}
+			{{$inventoryItem.Set "quantity" (sub $inventoryItem.quantity 1)}}
 		{{else}}
 			{{$inventory.Del $item}}
 		{{end}}
