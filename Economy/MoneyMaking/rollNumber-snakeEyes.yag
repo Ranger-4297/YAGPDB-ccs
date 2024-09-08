@@ -110,4 +110,5 @@
 		{{$bal = sub $bal $bet}}
 	{{end}}
 {{end}}
+{{dbSet .User.ID "cash" $bal}}
 {{sendMessage nil (cembed $embed)}}
