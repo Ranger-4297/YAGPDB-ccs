@@ -72,7 +72,7 @@
 		{{$embed.Set "color" $successColor}}
 	{{else}}
 		{{$cash = sub $cash $amount}}
-		{{$embed.Set "description" (print "You broke the lawm and got caught! You were arrested and lost " $symbol (humanizeThousands $amount) " due to your bail.")}}
+		{{$embed.Set "description" (print "You broke the law and got caught! You were arrested and lost " $symbol (humanizeThousands $amount) " due to your bail.")}}
 		{{$embed.Set "color" $errorColor}}
 	{{end}}
 {{else if (reFind `(rob|steal)` $cmd)}}
