@@ -95,7 +95,7 @@
 		{{dbSet $userID "cash" $bal}}
 		{{$russianRoulette.Set "game" (sdict "cost" $bet "players" (cslice $userID) "owner" $userID)}}
 		{{dbSet 0 "russianRoulette" $russianRoulette}}
-		{{scheduleUniqueCC CCID nil 300 "rr-game" "cancel"}}
+		{{scheduleUniqueCC .CCID nil 300 "rr-game" "cancel"}}
 		{{return}}
 	{{else}}
 		{{$storageDB := $russianRoulette.storage}}
