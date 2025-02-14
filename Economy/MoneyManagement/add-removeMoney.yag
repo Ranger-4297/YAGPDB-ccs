@@ -2,7 +2,7 @@
 		Made by ranger_4297 (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(add-?money|inc-?money|remove-?money|dec(rease)?-?money)(\s+|\z)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)((add|remove)-?money)(\s+|\z)`
 
 	©️ RhykerWells 2020-Present
 	GNU, GPLV3 License
