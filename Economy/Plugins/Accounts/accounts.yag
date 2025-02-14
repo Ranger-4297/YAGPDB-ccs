@@ -178,7 +178,9 @@
 		{{$e.Set "color" 0x00ff7b}}
 	{{else if and (eq "view" $o) $c}}
 		{{$p := 1}}
-		{{if and (index .CmdArgs 2) (toInt (index .CmdArgs 2)) (ge (toInt (index .CmdArgs 2)) 1)}}{{$p = (toInt (index .CmdArgs 2))}}{{end}}
+		{{if and (gt (len .CmdArgs) 2) (toInt (index .CmdArgs 2)) (ge (toInt (index .CmdArgs 2)) 1)}}
+			{{$p = toInt (index .CmdArgs 2)}}
+		{{end}}
 		{{$d := print "### Account holder\n<@!" $aID ">\n### Account balance\n" $cS (humanizeThousands $aB) "\n### Account history (page " $p ")\n"}}
 		{{range (seq (toInt (print (sub $p 1) "1")) (toInt (print $p "1")))}}
 			{{if $aH := $bH.Get (str .)}}
@@ -186,10 +188,10 @@
 				{{$d = print $d "<t:" $aH.timestamp ":f> - <@!" $aH.user "> **" $s "**\n> **Amount:** £" (humanizeThousands $aH.amount) " | **Previous balance:** £" (humanizeThousands $aH.before) " | **New balance:** £" (humanizeThousands $aH.after) "\n"}}
 			{{end}}
 		{{end}}
-		{{if not (in $d "Amount")}}{{$d = print $d "No accounts found on this page"}}{{end}}
+		{{if not (in $d "Amount")}}{{$d = print $d "No account history found on this page"}}{{end}}
 		{{$e.Set "description" $d}}
 		{{$e.Set "color" 0x00ff7b}}
-		{{$e.Set "footer" (sdict "text" (print print "page " $p "/" (roundCeil (fdiv (len $bH) 10))))}}
+		{{$e.Set "footer" (sdict "text" (print "page " $p "/" (or (roundCeil (fdiv (len $bH) 10)) 1)))}}
 	{{else if and (reFind `with(draw)?|dep(osit)?` $o) $c}}
 		{{if lt (len .CmdArgs) 3}}
 			{{$e.Set "description" (print "No `amount` argument provided")}}
