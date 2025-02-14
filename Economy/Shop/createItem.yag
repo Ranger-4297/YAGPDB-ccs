@@ -38,14 +38,7 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 	{{dbDel 0 "createItem"}}
 	{{return}}
 {{end}}
-{{$economySettings := (dbGet 0 "EconomySettings").Value}}
-{{if not $economySettings}}
-	{{$embed.Del "footer"}}{{$embed.Del "title"}}
-	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
-	{{sendMessage nil (cembed $embed)}}
-	{{return}}
-{{end}}
-{{$symbol := $economySettings.symbol}}
+{{$symbol := ""}}
 {{if not $databaseValue}}
 	{{if reFind (print `\A(?i)` $trigger `(\s+|\z)`) .Message.Content}}
 		{{if not (or (in $perms "Administrator") (in $perms "ManageServer"))}}
@@ -53,6 +46,14 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 			{{sendMessage nil (cembed $embed)}}
 			{{return}}
 		{{end}}
+		{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+		{{if not $economySettings}}
+			{{$embed.Del "footer"}}{{$embed.Del "title"}}
+			{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+			{{sendMessage nil (cembed $embed)}}
+			{{return}}
+		{{end}}
+		{{$symbol = $economySettings.symbol}}
 		{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" "⠀⠀"))}}
 		{{$currentSection = 1}}
 		{{$embed := sendMessageRetID nil (complexMessage "content" "Please enter a name for the item (under 60 characters)" "embed" (cembed $embed))}}
