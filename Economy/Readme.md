@@ -1,4 +1,4 @@
-# Economy CCs V8.9
+# Economy CCs V9
 Fully functional and modular economy system for your server!<br />
 These commands work perfectly on base YAGPDB, so you don't have to worry about database limits.<br />
 These commands are thoroughly tested before release and are ensured to keep working
@@ -13,7 +13,7 @@ Optional plugins<br />
 More!
 
 ## Setup & Documentation
-If you're new to the system or are looking for documenation, please make your way to [the wiki (outdated)](https://github.com/Ranger-4297/YAGPDB-ccs/wiki)
+If you're new to the system or are looking for documenation, please make your way to [the wiki](https://github.com/Ranger-4297/YAGPDB-ccs/wiki)
 
 ## Other Info
 For the most part; this system is completely modular.<br />
