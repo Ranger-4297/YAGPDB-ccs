@@ -45,9 +45,14 @@
 	{{$cardValue := index (split $card "") 0}}
 	{{if eq $cardValue "J" "Q" "K" "1"}}{{$cardValue = 10}}{{end}}
 	{{if eq "A" (str $cardValue)}}{{$cardValue = 11}}{{end}}
-	{{if and (eq (toInt $cardValue) 11) (gt (add $value $cardValue) 21)}}{{$cardValue = 1}}{{end}}
-	{{if and (eq (len $userCards) 3) (or (eq (index (split (index $userCards 0) "") 0) "A") (eq (index (split (index $userCards 1) "") 0) "A"))}}{{$cardValue = sub $cardValue 10}}{{end}}
 	{{$value = add $value $cardValue}}
+	{{if gt $value 21}}
+		{{$aces := reFindAll "A" (joinStr "" $userCards)}}
+		{{range len $aces}}
+			{{if le $value 21}}{{break}}{{end}}
+			{{$value = sub $value 10}}
+		{{end}}
+	{{end}}
 	{{$emojiCards := (dbGet 0 "cardGames").Value.cards}}
 	{{range $userCards}}{{$userPrintCards = $userPrintCards.Append ($emojiCards.Get .)}}{{end}}
 	{{return (sdict "cardValue" $value "cards" $userCards "cardPrint" $userPrintCards "used" $used)}}
@@ -87,21 +92,21 @@
 		{{$dealer := $data.dealer}}
 		{{$value := $dealer.cardValue | toInt}}
 		{{$data.dealer.Set "cardValue" $data.dealer.cardValueReal}}{{$data.dealer.Del "cardValueReal"}}{{$data.dealer.Set "cardPrint" $data.dealer.cardPrintReal}}{{$data.dealer.Del "cardPrintReal"}}
-		{{while le $value 17}}{{$hit = execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = add $value $hit.cardValue}}{{end}}
+		{{while lt $value 17}}{{$hit = execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = $hit.cardValue}}{{end}}
 		{{template "standCondition" (sdict "data" $data "symbol" $symbol "bal" $bal)}}
 		{{return}}
 	{{else if gt $hit.cardValue 21}}
 		{{template "standCondition" (sdict "data" $data "symbol" $symbol "bal" $bal)}}
 		{{return}}
 	{{end}}
-	{{$components := (cslice (cbutton "label" "Hit" "custom_id" "bj_hit" "style" "primary") (cbutton "label" "Stand" "custom_id" "bj_stand" "style" "success") (cbutton "label" "Double Down" "custom_id" "bj_double" "style" "secondary" "disabled" true) (cbutton "label" "Split" "custom_id" "bj_split" "style" "secondary" "disabled" true))}}
+	{{$components := cslice (cbutton "label" "Hit" "custom_id" "bj_hit" "style" "primary") (cbutton "label" "Stand" "custom_id" "bj_stand" "style" "success") (cbutton "label" "Double Down" "custom_id" "bj_double" "style" "secondary" "disabled" true) (cbutton "label" "Split" "custom_id" "bj_split" "style" "secondary" "disabled" true)}}
 	{{updateMessage (complexMessageEdit "embed" (cembed $embed) "components" $components)}}
 	{{scheduleUniqueCC $data.ccID nil 120 "cancel" "bj"}}{{dbSetExpire $userID "bj" (sdict "embed" $data.embed "player" $data.player "dealer" $data.dealer "usedCards" $data.usedCards "bet" $data.bet "user" .User.ID "ccID" $data.ccID) 120}}
 {{else if eq .StrippedID "stand"}}
 	{{$data.dealer.Set "cardValue" $data.dealer.cardValueReal}}{{$data.dealer.Del "cardValueReal"}}{{$data.dealer.Set "cardPrint" $data.dealer.cardPrintReal}}{{$data.dealer.Del "cardPrintReal"}}
 	{{$dealer := $data.dealer}}
 	{{$value := $dealer.cardValue | toInt}}
-	{{while le $value 17}}{{$hit := execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = add $value $hit.cardValue}}{{end}}
+	{{while lt $value 17}}{{$hit := execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = $hit.cardValue}}{{end}}
 	{{template "standCondition" (sdict "data" $data "symbol" $symbol "bal" $bal)}}
 {{else if eq .StrippedID "double"}}
 	{{$data.Set "bet" (mult $data.bet 2)}}
@@ -114,6 +119,6 @@
 	{{$data.dealer.Set "cardValue" $data.dealer.cardValueReal}}{{$data.dealer.Del "cardValueReal"}}{{$data.dealer.Set "cardPrint" $data.dealer.cardPrintReal}}{{$data.dealer.Del "cardPrintReal"}}
 	{{$dealer := $data.dealer}}
 	{{$value := $dealer.cardValue | toInt}}
-	{{while lt $value 17}}{{$hit := execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = add $value $hit.cardValue}}{{end}}
+	{{while lt $value 17}}{{$hit := execTemplate "hit" (sdict "data" $data "user" "dealer")}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$dealer = $hit}}{{$data.Set "dealer" $dealer}}{{$value = $hit.cardValue}}{{end}}
 	{{template "standCondition" (sdict "data" $data "symbol" $symbol "bal" $bal)}}
 {{end}}
