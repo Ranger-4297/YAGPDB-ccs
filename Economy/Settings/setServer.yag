@@ -109,8 +109,7 @@
 		{{end}}
 		{{$status := "enabled"}}{{$value = true}}
 		{{if not (eq $value "yes" "enable" "enabled")}}
-			{{$status = "disabled"}}
-			{{$value = false}}
+			{{$status = "disabled"}}{{$value = false}}
 		{{end}}
 		{{$embed.Set "description" (print "You " $status " custom responses")}}
 		{{$embed.Set "color" $successColor}}
