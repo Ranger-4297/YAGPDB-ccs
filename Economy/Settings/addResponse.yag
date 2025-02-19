@@ -2,7 +2,7 @@
 		Made by ranger_4297 (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)((add-?)?response(s)?)(\s+|\z)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(((add|remove)-?)?response(s)?)(\s+|\z)`
 
 	©️ RhykerWells 2020-Present
 	GNU, GPLV3 License
@@ -17,6 +17,7 @@
 {{$successColor := 0x00ff7b}}
 {{$errorColor := 0xFF0000}}
 {{$prefix := .ServerPrefix}}
+{{$cmd := lower .Cmd }}
 
 {{/* Add response */}}
 
@@ -37,27 +38,27 @@
 {{$symbol := $economySettings.symbol}}
 {{$responses := or ($economySettings.responses) (sdict "crime" cslice "work" cslice)}}
 {{if not .CmdArgs}}
-	{{if reFind `add-?responses?` .Cmd}}
-		{{$embed.Set "description" (print "No `type` argument passed.\nSyntax is: `" .Cmd " <Type:Work/Crime> <Reponse>`")}}
+	{{if reFind `(add|remove)-?responses?` $cmd}}
+		{{$embed.Set "description" (print "No `type` argument passed.\nSyntax is: `" $cmd " <Type:Work/Crime> <Reponse>`")}}
 	{{else}}
-		{{$embed.Set "description" (print "No `CommandType` argument passed.\nSyntax is: `" .Cmd " <CommandType:List> <Type:Work/Crime>`")}}
+		{{$embed.Set "description" (print "No `CommandType` argument passed.\nSyntax is: `" $cmd " <CommandType:List> <Type:Work/Crime>`")}}
 	{{end}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
 {{$type := index .CmdArgs 0 | lower}}
-{{if and (reFind `add-?responses?` .Cmd) (not (eq $type "work" "crime"))}}
-	{{$embed.Set "description" (print "Invalid `type` argument passed.\nSyntax is: `" .Cmd " <Type:Work/Crime> <Reponse>`")}}
+{{if and (reFind `(add|remove)-?responses?` $cmd) (not (eq $type "work" "crime"))}}
+	{{$embed.Set "description" (print "Invalid `type` argument passed.\nSyntax is: `" $cmd " <Type:Work/Crime> <Reponse>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
-{{else if and (not (reFind `add-?responses?` .Cmd)) (not (eq $type "list"))}}
-	{{$embed.Set "description" (print "Invalid `CommandType` argument passed.\nSyntax is: `" .Cmd " <CommandType:List> <Type:Work/Crime>`")}}
+{{else if and (not (reFind `(add|remove)-?responses?` $cmd)) (not (eq $type "list"))}}
+	{{$embed.Set "description" (print "Invalid `CommandType` argument passed.\nSyntax is: `" $cmd " <CommandType:List> <Type:Work/Crime>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{if (reFind `add-?responses?` .Cmd)}}
+{{if (reFind `add-?responses?` $cmd)}}
 	{{if lt (len .CmdArgs) 2}}
-		{{$embed.Set "description" (print "No `Response` argument passed.\nSyntax is: `" .Cmd " <Type:Work/Crime> <Reponse>`")}}
+		{{$embed.Set "description" (print "No `Response` argument passed.\nSyntax is: `" $cmd " <Type:Work/Crime> <Reponse>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
@@ -73,15 +74,39 @@
 	{{$embed.Set "description" (print "Successfully added \"" (reReplace `\(amount\)` $response "`(amount)`") "\" to the list of responses for `" $type "`.\nTo view the list of responses in it's entirey. Please use the command `" $prefix "responses list`")}}
 	{{$embed.Set "color" $successColor}}
 	{{$economySettings.Set "responses" $responses}}
+{{else if (reFind `remove-?responses?` $cmd)}}
+	{{if lt (len .CmdArgs) 2}}
+		{{$embed.Set "description" (print "No `Response` argument passed.\nSyntax is: `" $cmd " <Type:Work/Crime> <Reponse:Num>`\nView your response numbers with `-responses view " $type "`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$response := (index .CmdArgs 1) | toInt}}
+	{{if and (not (toInt $response)) (lt $response 1)}}
+		{{$embed.Set "description" (print "Invalid `Response` argument passed.\nSyntax is: `" $cmd " <Type:Work/Crime> <Reponse>`\nView your response numbers with `-responses view " $type "`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$currentResponses := $responses.Get $type}}
+	{{$newResponses := cslice}}
+	{{$responseToDelete := (index $currentResponses (sub $response 1))}}
+	{{range $currentResponses}}
+		{{if not (eq . $responseToDelete)}}
+			{{$newResponses = $newResponses.Append .}}
+		{{end}}
+	{{end}}
+	{{$responses.Set $type $newResponses}}
+	{{$embed.Set "description" (print "Successfully delete \"" (reReplace `\(amount\)` $responseToDelete "`(amount)`") "\" from the list of responses for `" $type "`.\nTo view the list of responses in it's entirey. Please use the command `" $prefix "responses list`")}}
+	{{$embed.Set "color" $successColor}}
+	{{$economySettings.Set "responses" $responses}}
 {{else}}
 	{{if lt (len .CmdArgs) 2}}
-		{{$embed.Set "description" (print "No `Type` argument passed.\nSyntax is: `" .Cmd " <CommandType:List> <Type:Work/Crime>`")}}
+		{{$embed.Set "description" (print "No `Type` argument passed.\nSyntax is: `" $cmd " <CommandType:List> <Type:Work/Crime>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
 	{{$type = index .CmdArgs 1 | lower}}
 	{{if not (eq $type "work" "crime")}}
-		{{$embed.Set "description" (print "Invalid `type` argument passed.\nSyntax is: `" .Cmd " <CommandType:List> <Type:Work/Crime>`")}}
+		{{$embed.Set "description" (print "Invalid `type` argument passed.\nSyntax is: `" $cmd " <CommandType:List> <Type:Work/Crime>`")}}
 		{{sendMessage nil (cembed $embed)}}
 		{{return}}
 	{{end}}
