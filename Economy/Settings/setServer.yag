@@ -26,7 +26,7 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$settings := print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `incomeCD`, `crimeCD`, `robCD`, `responses`\nTo set it with the default settings `" .Cmd " default`"}}
+{{$settings := print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `slutCD, `incomeCD`, `crimeCD`, `robCD`, `responses`\nTo set it with the default settings `" .Cmd " default`"}}
 {{if not .CmdArgs}}
 	{{$embed.Set "description" (print "No `Setting` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
 	{{sendMessage nil (cembed $embed)}}
@@ -36,7 +36,7 @@
 {{if eq $setting "default"}}
 	{{$embed.Set "description" (print "Set the `EconomySettings` to default values")}}
 	{{$embed.Set "color" $successColor}}
-	{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "betMax" 5000 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600 "enable-responses" false "responses" (sdict "work" cslice "crime" cslice))}}
+	{{dbSet 0 "EconomySettings" (sdict "min" 200 "max" 500 "betMax" 5000 "symbol" "£" "startBalance" 200 "incomeCooldown" 300 "workCooldown" 7200 "slutCooldown" 7200 "crimeCooldown" 14400 "robCooldown" 21600 "enable-responses" false "responses" (sdict "work" cslice "crime" cslice))}}
 	{{dbSet 0 "store" (sdict "items" sdict)}}
 	{{dbSet 0 "russianRoulette" sdict}}
 	{{dbSet 0 "bank" sdict}}
@@ -115,7 +115,7 @@
 		{{$embed.Set "color" $successColor}}
 		{{$economySettings.Set "enable-responses" $value}}
 		{{dbSet 0 "EconomySettings" $economySettings}}
-	{{else if eq $setting "workcd" "crimecd" "robcd" "incomecd"}}
+	{{else if eq $setting "workcd" "slutcd" "crimecd" "robcd" "incomecd"}}
 		{{$cdType := reReplace "cd" $setting ""}}
 		{{if lt (len .CmdArgs) 2}}
 			{{$embed.Set "description" (print "No `Value` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}

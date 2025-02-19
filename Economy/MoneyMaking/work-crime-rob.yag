@@ -2,7 +2,7 @@
 		Made by ranger_4297 (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(work|job|get-?paid|crime|rob|steal)(\s+|\z)`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(work|job|get-?paid|slut|whore|crime|rob|steal)(\s+|\z)`
 
 	©️ RhykerWells 2020-Present
 	GNU, GPLV3 License
@@ -34,6 +34,7 @@
 {{$responses := $economySettings.responses}}
 {{$enabledResponses := $economySettings.Get "enable-responses"}}
 {{$workCooldown := $economySettings.workCooldown | toInt}}
+{{$slutCooldown := $economySettings.slutCooldown | toInt}}
 {{$robCooldown := $economySettings.robCooldown | toInt}}
 {{$crimeCooldown := $economySettings.crimeCooldown | toInt}}
 {{$cash := or (dbGet $userID "cash").Value 0 | toInt}}
@@ -50,7 +51,22 @@
 	{{if and $enabledResponses $responses.work}}
 		{{$response = (reReplace `\(amount\)` (index (shuffle $responses.work) 0) (print $symbol (humanizeThousands $workPay)))}}
 	{{end}}
-	{{$cash =  add $cash $workPay}}
+	{{$cash = add $cash $workPay}}
+	{{$embed.Set "description" $response}}
+	{{$embed.Set "color" 0x00ff7b}}
+{{else if (reFind `(slut|whore)` $cmd)}}
+	{{if ($cooldown := dbGet $userID "slutCooldown")}}
+		{{$embed.Set "description" (print "This command is on cooldown for " (humanizeDurationSeconds ($cooldown.ExpiresAt.Sub currentTime)))}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{dbSetExpire $userID "slutCooldown" "cooldown" $slutCooldown}}
+	{{$slutPay := randInt $min $max}}
+	{{$response := print "You whored yourself out today, sucked a dick for " $symbol (humanizeThousands $slutPay)}}
+	{{if and $enabledResponses $responses.slut}}
+		{{$response = (reReplace `\(amount\)` (index (shuffle $responses.slut) 0) (print $symbol (humanizeThousands $slutPay)))}}
+	{{end}}
+	{{$cash = add $cash $slutPay}}
 	{{$embed.Set "description" $response}}
 	{{$embed.Set "color" 0x00ff7b}}
 {{else if (reFind `(commit-?)?crime` $cmd)}}
