@@ -170,7 +170,7 @@
 				{{- $winners = $winners.Append (userArg .).Mention}}
 			{{- end -}}
 		{{end}}
-		{{$payout := div $game.cost (len $winners)}}
+		{{$payout := div (mult $game.cost (len $players)) (len $winners)}}
 		{{$fields := cslice}}
 		{{$storageDB := $russianRoulette.storage}}
 		{{if not $storageDB}}
