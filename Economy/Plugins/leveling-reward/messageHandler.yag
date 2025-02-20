@@ -1,0 +1,64 @@
+{{/*
+        Made by jo3_l (621907351267442698)
+		Modified by ranger_4297 (765316548516380732)
+
+	Trigger Type: `Regex`
+	Trigger: `.*`
+
+	MIT License
+    Base code source: https://github.com/yagpdb-cc/yagpdb-cc
+	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
+*/}}
+
+{{/* Initiates variables */}}
+{{$userID := .User.ID}}
+{{$successColor := 0x00ff7b}}
+
+{{/* Response */}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "timestamp" currentTime "color" $successColor}}
+{{$settings := or (dbGet 0 "xpSettings").Value 0}}
+{{$roleRewards := or (dbGet 0 "roleRewards").Value (sdict "type" "stack")}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{$symbol := or $economySettings.symbol "£"}}
+
+{{if ($cooldown := dbGet $userID "xpCooldown")}}
+    {{return}}
+{{end}}
+
+{{if $settings}}
+	{{$amtToGive := randInt $settings.min $settings.max}}
+	{{$currentXp := or (dbGet $userID "xp").Value 0}}
+	{{$currentLvl := roundFloor (mult 0.1 (sqrt $currentXp))}}
+	{{$newXp := dbIncr .User.ID "xp" $amtToGive}}
+	{{$newLvl := roundFloor (mult 0.1 (sqrt $newXp))}}
+	{{$channel := or $settings.channel .Channel.ID}}
+	{{if not (.Guild.GetChannel $channel)}}
+        {{$channel = .Channel.ID}}
+    {{end}}
+	{{if ne $newLvl $currentLvl}}
+		{{$type := $roleRewards.type}}
+		{{$toAdd := or ($roleRewards.Get (json $newLvl)).role 0}} {{/* Try to get the role reward for this level */}}
+		{{range $level, $reward := $roleRewards}} {{/* Loop over role rewards */}}
+			{{- if and (ge (toInt $newLvl) (toInt $level)) (eq $type "stack") (ne $level "type")}}
+                {{if (not (hasRoleID $reward.role))}}
+                    {{- addRoleID $reward.role}}
+                {{end}}
+			{{- else if and (eq $type "highest") $toAdd}}
+                {{if (hasRoleID $reward.role)}}
+                    {{- removeRoleID $reward.role}}
+                {{end}}
+            {{- end -}}
+		{{end}}
+        {{$cashAdd := or ($roleRewards.Get (json $newLvl)).cash 0}}
+        {{if $cashAdd}}{{$cash := (dbGet $userID "cash").Value}}{{$cash = add $cash $cashAdd}}{{dbSet $userID "cash" $cash}}{{end}}
+		{{if $toAdd}}{{addRoleID $toAdd}}{{end}}
+		{{$embed.Set "title" "❯ Level up!"}}
+		{{$embed.Set "thumbnail" (sdict "url" "https://webstockreview.net/images/emoji-clipart-celebration-4.png")}}
+		{{$embed.Set "description" (printf "Congratulations **%s**! You've leveled up to level %d. You've had %v%d added to your wallet! - keep it up!" .User.String (toInt $newLvl) $symbol $cashAdd)}}
+		{{if $settings.announcements}}
+			{{sendMessage $channel (complexMessage "content" .User.Mention "embed" $embed)}} {{/* Send levelup notification */}}
+		{{end}}
+	{{end}}
+	{{$cooldownSeconds := div $settings.cooldown 1000000000}} {{/* Convert cooldown to seconds */}}
+	{{dbSetExpire .User.ID "xpCooldown" true $cooldownSeconds}} {{/* Set cooldown entry */}}
+{{end}}
