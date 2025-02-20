@@ -2,7 +2,7 @@
 		Made by ranger_4297 (765316548516380732)
 
 	Trigger Type: `Regex`
-	Trigger: `\A(-|<@!?204255221017214977>\s*)(item-?info)(\s+|\z)`
+	Trigger: `(item-?info)`
 
 	©️ RhykerWells 2020-Present
 	GNU, GPLV3 License
@@ -11,6 +11,11 @@
 
 
 {{/* Only edit below if you know what you're doing (: rawr */}}
+
+{{$trigger := print `\A(?:\` .ServerPrefix `|<@!?` .BotUser.ID `>\*)` .CCTrigger}}
+{{if not (reFind $trigger .Message.Content)}}
+	{{return}}
+{{end}}
 
 {{/* Initiates variables */}}
 {{$successColor := 0x00ff7b}}
