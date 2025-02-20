@@ -209,11 +209,11 @@
 		{{$cM := ""}}
 		{{$k := ""}}
 		{{if and (not $cA.historyCounter) (not $cA.balanceHistory) }}
-            {{$cA.Set "historyCounter" 0}}
-            {{$cA.Set "balanceHistory" sdict}}
-        {{end}}
+			{{$cA.Set "historyCounter" 0}}
+			{{$cA.Set "balanceHistory" sdict}}
+		{{end}}
 		{{$counter := $cA.historyCounter}}
-        {{$balanceHistory := $cA.balanceHistory}}
+		{{$balanceHistory := $cA.balanceHistory}}
 		{{if eq $o "with" "withdraw"}}
 			{{if gt $mA $aB}}
 				{{$e.Set "description" (print "You can't withdraw more than the account has")}}

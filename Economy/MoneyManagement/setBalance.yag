@@ -72,9 +72,9 @@
 {{$bankDB := or (dbGet 0 "bank").Value sdict}}
 {{$cash := or (dbGet $user.ID "cash").Value 0 | toInt}}
 {{if eq $moneyDestination "bank"}}
-    {{$bankDB.Set (toString $user.ID) $amount}}
+	{{$bankDB.Set (toString $user.ID) $amount}}
 {{else}}
-    {{$cash = $amount}}
+	{{$cash = $amount}}
 {{end}}
 {{dbSet 0 "bank" $bankDB}}
 {{dbSet $user.ID "cash" $cash}}

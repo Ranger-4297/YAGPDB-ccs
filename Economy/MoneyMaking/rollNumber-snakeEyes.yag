@@ -32,16 +32,16 @@
 {{$betMax := $economySettings.betMax | toInt}}
 {{$incomeCooldown := $economySettings.incomeCooldown | toInt}}
 {{if not .CmdArgs}}
-    {{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+	{{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
 	{{sendMessage nil (cembed $embed)}}
-    {{return}}
+	{{return}}
 {{end}}
 {{$bal := toInt (dbGet $userID "cash").Value}}
 {{$bet := index .CmdArgs 0 | str | lower}}
 {{if not (or (toInt $bet) (eq $bet "all" "max"))}}
-    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
-    {{sendMessage nil (cembed $embed)}}
-    {{return}}
+	{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
 {{if eq $bet "all"}}
 	{{$bet = $bal}}
@@ -49,19 +49,19 @@
 	{{$bet = $betMax}}
 {{end}}
 {{if le ($bet = toInt $bet) 0}}
-    {{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
-    {{sendMessage nil (cembed $embed)}}
-    {{return}}
+	{{$embed.Set "description" (print "Invalid `Bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
 {{if gt $bet $bal}}
-    {{$embed.Set "description" (print "You can't bet more than you have!")}}
-    {{sendMessage nil (cembed $embed)}}
-    {{return}}
+	{{$embed.Set "description" (print "You can't bet more than you have!")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
 {{if gt $bet $betMax}}
-    {{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
-    {{sendMessage nil (cembed $embed)}}
-    {{return}}
+	{{$embed.Set "description" (print "You can't bet more than " $symbol $betMax)}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
 {{end}}
 {{if (reFind `rollnum(ber)?|rn` .Cmd)}}
 	{{if ($cooldown := dbGet $userID "rollCooldown")}}

@@ -65,14 +65,14 @@
 {{end}}
 {{$user := $item.ID}}
 {{$embed.Set "title" (print "**Item info**")}}
-{{$embed.Set "fields" (cslice 
+{{$embed.Set "fields" (cslice
 	(sdict "name" "Name" "value" (print $name) "inline" true)
 	(sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true)
 	(sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true)
 	(sdict "name" "Description" "value" (print $desc) "inline" true)
 	(sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true)
 	(sdict "name" "Shop quantity" "value" (print $qty) "inline" true)
-	(sdict "name" "Role given" "value" $role "inline" true) 
+	(sdict "name" "Role given" "value" $role "inline" true)
 	(sdict "name" "Reply message" "value" $reply)
 	(sdict "name" "Inventory expiry" "value" $exp)
 )}}

@@ -31,15 +31,15 @@
 {{$symbol := $economySettings.symbol}}
 {{$betMax := $economySettings.betMax}}
 {{if not (or .CmdArgs (eq (str .ExecData) "start" "cancel" "cancel2"))}}
-    {{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
+	{{$embed.Set "description" (print "No `bet` argument provided.\nSyntax is `" .Cmd " <Bet:Amount>`")}}
 	{{sendMessage nil (cembed $embed)}}
-    {{return}}
+	{{return}}
 {{end}}
 {{$russianRoulette := (dbGet 0 "russianRoulette")}}
 {{if not $russianRoulette}}
-    {{$embed.Set "description" (print "No `russianRoulette` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
+	{{$embed.Set "description" (print "No `russianRoulette` database found.\nPlease set it up with the default values using `" $prefix "server-set default`")}}
 	{{sendMessage nil (cembed $embed)}}
-    {{return}}
+	{{return}}
 {{end}}
 {{$russianRoulette = $russianRoulette.Value}}
 {{$game := $russianRoulette.game}}
@@ -181,7 +181,7 @@
 			{{if $storageAmt}}
 				{{$storageAmt = add $storageAmt $payout}}
 			{{else}}
-				{{$storageAmt = $payout}} 
+				{{$storageAmt = $payout}}
 			{{end}}
 			{{- $fields = $fields.Append (sdict "Name" (print (userArg .)) "value" . "inline" false) -}}
 			{{$storageDB.Set (toString (userArg .).ID) $storageAmt}}

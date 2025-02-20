@@ -1,12 +1,12 @@
 {{/*
-        Made by ranger_4297 (765316548516380732)
+		Made by ranger_4297 (765316548516380732)
 
-    Trigger Type: `Regex`
-    Trigger: `\A(-|<@!?204255221017214977>\s*)(inv(entory)?)(\s+|\z)`
+	Trigger Type: `Regex`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(inv(entory)?)(\s+|\z)`
 
-    ©️ RhykerWells 2020-Present
-    GNU, GPLV3 License
-    Repository: https://github.com/Ranger-4297/YAGPDB-ccs
+	©️ RhykerWells 2020-Present
+	GNU, GPLV3 License
+	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
 */}}
 
 
@@ -59,7 +59,7 @@
 		{{$role = "none"}}
 	{{end}}
 	{{$expiry := $itemValue.expiry}}
-	{{$expires := "never"}}	
+	{{$expires := "never"}}
 	{{if $expiry}}
 		{{$timeSeconds := toDuration (humanizeDurationSeconds (mult $expiry .TimeSecond))}}
 		{{$expires = (print "<t:" (currentTime.Add $timeSeconds).Unix ":f>")}}
