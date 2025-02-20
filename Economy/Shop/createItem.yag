@@ -22,7 +22,7 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 {{$successColor := 0x00ff7b}}
 {{$databaseValue := toInt (dbGet .User.ID "waitResponse").Value}}
 {{$currentSection := 0}}
-{{$trigger := print `(` .ServerPrefix `|<@!?204255221017214977>\s*)((create|new)-?item)`}} 
+{{$trigger := print `(` .ServerPrefix `|<@!?204255221017214977>\s*)((create|new)-?item)`}}
 
 {{/* Create item */}}
 

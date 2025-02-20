@@ -86,7 +86,7 @@
 		{{if $roulettemt}}
 			{{$roulettemt = add $roulettemt $v}}
 		{{else}}
-			{{$roulettemt = $v}} 
+			{{$roulettemt = $v}}
 		{{end}}
 		{{- $fields = $fields.Append (sdict "name" "⠀⠀" "value" (print (userArg $k) " won " $symbol $v)) -}}
 		{{- $storageDB.Set (toString $k) $roulettemt -}}
