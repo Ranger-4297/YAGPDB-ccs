@@ -56,6 +56,10 @@
 	{{end}}
 {{end}}
 {{$embed.Set "description" (print $user.Mention "'s balance\nLeaderboard rank: " $rank)}}
-{{$embed.Set "fields" (cslice (sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true) (sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true) (sdict "name" "Networth" "value" (print $symbol $net) "inline" true))}}
+{{$embed.Set "fields" (cslice
+	(sdict "name" "Cash" "value" (print $symbol (humanizeThousands $cash)) "inline" true)
+	(sdict "name" "Bank" "value" (print $symbol (humanizeThousands $bank)) "inline" true)
+	(sdict "name" "Networth" "value" (print $symbol $net) "inline" true)
+)}}
 {{$embed.Set "color" $successColor}}
 {{sendMessage nil (cembed $embed)}}
