@@ -1,0 +1,136 @@
+{{/*
+        Made by jo3_l (621907351267442698)
+		Modified by ranger_4297 (765316548516380732)
+
+	Trigger Type: `Regex`
+	Trigger: `\A(-|<@!?204255221017214977>\s*)(r(ole)?-?rewards)(\s+|\z)`
+
+	MIT License
+    Base code source: https://github.com/yagpdb-cc/yagpdb-cc
+	Repository: https://github.com/Ranger-4297/YAGPDB-ccs
+*/}}
+
+
+{{/* Only edit below if you know what you're doing (: rawr */}}
+
+{{/* Initiates variables */}}
+{{$userID := .User.ID}}
+{{$successColor := 0x00ff7b}}
+{{$errorColor := 0xFF0000}}
+{{$prefix := .ServerPrefix}}
+
+{{/* Currency levelling reward */}}
+
+{{/* Response */}}
+{{$embed := sdict "author" (sdict "name" .User.Username "icon_url" (.User.AvatarURL "1024")) "description" "`rolerewards add <level> <role>`: Adds a role reward at the given level\n`rolerewards remove <level>`: Removes the role reward from the given level\n`rolerewards set-type <highest|stack>`: Sets the role reward type. Highest means only the highest role reward less than or equal to the current level, stack is all role rewards up to that level.\n`rolerewards reset`: Resets role reward settings.\n`rolerewards view`: Views current settings for role rewards." "timestamp" currentTime "color" $errorColor}}
+{{$economySettings := (dbGet 0 "EconomySettings").Value}}
+{{if not $economySettings}}
+	{{$embed.Set "description" (print "No `Settings` database found.\nPlease set it up with the default values using `" .ServerPrefix "server-set default`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$symbol := $economySettings.symbol}}
+{{$options := cslice "add" "set-type" "remove" "reset" "view"}}
+{{if not .CmdArgs}}
+	{{$embed.Set "title" "🏆 Role rewards"}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{if not (in $options (index .CmdArgs 0 | lower))}}
+	{{$embed.Set "title" "🏆 Role rewards"}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
+{{$roleRewards := or (dbGet 0 "roleRewards").Value (sdict "type" "stack")}}
+{{$option := index .CmdArgs 0 | lower}}
+{{if (eq $option "add")}}
+	{{if not (gt (len .CmdArgs) 1)}}
+		{{$embed.Set "description" (print "No `level` argument provided.\nSyntax is `" .Cmd " add <Level> <Role:ID/Mention>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$level := index .CmdArgs 1 | toInt}}
+	{{if or (not $level) (gt $level 200)}}
+		{{$embed.Set "description" (print "Invalid `level` argument provided.\nSyntax is `" .Cmd " add <Level> <Role:ID/Mention>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{if not (gt (len .CmdArgs) 2)}}
+		{{$embed.Set "description" (print "No `role` argument provided.\nSyntax is `" .Cmd " add <Level> <Role:ID/Mention>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$role := (reFind `\d{17,19}` (index .CmdArgs 2))}}
+	{{if not (getRole $role)}}
+		{{$embed.Set "description" (print "Invalid `role` argument provided.\nSyntax is `" .Cmd " add <Level> <Role:ID/Mention>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$cash := 0}}
+	{{if (gt (len .CmdArgs) 3)}}
+		{{if and (index .CmdArgs 3) (toInt (index .CmdArgs 3)) (gt (toInt (index .CmdArgs 3)) 0)}}
+			{{$cash = (toInt (index .CmdArgs 3))}}
+		{{end}}
+	{{end}}
+	{{$roleRewards.Set (str $level) (sdict "role" (toInt $role) "cash" $cash)}}
+	{{$embed.Set "description" (print "Successfully set <@&" $role "> to be given at level `" $level "`")}}
+	{{$embed.Set "color" $successColor}}
+	{{sendMessage nil (cembed $embed)}}
+{{else if (eq $option "set-type")}}
+	{{if not (gt (len .CmdArgs) 1)}}
+		{{$embed.Set "description" (print "No `type` argument provided.\nSyntax is `" .Cmd " set-type <type:stack/highest>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$type := index .CmdArgs 1 | lower}}
+	{{if not (in (cslice "stack" "highest") $type)}}
+		{{$embed.Set "description" (print "Invalid `type` argument provided.\nSyntax is `" .Cmd " set-type <type:stack/highest>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$roleRewards.Set "type" $type}}
+	{{$embed.Set "description" (print "Successfully set the role-giving type of this server to `" $type "`")}}
+	{{$embed.Set "color" $successColor}}
+	{{sendMessage nil (cembed $embed)}}
+{{else if eq $option "reset"}}
+	{{$s := dbSet 0 "roleRewards" (sdict "type" "stack")}}
+	{{$embed.Set "description" (print "Cleared the role-rewards for this server")}}
+	{{$embed.Set "color" $successColor}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{else if (eq $option "remove")}}
+	{{if not (gt (len .CmdArgs) 1)}}
+		{{$embed.Set "description" (print "No `level` argument provided.\nSyntax is `" .Cmd " remove <Level>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$level := index .CmdArgs 1 | toInt}}
+	{{if and (not $level) (lt $level 1) (gt $level 200)}}
+		{{$embed.Set "description" (print "Invalid `level` argument provided.\nSyntax is `" .Cmd " remove <Level>`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{if not ($roleRewards.Get (str $level))}}
+		{{$embed.Set "description" (print "There are no rewards set to this level`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$roleRewards.Del (str $level)}}
+	{{$embed.Set "description" (print "Successfully remvoved the role reward from level `" $level "`")}}
+	{{$embed.Set "color" $successColor}}
+	{{sendMessage nil (cembed $embed)}}
+{{else if eq $option "view"}}
+	{{if eq (len $roleRewards) 1}}
+		{{$embed.Set "description" (print "There are no rewards set on your server.\nYour current rewards type is `" $roleRewards.type "`")}}
+		{{sendMessage nil (cembed $embed)}}
+		{{return}}
+	{{end}}
+	{{$out := ""}}
+	{{range $level := seq 1 201}}
+		{{- with ($roleRewards.Get (str $level))}}
+			{{- $out = printf "%s\n❯ **Level %d:** <@&%d> - **Cash:** %v%d" $out $level .role $symbol .cash}}
+		{{- end -}}
+	{{end}}
+	{{sendMessage nil (cembed "title" "🏆 Role Rewards" "thumbnail" (sdict "url" "https://i.imgur.com/mJ7zu6k.png") "description" (joinStr "" $out "\n\n" "**❯ Type:** " $roleRewards.type))}}
+{{end}}
+{{$s := dbSet 0 "roleRewards" $roleRewards}}
