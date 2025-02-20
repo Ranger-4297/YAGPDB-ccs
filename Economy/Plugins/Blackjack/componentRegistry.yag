@@ -78,7 +78,10 @@
 		{{$embed.Set "color" 0xA25D2D}}
 		{{dbSet .data.user "cash" (add .bal .data.bet)}}
 	{{end}}
-	{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $playerPrintCards "\nValue: " $playerValue) "inline" true) (sdict "name" "Dealers hand" "value" (print $dealerPrintCards "\nValue: " (reReplace `21` (str $dealerValue) "Blackjack")) "inline" true))}}
+	{{$embed.Set "fields" (cslice
+		(sdict "name" "Your hand" "value" (print $playerPrintCards "\nValue: " $playerValue) "inline" true)
+		(sdict "name" "Dealers hand" "value" (print $dealerPrintCards "\nValue: " (reReplace `21` (str $dealerValue) "Blackjack")) "inline" true)
+	)}}
 	{{updateMessage (complexMessageEdit "embed" (cembed $embed))}}
 	{{cancelScheduledUniqueCC .data.ccID "cancel"}}{{dbDel .data.user "bj"}}
 	{{return}}
@@ -87,7 +90,10 @@
 	{{$hit := execTemplate "hit" (sdict "data" $data "user" "player")}}
 	{{$player := $data.player}}{{$data.Set "usedCards" $hit.Used}}{{$hit.Del "used"}}{{$player = $hit}}{{$data.Set "player" $player}}
 	{{$playerPrintCards := joinStr " " $data.player.cardPrint}}
-	{{$embed.Set "fields" (cslice (sdict "name" "Your hand" "value" (print $playerPrintCards "\nValue: " $data.player.cardValue) "inline" true) (sdict "name" "Dealers hand" "value" (print $data.dealer.cardPrint "\nValue: " $data.dealer.cardValue) "inline" true))}}
+	{{$embed.Set "fields" (cslice
+		(sdict "name" "Your hand" "value" (print $playerPrintCards "\nValue: " $data.player.cardValue) "inline" true)
+		(sdict "name" "Dealers hand" "value" (print $data.dealer.cardPrint "\nValue: " $data.dealer.cardValue) "inline" true)
+	)}}
 	{{if eq $hit.cardValue 21}}
 		{{$dealer := $data.dealer}}
 		{{$value := $dealer.cardValue | toInt}}
