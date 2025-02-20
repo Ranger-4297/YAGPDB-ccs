@@ -94,7 +94,7 @@
 		{{$buyQuantity := (sdict "max" (div $bal $price) "all" $shopQuantity).Get $option}}
 	{{end}}
 {{end}}
-{{if and (eq $name "chicken") (gt (toInt $buyQuantity) 1)}}
+{{if and (eq $name (or "Chicken" "chicken")) (or (gt (toInt $buyQuantity) 1) ($inventory.Get (or "Chicken" "chicken")))}}
 	{{$embed.Set "description" (print "You can only buy 1 " $name)}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}

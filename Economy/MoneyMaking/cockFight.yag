@@ -65,7 +65,7 @@
 {{end}}
 {{$econData := or (dbGet $userID "userEconData").Value (sdict "settings" sdict "inventory" sdict "streaks" (sdict "daily" 0 "weekly" 0 "monthly" 0) "cfWinChance" 50)}}
 {{$inventory := $econData.inventory}}
-{{if not ($inventory.Get "chicken")}}
+{{if not ($inventory.Get (or "Chicken" "chicken"))}}
 	{{$embed.Set "description" (print "You can't bet without a chicken! Buy one from the shop with `" $prefix "buy-item chicken`")}}
 	{{sendMessage nil (cembed $embed)}}
     {{return}}
