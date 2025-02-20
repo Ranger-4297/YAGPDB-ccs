@@ -36,24 +36,13 @@
 {{end}}
 {{$symbol := $economySettings.symbol}}
 {{$store := (dbGet 0 "store").Value}}
-{{$items := $store.items}}
-{{if not $items}}
+{{if not $store}}
 	{{$embed.Set "description" (print "The shop is empty\nAdd some items with `" $prefix "create-item`")}}
 	{{sendMessage nil (complexMessage "embed" $embed "reply" .Message.ID)}}
 	{{return}}
 {{end}}
-{{$fields := cslice}}
-{{$entry := cslice}}
-{{$display := ""}}
-{{range $item, $itemValue := $items}}
-	{{$qty := $itemValue.quantity}}
-	{{if $qty}}
-		{{$qty = humanizeThousands $qty}}
-	{{else}}
-		{{$qty = "Infinite"}}
-	{{end}}
-	{{$entry = $entry.Append (sdict "Name" (print $item " - "  $symbol (humanizeThousands $itemValue.price) " - " $qty) "value"  $itemValue.desc "inline" false)}}
-{{end}}
+{{$store = sort $store (sdict "key" "price")}}
+{{$items := cslice}}
 {{$page := 1}}
 {{if .CmdArgs}}
 	{{$page = (index .CmdArgs 0) | toInt}}
@@ -63,17 +52,25 @@
 {{end}}
 {{$start := mult 10 (sub $page 1)}}
 {{$stop := mult $page 10}}
-{{if ge $stop (len $entry)}}
-	{{$stop = (len $entry)}}
+{{if ge $stop (len $store)}}
+	{{$stop = (len $store)}}
 {{end}}
-{{if not (and (le $start $stop) (ge (len $entry) $start) (le $stop (len $entry)))}}
+{{if not (and (le $start $stop) (ge (len $store) $start) (le $stop (len $store)))}}
 	{{$embed.Set "description" (print "There are no items on this page\nAdd some with `create-item`")}}
 {{else}}
 	{{range (seq $start $stop)}}
-		{{$fields = $fields.Append (index $entry .)}}
+		{{$item := (index $store .)}}
+		{{$qty := $item.quantity}}
+		{{if $qty}}
+			{{$qty = humanizeThousands $qty}}
+		{{else}}
+			{{$qty = "Infinite"}}
+		{{end}}
+		{{$itemInfo := (print $symbol (humanizeThousands $item.price) " - " $item.name " - " $qty)}}
+		{{$items = $items.Append (sdict "Name" $itemInfo "value" $item.desc "inline" false)}}
 	{{end}}
-	{{$embed.Set "description" (print "Buy an item with `buy-item <Name> [Quantity:Int]`\nFor more information on an item use `item-store <Name>`.")}}
-	{{$embed.Set "fields" $fields}}
+	{{$embed.Set "description" (print "Buy an item with `buy-item <Name> [Quantity:Int]`\nFor more information on an item use `item-info <Name>`.")}}
+	{{$embed.Set "fields" $items}}
 	{{$embed.Set "color" $successColor}}
 {{end}}
 {{if gt (len $items) $stop}}
