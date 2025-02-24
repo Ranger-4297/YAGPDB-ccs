@@ -54,36 +54,7 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{if gt (len $items) 1}}
-	{{$items = sort $items (sdict "key" "price")}}
-	{{$matchedItems := cslice}}
-	{{range $k, $item := $items}}
-		{{$qty := $item.quantity}}
-		{{if $qty}}
-			{{$qty = humanizeThousands $qty}}
-		{{else}}
-			{{$qty = "Infinite"}}
-		{{end}}
-		{{$itemInfo :=  (print (add $k 1) " | " $symbol (humanizeThousands $item.price) " - " $item.name " - " $qty)}}
-		{{$matchedItems = $matchedItems.Append (sdict "Name" $itemInfo "value" $item.desc "inline" false)}}
-	{{end}}
-	{{if not (gt (len .CmdArgs) 1)}}
-		{{$embed.Set "description" (print "Multiple " $name "'s in the shop. Please specify with `" .Cmd " " $name " <Entry:Num>`")}}
-		{{$embed.Set "fields" $matchedItems}}
-		{{sendMessage nil (cembed $embed)}}
-		{{return}}
-	{{end}}
-	{{$entry := (index .CmdArgs 1) | toInt}}
-	{{if or (not $entry) (gt $entry (len $matchedItems))}}
-		{{$embed.Set "description" (print "Invalid `entry` argument passed. Please specify with `" .Cmd " " $name " <Entry:Num>`")}}
-		{{$embed.Set "fields" $matchedItems}}
-		{{sendMessage nil (cembed $embed)}}
-		{{return}}
-	{{end}}
-	{{$item = (index $items (sub $entry 1))}}
-{{else}}
-	{{$item = (index $items 0)}}
-{{end}}
+{{$item = (index $items 0)}}
 {{$price := $item.price}}
 {{$desc := $item.desc}}
 {{$qty := toInt $item.quantity}}
