@@ -79,6 +79,11 @@
 	{{return}}
 {{end}}
 {{$store := or (dbGet 0 "store").Value cslice}}
+{{if not $store}}
+	{{$embed.Set "description" (print "There are no items in the shop. Add some with `" $prefix "createitem`")}}
+	{{sendMessage nil (cembed $embed)}}
+	{{return}}
+{{end}}
 {{$name := index .CmdArgs 0}}
 {{$items := cslice}}
 {{$item := sdict}}
