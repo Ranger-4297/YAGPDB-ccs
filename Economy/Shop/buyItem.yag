@@ -194,7 +194,7 @@
 	{{$inventoryExpiry.Set $item.name $inventoryItemExpiries}}
 	{{$userData.Set "inventoryExpiry" $inventoryExpiry}}
 {{end}}
-{{/* dbSet 0 "store" $newStore */}}
+{{dbSet 0 "store" $newStore}}
 {{dbSet .User.ID "userEconData" $userData}}
 {{$embed.Set "description" (print "You've bought  " (humanizeThousands $buyQuantity) " of " $name " for " $symbol (humanizeThousands $price) "!")}}
 {{$embed.Set "color" $successColor}}
