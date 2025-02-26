@@ -31,7 +31,7 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$settings := print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `slutCD, `incomeCD`, `crimeCD`, `robCD`, `responses`\nTo set it with the default settings `" .Cmd " default`"}}
+{{$settings := print "\nAvailable settings: `max`, `min`, `betMax`, `startbalance`, `symbol`, `workCD`, `slutCD, `incomeCD`, `crimeCD`, `robCD`, `responses \nTo set it with the default settings `" .Cmd " default`"}}
 {{if not .CmdArgs}}
 	{{$embed.Set "description" (print "No `Setting` argument provided.\nSyntax is: `" .Cmd " <Setting> <Value>`" $settings)}}
 	{{sendMessage nil (cembed $embed)}}
