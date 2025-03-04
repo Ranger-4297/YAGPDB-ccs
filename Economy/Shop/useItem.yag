@@ -42,12 +42,17 @@
 	{{return}}
 {{end}}
 {{if not .CmdArgs}}
-	{{$embed.Set "description" (print "No `Item` argument provided.\nSyntax is `" .Cmd "  <Item:Name>`")}}
+	{{$embed.Set "description" (print "No `Item` argument provided.\nSyntax is `" .Cmd " <Item:Name>`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
 {{$name := index .CmdArgs 0}}
-{{$item := $inventory.Get $name}}
+{{$item := sdict}}
+{{range $inventory}}
+	{{- if eq .name $name -}}
+		{{- $item = . -}}
+	{{end}}
+{{end}}
 {{if not $item}}
 	{{$embed.Set "description" (print "This item doesn't exist\nUse `" $prefix "shop` to view the items!")}}
 	{{sendMessage nil (cembed $embed)}}
@@ -55,14 +60,20 @@
 {{end}}
 {{$qty := $item.quantity}}
 {{$role := $item.role}}
-{{$nqty := sub (toInt $qty) 1}}
-{{if eq (toInt $nqty) 0}}
-	{{$inventory.Del $name}}
-{{else}}
-	{{$item.Set "quantity" $nqty}}
-	{{$inventory.Set $name $item}}
-	{{$userdata.Set "inventory" $inventory}}
+{{$nqty := sub (toInt $qty) 1 | toInt}}
+{{$newInventory := cslice}}
+{{range $inventory}}
+	{{if not (eq .name $name)}}
+		{{$newInventory = $newInventory.Append .}}
+	{{else}}
+		{{if not $nqty}}
+			{{continue}}
+		{{end}}
+		{{.Set .quantity $nqty}}
+		{{$newInventory = $newInventory.Append .}}
+	{{end}}
 {{end}}
+{{$userdata.Set "inventory" $newInventory}}
 {{if $role}}
 	{{addRoleID $role}}
 {{end}}

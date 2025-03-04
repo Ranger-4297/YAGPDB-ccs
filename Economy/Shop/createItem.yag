@@ -28,9 +28,8 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 
 {{/* Response */}}
 {{$embed := sdict "author" (sdict "name" (print .Guild.Name " Store")) "title" "Item info" "footer" (sdict "text" "Type cancel to cancel the setup") "timestamp" currentTime "color" 0x0088CC}}
-{{$store := or (dbGet 0 "store").Value (sdict "items" sdict)}}
-{{$items := $store.items}}
-{{$itemData := sdict "desc" "" "price" 0 "quantity" 0 "role" 0 "replyMsg" "" "expiry" 0}}
+{{$store := or (dbGet 0 "store").Value cslice}}
+{{$itemData := sdict "name" "" "desc" "" "price" 0 "quantity" 0 "role" 0 "replyMsg" "" "expiry" 0}}
 {{$perms := split (index (split (exec "viewperms") "\n") 2) ", "}}
 {{if .ExecData}}
 	{{sendMessage nil "Create-item was cancelled"}}
@@ -57,14 +56,13 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 		{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" "⠀⠀"))}}
 		{{$currentSection = 1}}
 		{{$embed := sendMessageRetID nil (complexMessage "content" "Please enter a name for the item (under 60 characters)" "embed" (cembed $embed))}}
-		{{dbSet 0 "createItem" (sdict "embed" (str $embed) "item" (sdict "name" "" "data" $itemData) "user" (str $userID))}}
+		{{dbSet 0 "createItem" (sdict "embed" (str $embed) "item" (sdict "data" $itemData) "user" (str $userID))}}
 		{{scheduleUniqueCC .CCID nil 120 1 1}}
 	{{end}}
 {{end}}
 {{$createItem := (dbGet 0 "createItem").Value}}
 {{if and $createItem.user (eq (str $createItem.user) (str $userID))}}
 	{{if eq (lower .Message.Content) "cancel"}}
-		{{$currentSection = 0}}
 		{{sendMessage nil "Create-item was cancelled"}}
 		{{dbDel $userID "waitResponse"}}
 		{{dbDel 0 "createItem"}}
@@ -80,8 +78,17 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 			{{return}}
 		{{end}}
 		{{$name := .Message.Content}}
+		{{range $k, $v := $store}}
+			{{if eq $v.name $name}}
+				{{$message := sendMessageRetID nil "Please try again and enter name that isn't in use"}}
+				{{deleteTrigger 0}}
+				{{deleteMessage nil $message 10}}
+				{{scheduleUniqueCC $.CCID nil 120 1 2}}
+				{{return}}
+			{{end}}
+		{{end}}
 		{{$item := $createItem.item}}
-		{{$item.Set "name" $name}}
+		{{$item.data.Set "name" $name}}
 		{{$embed.Set "fields" (cslice (sdict "name" "Name" "value" $name "inline" true))}}
 		{{$currentSection = 1}}
 		{{dbSet 0 "createItem" $createItem}}
@@ -189,7 +196,6 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 		{{$duration := .Message.Content}}
 		{{if not (or (toDuration $duration) (eq (lower $duration) "skip" "inf"))}}
 			{{$message := sendMessageRetID nil "Please try again with a valid duration"}}
-			{{$currentSection = 0}}
 			{{deleteTrigger 0}}
 			{{deleteMessage nil $message 10}}
 			{{scheduleUniqueCC .CCID nil 120 1 7}}
@@ -202,7 +208,7 @@ Note: Command is `create-item`/`new-item`. Use your severs default prefix
 		{{end}}
 		{{$item := $createItem.item}}
 		{{$item.data.Set "expiry" $duration}}
-		{{$items.Set $createItem.item.name $createItem.item.data}}
+		{{$store = $store.Append $item.data}}
 		{{$message := structToSdict (index (getMessage nil $createItem.embed).Embeds 0)}}
 		{{$fields := sdict "name" "Inventory expiry" "value" (str $eV) "inline" true}}
 		{{$embed.Set "fields" ((cslice.AppendSlice $message.Fields).Append $fields)}}

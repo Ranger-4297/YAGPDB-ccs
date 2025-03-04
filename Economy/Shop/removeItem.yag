@@ -25,7 +25,7 @@
 {{$ex := or (and (reFind "a_" .Guild.Icon) "gif") "png"}}
 {{$icon := print "https://cdn.discordapp.com/icons/" .Guild.ID "/" .Guild.Icon "." $ex "?size=1024"}}
 
-{{/* Buy item */}}
+{{/* Remove item */}}
 
 {{/* Response */}}
 {{$embed := sdict "author" (sdict "name" (print .Guild.Name " Store")) "timestamp" currentTime "color" $errorColor}}
@@ -37,8 +37,7 @@
 {{end}}
 {{$symbol := $economySettings.symbol}}
 {{$store := (dbGet 0 "store").Value}}
-{{$items := $store.items}}
-{{if not $items}}
+{{if not $store}}
 	{{$embed.Set "description" (print "The shop is empty :(\nAdd some items with `" $prefix "create-item`")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
@@ -49,14 +48,27 @@
 	{{return}}
 {{end}}
 {{$name := index .CmdArgs 0}}
-{{if not ($items.Get $name)}}
-	{{$embed.Set "description" (print "This item doesn't exist\nUse `" $prefix "shop` to view the items!")}}
+{{$items := cslice}}
+{{$item := sdict}}
+{{range $store}}
+	{{- if eq .name $name -}}
+		{{- $items = $items.Append . -}}
+	{{end}}
+{{end}}
+{{if not (len $items)}}
+	{{$embed.Set "description" (print "This item doesn't exist")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$items.Del $name}}
-{{$store.Set "items" $items}}
+{{$item = (index $items 0)}}
+{{$newStore := cslice}}
+{{range $k, $v := $store}}
+	{{if eq (json $v) (json $item)}}
+		{{continue}}
+	{{end}}
+	{{$newStore = $newStore.Append $v}}
+{{end}}
 {{$embed.Set "description" (print "Removed " $name " successfully!")}}
 {{$embed.Set "color" $successColor}}
-{{dbSet 0 "store" $store}}
+{{dbSet 0 "store" $newStore}}
 {{sendMessage nil (cembed $embed)}}

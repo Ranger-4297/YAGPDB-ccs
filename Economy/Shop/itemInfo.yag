@@ -40,49 +40,55 @@
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$info := or (dbGet 0 "store").Value (sdict "items" sdict)}}
-{{$items := $info.Get "items"}}
+{{$store := or (dbGet 0 "store").Value cslice}}
 {{$name := index .CmdArgs 0}}
-{{if not ($items.Get $name)}}
+{{$items := cslice}}
+{{$item := sdict}}
+{{range $store}}
+	{{- if eq .name $name -}}
+		{{- $items = $items.Append . -}}
+	{{end}}
+{{end}}
+{{if not (len $items)}}
 	{{$embed.Set "description" (print "This item doesn't exist")}}
 	{{sendMessage nil (cembed $embed)}}
 	{{return}}
 {{end}}
-{{$item := $items.Get $name}}
-{{$price := $item.Get "price"}}
-{{$desc := $item.Get "desc"}}
+{{$item = (index $items 0)}}
+{{$price := $item.price}}
+{{$desc := $item.desc}}
 {{$qty := toInt $item.quantity}}
 {{if not $qty}}
-	{{$qty = "Infinite"}}
+    {{$qty = "Infinite"}}
 {{else}}
-	{{$qty = humanizeThousands $qty}}
+    {{$qty = humanizeThousands $qty}}
 {{end}}
 {{$role := "None"}}
 {{if $item.role}}
-	{{$role = print "<@&" $item.role ">"}}
+    {{$role = print "<@&" $item.role ">"}}
 {{end}}
 {{$reply := $item.replyMsg}}
 {{$exp := $item.expiry}}
 {{if $exp}}
-	{{$exp = humanizeDurationSeconds (mult $exp .TimeSecond)}}
+    {{$exp = humanizeDurationSeconds (mult $exp .TimeSecond)}}
 {{else}}
-	{{$exp = "Never"}}
+    {{$exp = "Never"}}
 {{end}}
 {{$user := $item.ID}}
 {{$embed.Set "title" (print "**Item info**")}}
 {{$embed.Set "fields" (cslice
-	(sdict "name" "Name" "value" (print $name) "inline" true)
-	(sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true)
-	(sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true)
-	(sdict "name" "Description" "value" (print $desc) "inline" true)
-	(sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true)
-	(sdict "name" "Shop quantity" "value" (print $qty) "inline" true)
-	(sdict "name" "Role given" "value" $role "inline" true)
-	(sdict "name" "Reply message" "value" $reply)
-	(sdict "name" "Inventory expiry" "value" $exp)
+    (sdict "name" "Name" "value" (print $name) "inline" true)
+    (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true)
+    (sdict "name" "Price" "value" (print $symbol (humanizeThousands $price)) "inline" true)
+    (sdict "name" "Description" "value" (print $desc) "inline" true)
+    (sdict "name" (print "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀") "value" (print "⠀⠀") "inline" true)
+    (sdict "name" "Shop quantity" "value" (print $qty) "inline" true)
+    (sdict "name" "Role given" "value" $role "inline" true)
+    (sdict "name" "Reply message" "value" $reply)
+    (sdict "name" "Inventory expiry" "value" $exp)
 )}}
 {{if $user}}
-	{{$embed.Set "footer" (sdict "text" (print "On market from"))}}
+    {{$embed.Set "footer" (sdict "text" (print "On market from"))}}
 {{end}}
 {{$embed.Set "color" $successColor}}
 {{sendMessage nil (cembed $embed)}}
